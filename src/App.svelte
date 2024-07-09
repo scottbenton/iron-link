@@ -2,9 +2,10 @@
 	import svelteLogo from './assets/svelte.svg';
 	import viteLogo from '/vite.svg';
 	import Counter from './lib/Counter.svelte';
-  import { useRegisterSW } from 'virtual:pwa-register/svelte'
+	import { useRegisterSW } from 'virtual:pwa-register/svelte';
+	import { i18n } from './lib';
 
-  useRegisterSW({ immediate: true })
+	useRegisterSW({ immediate: true });
 </script>
 
 <main>
@@ -16,7 +17,7 @@
 			<img src={svelteLogo} class="logo svelte" alt="Svelte Logo" />
 		</a>
 	</div>
-	<h1>Vite + Svelte</h1>
+	<h1>{$i18n.t('characters.capital_character', { count: 100 })}</h1>
 
 	<div class="card">
 		<Counter />

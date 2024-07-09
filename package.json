@@ -36,7 +36,9 @@
     "@fontsource-variable/inter": "^5.0.19",
     "@fontsource/barlow-condensed": "^5.0.13",
     "firebase": "^10.12.3",
+    "i18next": "^23.11.5",
     "rxdb": "^15.27.0",
-    "rxjs": "^7.8.1"
+    "rxjs": "^7.8.1",
+    "svelte-i18next": "^2.2.2"
   }
 }
