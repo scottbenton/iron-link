@@ -1,0 +1,14 @@
+.icon-button {
+	background-color: transparent;
+	border: none;
+	cursor: pointer;
+	display: inline-block;
+	padding: $space-2;
+	border-radius: $border-radius;
+	transition: background-color 150ms;
+	transition-timing-function: ease-in-out;
+	color: inherit;
+}
+.icon-button:hover {
+	background-color: transparentize($color: $gray-950, $amount: 0.2);
+}

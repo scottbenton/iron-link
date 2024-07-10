@@ -6,6 +6,21 @@ export const en = {
 			character_one: 'character',
 			character_other: 'characters',
 			create: 'Create a Character'
+		},
+		campaigns: {
+			capital_campaign_one: 'Campaign',
+			capital_campaign_other: 'Campaigns'
+		},
+		worlds: {
+			capital_world_one: 'World',
+			capital_world_other: 'Worlds'
+		},
+		homebrew: {
+			capital_homebrew: 'Homebrew'
+		},
+		'screen-reader': {
+			'navigation-title': 'Navigation',
+			'navigation-description': 'Links to the main sections of the site'
 		}
 	}
 };
