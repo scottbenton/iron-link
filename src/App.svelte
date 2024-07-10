@@ -1,51 +1,60 @@
 <script lang="ts">
-	import svelteLogo from './assets/svelte.svg';
-	import viteLogo from '/vite.svg';
-	import Counter from './lib/Counter.svelte';
 	import { useRegisterSW } from 'virtual:pwa-register/svelte';
 	import { i18n } from './lib';
+	import Theme from './lib/theme/theme.svelte';
+	import { Link, Route, Router } from 'svelte-routing';
+	import Layout from './lib/components/Layout/Layout.svelte';
 
 	useRegisterSW({ immediate: true });
 </script>
 
-<main>
-	<div>
-		<a href="https://vitejs.dev" target="_blank" rel="noreferrer">
-			<img src={viteLogo} class="logo" alt="Vite Logo" />
-		</a>
-		<a href="https://svelte.dev" target="_blank" rel="noreferrer">
-			<img src={svelteLogo} class="logo svelte" alt="Svelte Logo" />
-		</a>
-	</div>
-	<h1>{$i18n.t('characters.capital_character', { count: 100 })}</h1>
+<Theme />
 
-	<div class="card">
-		<Counter />
-	</div>
-
-	<p>
-		Check out <a href="https://github.com/sveltejs/kit#readme" target="_blank" rel="noreferrer"
-			>SvelteKit</a
-		>, the official Svelte app framework powered by Vite!
-	</p>
-
-	<p class="read-the-docs">Click on the Vite and Svelte logos to learn more</p>
-</main>
+<Router>
+	<Layout>
+		<nav>
+			Navbar
+			<Link to="/characters" let:active>Characters {active}</Link>
+			<Link to="/campaigns" let:active>Campaigns {active}</Link>
+			<Link to="/worlds" let:active>Worlds {active}</Link>
+			<Link to="/homebrew" let:active>Homebrew {active}</Link>
+		</nav>
+		<Route path="/characters/*">
+			<Router>
+				<Route path="/">Character Select Page</Route>
+				<Route path="/add">Create Page</Route>
+				<Route path="/:id" let:params>Character Page {params.id}</Route>
+				<Route path="*">404 Page</Route>
+			</Router>
+		</Route>
+		<Route path="/campaigns/*">
+			<Router>
+				<Route path="/">Campaign Select Page</Route>
+				<Route path="/add">Create Page</Route>
+				<Route path="/:id" let:params>Campaign Page {params.id}</Route>
+				<Route path="*">404 Page</Route>
+			</Router>
+		</Route>
+		<Route path="/worlds/*">
+			<Router>
+				<Route path="/">World Select Page</Route>
+				<Route path="/:id" let:params>World Page {params.id}</Route>
+				<Route path="*">404 Page</Route>
+			</Router>
+		</Route>
+		<Route path="/homebrew/*">
+			<Router>
+				<Route path="/">Homebrew Select Page</Route>
+				<Route path="/:id" let:params>Homebrew Sheet Page {params.id}</Route>
+				<Route path="*">404 Page</Route>
+			</Router>
+		</Route>
+		<Route path="*">404 Page</Route>
+	</Layout>
+</Router>
 
 <style>
-	.logo {
-		height: 6em;
-		padding: 1.5em;
-		will-change: filter;
-		transition: filter 300ms;
-	}
-	.logo:hover {
-		filter: drop-shadow(0 0 2em #646cffaa);
-	}
-	.logo.svelte:hover {
-		filter: drop-shadow(0 0 2em #ff3e00aa);
-	}
-	.read-the-docs {
-		color: #888;
+	.test {
+		min-height: 200vh;
 	}
 </style>
