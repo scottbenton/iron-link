@@ -7,6 +7,12 @@ export const en = {
 			character_other: 'characters',
 			create: 'Create a Character'
 		},
+		characterCreatePage: {
+			gameSystemsHeading: 'Game Systems',
+			characterDetailsHeading: 'Character Details',
+			nameInputLabel: 'Name',
+			pronounsInputLabel: 'Pronouns'
+		},
 		campaigns: {
 			capital_campaign_one: 'Campaign',
 			capital_campaign_other: 'Campaigns'

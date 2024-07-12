@@ -73,3 +73,10 @@ h6 {
 	text-transform: uppercase;
 	font-weight: 600;
 }
+input,
+textarea,
+button,
+select,
+a {
+	-webkit-tap-highlight-color: transparent;
+}

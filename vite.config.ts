@@ -2,6 +2,7 @@ import { defineConfig } from 'vite';
 import { svelte } from '@sveltejs/vite-plugin-svelte';
 import { VitePWA } from 'vite-plugin-pwa';
 import iconsPlugin from 'unplugin-icons/vite';
+import path from 'path';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -32,5 +33,14 @@ export default defineConfig({
 		iconsPlugin({
 			compiler: 'svelte'
 		})
-	]
+	],
+	resolve: {
+		alias: {
+			$assets: path.resolve('./src/assets'),
+			$components: path.resolve('./src/components'),
+			$lib: path.resolve('./src/lib'),
+			$routes: path.resolve('./src/routes'),
+			$types: path.resolve('./src/types')
+		}
+	}
 });

@@ -4,7 +4,7 @@
 	const id = createId();
 </script>
 
-<svg id="iron-link-logo" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg class="iron-link-logo" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
 	<g clip-path={`url(#${id}clip0_551_463)`}>
 		<path
 			d="M58 3.4641C61.7128 1.32051 66.2872 1.32051 70 3.4641L113.426 28.5359C117.138 30.6795 119.426 34.641 119.426 38.9282V89.0718C119.426 93.359 117.138 97.3205 113.426 99.4641L70 124.536C66.2872 126.679 61.7128 126.679 58 124.536L14.5744 99.4641C10.8616 97.3205 8.57438 93.359 8.57438 89.0718V38.9282C8.57438 34.641 10.8616 30.6795 14.5744 28.5359L58 3.4641Z"
@@ -40,8 +40,8 @@
 			y2="120.092"
 			gradientUnits="userSpaceOnUse"
 		>
-			<stop id="stop-1" />
-			<stop offset="1" id="stop-2" />
+			<stop class="stop-1" />
+			<stop offset="1" class="stop-2" />
 		</linearGradient>
 		<clipPath id={`${id}clip0_551_463`}>
 			<rect width="128" height="128" fill="white" />
@@ -50,14 +50,14 @@
 </svg>
 
 <style lang="scss">
-	#iron-link-logo {
+	.iron-link-logo {
 		width: 100%;
 		height: 100%;
 	}
-	#stop-1 {
+	.stop-1 {
 		stop-color: $primary-gradient-color-1;
 	}
-	#stop-2 {
+	.stop-2 {
 		stop-color: $primary-gradient-color-2;
 	}
 </style>
