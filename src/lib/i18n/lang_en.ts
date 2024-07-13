@@ -5,13 +5,16 @@ export const en = {
 			capital_character_other: 'Characters',
 			character_one: 'character',
 			character_other: 'characters',
-			create: 'Create a Character'
+			create: 'Create a Character',
+			statsLabel: 'Stats'
 		},
 		characterCreatePage: {
 			gameSystemsHeading: 'Game Systems',
 			characterDetailsHeading: 'Character Details',
 			nameInputLabel: 'Name',
-			pronounsInputLabel: 'Pronouns'
+			pronounsInputLabel: 'Pronouns',
+			callsignInputLabel: 'Callsign',
+			createYourCharacterButton: 'Create Your Character'
 		},
 		campaigns: {
 			capital_campaign_one: 'Campaign',

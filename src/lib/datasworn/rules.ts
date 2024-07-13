@@ -51,6 +51,14 @@ export const rulesets = derived(activeRulesets, ({ rulesetIds, expansionIds }) =
 	return newRulesets;
 });
 
+export const isIronswornActive = derived(activeRulesets, ($activeRulesets) => {
+	return $activeRulesets.rulesetIds[ironsworn._id];
+});
+
+export const isStarforgedActive = derived(activeRulesets, ($activeRulesets) => {
+	return $activeRulesets.rulesetIds[starforged._id];
+});
+
 function deepCopy<T = Datasworn.Ruleset | Datasworn.Expansion>(obj: T): T {
 	return JSON.parse(JSON.stringify(obj));
 }
@@ -65,7 +73,7 @@ export const parser = derived(rulesets, ($rulesets) => {
 });
 
 export const stats = derived(rulesets, ($rulesets) => {
-	const stats = $rulesets.reduce((acc, ruleset) => {
+	const stats: Record<string, Datasworn.StatRule> = $rulesets.reduce((acc, ruleset) => {
 		if (ruleset.rules.stats) {
 			acc = { ...acc, ...ruleset.rules.stats };
 		}

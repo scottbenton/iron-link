@@ -41,6 +41,8 @@
 		margin: 0 auto;
 		padding: 0 $space-4;
 		background-color: $background-surface;
+		border-top-left-radius: $border-radius;
+		border-top-right-radius: $border-radius;
 	}
 	.page-sm {
 		max-width: $breakpoint-sm;

@@ -1,7 +1,7 @@
 <script lang="ts">
 	export let id: string;
 	export let label: string;
-	export let value: string;
+	export let value: string | number;
 	export let onChange: (value: string) => void = () => {};
 
 	const handleInputChange = (
@@ -16,7 +16,18 @@
 <div class="input-container">
 	<label class="text-sm" for={id}>{label}</label>
 	<div class="input-box text-base">
-		<input type="text" {id} name={id} bind:value on:change={handleInputChange} />
+		{#if value === 'number'}
+			<input
+				type="number"
+				{id}
+				name={id}
+				bind:value
+				on:change={handleInputChange}
+				inputmode="numeric"
+			/>
+		{:else}
+			<input type="text" {id} name={id} bind:value on:change={handleInputChange} />
+		{/if}
 		{#if $$slots.endAction}
 			<div class="input-action">
 				<slot name="endAction" />
