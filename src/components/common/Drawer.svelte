@@ -31,7 +31,7 @@
 		<div use:melt={$content} transition:slide={{ delay: 0, duration: 300, axis: 'x' }}>
 			<h2 class="screen-reader-only" use:melt={$titleElement}>{title}</h2>
 			<p class="screen-reader-only" use:melt={$descriptionElement}>{description}</p>
-			<div id="button-container">
+			<div class="button-container">
 				<button class="icon-button" use:melt={$close} aria-label="Close"><CloseIcon /></button>
 			</div>
 			<slot {closeDialog} />
@@ -60,7 +60,7 @@
 		left: 0px;
 		bottom: 0px;
 	}
-	#button-container {
+	.button-container {
 		display: flex;
 		justify-content: flex-end;
 		padding: $space-2;

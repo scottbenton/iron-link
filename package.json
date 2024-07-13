@@ -35,6 +35,11 @@
 		"vite-tsconfig-paths": "^4.3.2"
 	},
 	"dependencies": {
+		"@datasworn/core": "file:datasworn/datasworn-core-0.1.0.tgz",
+		"@datasworn/ironsworn-classic": "file:datasworn/datasworn-ironsworn-classic-0.1.0.tgz",
+		"@datasworn/ironsworn-classic-delve": "file:datasworn/datasworn-ironsworn-classic-delve-0.1.0.tgz",
+		"@datasworn/starforged": "file:datasworn/datasworn-starforged-0.1.0.tgz",
+		"@datasworn/sundered_isles": "file:datasworn/datasworn-sundered_isles-0.1.0.tgz",
 		"@fontsource-variable/inter": "^5.0.19",
 		"@fontsource/barlow-condensed": "^5.0.13",
 		"firebase": "^10.12.3",

@@ -1,7 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 
-const firebaseConfig = {
+export const firebaseConfig = {
 	apiKey: import.meta.env.VITE_IRON_LINK_FIREBASE_APIKEY,
 	authDomain: import.meta.env.VITE_IRON_LINK_FIREBASE_AUTHDOMAIN,
 	projectId: import.meta.env.VITE_IRON_LINK_FIREBASE_PROJECTID,
