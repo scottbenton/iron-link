@@ -6,6 +6,8 @@
 	export let label: string;
 	export let checked: boolean;
 	export let disabled: boolean = false;
+	export let ariaControls: string | undefined = undefined;
+
 	export let onChecked: (checked: boolean) => void = () => {};
 
 	const {
@@ -30,7 +32,7 @@
 </script>
 
 <div class="checkbox-container">
-	<button use:melt={$root} {id} class:checked={$isChecked}>
+	<button use:melt={$root} {id} class:checked={$isChecked} aria-controls={ariaControls}>
 		{#if $isChecked}
 			<CheckIcon width={'24px'} height={'24px'} style={'font-size:1.25rem'} />
 		{/if}

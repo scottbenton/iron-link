@@ -14,7 +14,8 @@ export const en = {
 			nameInputLabel: 'Name',
 			pronounsInputLabel: 'Pronouns',
 			callsignInputLabel: 'Callsign',
-			createYourCharacterButton: 'Create Your Character'
+			createYourCharacterButton: 'Create Your Character',
+			nameRequiredError: 'Name is required'
 		},
 		campaigns: {
 			capital_campaign_one: 'Campaign',
@@ -26,6 +27,10 @@ export const en = {
 		},
 		homebrew: {
 			capital_homebrew: 'Homebrew'
+		},
+		shared: {
+			errorPrefix: 'Error',
+			rulesetRequiredText: 'You must choose at least one ruleset'
 		},
 		'screen-reader': {
 			'navigation-title': 'Navigation',

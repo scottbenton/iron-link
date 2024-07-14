@@ -2,6 +2,9 @@
 	export let id: string;
 	export let label: string;
 	export let value: string | number;
+	export let required: boolean = false;
+	export let error: boolean = false;
+	export let helperText: string | undefined = undefined;
 	export let onChange: (value: string) => void = () => {};
 
 	const handleInputChange = (
@@ -13,11 +16,12 @@
 	};
 </script>
 
-<div class="input-container">
-	<label class="text-sm" for={id}>{label}</label>
+<div class="input-container" class:error>
+	<label class="text-sm" for={id}>{label}{required ? '*' : ''}</label>
 	<div class="input-box text-base">
 		{#if value === 'number'}
 			<input
+				{required}
 				type="number"
 				{id}
 				name={id}
@@ -34,6 +38,7 @@
 			</div>
 		{/if}
 	</div>
+	{#if helperText?.trim()}<p class="helper-text text-sm">{helperText}</p>{/if}
 </div>
 
 <style lang="scss">
@@ -42,6 +47,21 @@
 			font-weight: 600;
 			color: $text-secondary;
 		}
+	}
+	.input-container.error {
+		label {
+			color: $error-600;
+		}
+		.input-box {
+			border-color: $error-600;
+		}
+		.helper-text {
+			color: $error-600;
+		}
+	}
+	.helper-text {
+		margin-top: $space-1;
+		color: $text-secondary;
 	}
 	.input-box {
 		display: flex;

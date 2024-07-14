@@ -6,12 +6,15 @@ import {
 	type CharacterCollectionType
 } from './collections/characterCollection';
 import { RxDBMigrationSchemaPlugin } from 'rxdb/plugins/migration-schema';
-
-export let dbPromise: Promise<RxDatabase> | undefined = undefined;
+import { getContext } from 'svelte';
 
 type DBType = {
 	characters: CharacterCollectionType;
 };
+export type DB = RxDatabase<DBType>;
+
+export let dbPromise: Promise<RxDatabase<DBType>> | undefined = undefined;
+
 let database: RxDatabase<DBType> | undefined = undefined;
 
 async function setupDatabase() {
@@ -37,23 +40,21 @@ async function setupDatabase() {
 			if (!db.collections.characters) {
 				await addCharacterCollection(db);
 			}
-			console.debug(Object.keys(db.collections));
 
-			database = db as unknown as RxDatabase<DBType>;
-			return db;
+			return db as unknown as RxDatabase<DBType>;
 		});
 	} catch (e) {
 		console.error(e);
+		throw e;
 	}
 
 	return dbPromise;
 }
 
-export const initDB = () => (dbPromise ? dbPromise : setupDatabase());
+export function initDB(): Promise<RxDatabase<DBType>> {
+	return dbPromise ? dbPromise : setupDatabase();
+}
 
-export function getDatabase() {
-	if (!database) {
-		throw new Error('Database not set up');
-	}
-	return database;
+export function getDB(): DB {
+	return getContext('db');
 }

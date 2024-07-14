@@ -1,47 +1,76 @@
-# Svelte + TS + Vite
+# Setup
 
-This template should help get you started developing with Svelte and TypeScript in Vite.
+## Steps
 
-## Recommended IDE Setup
+1. Clone this project `git clone https://github.com/scottbenton/iron-link.git`
+1. Install dependencies `npm i`
+1. Create an `.env.local` file (see `.env.local` below)
+1. Set up firebase (see Firebase Setup below, or contact Scott to get credentials to the dev instance)
+1. Run `npm run dev` and go to your browser to see the output.
 
-[VS Code](https://code.visualstudio.com/) + [Svelte](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode).
+## .env.local
 
-## Need an official Svelte framework?
+Create a new file in the root of this repository, named `.env.local`.
+This file will hold environment variables representing credentials needed to connect your instance with firebase.
 
-Check out [SvelteKit](https://github.com/sveltejs/kit#readme), which is also powered by Vite. Deploy anywhere with its serverless-first approach and adapt to various platforms, with out of the box support for TypeScript, SCSS, and Less, and easily-added support for mdsvex, GraphQL, PostCSS, Tailwind CSS, and more.
+Copy the following into your project
 
-## Technical considerations
-
-**Why use this over SvelteKit?**
-
-- It brings its own routing solution which might not be preferable for some users.
-- It is first and foremost a framework that just happens to use Vite under the hood, not a Vite app.
-
-This template contains as little as possible to get started with Vite + TypeScript + Svelte, while taking into account the developer experience with regards to HMR and intellisense. It demonstrates capabilities on par with the other `create-vite` templates and is a good starting point for beginners dipping their toes into a Vite + Svelte project.
-
-Should you later need the extended capabilities and extensibility provided by SvelteKit, the template has been structured similarly to SvelteKit so that it is easy to migrate.
-
-**Why `global.d.ts` instead of `compilerOptions.types` inside `jsconfig.json` or `tsconfig.json`?**
-
-Setting `compilerOptions.types` shuts out all other types not explicitly listed in the configuration. Using triple-slash references keeps the default TypeScript setting of accepting type information from the entire workspace, while also adding `svelte` and `vite/client` type information.
-
-**Why include `.vscode/extensions.json`?**
-
-Other templates indirectly recommend extensions via the README, but this file allows VS Code to prompt the user to install the recommended extension upon opening the project.
-
-**Why enable `allowJs` in the TS template?**
-
-While `allowJs: false` would indeed prevent the use of `.js` files in the project, it does not prevent the use of JavaScript syntax in `.svelte` files. In addition, it would force `checkJs: false`, bringing the worst of both worlds: not being able to guarantee the entire codebase is TypeScript, and also having worse typechecking for the existing JavaScript. In addition, there are valid use cases in which a mixed codebase may be relevant.
-
-**Why is HMR not preserving my local component state?**
-
-HMR state preservation comes with a number of gotchas! It has been disabled by default in both `svelte-hmr` and `@sveltejs/vite-plugin-svelte` due to its often surprising behavior. You can read the details [here](https://github.com/rixo/svelte-hmr#svelte-hmr).
-
-If you have state that's important to retain within a component, consider creating an external store which would not be replaced by HMR.
-
-```ts
-// store.ts
-// An extremely simple external store
-import { writable } from 'svelte/store'
-export default writable(0)
 ```
+VITE_IRON_LINK_FIREBASE_APIKEY=
+VITE_IRON_LINK_FIREBASE_AUTHDOMAIN=
+VITE_IRON_LINK_FIREBASE_PROJECTID=
+VITE_IRON_LINK_FIREBASE_STORAGEBUCKET=
+VITE_IRON_LINK_FIREBASE_MESSAGINGSENDERID=
+VITE_IRON_LINK_FIREBASE_APPID=
+```
+
+As you create your firebase project, you will get values to fill these config values in.
+You can also just ask me directly, and I will send you the values I use in development.
+Copy those values from into your `.env.local` file in the following properties:
+
+## Firebase Setup
+
+Firebase provides authentication, database, and image storage to this application.
+
+The first step is to create a firebase projects for Iron Link. You can create a new project by going to the [firebase console](https://console.firebase.google.com/). Once you have created a project, you need to follow the following steps.
+
+### Add an App
+
+1. From the homepage, under the `Get started` section, click `</>`.
+1. Give your app a nickname, and if you plan on hosting your own version (and not just contributing to the existing deployments), click "Also set up Firebase Hosting"
+1. Click next, and copy the apiKey, authDomain, projectId, storageBucket, messagingSenderId, and appId values into your `.env.local` file you created earlier
+1. Complete your setup
+
+![Firebase Web App Setup](./readme_assets/FirebaseWeb.png)
+
+### Authentication
+
+1. Under the `Build` tab on the left, select `Authentication`
+1. Click `Get Started`
+1. Select and enable `Google`
+1. Add a new provider, and enable `Email/Password` with `Email link` sign in
+
+### Firestore
+
+1. Under the `Build` tab on the left, select `Firestore Database`
+1. Create a new database, choosing the location of your choice.
+1. Once your database has been provisioned, click the `rules` tab, and copy the contents of the `firestore.rules` file into the tab
+
+### Cloud Storage
+
+1. Under the `Build` tab on the left, select `Storage`
+1. Set up cloud storage, and wait for it to be created
+1. Once your storage has been created, click the `rules` tab, and copy the contents of the `storage.rules` file into the tab
+
+## Posthog Setup (OPTIONAL)
+
+Posthog gives us some light analytics (page views), and the ability to gate new features behind feature flags. If you need to set up posthog you can create a new project and then add the following to your `.env.local` file
+
+```
+VITE_POSTHOG_KEY=
+VITE_POSTHOG_HOST=
+```
+
+---
+
+With that, you should be all set up and ready to develop locally!
