@@ -6,10 +6,15 @@ import {
 	signInWithEmailLink,
 	isSignInWithEmailLink,
 	signInWithPopup,
-	GoogleAuthProvider
+	GoogleAuthProvider,
+	linkWithRedirect,
+	linkWithPopup,
+	linkWithCredential,
+	EmailAuthProvider
 } from 'firebase/auth';
 import { auth } from './config';
 import { writable } from 'svelte/store';
+import { initDB } from '$lib/db';
 
 export const authStore = writable<{
 	user?: { uid: string; isAnonymous: boolean };
@@ -23,6 +28,7 @@ export function listenToAuth() {
 	onAuthStateChanged(
 		auth,
 		(user) => {
+			initDB(user?.uid);
 			if (user) {
 				authStore.update((store) => {
 					store.user = { uid: user.uid, isAnonymous: user.isAnonymous };
@@ -67,7 +73,6 @@ export function sendSignInLinkToEmail(email: string) {
 
 		sendSignInLinkToEmailFirebase(auth, email, actionCodeSettings)
 			.then(() => {
-				console.debug('IN THEN');
 				window.localStorage.setItem('auth-email', email);
 				resolve(true);
 			})
@@ -87,14 +92,21 @@ export function completeMagicLinkSignupIfPresent(): Promise<boolean> {
 			// Get the email if available. This should be available if the user completes
 			// the flow on the same device where they started it.
 			let email = window.localStorage.getItem('auth-email');
+			let isLinkingAccount = !!window.localStorage.getItem('auth-link-account');
 			if (!email) {
 				// User opened the link on a different device. To prevent session fixation
 				// attacks, ask the user to provide the associated email again. For example:
 				email = window.prompt('Please provide your email for confirmation');
 			}
 			if (email) {
-				// The client SDK will parse the code from the link for you.
-				signInWithEmailLink(auth, email, window.location.href)
+				const promise =
+					isLinkingAccount && auth.currentUser
+						? linkWithCredential(
+								auth.currentUser,
+								EmailAuthProvider.credentialWithLink(email, window.location.href)
+							)
+						: signInWithEmailLink(auth, email, window.location.href);
+				promise
 					.then(() => {
 						// Clear email from storage.
 						window.localStorage.removeItem('auth-email');
@@ -112,8 +124,31 @@ export function completeMagicLinkSignupIfPresent(): Promise<boolean> {
 		}
 	});
 }
-export function linkGoogleAccount() {}
-export function linkEmailAccount() {}
+export function linkGoogleAccount() {
+	if (auth.currentUser === null) {
+		return Promise.reject('No user is signed in.');
+	}
+	return linkWithPopup(auth.currentUser, googleAuthProvider);
+}
+export function linkEmailAccount(email: string) {
+	return new Promise((resolve, reject) => {
+		const actionCodeSettings = {
+			url: window.location.origin + '/login',
+			handleCodeInApp: true
+		};
+
+		sendSignInLinkToEmailFirebase(auth, email, actionCodeSettings)
+			.then(() => {
+				window.localStorage.setItem('auth-email', email);
+				window.localStorage.setItem('auth-link-account', 'true');
+				resolve(true);
+			})
+			.catch((error) => {
+				console.error(error);
+				reject(error);
+			});
+	});
+}
 
 export function signOut() {
 	signOutFirebase(auth).catch((error) => {

@@ -26,6 +26,9 @@
 
 {#if $open}
 	<div class="menu" use:melt={$menu} transition:fly={{ duration: 150, y: -10 }}>
+		{#if isDevEnvironment}
+			<div>{user?.uid}</div>
+		{/if}
 		{#if user}
 			{#if !isAnonymous || isDevEnvironment}
 				<div class="item" use:melt={$item} on:m-click={() => signOut()}>

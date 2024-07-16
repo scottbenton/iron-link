@@ -13,7 +13,6 @@
 		elements: { trigger, overlay, content, title: titleElement, close, portalled },
 		states
 	} = createDialog({
-		forceVisible: true,
 		role: isAlertDialog ? 'alertdialog' : 'dialog'
 	});
 
@@ -29,7 +28,7 @@
 </script>
 
 {#if $$slots.trigger}
-	<slot name="trigger" {trigger} />
+	<slot name="trigger" trigger={$trigger} />
 {/if}
 
 {#if states.open}

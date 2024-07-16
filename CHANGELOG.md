@@ -1,3 +1,10 @@
+# 0.0.2
+
+## New Features
+
+- Added authentication to the app
+- Added filter to character query to only pull down your characters
+
 # 0.0.1
 
 ## New Features

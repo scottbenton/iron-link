@@ -7,7 +7,7 @@
 	import HomebrewIcon from 'virtual:icons/tabler/pencil';
 	import { i18n } from '$lib/i18n';
 	import SettingsMenu from './SettingsMenu.svelte';
-	// TODO - if the user is anonymous, add a new button to link the account to an email.
+	import LinkAccountButton from './LinkAccountButton.svelte';
 
 	const location = useLocation();
 
@@ -55,7 +55,10 @@
 		{/each}
 	</nav>
 
-	<SettingsMenu />
+	<div class="settings">
+		<LinkAccountButton />
+		<SettingsMenu />
+	</div>
 </div>
 
 <style lang="scss">
@@ -150,5 +153,10 @@
 			margin: $space-0_5;
 			padding: $space-1 $space-4;
 		}
+	}
+	.settings {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
 	}
 </style>

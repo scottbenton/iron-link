@@ -7,16 +7,14 @@
 	import RulesetChooser from '$components/datasworn/RulesetChooser.svelte';
 	import PageLayout from '$components/Layout/PageLayout.svelte';
 	import { activeRulesets, isStarforgedActive, rulesets, stats } from '$lib/datasworn/rules';
+	import { dbStore } from '$lib/db';
 	import type { CharacterType } from '$lib/db/collections/characterCollection';
 	import { createId } from '$lib/db/createId';
-	import { getDB } from '$lib/db/rxdb';
 	import { authStore } from '$lib/firebase/auth';
 	import { i18n } from '$lib/i18n';
 	import { Breakpoints } from '$types/breakpoints';
 	import { navigate } from 'svelte-routing';
 	import AddIcon from 'virtual:icons/tabler/plus';
-
-	// TODO - hook up authStore and add UID to character
 
 	// Reset active rulesets
 	$activeRulesets = {
@@ -70,8 +68,8 @@
 			expansionIds,
 			uid
 		};
-		getDB()
-			.characters?.insert(character)
+		$dbStore.db?.characters
+			?.insert(character)
 			.then(() => {
 				// Redirect
 				navigate(`/characters/${character._id}`);

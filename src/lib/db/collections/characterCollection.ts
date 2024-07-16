@@ -1,5 +1,5 @@
 import { firebaseConfig, firestore } from '../../firebase/config';
-import { collection } from 'firebase/firestore';
+import { collection, where } from 'firebase/firestore';
 import {
 	toTypedRxJsonSchema,
 	type ExtractDocumentTypeFromTypedRxJsonSchema,
@@ -8,7 +8,7 @@ import {
 	type RxJsonSchema
 } from 'rxdb';
 import { replicateFirestore } from '../firestorePlugin';
-import { rulesets } from '$lib/datasworn/rules';
+import type { DB } from '../db';
 
 const characterSchemaLiteral = {
 	title: 'character schema',
@@ -135,8 +135,7 @@ const characterSchema: RxJsonSchema<CharacterType> = characterSchemaLiteral;
 export type CharacterCollectionType = RxCollection<CharacterType>;
 
 export async function addCharacterCollection(db: RxDatabase): Promise<void> {
-	// TODO - add UID to filter by user
-	const { characters } = await db.addCollections({
+	await db.addCollections({
 		characters: {
 			schema: characterSchema,
 			autoMigrate: true,
@@ -148,14 +147,20 @@ export async function addCharacterCollection(db: RxDatabase): Promise<void> {
 			}
 		}
 	});
-	replicateFirestore({
+}
+
+export function addCharacterReplication(db: DB, uid: string) {
+	const characters = db.characters;
+	return replicateFirestore({
 		collection: characters,
 		firestore: {
 			projectId: firebaseConfig.projectId,
 			database: firestore,
 			collection: collection(firestore, 'characters')
 		},
-		pull: {},
+		pull: {
+			filter: [where('uid', '==', uid)]
+		},
 		push: {},
 		live: true,
 		replicationIdentifier: 'characters'

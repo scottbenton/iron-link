@@ -2,15 +2,10 @@
 	import { Route, Router } from 'svelte-routing';
 	import Layout from '$components/Layout/Layout.svelte';
 	import CharacterSelectPage from './routes/characters/CharacterSelectPage/CharacterSelectPage.svelte';
-	import { type DB } from './lib/db/rxdb';
+	import { type DB } from './lib/db';
 	import CharacterCreatePage from '$routes/characters/CharacterCreatePage/CharacterCreatePage.svelte';
-	import { setContext } from 'svelte';
 	import AuthBlocker from '$components/Layout/AuthBlocker.svelte';
 	import LoginPage from '$routes/LoginPage.svelte';
-
-	export let db: DB;
-
-	setContext('db', db);
 </script>
 
 <Router>

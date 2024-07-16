@@ -5,16 +5,14 @@
 	import AddIcon from 'virtual:icons/tabler/plus';
 	import GridList from '$components/Layout/GridList.svelte';
 	import type { CharacterType } from '../../../lib/db/collections/characterCollection';
-	import { getDB } from '$lib/db/rxdb';
 	import Button from '$components/common/Button.svelte';
+	import { dbStore } from '$lib/db';
 
 	let characters: CharacterType[] = [];
 
-	$: getDB()
-		.characters?.find()
-		.$.subscribe((chars) => {
-			characters = chars.sort((c1, c2) => c1.name.localeCompare(c2.name));
-		});
+	$: $dbStore.db?.characters?.find().$.subscribe((chars) => {
+		characters = chars.sort((c1, c2) => c1.name.localeCompare(c2.name));
+	});
 </script>
 
 <PageLayout>

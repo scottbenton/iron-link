@@ -43,7 +43,8 @@ export const en = {
 		},
 		settingsMenu: {
 			openButtonAriaLabel: 'Open Settings Menu',
-			logout: 'Logout'
+			logout: 'Logout',
+			linkAccount: 'Log in to Sync Characters'
 		},
 		'screen-reader': {
 			'navigation-title': 'Navigation',
@@ -56,11 +57,14 @@ export const en = {
 			or: 'or',
 			emailLoginInputLabel: 'Email Address',
 			emailButton: 'Send Sign In Link',
+			emailButtonSent: 'Sign In Link Sent',
 			emailError: 'Sending sign in link failed. Please double check your email address.',
 			skipAccountCreationWarning:
-				'Your characters will not be able to be synced to other devices, or played in campaigns with other users. You can convert your account to a full account at any time after creation.',
+				'Your characters will not be able to be synced to other devices, or played in campaigns with other users. You can convert your account to a full account at any time after creation, so long as your email is not already being used for a different Iron Link Account.',
 			skipAccountButton: 'Skip Account Creation',
-			skipAccountError: 'Failed to create anonymous account. Please try again.'
+			skipAccountError: 'Failed to create anonymous account. Please try again.',
+			skipAccountLinkInfo:
+				'You must use an email that is not already associated with an Iron Link account.'
 		}
 	}
 };
