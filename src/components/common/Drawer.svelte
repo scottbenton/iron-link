@@ -1,4 +1,5 @@
 <script lang="ts">
+	import IconButton from '$components/IconButton.svelte';
 	import { createDialog, melt } from '@melt-ui/svelte';
 	import { slide } from 'svelte/transition';
 	import CloseIcon from 'virtual:icons/tabler/x';
@@ -32,7 +33,9 @@
 			<h2 class="screen-reader-only" use:melt={$titleElement}>{title}</h2>
 			<p class="screen-reader-only" use:melt={$descriptionElement}>{description}</p>
 			<div class="button-container">
-				<button class="icon-button" use:melt={$close} aria-label="Close"><CloseIcon /></button>
+				<IconButton meltAction={$close} label="Close">
+					<CloseIcon />
+				</IconButton>
 			</div>
 			<slot {closeDialog} />
 		</div>

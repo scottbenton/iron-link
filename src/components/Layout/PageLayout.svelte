@@ -41,23 +41,51 @@
 		margin: 0 auto;
 		padding: 0 $space-4;
 		background-color: $background-surface;
-		border-top-left-radius: $border-radius;
-		border-top-right-radius: $border-radius;
 	}
 	.page-sm {
 		max-width: $breakpoint-sm;
 	}
+	@media (min-width: $breakpoint-sm) {
+		.page-sm {
+			border-top-left-radius: $border-radius;
+			border-top-right-radius: $border-radius;
+		}
+	}
 	.page-md {
 		max-width: $breakpoint-md;
+	}
+	@media (min-width: $breakpoint-md) {
+		.page-md {
+			border-top-left-radius: $border-radius;
+			border-top-right-radius: $border-radius;
+		}
 	}
 	.page-lg {
 		max-width: $breakpoint-lg;
 	}
+	@media (min-width: $breakpoint-lg) {
+		.page-lg {
+			border-top-left-radius: $border-radius;
+			border-top-right-radius: $border-radius;
+		}
+	}
 	.page-xl {
 		max-width: $breakpoint-xl;
 	}
+	@media (min-width: $breakpoint-xl) {
+		.page-xl {
+			border-top-left-radius: $border-radius;
+			border-top-right-radius: $border-radius;
+		}
+	}
 	.page-2xl {
 		max-width: $breakpoint-2xl;
+	}
+	@media (min-width: $breakpoint-2xl) {
+		.page-2xl {
+			border-top-left-radius: $border-radius;
+			border-top-right-radius: $border-radius;
+		}
 	}
 	.page-header {
 		padding: $space-5 0;

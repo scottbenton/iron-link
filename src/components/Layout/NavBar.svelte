@@ -9,6 +9,8 @@
 	import WorldIcon from 'virtual:icons/tabler/globe';
 	import HomebrewIcon from 'virtual:icons/tabler/pencil';
 	import { Link, useLocation } from 'svelte-routing';
+	import SettingsMenu from './SettingsMenu.svelte';
+	import IconButton from '$components/IconButton.svelte';
 
 	const location = useLocation();
 
@@ -38,16 +40,18 @@
 	];
 </script>
 
-<nav class="page-container">
-	<div class="logo-mark">
+<header class="page-container">
+	<div class="left-nav">
 		<Drawer
 			title={$i18n.t('screen-reader.navigation-title')}
 			description={$i18n.t('screen-reader.navigation-description')}
 			let:closeDialog
 		>
-			<button class="icon-button" slot="trigger" let:trigger use:melt={trigger}>
-				<HamburgerMenuIcon />
-			</button>
+			<svelte:fragment slot="trigger" let:trigger>
+				<IconButton label={$i18n.t('nav.openNavDrawer')} meltAction={trigger}>
+					<HamburgerMenuIcon />
+				</IconButton>
+			</svelte:fragment>
 			<ul>
 				{#each rootPaths as { path, Icon, label }}
 					<li>
@@ -70,18 +74,20 @@
 		<div class="logo-container-mobile"><IronLinkLogo /></div>
 		<h1 class="font-title text-2xl">Iron Link</h1>
 	</div>
-</nav>
+	<SettingsMenu />
+</header>
 
 <style lang="scss">
-	nav {
+	header {
 		display: flex;
 		padding-top: $space-2;
 		padding-bottom: $space-2;
 		background-color: $gray-700;
 		color: #fff;
+		justify-content: space-between;
 	}
 	@media (min-width: $breakpoint-sm) {
-		nav {
+		header {
 			display: none;
 		}
 	}
@@ -117,7 +123,7 @@
 		padding-left: $space-4;
 	}
 
-	.logo-mark {
+	.left-nav {
 		display: flex;
 		align-items: center;
 	}

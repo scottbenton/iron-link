@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Button from '$components/common/Button.svelte';
 	import OracleInputButton from '$components/common/Input/OracleInputButton.svelte';
 	import TextInput from '$components/common/Input/TextInput.svelte';
 	import NumberMeter from '$components/common/NumberMeter.svelte';
@@ -6,9 +7,10 @@
 	import RulesetChooser from '$components/datasworn/RulesetChooser.svelte';
 	import PageLayout from '$components/Layout/PageLayout.svelte';
 	import { activeRulesets, isStarforgedActive, rulesets, stats } from '$lib/datasworn/rules';
+	import { dbStore } from '$lib/db';
 	import type { CharacterType } from '$lib/db/collections/characterCollection';
 	import { createId } from '$lib/db/createId';
-	import { getDatabase } from '$lib/db/rxdb';
+	import { authStore } from '$lib/firebase/auth';
 	import { i18n } from '$lib/i18n';
 	import { Breakpoints } from '$types/breakpoints';
 	import { navigate } from 'svelte-routing';
@@ -20,13 +22,28 @@
 		expansionIds: {}
 	};
 
+	$: showErrors = false;
+
 	$: name = '';
 	$: pronouns = '';
 	$: callsign = '';
 	$: statsValues = {} as Record<string, number>;
 
 	function handleCreateCharacter() {
-		console.log('Creating character', { name, pronouns, callsign, statsValues });
+		const uid = $authStore.user?.uid;
+
+		if (!uid) {
+			console.error('UID WAS NOT DEFINED');
+			return;
+		}
+		// Validation
+		if (
+			!name.trim() ||
+			!Object.values($activeRulesets.rulesetIds).filter((isActive) => isActive).length
+		) {
+			showErrors = true;
+			return;
+		}
 
 		const expansionIds: string[] = [];
 		Object.keys($activeRulesets.expansionIds).forEach((rulesetId) => {
@@ -49,10 +66,10 @@
 			},
 			rulesetIds: Object.keys($activeRulesets.rulesetIds),
 			expansionIds,
-			uid: ''
+			uid
 		};
-		getDatabase()
-			.characters?.insert(character)
+		$dbStore.db?.characters
+			?.insert(character)
 			.then(() => {
 				// Redirect
 				navigate(`/characters/${character._id}`);
@@ -70,29 +87,46 @@
 		</h1>
 	</svelte:fragment>
 
-	<div class="stack">
+	<form
+		class="stack"
+		on:submit={(evt) => {
+			evt.preventDefault();
+			handleCreateCharacter();
+		}}
+	>
 		<SectionHeader title={$i18n.t('characterCreatePage.gameSystemsHeading')} />
-		<RulesetChooser />
+		<RulesetChooser showError={showErrors} />
 		<SectionHeader title={$i18n.t('characterCreatePage.characterDetailsHeading')} />
 		<div class="grid">
-			<TextInput label={$i18n.t('characterCreatePage.nameInputLabel')} id="name" bind:value={name}>
-				<svelte:fragment slot="endAction">
-					<OracleInputButton
-						label={$i18n.t('characterCreatePage.nameInputLabel')}
-						oracleIds={[
-							'oracle_rollable:classic/name/ironlander/a',
-							'oracle_rollable:classic/name/ironlander/b',
-							[
-								'oracle_rollable:starforged/character/name/given_name',
-								'oracle_rollable:starforged/character/name/family_name'
-							]
-						]}
-						onResult={(result) => {
-							name = result;
-						}}
-					/>
-				</svelte:fragment>
-			</TextInput>
+			<div>
+				<TextInput
+					label={$i18n.t('characterCreatePage.nameInputLabel')}
+					id="name"
+					bind:value={name}
+					required
+					error={showErrors && !name.trim()}
+					helperText={showErrors && !name.trim()
+						? $i18n.t('characterCreatePage.nameRequiredError')
+						: undefined}
+				>
+					<svelte:fragment slot="endAction">
+						<OracleInputButton
+							label={$i18n.t('characterCreatePage.nameInputLabel')}
+							oracleIds={[
+								'oracle_rollable:classic/name/ironlander/a',
+								'oracle_rollable:classic/name/ironlander/b',
+								[
+									'oracle_rollable:starforged/character/name/given_name',
+									'oracle_rollable:starforged/character/name/family_name'
+								]
+							]}
+							onResult={(result) => {
+								name = result;
+							}}
+						/>
+					</svelte:fragment>
+				</TextInput>
+			</div>
 			<TextInput
 				label={$i18n.t('characterCreatePage.pronounsInputLabel')}
 				id="pronouns"
@@ -117,27 +151,27 @@
 			{/if}
 		</div>
 		{#if Object.keys($stats).length > 0}
-			<h2 class="text-xl font-title">{$i18n.t('characters.statsLabel')}</h2>
-			<div class="stat-grid">
-				{#each Object.keys($stats) as statId}
-					<NumberMeter
-						min={-9}
-						max={9}
-						label={$stats[statId].label}
-						bind:value={statsValues[statId]}
-					/>
-				{/each}
+			<div>
+				<span class="text-sm label">{$i18n.t('characters.statsLabel')}</span>
+				<div class="stat-grid">
+					{#each Object.keys($stats) as statId}
+						<NumberMeter
+							min={-9}
+							max={9}
+							label={$stats[statId].label}
+							bind:value={statsValues[statId]}
+						/>
+					{/each}
+				</div>
 			</div>
 		{/if}
 		<div class="button-container">
-			<button class="primary-button" on:click={handleCreateCharacter}>
-				<div>
-					{$i18n.t('characterCreatePage.createYourCharacterButton')}
-					<div class="icon"><AddIcon /></div>
-				</div>
-			</button>
+			<Button variant="primary-gradient" type="submit">
+				{$i18n.t('characterCreatePage.createYourCharacterButton')}
+				<svelte:fragment slot="endIcon"><AddIcon /></svelte:fragment>
+			</Button>
 		</div>
-	</div>
+	</form>
 </PageLayout>
 
 <style lang="scss">
@@ -164,5 +198,9 @@
 		display: flex;
 		justify-content: flex-end;
 		margin-top: $space-8;
+	}
+	.label {
+		font-weight: 600;
+		color: $text-secondary;
 	}
 </style>

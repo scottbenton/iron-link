@@ -64,6 +64,42 @@ $error-800: #991b1b;
 $error-900: #7f1d1d;
 $error-950: #450a0a;
 
+$info-50: #eff6ff;
+$info-100: #dbeafe;
+$info-200: #bfdbfe;
+$info-300: #93c5fd;
+$info-400: #60a5fa;
+$info-500: #3b82f6;
+$info-600: #2563eb;
+$info-700: #1d4ed8;
+$info-800: #1e40af;
+$info-900: #1e3a8a;
+$info-950: #172554;
+
+$warning-50: #fffbeb;
+$warning-100: #fef3c7;
+$warning-200: #fde68a;
+$warning-300: #fcd34d;
+$warning-400: #fbbf24;
+$warning-500: #f59e0b;
+$warning-600: #d97706;
+$warning-700: #b45309;
+$warning-800: #92400e;
+$warning-900: #78350f;
+$warning-950: #451a03;
+
+$success-50: #f0fdf4;
+$success-100: #dcfce7;
+$success-200: #bbf7d0;
+$success-300: #86efac;
+$success-400: #4ade80;
+$success-500: #22c55e;
+$success-600: #16a34a;
+$success-700: #15803d;
+$success-800: #166534;
+$success-900: #14532d;
+$success-950: #052e16;
+
 $space-0: 0px;
 $space-px: 1px;
 $space-0_5: 0.125rem;
@@ -89,7 +125,7 @@ $space-10: 2.5rem;
 $space-11: 2.75rem;
 $space-12: 3rem;
 
-$background-default: $gray-900;
+$background-default: #fff;
 $background-surface: #fff;
 $text-primary: $gray-800;
 $text-secondary: $gray-600;
@@ -99,34 +135,80 @@ $primary-surface: $primary-800;
 $primary-surface-text: #fff;
 $primary-gradient-color-1: #ff6584;
 $primary-gradient-color-2: #ca8a04;
+// $primary-gradient-color-1: #86efac;
+// $primary-gradient-color-2: #047857;
+$primary-gradient-dark-color-1: #b30933;
+$primary-gradient-dark-color-2: #b45309;
+// $primary-gradient-dark-color-1: #15803d;
+// $primary-gradient-dark-color-2: #064e3b;
 $primary-gradient: radial-gradient(
 	142% 91% at 111% 84%,
 	$primary-gradient-color-1 20%,
 	$primary-gradient-color-2 80%
+);
+$primary-gradient-dark: radial-gradient(
+	183% 200% at 101% 70%,
+	$primary-gradient-dark-color-2 5%,
+	$primary-gradient-dark-color-1 100%
 );
 $primary-gradient-linear: linear-gradient(
 	150deg,
 	$primary-gradient-color-1 0%,
 	$primary-gradient-color-2 100%
 );
+$danger-gradient-dark: radial-gradient(183% 200% at 101% 70%, $error-700 5%, $error-900 100%);
 
 $divider: $gray-300;
 $border-radius: $space-3;
 
 $gradient-bg: radial-gradient(142% 91% at 111% 84%, #14b8a6 20%, #ff6584 80%);
 
+$text-xs: 0.75rem;
 .text-xs {
-	font-size: 0.75rem;
+	font-size: $text-xs;
 	line-height: 1rem;
 }
 
+$text-sm: 0.875rem;
 .text-sm {
-	font-size: 0.875rem;
+	font-size: $text-sm;
 	line-height: 1.25rem;
 }
+$text-base: 1rem;
 .text-base {
-	font-size: 1rem;
+	font-size: $text-base;
 	line-height: 1.5rem;
+}
+
+$text-lg: 1.125rem;
+.text-lg {
+	font-size: $text-lg;
+	line-height: 1.75rem;
+}
+$text-xl: 1.25rem;
+.text-xl {
+	font-size: $text-xl;
+	line-height: 1.75rem;
+}
+$text-2xl: 1.5rem;
+.text-2xl {
+	font-size: $text-2xl;
+	line-height: 2rem;
+}
+$text-3xl: 1.875rem;
+.text-3xl {
+	font-size: $text-3xl;
+	line-height: 2.25rem;
+}
+$text-4xl: 2.25rem;
+.text-4xl {
+	font-size: $text-4xl;
+	line-height: 2.5rem;
+}
+$text-5xl: 3rem;
+.text-5xl {
+	font-size: $text-5xl;
+	line-height: 1;
 }
 
 .page-container {

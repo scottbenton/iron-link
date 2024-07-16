@@ -4,13 +4,13 @@
 	import PageLayout from '$components/Layout/PageLayout.svelte';
 	import AddIcon from 'virtual:icons/tabler/plus';
 	import GridList from '$components/Layout/GridList.svelte';
-	import { getDatabase } from '../../../lib/db/rxdb';
 	import type { CharacterType } from '../../../lib/db/collections/characterCollection';
-	const db = getDatabase();
+	import Button from '$components/common/Button.svelte';
+	import { dbStore } from '$lib/db';
 
 	let characters: CharacterType[] = [];
 
-	$: db.characters?.find().$.subscribe((chars) => {
+	$: $dbStore.db?.characters?.find().$.subscribe((chars) => {
 		characters = chars.sort((c1, c2) => c1.name.localeCompare(c2.name));
 	});
 </script>
@@ -20,14 +20,12 @@
 		<h1 class="font-title text-4xl">
 			{$i18n.t('characters.capital_character', { count: 100 })}
 		</h1>
-		<Link to="/characters/add">
-			<div class="primary-button">
-				<div>
-					{$i18n.t('characters.create')}
-					<div class="icon"><AddIcon /></div>
-				</div>
-			</div>
-		</Link>
+		<Button href="/characters/add" variant="primary-gradient">
+			{$i18n.t('characters.create')}
+			<svelte:fragment slot="endIcon">
+				<AddIcon />
+			</svelte:fragment>
+		</Button>
 	</svelte:fragment>
 	<GridList items={characters}>
 		<svelte:fragment slot="item" let:item>
@@ -47,9 +45,9 @@
 	}
 
 	.character-card {
-		background-color: var(--color-surface);
-		border-radius: var(--border-radius);
-		padding: var(--space-4);
+		background-color: $background-surface;
+		border-radius: $border-radius;
+		padding: $space-4;
 		border: 1px solid $divider;
 		cursor: pointer;
 		&:hover {

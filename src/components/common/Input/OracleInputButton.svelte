@@ -1,4 +1,5 @@
 <script lang="ts">
+	import IconButton from '$components/IconButton.svelte';
 	import { canRollOracle, rollOracle } from '$lib/datasworn/rollOracle';
 	import { parser } from '$lib/datasworn/rules';
 	import { announcer } from '$lib/stores/announcer.store';
@@ -31,9 +32,9 @@
 </script>
 
 {#if filteredOracleIds.length > 0}
-	<button class="icon-button" on:click={handleOracleClick} aria-label={'Consult the Oracle'}>
+	<IconButton onClick={handleOracleClick} label={'Consult the Oracle'}>
 		<DieIcon />
-	</button>
+	</IconButton>
 {/if}
 
 <style lang="scss"></style>

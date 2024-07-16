@@ -1,4 +1,5 @@
 <script lang="ts">
+	import ConfirmationDialog from '$components/common/ConfirmationDialog/ConfirmationDialog.svelte';
 	import AriaLiveAnnouncer from './AriaLiveAnnouncer.svelte';
 	import NavBar from './NavBar.svelte';
 	import NavRail from './NavRail.svelte';
@@ -11,6 +12,7 @@
 	<main>
 		<slot />
 	</main>
+	<ConfirmationDialog />
 </div>
 
 <style lang="scss">
