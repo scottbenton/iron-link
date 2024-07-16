@@ -14,9 +14,11 @@
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		margin-left: $-space-4;
-		margin-right: $-space-4;
-		padding: $space-1 $space-4;
+		margin-left: $-space-3;
+		margin-right: $-space-3;
+		padding: $space-1 $space-3;
+
+		border-radius: $border-radius;
 
 		background-color: $gray-200;
 

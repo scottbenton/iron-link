@@ -45,6 +45,9 @@ function getAndRollOracle(oracleId: string, idParser: Parser): OracleRollResult 
 	let oracle = idParser.parse(oracleId);
 	if (oracle.typeId === 'oracle_rollable') {
 		let oracleRollable = oracle.get() as OracleRollable;
+		if (!oracleRollable) {
+			throw new Error('Oracle not found.');
+		}
 		const roll = rollDie(oracleRollable.dice);
 		const result = oracleRollable.rows.find((r) => {
 			return r.roll && r.roll.min <= roll && roll <= r.roll.max;

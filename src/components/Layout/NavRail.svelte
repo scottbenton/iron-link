@@ -6,6 +6,8 @@
 	import WorldIcon from 'virtual:icons/tabler/globe';
 	import HomebrewIcon from 'virtual:icons/tabler/pencil';
 	import { i18n } from '$lib/i18n';
+	import SettingsMenu from './SettingsMenu.svelte';
+	// TODO - if the user is anonymous, add a new button to link the account to an email.
 
 	const location = useLocation();
 
@@ -35,22 +37,26 @@
 	];
 </script>
 
-<nav class="nav-rail">
-	<div class="logo-container">
-		<IronLinkLogo />
-	</div>
+<div class="nav-rail">
+	<nav>
+		<div class="logo-container">
+			<IronLinkLogo />
+		</div>
 
-	{#each rootPaths as { path, Icon, label }}
-		<Link to={`/${path}`} class="nav-rail-item">
-			<div class="nav-link" class:active={activePath === path}>
-				<div class="icon-container">
-					<div class="icon"><Icon style={`font-size: 1.25rem`} /></div>
+		{#each rootPaths as { path, Icon, label }}
+			<Link to={`/${path}`} class="nav-rail-item">
+				<div class="nav-link" class:active={activePath === path}>
+					<div class="icon-container">
+						<div class="icon"><Icon style={`font-size: 1.25rem`} /></div>
+					</div>
+					<span class="name text-xs">{label}</span>
 				</div>
-				<span class="name text-xs">{label}</span>
-			</div>
-		</Link>
-	{/each}
-</nav>
+			</Link>
+		{/each}
+	</nav>
+
+	<SettingsMenu />
+</div>
 
 <style lang="scss">
 	$transitionDuration: 200ms;
@@ -61,11 +67,18 @@
 	@media (min-width: $breakpoint-sm) {
 		.nav-rail {
 			background-color: $gray-700;
+			color: #fff;
 			display: flex;
 			flex-direction: column;
 			align-items: center;
+			justify-content: space-between;
 			padding: $space-4 $space-2;
 			border-right: 1px solid $gray-800;
+			nav {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+			}
 		}
 	}
 
@@ -126,7 +139,7 @@
 
 				opacity: 100%;
 
-				animation: spin 4s linear infinite;
+				animation: spin 8s linear infinite;
 			}
 		}
 		.icon {

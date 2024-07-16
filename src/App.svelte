@@ -1,16 +1,17 @@
 <script lang="ts">
 	import { useRegisterSW } from 'virtual:pwa-register/svelte';
-	import Theme from './lib/theme/theme.svelte';
 	import { initDB } from './lib/db/rxdb';
 	import Router from './Router.svelte';
+	import './index.scss';
+	import { listenToAuth } from '$lib/firebase/auth';
+
+	listenToAuth();
 
 	const dbPromise = initDB();
 	useRegisterSW({
 		immediate: true
 	});
 </script>
-
-<Theme />
 
 {#await dbPromise then db}
 	<Router {db} />

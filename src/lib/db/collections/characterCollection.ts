@@ -135,6 +135,7 @@ const characterSchema: RxJsonSchema<CharacterType> = characterSchemaLiteral;
 export type CharacterCollectionType = RxCollection<CharacterType>;
 
 export async function addCharacterCollection(db: RxDatabase): Promise<void> {
+	// TODO - add UID to filter by user
 	const { characters } = await db.addCollections({
 		characters: {
 			schema: characterSchema,

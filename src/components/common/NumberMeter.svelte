@@ -1,7 +1,10 @@
 <script lang="ts">
+	import IconButton from '$components/IconButton.svelte';
 	import { announcer } from '$lib/stores/announcer.store';
 	import MinusIcon from 'virtual:icons/tabler/minus';
 	import PlusIcon from 'virtual:icons/tabler/plus';
+	import Button from './Button.svelte';
+	import { i18n } from '$lib/i18n';
 
 	export let label: string;
 	export let value: number = 0;
@@ -15,37 +18,39 @@
 	const handleDecrement = () => {
 		if (localValue === min) return;
 		value = localValue - 1;
-		$announcer = `Decremented ${label} to ${value}`;
+		$announcer = $i18n.t('shared.meterDecrementNotification', { label, value });
 	};
 	const handleIncrement = () => {
 		if (localValue === max) return;
 		value = localValue + 1;
-		$announcer = `Incremented ${label} to ${value}`;
+		$announcer = $i18n.t('shared.meterIncrementNotification', { label, value });
 	};
 </script>
 
 <div class="number-meter">
 	<span class="label text-base font-title">{label}</span>
 	<div class="meter-actions">
-		<button
-			class="icon-button"
+		<IconButton
 			disabled={localValue === min}
-			on:click={handleDecrement}
-			aria-label={`Decrement ${label}`}><MinusIcon style={'font-size: 1.25rem'} /></button
+			onClick={handleDecrement}
+			label={$i18n.t('shared.meterDecrement', { label })}
 		>
+			<MinusIcon style={'font-size: 1.25rem'} />
+		</IconButton>
 		{#if onClick === undefined}
 			<span class="value font-title text-xl">{localValue >= 0 ? '+' : '-'}{localValue}</span>
 		{:else}
-			<button class="value font-title text-xl" on:click={() => onClick()}
+			<button type="button" class="value font-title text-xl" on:click={() => onClick()}
 				>{localValue >= 0 ? '+' : '-'}{localValue}</button
 			>
 		{/if}
-		<button
-			class="icon-button"
+		<IconButton
 			disabled={localValue === max}
-			on:click={handleIncrement}
-			aria-label={`Increment ${label}`}><PlusIcon style={'font-size: 1.25rem'} /></button
+			onClick={handleIncrement}
+			label={$i18n.t('shared.meterIncrement', { label })}
 		>
+			<PlusIcon style={'font-size: 1.25rem'} />
+		</IconButton>
 	</div>
 </div>
 
