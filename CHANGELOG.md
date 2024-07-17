@@ -1,3 +1,9 @@
+# 0.0.3
+
+## Fixes
+
+- Fixed scss issues
+
 # 0.0.2
 
 ## New Features
