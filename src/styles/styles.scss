@@ -3,6 +3,37 @@ body {
 	font-size: 16px;
 }
 
+:root {
+	--background-default: #fff;
+	--background-inset: #{$gray-100};
+	--background-inset-alt: #{$gray-200};
+	--background-hover: #{transparentize($gray-800, 0.2)};
+	--divider: #{$gray-300};
+
+	--background-disabled: #{$gray-300};
+	--divider-disabled: #{$gray-300};
+	--text-disabled: #{$gray-600};
+
+	--text-primary: #{$gray-800};
+	--text-secondary: #{$gray-700};
+	--text-tertiary: #{$gray-500};
+}
+[data-theme='dark'] {
+	--background-default: #{$gray-900};
+	--background-inset: #{$gray-950};
+	--background-inset-alt: #{$gray-800};
+	--background-hover: #{transparentize($gray-100, 0.1)};
+	--divider: #{$gray-500};
+
+	--background-disabled: #{$gray-700};
+	--divider-disabled: #{$gray-700};
+	--text-disabled: #{$gray-400};
+
+	--text-primary: #fff;
+	--text-secondary: #{$gray-200};
+	--text-tertiary: #{$gray-400};
+}
+
 .text-xs {
 	font-size: $text-xs;
 	line-height: 1rem;

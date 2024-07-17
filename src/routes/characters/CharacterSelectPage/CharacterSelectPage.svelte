@@ -45,13 +45,13 @@
 	}
 
 	.character-card {
-		background-color: $background-surface;
+		background-color: $background-default;
 		border-radius: $border-radius;
 		padding: $space-4;
 		border: 1px solid $divider;
 		cursor: pointer;
 		&:hover {
-			background-color: $gray-200;
+			background-color: $background-hover;
 		}
 	}
 </style>

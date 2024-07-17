@@ -52,7 +52,7 @@
 		font-weight: 600;
 		background-color: transparent;
 		border: none;
-		color: $gray-800;
+		color: $text-primary;
 		cursor: pointer;
 
 		transition-property: background-color padding margin;
@@ -80,7 +80,7 @@
 		}
 
 		&:not(:disabled):hover {
-			background-color: transparentize($color: $gray-950, $amount: 0.1);
+			background-color: $background-hover;
 		}
 
 		&.danger {

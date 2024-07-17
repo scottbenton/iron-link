@@ -64,18 +64,18 @@
 			align-items: center;
 			justify-content: stretch;
 			border-radius: $space-2;
-			background-color: #fff;
+			background-color: $background-default;
 			color: #fff;
 			border: 2px solid $gray-400;
 			&:hover:not(:disabled) {
-				background-color: $gray-200;
+				background-color: $background-hover;
 			}
 			cursor: pointer;
 			&:disabled {
 				cursor: default;
-				border-color: $gray-300;
+				border-color: $divider-disabled;
 				&[data-state='checked'] {
-					background-color: $gray-300;
+					background-color: $background-disabled;
 				}
 			}
 		}
