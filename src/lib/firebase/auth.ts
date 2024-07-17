@@ -5,12 +5,12 @@ import {
 	sendSignInLinkToEmail as sendSignInLinkToEmailFirebase,
 	signInWithEmailLink,
 	isSignInWithEmailLink,
-	signInWithPopup,
+	signInWithRedirect,
 	GoogleAuthProvider,
-	linkWithRedirect,
 	linkWithPopup,
 	linkWithCredential,
-	EmailAuthProvider
+	EmailAuthProvider,
+	getRedirectResult
 } from 'firebase/auth';
 import { auth } from './config';
 import { writable } from 'svelte/store';
@@ -58,7 +58,7 @@ export function listenToAuth() {
 
 const googleAuthProvider = new GoogleAuthProvider();
 export function signInWithGoogle() {
-	return signInWithPopup(auth, googleAuthProvider);
+	return signInWithRedirect(auth, googleAuthProvider);
 }
 
 export function createGuestAccount() {
