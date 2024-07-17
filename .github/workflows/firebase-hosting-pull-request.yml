@@ -30,7 +30,7 @@ jobs:
   deploy_firestore_and_storage_rules:
     name: Deploy Firestore and Storage rules and indexes
     runs-on: ubuntu-latest
-    environment: Production
+    environment: Development
     steps:
       - uses: actions/checkout@v2
       - uses: w9jds/firebase-action@v13.5.2
