@@ -19,6 +19,24 @@
       "queryScope": "COLLECTION",
       "fields": [
         {
+          "fieldPath": "serverTimestamp",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "uid",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "_id",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "characters",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
           "fieldPath": "uid",
           "order": "ASCENDING"
         },
