@@ -1,3 +1,9 @@
+# 0.0.4
+
+## Fixes
+
+- Fixed character docs not properly syncing from the server
+
 # 0.0.3
 
 ## Fixes
