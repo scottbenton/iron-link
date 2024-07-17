@@ -35,7 +35,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: w9jds/firebase-action@v13.5.2
         with:
-          args: deploy --only firestore --force
+          args: deploy --only firestore
         env:
           GCP_SA_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_IRON_LINK_DEV }}
           PROJECT_ID: '${{secrets.IRON_LINK_FIREBASE_PROJECTID}}'
