@@ -332,9 +332,11 @@ export function replicateFirestore<RxDocType>(
 		const cancelBefore = replicationState.cancel.bind(replicationState);
 		replicationState.start = () => {
 			const lastChangeQuery = query(pullQuery, orderBy(serverTimestampField, 'desc'), limit(1));
+			console.debug('Starting Snapshot Listener');
 			const unsubscribe = onSnapshot(
 				lastChangeQuery,
 				(_querySnapshot) => {
+					console.debug(_querySnapshot);
 					/**
 					 * There is no good way to observe the event stream in firestore.
 					 * So instead we listen to any write to the collection
@@ -344,12 +346,14 @@ export function replicateFirestore<RxDocType>(
 					replicationState.reSync();
 				},
 				(error) => {
+					console.error('Snapshot Error', error);
 					replicationState.subjects.error.next(
 						newRxError('RC_STREAM', { error: errorToPlainJson(error) })
 					);
 				}
 			);
 			replicationState.cancel = () => {
+				console.debug('Ending snapshot listener');
 				unsubscribe();
 				return cancelBefore();
 			};
