@@ -99,7 +99,7 @@
 		display: flex;
 		flex-direction: column;
 		border-radius: $border-radius;
-		background-color: $background-surface;
+		background-color: $background-default;
 		border: 1px solid $divider;
 		padding: $space-2 0;
 

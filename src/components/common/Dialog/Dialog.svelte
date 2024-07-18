@@ -67,7 +67,7 @@
 	}
 	div[data-melt-dialog-content] {
 		z-index: 100;
-		background-color: $background-surface;
+		background-color: $background-default;
 		border-radius: $border-radius;
 		border: 1px solid $divider;
 		position: fixed;

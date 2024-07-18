@@ -20,7 +20,7 @@
 
 		border-radius: $border-radius;
 
-		background-color: $gray-200;
+		background-color: $background-inset-alt;
 
 		h2 {
 			font-weight: 600;

@@ -54,7 +54,9 @@
 		bottom: 0;
 	}
 	div[data-melt-dialog-content] {
-		background-color: $background-surface;
+		background-color: $background-default;
+		min-width: 200px;
+		color: $text-primary;
 		// border-radius: $border-radius;
 		border: 1px solid $divider;
 		position: fixed;

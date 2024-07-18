@@ -81,16 +81,23 @@ $info-900: #1e3a8a;
 $info-950: #172554;
 
 // Background colors
-$background-default: #fff;
-$background-surface: #fff;
+$background-default: var(--background-default);
+$background-inset: var(--background-inset);
+$background-inset-alt: var(--background-inset-alt);
+$background-hover: var(--background-hover);
 
 // Border colors
-$divider: $gray-300;
+$divider: var(--divider);
 
 // Text colors
-$text-primary: $gray-800;
-$text-secondary: $gray-700;
-$text-tertiary: $gray-500;
+$text-primary: var(--text-primary);
+$text-secondary: var(--text-secondary);
+$text-tertiary: var(--text-tertiary);
+
+// Disabled Colors
+$background-disabled: var(--background-disabled);
+$divider-disabled: var(--divider-disabled);
+$text-disabled: var(--text-disabled);
 
 // Gradients
 $primary-gradient-color-1: #ff6584;

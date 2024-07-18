@@ -59,6 +59,17 @@
 			color: $error-600;
 		}
 	}
+	:global(.input-container.error) {
+		label {
+			color: $error-500;
+		}
+		.input-box {
+			border-color: $error-500;
+		}
+		.helper-text {
+			color: $error-500;
+		}
+	}
 	.helper-text {
 		margin-top: $space-1;
 		color: $text-secondary;
@@ -74,6 +85,7 @@
 		transition-timing-function: ease-in-out;
 
 		input {
+			color: $text-primary;
 			padding: $space-3 $space-4;
 			flex-grow: 1;
 			border: none;

@@ -44,7 +44,9 @@ export const en = {
 		settingsMenu: {
 			openButtonAriaLabel: 'Open Settings Menu',
 			logout: 'Logout',
-			linkAccount: 'Log in to Sync Characters'
+			linkAccount: 'Log in to Sync Characters',
+			lightTheme: 'Change to Light Theme',
+			darkTheme: 'Change to Dark Theme'
 		},
 		'screen-reader': {
 			'navigation-title': 'Navigation',

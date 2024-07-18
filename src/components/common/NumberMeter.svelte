@@ -56,7 +56,8 @@
 
 <style lang="scss">
 	.number-meter {
-		background-color: $gray-300;
+		background-color: $background-inset-alt;
+		color: $text-secondary;
 		border-radius: $border-radius;
 		display: inline-flex;
 		flex-direction: column;
@@ -66,12 +67,10 @@
 		.meter-actions {
 			display: flex;
 			align-items: stretch;
-			color: $text-secondary;
 		}
 		.label {
 			padding-left: $space-1;
 			padding-right: $space-1;
-			color: $text-secondary;
 		}
 		.value {
 			border-radius: $border-radius;
@@ -82,6 +81,11 @@
 			background-color: $gray-700;
 			color: #fff;
 			width: 50px;
+		}
+	}
+	:global([data-theme='dark']) {
+		.number-meter .value {
+			background-color: $gray-900;
 		}
 	}
 </style>

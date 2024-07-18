@@ -69,14 +69,13 @@
 	}
 	@media (min-width: $breakpoint-sm) {
 		.nav-rail {
-			background-color: $gray-700;
+			background-color: $gray-800;
 			color: #fff;
 			display: flex;
 			flex-direction: column;
 			align-items: center;
 			justify-content: space-between;
 			padding: $space-4 $space-2;
-			border-right: 1px solid $gray-800;
 			nav {
 				display: flex;
 				flex-direction: column;
@@ -90,7 +89,7 @@
 		margin-top: $space-3;
 	}
 	:global(.nav-rail-item:hover .nav-link .icon-container .icon) {
-		background-color: $gray-600;
+		background-color: $gray-900;
 	}
 	:global(.nav-rail-item:hover .nav-link.active .icon-container .icon) {
 		background-color: $gray-900;
@@ -109,7 +108,6 @@
 		.icon {
 			border-radius: 999px;
 			padding: $space-1_5 $space-4_5;
-			background-color: $gray-700;
 			transition-property: padding margin background-color color;
 			transition-timing-function: ease-in-out;
 			transition-duration: $transitionDuration;
@@ -146,7 +144,7 @@
 			}
 		}
 		.icon {
-			background-color: $gray-800;
+			background-color: $gray-900;
 			color: #fff;
 			position: relative;
 			z-index: 2;

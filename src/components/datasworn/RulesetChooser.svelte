@@ -66,4 +66,7 @@
 			color: $error-600;
 		}
 	}
+	:global([data-theme='dark'] #ruleset-required-text.error) {
+		color: $error-400;
+	}
 </style>

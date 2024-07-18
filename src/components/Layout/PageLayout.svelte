@@ -40,7 +40,7 @@
 		width: 100%;
 		margin: 0 auto;
 		padding: 0 $space-4;
-		background-color: $background-surface;
+		background-color: $background-default;
 	}
 	.page-sm {
 		max-width: $breakpoint-sm;

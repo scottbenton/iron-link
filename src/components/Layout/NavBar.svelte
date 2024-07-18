@@ -2,7 +2,6 @@
 	import IronLinkLogo from '$assets/IronLinkLogo.svelte';
 	import HamburgerMenuIcon from 'virtual:icons/tabler/menu-2';
 	import Drawer from '../common/Drawer.svelte';
-	import { melt } from '@melt-ui/svelte';
 	import { i18n } from '$lib/i18n';
 	import CharacterIcon from 'virtual:icons/tabler/user';
 	import CampaignIcon from 'virtual:icons/tabler/users-group';
@@ -60,7 +59,7 @@
 								closeDialog && closeDialog();
 							}}
 							to={`/${path}`}
-							class="nav-link-item"
+							class="nav-drawer-item"
 						>
 							<div class="nav-link" class:active={activePath === path}>
 								<div class="icon"><Icon /></div>
@@ -82,7 +81,7 @@
 		display: flex;
 		padding-top: $space-2;
 		padding-bottom: $space-2;
-		background-color: $gray-700;
+		background-color: $gray-800;
 		color: #fff;
 		justify-content: space-between;
 	}
@@ -99,19 +98,16 @@
 	}
 	li {
 		color: $text-primary;
-		:hover {
-			background-color: $gray-200;
-		}
 		.icon {
 			flex-shrink: 0;
 		}
 		.name {
 			flex-shrink: 0;
-			margin-left: $space-2;
+			margin-left: $space-4;
 		}
 	}
 
-	:global(.nav-link-item) {
+	:global(.nav-drawer-item) {
 		color: inherit;
 		text-decoration: none;
 	}
@@ -121,6 +117,9 @@
 		align-items: center;
 		padding: $space-3 $space-6;
 		padding-left: $space-4;
+		&:hover {
+			background-color: $background-hover;
+		}
 	}
 
 	.left-nav {
