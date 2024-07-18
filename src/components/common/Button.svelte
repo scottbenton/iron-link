@@ -1,20 +1,41 @@
 <script lang="ts">
-	import { link, Link } from 'svelte-routing';
+	import { melt } from '@melt-ui/svelte';
+	import { link } from 'svelte-routing';
+	import type { Action } from 'svelte/action';
+	type SomeBuilder<Element, Param, Attributes extends Record<string, any>> = Record<string, any> & {
+		action: Action<Element, Param, Attributes>;
+	};
 
 	export let variant: 'primary-gradient' | 'primary' | 'secondary' | 'text' = 'primary-gradient';
 	export let dangerButton: boolean = false;
 	export let href: string | undefined = undefined;
 	export let onClick: (() => void) | undefined = undefined;
+	export let isLabel: boolean = false;
 	export let type: 'button' | 'submit' | 'reset' = 'button';
+
+	export let meltAction: SomeBuilder<HTMLButtonElement, never, Record<string, any>> | undefined =
+		undefined;
 </script>
 
-{#if href}
+{#if isLabel}
+	<label class={`button ${variant} ${dangerButton ? 'danger' : ''}`} {...$$props}>
+		<span class="content">
+			<slot />
+			{#if $$slots.endIcon}
+				<span class="end-icon">
+					<slot name="endIcon" />
+				</span>
+			{/if}
+		</span>
+	</label>
+{:else if href}
 	<a
 		class={`button ${variant} ${dangerButton ? 'danger' : ''}`}
 		{href}
 		{...$$props}
 		on:click={() => onClick && onClick()}
 		use:link
+		use:melt={meltAction ?? { action: () => ({ destroy: () => {} }) }}
 	>
 		<span class="content"
 			><slot />
@@ -31,6 +52,7 @@
 		class={`button ${variant} ${dangerButton ? 'danger' : ''}`}
 		{...$$props}
 		on:click={() => onClick && onClick()}
+		use:melt={meltAction ?? { action: () => ({ destroy: () => {} }) }}
 	>
 		<span class="content">
 			<slot />
