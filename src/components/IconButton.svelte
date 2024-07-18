@@ -27,6 +27,7 @@
 
 <style lang="scss">
 	.icon-button {
+		flex-shrink: 0;
 		background-color: transparent;
 		border: none;
 		cursor: pointer;
@@ -37,7 +38,7 @@
 		transition-timing-function: ease-in-out;
 		color: inherit;
 		&:not(:disabled):hover {
-			background-color: transparentize($color: $gray-950, $amount: 0.2);
+			background-color: $background-hover;
 		}
 		&:disabled {
 			color: $text-tertiary;

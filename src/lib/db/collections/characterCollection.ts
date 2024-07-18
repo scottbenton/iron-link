@@ -4,11 +4,11 @@ import {
 	toTypedRxJsonSchema,
 	type ExtractDocumentTypeFromTypedRxJsonSchema,
 	type RxCollection,
-	type RxDatabase,
+	type RxCollectionCreator,
 	type RxJsonSchema
 } from 'rxdb';
-import { replicateFirestore } from '../firestorePlugin';
 import type { DB } from '../db';
+import { replicateFirestore } from 'rxdb/plugins/replication-firestore';
 
 const characterSchemaLiteral = {
 	title: 'character schema',
@@ -119,6 +119,34 @@ const characterSchemaLiteral = {
 
 		uid: {
 			type: 'string'
+		},
+
+		portrait: {
+			type: 'object',
+			properties: {
+				filename: {
+					type: 'string'
+				},
+				settings: {
+					type: 'object',
+					properties: {
+						zoom: {
+							type: 'number'
+						},
+						crop: {
+							type: 'object',
+							properties: {
+								x: {
+									type: 'number'
+								},
+								y: {
+									type: 'number'
+								}
+							}
+						}
+					}
+				}
+			}
 		}
 	},
 	required: ['name', 'uid', '_id', 'rulesetIds']
@@ -134,24 +162,15 @@ const characterSchema: RxJsonSchema<CharacterType> = characterSchemaLiteral;
 
 export type CharacterCollectionType = RxCollection<CharacterType>;
 
-export async function addCharacterCollection(db: RxDatabase): Promise<void> {
-	await db.addCollections({
-		characters: {
-			schema: characterSchema,
-			autoMigrate: true,
-			migrationStrategies: {
-				1: (oldDoc) => {
-					oldDoc.uid = '';
-					return oldDoc;
-				}
-			}
-		}
-	});
-}
+export const characterCollection: RxCollectionCreator = {
+	schema: characterSchema,
+	autoMigrate: false,
+	migrationStrategies: {}
+};
 
 export function addCharacterReplication(db: DB, uid: string) {
 	const characters = db.characters;
-	return replicateFirestore({
+	const replication = replicateFirestore({
 		collection: characters,
 		firestore: {
 			projectId: firebaseConfig.projectId,
@@ -165,4 +184,8 @@ export function addCharacterReplication(db: DB, uid: string) {
 		live: true,
 		replicationIdentifier: 'characters'
 	});
+
+	replication.error$.subscribe((err) => console.error(err.parameters.errors));
+
+	return replication;
 }

@@ -95,6 +95,7 @@
 
 		.input-action {
 			padding-right: $space-1;
+			flex-shrink: 0;
 		}
 
 		&:focus-within {

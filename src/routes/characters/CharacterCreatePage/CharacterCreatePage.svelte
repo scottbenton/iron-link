@@ -1,5 +1,7 @@
 <script lang="ts">
 	import Button from '$components/common/Button.svelte';
+	import CroppedImage from '$components/common/CroppedImage.svelte';
+	import ImageUploadDialog from '$components/common/Input/ImageUploadAndCropDialog.svelte';
 	import OracleInputButton from '$components/common/Input/OracleInputButton.svelte';
 	import TextInput from '$components/common/Input/TextInput.svelte';
 	import NumberMeter from '$components/common/NumberMeter.svelte';
@@ -11,8 +13,12 @@
 	import type { CharacterType } from '$lib/db/collections/characterCollection';
 	import { createId } from '$lib/db/createId';
 	import { authStore } from '$lib/firebase/auth';
+	import { uploadFile } from '$lib/firebase/storage';
 	import { i18n } from '$lib/i18n';
 	import { Breakpoints } from '$types/breakpoints';
+	import type { FileSettings } from '$types/FileSettings.type';
+	import { melt } from '@melt-ui/svelte';
+	import { createBlob } from 'rxdb';
 	import { navigate } from 'svelte-routing';
 	import AddIcon from 'virtual:icons/tabler/plus';
 
@@ -28,6 +34,8 @@
 	$: pronouns = '';
 	$: callsign = '';
 	$: statsValues = {} as Record<string, number>;
+	$: profileImage = undefined as File | undefined;
+	$: profileImageSettings = undefined as FileSettings | undefined;
 
 	function handleCreateCharacter() {
 		const uid = $authStore.user?.uid;
@@ -68,11 +76,34 @@
 			expansionIds,
 			uid
 		};
+		const filenameId = createId();
+		const filenameExt = profileImage?.name.split('.').pop();
+		const filename = `${filenameId}.${filenameExt ?? ''}`;
+		if (profileImage) {
+			character.portrait = {
+				filename,
+				settings: profileImageSettings
+			};
+		}
 		$dbStore.db?.characters
 			?.insert(character)
 			.then(() => {
-				// Redirect
-				navigate(`/characters/${character._id}`);
+				if (profileImage) {
+					const copiedFile = new File([profileImage], filename, {
+						type: profileImage.type,
+						lastModified: new Date().getTime()
+					});
+					uploadFile('characters', character._id, copiedFile)
+						.then(() => {
+							navigate(`/characters/${character._id}`);
+						})
+						.catch((e) => {
+							console.error(e);
+						});
+				} else {
+					// Redirect
+					navigate(`/characters/${character._id}`);
+				}
 			})
 			.catch((e) => {
 				console.error(e);
@@ -97,58 +128,84 @@
 		<SectionHeader title={$i18n.t('characterCreatePage.gameSystemsHeading')} />
 		<RulesetChooser showError={showErrors} />
 		<SectionHeader title={$i18n.t('characterCreatePage.characterDetailsHeading')} />
-		<div class="grid">
-			<div>
+		<div class="character-details">
+			<ImageUploadDialog
+				onUpload={(file, settings) => {
+					profileImage = file;
+					profileImageSettings = settings;
+				}}
+				onRemove={() => {
+					profileImage = undefined;
+					profileImageSettings = undefined;
+				}}
+				file={profileImage}
+				fileSettings={profileImageSettings}
+			>
+				<svelte:fragment slot="trigger" let:trigger>
+					<button use:melt={trigger} class="profile-upload-trigger">
+						<div class="image">
+							<CroppedImage image={profileImage} settings={profileImageSettings} />
+						</div>
+						<div class="text">
+							{$i18n.t('characterCreatePage.uploadPortrait')}
+						</div>
+					</button>
+				</svelte:fragment>
+			</ImageUploadDialog>
+
+			<div class="grid">
+				<div>
+					<TextInput
+						label={$i18n.t('characterCreatePage.nameInputLabel')}
+						id="name"
+						bind:value={name}
+						required
+						error={showErrors && !name.trim()}
+						helperText={showErrors && !name.trim()
+							? $i18n.t('characterCreatePage.nameRequiredError')
+							: undefined}
+					>
+						<svelte:fragment slot="endAction">
+							<OracleInputButton
+								label={$i18n.t('characterCreatePage.nameInputLabel')}
+								oracleIds={[
+									'oracle_rollable:classic/name/ironlander/a',
+									'oracle_rollable:classic/name/ironlander/b',
+									[
+										'oracle_rollable:starforged/character/name/given_name',
+										'oracle_rollable:starforged/character/name/family_name'
+									]
+								]}
+								onResult={(result) => {
+									name = result;
+								}}
+							/>
+						</svelte:fragment>
+					</TextInput>
+				</div>
 				<TextInput
-					label={$i18n.t('characterCreatePage.nameInputLabel')}
-					id="name"
-					bind:value={name}
-					required
-					error={showErrors && !name.trim()}
-					helperText={showErrors && !name.trim()
-						? $i18n.t('characterCreatePage.nameRequiredError')
-						: undefined}
-				>
-					<svelte:fragment slot="endAction">
-						<OracleInputButton
-							label={$i18n.t('characterCreatePage.nameInputLabel')}
-							oracleIds={[
-								'oracle_rollable:classic/name/ironlander/a',
-								'oracle_rollable:classic/name/ironlander/b',
-								[
-									'oracle_rollable:starforged/character/name/given_name',
-									'oracle_rollable:starforged/character/name/family_name'
-								]
-							]}
-							onResult={(result) => {
-								name = result;
-							}}
-						/>
-					</svelte:fragment>
-				</TextInput>
+					label={$i18n.t('characterCreatePage.pronounsInputLabel')}
+					id="pronouns"
+					bind:value={pronouns}
+				/>
+				{#if $isStarforgedActive}
+					<TextInput
+						label={$i18n.t('characterCreatePage.callsignInputLabel')}
+						id="callsign"
+						bind:value={callsign}
+					>
+						<svelte:fragment slot="endAction">
+							<OracleInputButton
+								label={$i18n.t('characterCreatePage.callsignInputLabel')}
+								oracleIds={['oracle_rollable:starforged/character/name/callsign']}
+								onResult={(result) => {
+									callsign = result;
+								}}
+							/>
+						</svelte:fragment>
+					</TextInput>
+				{/if}
 			</div>
-			<TextInput
-				label={$i18n.t('characterCreatePage.pronounsInputLabel')}
-				id="pronouns"
-				bind:value={pronouns}
-			/>
-			{#if $isStarforgedActive}
-				<TextInput
-					label={$i18n.t('characterCreatePage.callsignInputLabel')}
-					id="callsign"
-					bind:value={callsign}
-				>
-					<svelte:fragment slot="endAction">
-						<OracleInputButton
-							label={$i18n.t('characterCreatePage.callsignInputLabel')}
-							oracleIds={['oracle_rollable:starforged/character/name/callsign']}
-							onResult={(result) => {
-								callsign = result;
-							}}
-						/>
-					</svelte:fragment>
-				</TextInput>
-			{/if}
 		</div>
 		{#if Object.keys($stats).length > 0}
 			<div>
@@ -186,8 +243,9 @@
 
 	.grid {
 		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+		grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
 		gap: $space-4;
+		flex-grow: 1;
 	}
 	.stat-grid {
 		display: grid;
@@ -202,5 +260,37 @@
 	.label {
 		font-weight: 600;
 		color: $text-secondary;
+	}
+	.character-details {
+		display: flex;
+		align-items: flex-start;
+		gap: $space-4;
+	}
+
+	.profile-upload-trigger {
+		background-color: transparent;
+		border: 1px solid $divider;
+		border-radius: $border-radius;
+		text-wrap: wrap;
+		width: 128px;
+		box-sizing: border-box;
+		padding: 0px;
+		cursor: pointer;
+		transition-property: background-color;
+		transition-duration: 150ms;
+		transition-timing-function: ease-in-out;
+
+		&:hover {
+			background-color: $background-hover;
+		}
+		.image {
+			margin-top: -1px;
+			margin-left: -1px;
+		}
+		.text {
+			padding: $space-1;
+			font-weight: 600;
+			color: $text-secondary;
+		}
 	}
 </style>

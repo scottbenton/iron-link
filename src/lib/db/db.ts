@@ -1,12 +1,12 @@
-import { type RxDatabase } from 'rxdb';
+import { removeRxDatabase, type RxDatabase } from 'rxdb';
 import {
 	addCharacterReplication,
 	type CharacterCollectionType
 } from './collections/characterCollection';
-import { setupDatabase } from './setupDatabase';
-import type { RxFirestoreReplicationState } from './firestorePlugin';
+import { dbStorage, setupDatabase } from './setupDatabase';
 import type { DocumentData } from 'firebase/firestore';
 import { writable } from 'svelte/store';
+import type { RxFirestoreReplicationState } from 'rxdb/plugins/replication-firestore';
 
 type DBType = {
 	characters: CharacterCollectionType;
@@ -21,21 +21,31 @@ let replicators: Record<keyof DBType, RxFirestoreReplicationState<DocumentData> 
 };
 
 export async function initDB(uid: string | undefined) {
-	console.debug('INIT DB CALLED');
-
 	if (uid) {
 		try {
 			const localDB = await setupDatabase();
-
-			console.debug('ADDING REPLICATORS');
-
 			replicators.characters = addCharacterReplication(localDB, uid);
 
 			db = localDB;
 			dbStore.set({ db: localDB });
 		} catch (e) {
 			console.error(e);
-			location.reload(); // this might fix things?
+			if (localStorage.getItem('db-setup-error-refreshed') === 'true') {
+				const shouldWipe = confirm(
+					'Error setting up database. Click OK to wipe your local data and try again. If you played online recently, your data is backed up, you will not lose anything.'
+				);
+				if (shouldWipe) {
+					localStorage.removeItem('db-setup-error-refreshed');
+					await removeRxDatabase('iron-link-db', dbStorage);
+					location.reload();
+				} else {
+					localStorage.removeItem('db-setup-error-refreshed');
+					throw e;
+				}
+			} else {
+				localStorage.setItem('db-setup-error-refreshed', 'true');
+				location.reload(); // this might fix things?
+			}
 		}
 	} else {
 		dbStore.set({});

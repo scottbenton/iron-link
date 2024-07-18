@@ -15,7 +15,8 @@ export const en = {
 			pronounsInputLabel: 'Pronouns',
 			callsignInputLabel: 'Callsign',
 			createYourCharacterButton: 'Create Your Character',
-			nameRequiredError: 'Name is required'
+			nameRequiredError: 'Name is required',
+			uploadPortrait: 'Upload a Portrait'
 		},
 		campaigns: {
 			capital_campaign_one: 'Campaign',
@@ -39,7 +40,13 @@ export const en = {
 			meterIncrement: 'Increment {{label}}',
 			meterDecrement: 'Decrement {{label}}',
 			meterIncrementNotification: 'Incremented {{label}} to {{value}}',
-			meterDecrementNotification: 'Decremented {{label}} to {{value}}'
+			meterDecrementNotification: 'Decremented {{label}} to {{value}}',
+			imageUploadDialog: {
+				title: 'Upload an Image',
+				changeImage: 'Change Image',
+				uploadButton: 'Upload',
+				removeImageButton: 'Remove Image'
+			}
 		},
 		settingsMenu: {
 			openButtonAriaLabel: 'Open Settings Menu',
