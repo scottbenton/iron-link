@@ -3,17 +3,19 @@
 	import { announcer } from '$lib/stores/announcer.store';
 	import MinusIcon from 'virtual:icons/tabler/minus';
 	import PlusIcon from 'virtual:icons/tabler/plus';
-	import Button from './Button.svelte';
 	import { i18n } from '$lib/i18n';
+	import RollerBox from './RollerBox.svelte';
+	import RollerInnerButton from './RollerInnerButton.svelte';
 
 	export let label: string;
 	export let value: number = 0;
 	export let min: number | undefined = undefined;
 	export let max: number | undefined = undefined;
+	export let actionType: 'reset' | 'roll' | undefined = undefined;
 
 	$: localValue = value ?? 0;
 
-	export let onClick: (() => void) | undefined = undefined;
+	export let onActionClick: (() => void) | undefined = undefined;
 
 	const handleDecrement = () => {
 		if (localValue === min) return;
@@ -27,8 +29,7 @@
 	};
 </script>
 
-<div class="number-meter">
-	<span class="label text-base font-title">{label}</span>
+<RollerBox {label}>
 	<div class="meter-actions">
 		<IconButton
 			disabled={localValue === min}
@@ -37,13 +38,7 @@
 		>
 			<MinusIcon style={'font-size: 1.25rem'} />
 		</IconButton>
-		{#if onClick === undefined}
-			<span class="value font-title text-xl">{localValue >= 0 ? '+' : '-'}{localValue}</span>
-		{:else}
-			<button type="button" class="value font-title text-xl" on:click={() => onClick()}
-				>{localValue >= 0 ? '+' : '-'}{localValue}</button
-			>
-		{/if}
+		<RollerInnerButton {value} onClick={onActionClick} {actionType} />
 		<IconButton
 			disabled={localValue === max}
 			onClick={handleIncrement}
@@ -52,40 +47,11 @@
 			<PlusIcon style={'font-size: 1.25rem'} />
 		</IconButton>
 	</div>
-</div>
+</RollerBox>
 
 <style lang="scss">
-	.number-meter {
-		background-color: $background-inset-alt;
-		color: $text-secondary;
-		border-radius: $border-radius;
-		display: inline-flex;
-		flex-direction: column;
-		align-items: center;
-		padding: $space-1 0;
-
-		.meter-actions {
-			display: flex;
-			align-items: stretch;
-		}
-		.label {
-			padding-left: $space-1;
-			padding-right: $space-1;
-		}
-		.value {
-			border-radius: $border-radius;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			flex-grow: 1;
-			background-color: $gray-700;
-			color: #fff;
-			width: 50px;
-		}
-	}
-	:global([data-theme='dark']) {
-		.number-meter .value {
-			background-color: $gray-900;
-		}
+	.meter-actions {
+		display: flex;
+		align-items: stretch;
 	}
 </style>

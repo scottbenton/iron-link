@@ -81,3 +81,45 @@ export const stats = derived(rulesets, ($rulesets) => {
 	}, {});
 	return stats;
 });
+
+export const conditionMeters = derived(rulesets, ($rulesets) => {
+	const conditionMeters: Record<string, Datasworn.ConditionMeterRule> = $rulesets.reduce(
+		(acc, ruleset) => {
+			if (ruleset.rules.condition_meters) {
+				acc = { ...acc, ...ruleset.rules.condition_meters };
+			}
+			return acc;
+		},
+		{}
+	);
+	return conditionMeters;
+});
+
+export const impacts = derived(rulesets, ($rulesets) => {
+	const impactCategories: Record<string, Datasworn.ImpactCategory> = {};
+	const impacts: Record<string, Datasworn.ImpactRule> = {};
+
+	$rulesets.forEach((ruleset) => {
+		Object.keys(ruleset.rules.impacts).forEach((impactCategoryKey) => {
+			impactCategories[impactCategoryKey] = ruleset.rules.impacts[impactCategoryKey];
+			Object.keys(ruleset.rules.impacts[impactCategoryKey].contents).forEach((impactKey) => {
+				impacts[impactKey] = ruleset.rules.impacts[impactCategoryKey].contents[impactKey];
+			});
+		});
+	});
+
+	return { impactCategories, impacts };
+});
+
+export const specialTracks = derived(rulesets, ($rulesets) => {
+	const specialTracks: Record<string, Datasworn.SpecialTrackRule> = $rulesets.reduce(
+		(acc, ruleset) => {
+			if (ruleset.rules.special_tracks) {
+				acc = { ...acc, ...ruleset.rules.special_tracks };
+			}
+			return acc;
+		},
+		{}
+	);
+	return specialTracks;
+});

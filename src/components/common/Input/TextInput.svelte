@@ -75,6 +75,7 @@
 		color: $text-secondary;
 	}
 	.input-box {
+		background-color: $background-default;
 		display: flex;
 		align-items: center;
 		border: 1px solid $divider;

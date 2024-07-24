@@ -95,6 +95,7 @@
 		list-style-type: none;
 		padding: 0;
 		margin: 0;
+		min-width: 250px;
 	}
 	li {
 		color: $text-primary;

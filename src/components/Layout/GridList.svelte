@@ -1,17 +1,22 @@
 <script lang="ts" generics="T">
 	interface $$Slots {
 		item: { item: T };
+		emptyState: {};
 	}
 	export let items: T[] = [];
 </script>
 
-<ul>
-	{#each items as item}
-		<li>
-			<slot name="item" {item} />
-		</li>
-	{/each}
-</ul>
+{#if items.length > 0}
+	<ul>
+		{#each items as item}
+			<li>
+				<slot name="item" {item} />
+			</li>
+		{/each}
+	</ul>
+{:else}
+	<slot name="emptyState" />
+{/if}
 
 <style lang="scss">
 	ul {

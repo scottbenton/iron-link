@@ -3,13 +3,23 @@
 	import UploadIcon from 'virtual:icons/tabler/user-hexagon';
 
 	const sizes = {
-		small: 64,
-		medium: 128,
-		large: 256
+		xs: 64,
+		sm: 96,
+		md: 128,
+		lg: 192,
+		xl: 256
+	};
+	const fontSizes = {
+		xs: '1.5rem',
+		sm: '1.75rem',
+		md: '2rem',
+		lg: '2.25rem',
+		xl: '2.5rem'
 	};
 
-	export let size: keyof typeof sizes = 'medium';
-	export let image: File | undefined;
+	export let size: keyof typeof sizes = 'md';
+	export let image: File | undefined = undefined;
+	export let imageUrl: string | undefined = undefined;
 	export let settings: FileSettings = {
 		crop: { x: 0, y: 0 },
 		zoom: 1
@@ -24,18 +34,19 @@
 	$: marginLeft = -settings.crop.x;
 
 	$: imageUrl = image ? URL.createObjectURL(image) : undefined;
-	$: transformStatement = `transform: translate(calc(${marginLeft}% ), calc(${marginTop}%))`;
+	$: transformStatement = `transform: translate(${marginLeft}%, ${marginTop}%)`;
 </script>
 
 <div
 	class="portrait"
-	class:empty={!image}
+	class:empty={!image && !imageUrl}
 	style={`width: ${sizes[size]}px; height: ${sizes[size]}px;`}
 >
 	{#if imageUrl}
 		<img
 			src={imageUrl}
 			alt="Cropped"
+			aria-hidden="true"
 			width={isTaller ? `${100 * settings.zoom}%` : 'auto'}
 			height={isTaller ? 'auto' : `${100 * settings.zoom}%`}
 			style={transformStatement}
@@ -44,7 +55,7 @@
 			}}
 		/>
 	{:else}
-		<DefaultIcon font-size="2rem" stroke-width="1px" />
+		<DefaultIcon font-size={fontSizes[size]} stroke-width="1px" />
 	{/if}
 </div>
 
@@ -52,12 +63,9 @@
 	.portrait {
 		overflow: hidden;
 
+		display: block;
 		background-color: $background-inset-alt;
 		color: $text-tertiary;
-		display: block;
-		border-width: 1px;
-		border-style: solid;
-		border-color: $divider;
 		border-radius: $border-radius;
 		flex-shrink: 0;
 

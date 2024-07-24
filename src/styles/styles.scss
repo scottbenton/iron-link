@@ -6,9 +6,9 @@ body {
 :root {
 	--background-default: #fff;
 	--background-inset: #{$gray-100};
-	--background-inset-alt: #{$gray-200};
-	--background-hover: #{transparentize($gray-800, 0.2)};
-	--divider: #{$gray-400};
+	--background-inset-alt: #{$gray-300};
+	--background-hover: #{transparentize($gray-800, 0.1)};
+	--divider: #{$gray-300};
 
 	--background-disabled: #{$gray-300};
 	--divider-disabled: #{$gray-300};
@@ -23,7 +23,7 @@ body {
 	--background-inset: #{$gray-950};
 	--background-inset-alt: #{$gray-800};
 	--background-hover: #{transparentize($gray-100, 0.1)};
-	--divider: #{$gray-500};
+	--divider: #{$gray-700};
 
 	--background-disabled: #{$gray-700};
 	--divider-disabled: #{$gray-700};

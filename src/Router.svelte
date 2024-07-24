@@ -6,6 +6,7 @@
 	import CharacterCreatePage from '$routes/characters/CharacterCreatePage/CharacterCreatePage.svelte';
 	import AuthBlocker from '$components/Layout/AuthBlocker.svelte';
 	import LoginPage from '$routes/LoginPage.svelte';
+	import CharacterSheetPage from '$routes/characters/CharacterSheetPage/CharacterSheetPage.svelte';
 </script>
 
 <Router>
@@ -16,7 +17,7 @@
 				<Router>
 					<Route path="/"><CharacterSelectPage /></Route>
 					<Route path="/add"><CharacterCreatePage /></Route>
-					<Route path="/:id" let:params>Character Page {params.id}</Route>
+					<Route path="/:id" let:params><CharacterSheetPage characterId={params.id} /></Route>
 					<Route path="*">404 Page</Route>
 				</Router>
 			</AuthBlocker>
