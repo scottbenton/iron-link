@@ -8,10 +8,11 @@
 
 	export let open: boolean | undefined = undefined;
 	export let file: File | undefined = undefined;
+	export let fileUrl: string | undefined = undefined;
 	export let fileSettings: FileSettings | undefined = undefined;
 
 	let localFile: File | undefined = file;
-	let localFileSettings: FileSettings = fileSettings ?? {
+	let localFileSettings: FileSettings = {
 		crop: { x: 0, y: 0 },
 		zoom: 1
 	};
@@ -19,21 +20,21 @@
 	let cropPercentages = { x: 0, y: 0 };
 
 	export let onUpload: (file: File, fileSettings: FileSettings) => void;
+	export let onResize: (fileSettings: FileSettings) => void = () => {};
 	export let onRemove: () => void;
 
 	let fileInput: HTMLInputElement;
 
 	$: {
-		if (open && !localFile) {
+		if (open && !(localFile || fileUrl)) {
 			fileInput.click();
 		}
 	}
 
-	let imageUrl: string | undefined = undefined;
 	let reader = new FileReader();
 	reader.addEventListener('load', () => {
 		if (typeof reader.result === 'string') {
-			imageUrl = reader.result;
+			fileUrl = reader.result;
 		}
 	});
 	$: {
@@ -47,10 +48,10 @@
 	<svelte:fragment slot="trigger" let:trigger>
 		<slot name="trigger" {trigger} />
 	</svelte:fragment>
-	{#if imageUrl}
+	{#if fileUrl && open}
 		<div class="cropper-container">
 			<Cropper
-				image={imageUrl}
+				image={fileUrl}
 				bind:crop={localFileSettings.crop}
 				bind:zoom={localFileSettings.zoom}
 				on:cropcomplete={({ detail }) => {
@@ -65,14 +66,14 @@
 			/>
 		</div>
 	{/if}
-	{#if localFile}
+	{#if localFile || fileUrl}
 		<Button variant={'secondary'} onClick={() => fileInput.click()}>
 			{$i18n.t('shared.imageUploadDialog.changeImage')}
 		</Button>
 	{/if}
 	<div class="actions" slot="actions" let:closeDialog>
 		<div>
-			{#if file}
+			{#if file || fileUrl}
 				<Button
 					variant={'text'}
 					dangerButton
@@ -85,12 +86,17 @@
 		</div>
 		<div>
 			<Button variant={'text'} onClick={() => closeDialog()}>{$i18n.t('shared.cancel')}</Button>
-			{#if localFile}
+			{#if localFile || fileUrl}
 				<Button
 					variant={'primary'}
 					onClick={() => {
 						if (localFile) {
 							onUpload(localFile, { zoom: localFileSettings.zoom, crop: cropPercentages });
+							closeDialog();
+						} else if (localFileSettings !== fileSettings) {
+							onResize({ zoom: localFileSettings.zoom, crop: cropPercentages });
+							closeDialog();
+						} else {
 							closeDialog();
 						}
 					}}>{$i18n.t('shared.imageUploadDialog.uploadButton')}</Button

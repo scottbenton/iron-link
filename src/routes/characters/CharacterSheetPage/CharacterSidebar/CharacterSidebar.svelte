@@ -9,12 +9,16 @@
 	import Debilities from '../components/Debilities.svelte';
 	import LegacyTracks from '../components/LegacyTracks.svelte';
 	import Experience from '../components/Experience.svelte';
+	import CharacterSettings from './CharacterSettings.svelte';
 
 	export let character: RxDocument<CharacterType>;
 </script>
 
 <div class="sidebar">
-	<h1 class="font-title text-lg">{$i18n.t('characterSheet.characterHeader')}</h1>
+	<div class="sidebar-title">
+		<h1 class="font-title text-lg">{$i18n.t('characterSheet.characterHeader')}</h1>
+		<CharacterSettings {character} />
+	</div>
 	<CharacterOverview {character} />
 	<CharacterStats {character} />
 	<CharacterMeters {character} />
@@ -27,6 +31,11 @@
 <style lang="scss">
 	.sidebar {
 		padding: $space-4;
+		.sidebar-title {
+			display: flex;
+			align-items: flex-start;
+			justify-content: space-between;
+		}
 		// width: 350px; // todo - work out how to make this responsive
 	}
 </style>

@@ -22,6 +22,7 @@ export const en = {
 		},
 		characterSheet: {
 			characterHeader: 'Character',
+			characterSettingsButtonLabel: 'Character Settings',
 			initiative: {
 				label: 'Initiative',
 				hasInitiative: 'Has Initiative',
