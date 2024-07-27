@@ -4,11 +4,12 @@
 	import type { CharacterType } from '$lib/db/collections/characterCollection';
 	import { i18n } from '$lib/i18n';
 	import type { RxDocument } from 'rxdb';
+	import { onDestroy } from 'svelte';
 
 	export let character: RxDocument<CharacterType>;
 
 	$: conditionMeterValues = (character.conditionMeters as Record<string, number>) ?? {};
-	$: character.conditionMeters$?.subscribe((newMeters) => {
+	$: conditionMeterSubscription = character.conditionMeters$?.subscribe((newMeters) => {
 		conditionMeterValues = (newMeters as Record<string, number>) ?? {};
 	});
 
@@ -21,6 +22,10 @@
 			return doc;
 		});
 	}
+
+	onDestroy(() => {
+		conditionMeterSubscription?.unsubscribe();
+	});
 </script>
 
 <div class="meters-section">

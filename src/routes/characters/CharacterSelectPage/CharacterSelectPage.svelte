@@ -10,11 +10,15 @@
 	import CharacterImage from '$components/common/CharacterImage.svelte';
 	import type { RxDocument } from 'rxdb';
 	import EmptyState from '$components/common/EmptyState.svelte';
+	import { onDestroy } from 'svelte';
 
 	let characters: RxDocument<CharacterType>[] = [];
 
-	$: $dbStore.db?.characters?.find().$.subscribe((chars) => {
+	$: subscription = $dbStore.db?.characters?.find().$.subscribe((chars) => {
 		characters = chars.sort((c1, c2) => c1.name.localeCompare(c2.name));
+	});
+	onDestroy(() => {
+		subscription?.unsubscribe();
 	});
 </script>
 

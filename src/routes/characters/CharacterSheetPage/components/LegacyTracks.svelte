@@ -4,12 +4,17 @@
 	import type { CharacterType } from '$lib/db/collections/characterCollection';
 	import { i18n } from '$lib/i18n';
 	import type { RxDocument } from 'rxdb';
+	import { onDestroy } from 'svelte';
 
 	export let character: RxDocument<CharacterType>;
 
 	$: legacyTrackValues = character.legacyTracks ?? {};
-	$: character.legacyTracks$?.subscribe((newLegacyTrackValues) => {
+	$: legacyTrackSubscription = character.legacyTracks$?.subscribe((newLegacyTrackValues) => {
 		legacyTrackValues = newLegacyTrackValues ?? {};
+	});
+
+	onDestroy(() => {
+		legacyTrackSubscription?.unsubscribe();
 	});
 
 	function handleLegacyTrackValueChange(key: string, value: number) {

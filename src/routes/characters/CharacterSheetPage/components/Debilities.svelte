@@ -7,13 +7,17 @@
 	import type { CharacterType } from '$lib/db/collections/characterCollection';
 	import { i18n } from '$lib/i18n';
 	import type { RxDocument } from 'rxdb';
+	import { onDestroy } from 'svelte';
 	import EditIcon from 'virtual:icons/tabler/edit';
 
 	export let character: RxDocument<CharacterType>;
 
 	$: debilities = character.debilities ?? {};
-	$: character.debilities$?.subscribe((newDebilities) => {
+	$: debilitySubscription = character.debilities$?.subscribe((newDebilities) => {
 		debilities = newDebilities ?? {};
+	});
+	onDestroy(() => {
+		debilitySubscription?.unsubscribe();
 	});
 
 	$: debilityString = Object.keys(debilities)

@@ -3,6 +3,7 @@
 	import type { CharacterType } from '$lib/db/collections/characterCollection';
 	import { i18n } from '$lib/i18n';
 	import type { RxDocument } from 'rxdb';
+	import { onDestroy } from 'svelte';
 
 	export let character: RxDocument<CharacterType>;
 
@@ -10,14 +11,20 @@
 	$: momentum = character.momentum ?? 2;
 	$: adds = character.adds ?? 0;
 
-	$: character.debilities$?.subscribe((newDebilities) => {
+	$: debilitiesSubscription = character.debilities$?.subscribe((newDebilities) => {
 		debilities = newDebilities ?? {};
 	});
-	$: character.momentum$?.subscribe((newMomentum) => {
+	$: momentumSubscription = character.momentum$?.subscribe((newMomentum) => {
 		momentum = newMomentum ?? 2;
 	});
-	$: character.adds$?.subscribe((newAdds) => {
+	$: addsSubscription = character.adds$?.subscribe((newAdds) => {
 		adds = newAdds ?? 0;
+	});
+
+	onDestroy(() => {
+		debilitiesSubscription?.unsubscribe();
+		momentumSubscription?.unsubscribe();
+		addsSubscription?.unsubscribe();
 	});
 
 	$: momentumResetValue = 2;

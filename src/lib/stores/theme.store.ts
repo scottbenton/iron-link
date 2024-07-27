@@ -5,4 +5,25 @@ export enum ThemeType {
 	Dark = 'dark'
 }
 
-export const themeStore = writable<{ type: ThemeType | undefined }>({ type: undefined });
+export enum ColorScheme {
+	Default = 'default',
+	Cinder = 'cinder',
+	Eidolon = 'eidolon',
+	Hinterlands = 'hinterlands',
+	Myriad = 'myriad',
+	Mystic = 'mystic'
+}
+
+export const colorSchemes: ColorScheme[] = [
+	ColorScheme.Default,
+	ColorScheme.Cinder,
+	ColorScheme.Eidolon,
+	ColorScheme.Hinterlands,
+	ColorScheme.Myriad,
+	ColorScheme.Mystic
+];
+
+export const themeStore = writable<{ type: ThemeType | undefined; colorScheme: ColorScheme }>({
+	type: undefined,
+	colorScheme: ColorScheme.Default
+});

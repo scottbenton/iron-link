@@ -4,12 +4,16 @@
 	import type { CharacterType } from '$lib/db/collections/characterCollection';
 	import { i18n } from '$lib/i18n';
 	import type { RxDocument } from 'rxdb';
+	import { onDestroy } from 'svelte';
 
 	export let character: RxDocument<CharacterType>;
 
 	$: statValues = character.stats as Record<string, number>;
-	$: character.stats$?.subscribe((newStats) => {
+	$: statSubscription = character.stats$?.subscribe((newStats) => {
 		statValues = newStats as Record<string, number>;
+	});
+	onDestroy(() => {
+		statSubscription?.unsubscribe();
 	});
 </script>
 

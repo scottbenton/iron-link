@@ -3,20 +3,26 @@
 	import CharacterImage from '$components/common/CharacterImage.svelte';
 	import InitiativeButtons from '../components/InitiativeButtons.svelte';
 	import type { RxDocument } from 'rxdb';
+	import { onDestroy } from 'svelte';
 
 	export let character: RxDocument<CharacterType>;
 
 	$: name = character.name;
 	$: personalDetails = undefined as string | undefined;
-	$: character.name$.subscribe((newName) => {
+	$: nameSubscription = character.name$.subscribe((newName) => {
 		name = newName;
 	});
-	$: character.personalDetails$?.subscribe((details) => {
+	$: detailSubscription = character.personalDetails$?.subscribe((details) => {
 		personalDetails = details
 			? Object.values(details)
 					.filter((detail) => detail?.trim())
 					.join(' | ')
 			: undefined;
+	});
+
+	onDestroy(() => {
+		nameSubscription?.unsubscribe();
+		detailSubscription?.unsubscribe();
 	});
 </script>
 

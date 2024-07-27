@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { CharacterType } from '$lib/db/collections/characterCollection';
 	import { getFileURL } from '$lib/firebase/storage';
-	import type { SvelteComponent } from 'svelte';
+	import { onDestroy, type SvelteComponent } from 'svelte';
 	import CroppedImage from './CroppedImage.svelte';
 	import type { RxDocument } from 'rxdb';
 
@@ -9,8 +9,11 @@
 	export let size: SvelteComponent<CroppedImage>['size'] = 'md';
 
 	$: portrait = character.portrait;
-	$: character.portrait$?.subscribe((newPortrait) => {
+	$: portraitSubscription = character.portrait$?.subscribe((newPortrait) => {
 		portrait = newPortrait;
+	});
+	onDestroy(() => {
+		portraitSubscription?.unsubscribe();
 	});
 	$: imageUrl = undefined as string | undefined;
 

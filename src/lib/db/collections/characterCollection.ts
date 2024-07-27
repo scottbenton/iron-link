@@ -111,6 +111,10 @@ const characterSchemaLiteral = {
 			}
 		},
 
+		theme: {
+			type: 'string'
+		},
+
 		uid: {
 			type: 'string'
 		},
@@ -153,6 +157,7 @@ const schemaTyped = toTypedRxJsonSchema(characterSchemaLiteral);
 
 // aggregate the document type from the schema
 export type CharacterType = ExtractDocumentTypeFromTypedRxJsonSchema<typeof schemaTyped> & {
+	stats: Record<string, number>;
 	conditionMeters?: Record<string, number>;
 	debilities?: Record<string, boolean>;
 	legacyTracks?: Record<string, { value?: number; isLegacy?: boolean }>;

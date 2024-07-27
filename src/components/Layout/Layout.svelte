@@ -26,6 +26,8 @@
 	});
 
 	$: $themeStore.type && document.body.setAttribute('data-theme', $themeStore.type);
+	$: $themeStore.colorScheme &&
+		document.body.setAttribute('data-color-scheme', $themeStore.colorScheme);
 </script>
 
 <div class="layout">

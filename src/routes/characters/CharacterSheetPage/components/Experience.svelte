@@ -3,13 +3,17 @@
 	import type { CharacterType } from '$lib/db/collections/characterCollection';
 	import { i18n } from '$lib/i18n';
 	import type { RxDocument } from 'rxdb';
+	import { onDestroy } from 'svelte';
 
 	export let character: RxDocument<CharacterType>;
 
 	$: experience = character.experience ?? 0;
 
-	$: character.experience$?.subscribe((exp) => {
+	$: experienceSubscription = character.experience$?.subscribe((exp) => {
 		experience = exp ?? 0;
+	});
+	onDestroy(() => {
+		experienceSubscription?.unsubscribe();
 	});
 </script>
 

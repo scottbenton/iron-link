@@ -4,14 +4,18 @@
 	import type { CharacterType } from '$lib/db/collections/characterCollection';
 	import { i18n } from '$lib/i18n';
 	import type { RxDocument } from 'rxdb';
+	import { onDestroy } from 'svelte';
 
 	const defaultInitiativeStatus: CharacterType['initiativeStatus'] = 'outOfCombat';
 
 	export let character: RxDocument<CharacterType>;
 
 	$: initiativeStatus = character.initiativeStatus;
-	$: character.initiativeStatus$?.subscribe((newInitiativeStatus) => {
+	$: initiativeSubscription = character.initiativeStatus$?.subscribe((newInitiativeStatus) => {
 		initiativeStatus = newInitiativeStatus;
+	});
+	onDestroy(() => {
+		initiativeSubscription?.unsubscribe();
 	});
 
 	$: status = (initiativeStatus ?? defaultInitiativeStatus) as Exclude<

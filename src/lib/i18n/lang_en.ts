@@ -42,7 +42,10 @@ export const en = {
 			noActiveImpacts: 'No Active Impacts / Debilities',
 			legacyTracksHeader: 'Legacy Tracks',
 			experienceHeader: 'Experience',
-			unsentExperience: 'Unspent Experience'
+			unsentExperience: 'Unspent Experience',
+			characterDetailsDialogHeader: 'Edit Character Details',
+			characterStatsDialogHeader: 'Edit Character Stats',
+			rulesetChooserDialogHeader: 'Choose Rulesets'
 		},
 		campaigns: {
 			capital_campaign_one: 'Campaign',

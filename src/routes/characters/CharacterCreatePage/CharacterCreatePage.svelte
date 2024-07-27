@@ -8,7 +8,7 @@
 	import SectionHeader from '$components/common/SectionHeader.svelte';
 	import RulesetChooser from '$components/datasworn/RulesetChooser.svelte';
 	import PageLayout from '$components/Layout/PageLayout.svelte';
-	import { activeRulesets, isStarforgedActive, rulesets, stats } from '$lib/datasworn/rules';
+	import { activeRulesets, isStarforgedActive, stats } from '$lib/datasworn/rules';
 	import { dbStore } from '$lib/db';
 	import type { CharacterType } from '$lib/db/collections/characterCollection';
 	import { createId } from '$lib/db/createId';
@@ -16,9 +16,7 @@
 	import { uploadFile } from '$lib/firebase/storage';
 	import { i18n } from '$lib/i18n';
 	import { Breakpoints } from '$types/breakpoints';
-	import type { FileSettings } from '$types/FileSettings.type';
 	import { melt } from '@melt-ui/svelte';
-	import { createBlob } from 'rxdb';
 	import { navigate } from 'svelte-routing';
 	import AddIcon from 'virtual:icons/tabler/plus';
 
