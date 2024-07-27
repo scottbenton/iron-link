@@ -4,11 +4,11 @@
 	import ImageUploadDialog from '$components/common/Input/ImageUploadAndCropDialog.svelte';
 	import OracleInputButton from '$components/common/Input/OracleInputButton.svelte';
 	import TextInput from '$components/common/Input/TextInput.svelte';
-	import NumberMeter from '$components/common/NumberMeter.svelte';
+	import NumberMeter from '$components/datasworn/Rollers/NumberMeter.svelte';
 	import SectionHeader from '$components/common/SectionHeader.svelte';
 	import RulesetChooser from '$components/datasworn/RulesetChooser.svelte';
 	import PageLayout from '$components/Layout/PageLayout.svelte';
-	import { activeRulesets, isStarforgedActive, rulesets, stats } from '$lib/datasworn/rules';
+	import { activeRulesets, isStarforgedActive, stats } from '$lib/datasworn/rules';
 	import { dbStore } from '$lib/db';
 	import type { CharacterType } from '$lib/db/collections/characterCollection';
 	import { createId } from '$lib/db/createId';
@@ -16,9 +16,7 @@
 	import { uploadFile } from '$lib/firebase/storage';
 	import { i18n } from '$lib/i18n';
 	import { Breakpoints } from '$types/breakpoints';
-	import type { FileSettings } from '$types/FileSettings.type';
 	import { melt } from '@melt-ui/svelte';
-	import { createBlob } from 'rxdb';
 	import { navigate } from 'svelte-routing';
 	import AddIcon from 'virtual:icons/tabler/plus';
 
@@ -35,7 +33,10 @@
 	$: callsign = '';
 	$: statsValues = {} as Record<string, number>;
 	$: profileImage = undefined as File | undefined;
-	$: profileImageSettings = undefined as FileSettings | undefined;
+	$: profileImageSettings = {
+		zoom: 1,
+		crop: { x: 0, y: 0 }
+	};
 
 	function handleCreateCharacter() {
 		const uid = $authStore.user?.uid;
@@ -53,12 +54,13 @@
 			return;
 		}
 
-		const expansionIds: string[] = [];
+		const expansionIds: Record<string, string[]> = {};
 		Object.keys($activeRulesets.expansionIds).forEach((rulesetId) => {
 			if ($activeRulesets.rulesetIds[rulesetId]) {
+				expansionIds[rulesetId] = [];
 				Object.keys($activeRulesets.expansionIds[rulesetId] ?? {}).forEach((expansionId) => {
 					if ($activeRulesets.expansionIds[rulesetId][expansionId]) {
-						expansionIds.push(expansionId);
+						expansionIds[rulesetId].push(expansionId);
 					}
 				});
 			}
@@ -69,8 +71,8 @@
 			name,
 			stats: statsValues,
 			personalDetails: {
-				pronouns,
-				callsign
+				pronouns: pronouns.trim() || undefined,
+				callsign: callsign.trim() || undefined
 			},
 			rulesetIds: Object.keys($activeRulesets.rulesetIds),
 			expansionIds,
@@ -136,7 +138,6 @@
 				}}
 				onRemove={() => {
 					profileImage = undefined;
-					profileImageSettings = undefined;
 				}}
 				file={profileImage}
 				fileSettings={profileImageSettings}
@@ -264,6 +265,7 @@
 	.character-details {
 		display: flex;
 		align-items: flex-start;
+		flex-wrap: wrap;
 		gap: $space-4;
 	}
 

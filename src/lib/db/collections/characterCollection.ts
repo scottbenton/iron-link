@@ -65,7 +65,7 @@ const characterSchemaLiteral = {
 			enum: ['initiative', 'noInitiative', 'outOfCombat'],
 			default: 'outOfCombat'
 		},
-		specialTracks: {
+		legacyTracks: {
 			type: 'object',
 			patternProperties: {
 				'.*': {
@@ -82,15 +82,7 @@ const characterSchemaLiteral = {
 			}
 		},
 		experience: {
-			type: 'object',
-			properties: {
-				spent: {
-					type: 'number'
-				},
-				earned: {
-					type: 'number'
-				}
-			}
+			type: 'number'
 		},
 		debilities: {
 			type: 'object',
@@ -111,10 +103,16 @@ const characterSchemaLiteral = {
 			}
 		},
 		expansionIds: {
-			type: 'array',
-			items: {
-				type: 'string'
+			type: 'object',
+			patternProperties: {
+				'.*': {
+					type: 'boolean'
+				}
 			}
+		},
+
+		theme: {
+			type: 'string'
 		},
 
 		uid: {
@@ -142,11 +140,14 @@ const characterSchemaLiteral = {
 								y: {
 									type: 'number'
 								}
-							}
+							},
+							required: ['x', 'y']
 						}
-					}
+					},
+					required: ['zoom', 'crop']
 				}
-			}
+			},
+			required: ['filename', 'settings']
 		}
 	},
 	required: ['name', 'uid', '_id', 'rulesetIds']
@@ -155,7 +156,12 @@ const characterSchemaLiteral = {
 const schemaTyped = toTypedRxJsonSchema(characterSchemaLiteral);
 
 // aggregate the document type from the schema
-export type CharacterType = ExtractDocumentTypeFromTypedRxJsonSchema<typeof schemaTyped>;
+export type CharacterType = ExtractDocumentTypeFromTypedRxJsonSchema<typeof schemaTyped> & {
+	stats: Record<string, number>;
+	conditionMeters?: Record<string, number>;
+	debilities?: Record<string, boolean>;
+	legacyTracks?: Record<string, { value?: number; isLegacy?: boolean }>;
+};
 
 // create the typed RxJsonSchema from the literal typed object.
 const characterSchema: RxJsonSchema<CharacterType> = characterSchemaLiteral;
@@ -178,9 +184,12 @@ export function addCharacterReplication(db: DB, uid: string) {
 			collection: collection(firestore, 'characters')
 		},
 		pull: {
-			filter: [where('uid', '==', uid)]
+			filter: [where('uid', '==', uid)],
+			modifier: (obj) => transformNullToUndefined(obj)
 		},
-		push: {},
+		push: {
+			modifier: (obj) => transformUndefinedToNull(obj)
+		},
 		live: true,
 		replicationIdentifier: 'characters'
 	});
@@ -188,4 +197,39 @@ export function addCharacterReplication(db: DB, uid: string) {
 	replication.error$.subscribe((err) => console.error(err.parameters.errors));
 
 	return replication;
+}
+
+function transformUndefinedToNull(obj: any): any {
+	// Check if the input is an object
+	if (obj !== null && typeof obj === 'object') {
+		// Iterate over object keys
+		Object.keys(obj).forEach((key) => {
+			// If the value is undefined, set it to null
+			if (obj[key] === undefined) {
+				obj[key] = null;
+			} else if (typeof obj[key] === 'object') {
+				// If the value is an object, recursively call the function
+				transformUndefinedToNull(obj[key]);
+			}
+		});
+	}
+	return obj;
+}
+
+// Takes an object and converts all null values to undefined
+function transformNullToUndefined(obj: any): any {
+	// Check if the input is an object
+	if (obj !== null && typeof obj === 'object') {
+		// Iterate over object keys
+		Object.keys(obj).forEach((key) => {
+			// If the value is undefined, set it to null
+			if (obj[key] === null) {
+				obj[key] = undefined;
+			} else if (typeof obj[key] === 'object') {
+				// If the value is an object, recursively call the function
+				transformNullToUndefined(obj[key]);
+			}
+		});
+	}
+	return obj;
 }

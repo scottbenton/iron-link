@@ -1,11 +1,6 @@
 <script lang="ts">
 	import Checkbox from '$components/common/Input/Checkbox.svelte';
-	import {
-		activeRulesets,
-		defaultExpansions,
-		defaultRulesets,
-		rulesets
-	} from '$lib/datasworn/rules';
+	import { activeRulesets, defaultExpansions, defaultRulesets } from '$lib/datasworn/rules';
 	import { i18n } from '$lib/i18n';
 
 	export let showError = false;

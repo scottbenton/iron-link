@@ -119,9 +119,9 @@
 		background-color: $gray-800;
 
 		display: inline-block;
-		padding: 3px;
-		margin: -3px;
-		border-radius: calc($border-radius + 3px);
+		padding: 2px;
+		margin: -2px;
+		border-radius: calc($border-radius + 2px);
 		color: #fff;
 		&:disabled {
 			background-color: $gray-300;
@@ -141,10 +141,7 @@
 			display: block;
 			position: absolute;
 			z-index: 1;
-			left: 0;
-			right: 0;
-			top: 0;
-			bottom: 0;
+			inset: -4px;
 			margin: auto;
 			aspect-ratio: 1;
 			border-radius: inherit;
@@ -170,9 +167,6 @@
 			padding: $space-1;
 			margin: $-space-1;
 			border-radius: calc($border-radius + $space-1);
-			.content {
-				background-color: $gray-900;
-			}
 		}
 	}
 

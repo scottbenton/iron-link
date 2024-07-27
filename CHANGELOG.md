@@ -1,3 +1,11 @@
+# 0.0.5
+
+## New Features
+
+- Added character panel with some basic character information
+- Added basic three-panel layout, with the panels shrinking into drawers as the screen shrinks
+- Added themes to the character sheet
+
 # 0.0.4
 
 ## Fixes

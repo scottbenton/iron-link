@@ -6,7 +6,9 @@ export const en = {
 			character_one: 'character',
 			character_other: 'characters',
 			create: 'Create a Character',
-			statsLabel: 'Stats'
+			statsLabel: 'Stats',
+			emptyStateTitle: 'No Characters Found',
+			emptyState: 'Create a new character to get started.'
 		},
 		characterCreatePage: {
 			gameSystemsHeading: 'Game Systems',
@@ -17,6 +19,33 @@ export const en = {
 			createYourCharacterButton: 'Create Your Character',
 			nameRequiredError: 'Name is required',
 			uploadPortrait: 'Upload a Portrait'
+		},
+		characterSheet: {
+			characterHeader: 'Character',
+			characterSettingsButtonLabel: 'Character Settings',
+			initiative: {
+				label: 'Initiative',
+				hasInitiative: 'Has Initiative',
+				noInitiative: 'No Initiative',
+				outOfCombat: 'Out of Combat',
+				hasInitiativeStarforged: 'In Control',
+				noInitiativeStarforged: 'In a Bad Spot'
+			},
+			statsHeader: 'Stats',
+			conditionMeterHeader: 'Condition Meters',
+			rollAffectsHeader: 'Roll Modifiers',
+			momentumLabel: 'Momentum',
+			addsLabel: 'Adds',
+			impactsHeader: 'Impacts / Debilities',
+			activeImpactsHeader: 'Active Impacts / Debilities',
+			activeImpactsEditButton: 'Edit Active Impacts / Debilities',
+			noActiveImpacts: 'No Active Impacts / Debilities',
+			legacyTracksHeader: 'Legacy Tracks',
+			experienceHeader: 'Experience',
+			unsentExperience: 'Unspent Experience',
+			characterDetailsDialogHeader: 'Edit Character Details',
+			characterStatsDialogHeader: 'Edit Character Stats',
+			rulesetChooserDialogHeader: 'Choose Rulesets'
 		},
 		campaigns: {
 			capital_campaign_one: 'Campaign',
@@ -35,12 +64,14 @@ export const en = {
 		shared: {
 			cancel: 'Cancel',
 			closeModal: 'Close Modal',
+			done: 'Done',
 			errorPrefix: 'Error',
 			rulesetRequiredText: 'You must choose at least one ruleset',
 			meterIncrement: 'Increment {{label}}',
 			meterDecrement: 'Decrement {{label}}',
 			meterIncrementNotification: 'Incremented {{label}} to {{value}}',
 			meterDecrementNotification: 'Decremented {{label}} to {{value}}',
+			progressValue: '{{ticks}} ticks filled for a total of {{boxes}} boxes fully filled',
 			imageUploadDialog: {
 				title: 'Upload an Image',
 				changeImage: 'Change Image',
