@@ -4,7 +4,8 @@ import WorldsIcon from "@mui/icons-material/TravelExplore";
 import HomebrewIcon from "@mui/icons-material/Edit";
 import SignInIcon from "@mui/icons-material/Person";
 import SignUpIcon from "@mui/icons-material/PersonAddAlt1";
-import { routes } from "pages/routes";
+import { pathConfig } from "pages/pathConfig";
+import { i18n } from "i18n/config";
 
 export interface NavRouteConfig {
   Logo: typeof CharacterIcon;
@@ -16,40 +17,40 @@ export interface NavRouteConfig {
 export const authenticatedNavRoutes: NavRouteConfig[] = [
   {
     Logo: CharacterIcon,
-    title: "Characters",
-    href: routes.characterSelect,
-    checkIsSelected: (path) => path.startsWith(routes.characterSelect),
+    title: i18n.t("Characters"),
+    href: pathConfig.characterSelect,
+    checkIsSelected: (path) => path.startsWith(pathConfig.characterSelect),
   },
   {
     Logo: CampaignsIcon,
-    title: "Campaigns",
-    href: routes.campaignSelect,
-    checkIsSelected: (path) => path.startsWith(routes.campaignSelect),
+    title: i18n.t("Campaigns"),
+    href: pathConfig.campaignSelect,
+    checkIsSelected: (path) => path.startsWith(pathConfig.campaignSelect),
   },
   {
     Logo: WorldsIcon,
-    title: "Worlds",
-    href: routes.worldSelect,
-    checkIsSelected: (path) => path.startsWith(routes.worldSelect),
+    title: i18n.t("Worlds"),
+    href: pathConfig.worldSelect,
+    checkIsSelected: (path) => path.startsWith(pathConfig.worldSelect),
   },
   {
     Logo: HomebrewIcon,
-    title: "Homebrew",
-    href: routes.homebrewSelect,
-    checkIsSelected: (path) => path.startsWith(routes.homebrewSelect),
+    title: i18n.t("Homebrew"),
+    href: pathConfig.homebrewSelect,
+    checkIsSelected: (path) => path.startsWith(pathConfig.homebrewSelect),
   },
 ];
 export const unauthenticatedNavRoutes: NavRouteConfig[] = [
   {
     Logo: SignInIcon,
-    title: "Sign In",
-    href: routes.signIn,
-    checkIsSelected: (path) => path.startsWith(routes.signIn),
+    title: i18n.t("Sign In"),
+    href: pathConfig.signIn,
+    checkIsSelected: (path) => path.startsWith(pathConfig.signIn),
   },
   {
     Logo: SignUpIcon,
-    title: "Sign Up",
-    href: routes.signUp,
-    checkIsSelected: (path) => path.startsWith(routes.signUp),
+    title: i18n.t("Sign Up"),
+    href: pathConfig.signUp,
+    checkIsSelected: (path) => path.startsWith(pathConfig.signUp),
   },
 ];

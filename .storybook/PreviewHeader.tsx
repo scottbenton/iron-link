@@ -10,7 +10,7 @@ import {
 import { ColorScheme, useColorScheme } from "../src/atoms/theme.atom";
 
 export function PreviewHeader() {
-  const { mode, setMode } = useThemeMode();
+  const { colorScheme: mode, setColorScheme: setMode } = useThemeMode();
   const [colorScheme, setColorScheme] = useColorScheme();
 
   return (
@@ -42,7 +42,6 @@ export function PreviewHeader() {
           <Switch
             checked={mode === "dark"}
             onChange={(evt) => {
-              console.debug("SWITCH CLICKED", evt.target.checked);
               setMode(evt.target.checked ? "dark" : "light");
             }}
           />

@@ -87,6 +87,37 @@ export const config: ThemeConfig = {
 
 export function getTheme(colorScheme: ColorScheme): Theme {
   return createTheme({
+    shape: {
+      borderRadius: 8,
+    },
+    typography: {
+      fontFamily: [
+        "Inter Variable",
+        "-apple-system",
+        "BlinkMacSystemFont",
+        '"Segoe UI"',
+        "Roboto",
+        '"Helvetica Neue"',
+        "Arial",
+        "sans-serif",
+        '"Apple Color Emoji"',
+        '"Segoe UI Emoji"',
+        '"Segoe UI Symbol"',
+      ].join(","),
+      fontFamilyTitle: [
+        "Barlow Condensed",
+        "-apple-system",
+        "BlinkMacSystemFont",
+        '"Segoe UI"',
+        "Roboto",
+        '"Helvetica Neue"',
+        "Arial",
+        "sans-serif",
+        '"Apple Color Emoji"',
+        '"Segoe UI Emoji"',
+        '"Segoe UI Symbol"',
+      ].join(","),
+    },
     palette: {
       grey: grey,
       background: {
@@ -136,4 +167,10 @@ export function getTheme(colorScheme: ColorScheme): Theme {
       },
     },
   });
+}
+
+declare module "@mui/material" {
+  interface TypographyOptions {
+    fontFamilyTitle: string;
+  }
 }

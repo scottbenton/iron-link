@@ -8,6 +8,11 @@ import {
   withRouter,
 } from "storybook-addon-remix-react-router";
 import "../src/App.css";
+import "@fontsource-variable/inter";
+import "@fontsource/barlow-condensed/600.css";
+
+import { allDefaultPackages } from "../src/data/datasworn.packages";
+import { useSetDataswornTree } from "../src/atoms/dataswornTree.atom";
 
 const preview: Preview = {
   parameters: {
@@ -23,16 +28,39 @@ const preview: Preview = {
     }),
   },
   decorators: [
-    (Stories) => (
-      <ThemeProvider>
-        <Box sx={{ bgcolor: "background.default", color: "primary.main" }}>
-          <PreviewHeader />
-          <Box p={4}>
-            <Stories />
+    (Stories, args) => {
+      useSetDataswornTree(allDefaultPackages);
+      const shouldBeCentered = args.tags.includes("centered");
+      const isCard = args.tags.includes("card");
+      return (
+        <ThemeProvider>
+          <Box sx={{ bgcolor: "background.default", color: "text.primary" }}>
+            <PreviewHeader />
+            <Box
+              p={4}
+              sx={[
+                shouldBeCentered
+                  ? {
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      flexDirection: "column",
+                    }
+                  : {},
+                isCard
+                  ? {
+                      maxWidth: 400,
+                      mx: "auto",
+                    }
+                  : {},
+              ]}
+            >
+              <Stories />
+            </Box>
           </Box>
-        </Box>
-      </ThemeProvider>
-    ),
+        </ThemeProvider>
+      );
+    },
     withRouter,
   ],
 };

@@ -20,11 +20,15 @@ export function GradientBox(props: GradientBoxProps) {
             : {
                 content: '""',
                 position: "absolute",
-                top: -5,
-                left: -5,
-                right: -5,
-                bottom: -5,
-                aspectRatio: "1/1",
+                display: "block",
+                left: "-10%",
+                right: "-10%",
+                top: 0,
+                bottom: 0,
+                margin: "auto 0",
+                minWidth: "calc(100% * sqrt(2))", // Diagonal length
+                minHeight: "calc(100% * sqrt(2))", // Diagonal length
+                aspectRatio: "1 / 1",
                 background: (theme) =>
                   `radial-gradient(142% 91% at 111% 84%, ${theme.palette.secondary.dark} 20%, ${theme.palette.primary.light} 80%)`,
                 animation: prefersReducedMotion

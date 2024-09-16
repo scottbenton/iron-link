@@ -7,7 +7,6 @@ export function NavRailItem(props: NavRouteConfig) {
   const { Logo, title, checkIsSelected, href } = props;
 
   const { pathname } = useLocation();
-  console.debug(pathname);
 
   const isSelected = checkIsSelected(pathname);
 
@@ -30,7 +29,7 @@ export function NavRailItem(props: NavRouteConfig) {
           "& .pill": {
             bgcolor: isSelected ? "grey.900" : "grey.800",
             px: isSelected ? 2.25 : 2.5,
-            py: isSelected ? 0.75 : 1,
+            py: isSelected ? 0.5 : 0.75,
             border: "1px solid",
             borderColor: isSelected ? "transparent" : "grey.800",
           },
@@ -56,7 +55,6 @@ export function NavRailItem(props: NavRouteConfig) {
       <Typography
         variant="caption"
         sx={{
-          mt: 0.25,
           color: isSelected ? "common.white" : "grey.300",
         }}
       >

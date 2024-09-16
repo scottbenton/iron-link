@@ -1,5 +1,6 @@
 import { Box, SxProps, Theme, useTheme } from "@mui/material";
 import { useId } from "react";
+import { useTranslation } from "react-i18next";
 
 export interface IronLinkLogoProps {
   sx?: SxProps<Theme>;
@@ -11,15 +12,17 @@ export function IronLinkLogo(props: IronLinkLogoProps) {
   const theme = useTheme();
 
   const id = useId();
+  const { t } = useTranslation();
   return (
     <Box
+      aria-label={t("Iron Link")}
       component={"svg"}
       sx={sx}
       viewBox="0 0 128 128"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <g clip-path={`url(#${id}clip0_551_463)`}>
+      <g clipPath={`url(#${id}clip0_551_463)`}>
         <path
           d="M58 3.4641C61.7128 1.32051 66.2872 1.32051 70 3.4641L113.426 28.5359C117.138 30.6795 119.426 34.641 119.426 38.9282V89.0718C119.426 93.359 117.138 97.3205 113.426 99.4641L70 124.536C66.2872 126.679 61.7128 126.679 58 124.536L14.5744 99.4641C10.8616 97.3205 8.57438 93.359 8.57438 89.0718V38.9282C8.57438 34.641 10.8616 30.6795 14.5744 28.5359L58 3.4641Z"
           fill={`url(#${id}paint0_linear_551_463)`}
@@ -33,14 +36,14 @@ export function IronLinkLogo(props: IronLinkLogoProps) {
           fill="white"
         />
         <path
-          fill-rule="evenodd"
-          clip-rule="evenodd"
+          fillRule="evenodd"
+          clipRule="evenodd"
           d="M62.0024 125.976C60.6149 125.742 59.2593 125.262 58.0024 124.536L52.5601 121.394L54.3452 77.8362C54.4331 75.6926 56.1964 74 58.3418 74H62.0024V125.976Z"
           fill="white"
         />
         <path
-          fill-rule="evenodd"
-          clip-rule="evenodd"
+          fillRule="evenodd"
+          clipRule="evenodd"
           d="M75.4424 121.394L70 124.536C68.7431 125.262 67.3875 125.742 66 125.976V74H69.6606C71.806 74 73.5694 75.6926 73.6572 77.8362L75.4424 121.394Z"
           fill="white"
         />
