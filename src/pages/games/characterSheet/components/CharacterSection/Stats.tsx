@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 import { useCharacterId } from "../../hooks/useCharacterId";
 import { useDerivedCharacterState } from "../../hooks/useDerivedCharacterState";
 import { useCallback } from "react";
-import { useIsCharacterOwner } from "../../hooks/useIsCharacterOwner";
+import { useIsOwnerOfCharacter } from "../../hooks/useIsOwnerOfCharacter";
 import RollIcon from "@mui/icons-material/Casino";
 import { useRollStatAndAddToLog } from "pages/games/hooks/useRollStatAndAddToLog";
 
@@ -21,7 +21,7 @@ export function Stats() {
       momentum: character?.characterDocument.data?.momentum ?? 2,
     })
   );
-  const isCharacterOwner = useIsCharacterOwner();
+  const isCharacterOwner = useIsOwnerOfCharacter();
 
   const { t } = useTranslation();
 
@@ -56,18 +56,25 @@ export function Stats() {
             key={key}
             label={statRule.label}
             value={stats[key] ?? 0}
-            action={{
-              actionLabel: t("Roll"),
-              ActionIcon: RollIcon,
-            }}
-            onActionClick={() =>
-              rollStat({
-                statId: key,
-                statLabel: statRule.label,
-                statModifier: stats[key] ?? 0,
-                adds,
-                momentum,
-              })
+            action={
+              isCharacterOwner
+                ? {
+                    actionLabel: t("Roll"),
+                    ActionIcon: RollIcon,
+                  }
+                : undefined
+            }
+            onActionClick={
+              isCharacterOwner
+                ? () =>
+                    rollStat({
+                      statId: key,
+                      statLabel: statRule.label,
+                      statModifier: stats[key] ?? 0,
+                      adds,
+                      momentum,
+                    })
+                : undefined
             }
           />
         ))}

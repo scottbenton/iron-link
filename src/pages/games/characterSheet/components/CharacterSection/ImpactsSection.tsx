@@ -20,11 +20,11 @@ import { updateCharacter } from "api-calls/character/updateCharacter";
 import { Button } from "@mui/material";
 import { useCharacterId } from "../../hooks/useCharacterId";
 import { useDerivedCharacterState } from "../../hooks/useDerivedCharacterState";
-import { useIsCharacterOwner } from "../../hooks/useIsCharacterOwner";
+import { useIsOwnerOfCharacter } from "../../hooks/useIsOwnerOfCharacter";
 
 export function ImpactsSection() {
   const characterId = useCharacterId();
-  const isCharacterOwner = useIsCharacterOwner();
+  const isCharacterOwner = useIsOwnerOfCharacter();
 
   const impacts = useDerivedCharacterState(
     characterId,

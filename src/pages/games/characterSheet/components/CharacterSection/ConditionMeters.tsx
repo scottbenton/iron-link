@@ -13,12 +13,12 @@ import { SingleConditionMeter } from "./SingleConditionMeter";
 import { useDerivedCampaignState } from "pages/games/gamePageLayout/hooks/useDerivedCampaignState";
 import { updateCampaign } from "api-calls/campaign/updateCampaign";
 import { useCampaignId } from "pages/games/gamePageLayout/hooks/useCampaignId";
-import { useIsCharacterOwner } from "../../hooks/useIsCharacterOwner";
+import { useIsOwnerOfCharacter } from "../../hooks/useIsOwnerOfCharacter";
 
 export function ConditionMeters() {
   const campaignId = useCampaignId();
   const characterId = useCharacterId();
-  const isCharacterOwner = useIsCharacterOwner();
+  const isCharacterOwner = useIsOwnerOfCharacter();
 
   const campaignConditionMeterValues = useDerivedCampaignState(
     (campaign) => campaign?.conditionMeters ?? {}

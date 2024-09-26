@@ -5,11 +5,11 @@ import { DebouncedProgressTrack } from "components/datasworn/ProgressTrack";
 import { useCharacterId } from "../../hooks/useCharacterId";
 import { useDerivedCharacterState } from "../../hooks/useDerivedCharacterState";
 import { useCallback } from "react";
-import { useIsCharacterOwner } from "../../hooks/useIsCharacterOwner";
+import { useIsOwnerOfCharacter } from "../../hooks/useIsOwnerOfCharacter";
 
 export function LegacyTracks() {
   const characterId = useCharacterId();
-  const isCharacterOwner = useIsCharacterOwner();
+  const isCharacterOwner = useIsOwnerOfCharacter();
 
   const legacyTracks = useDerivedCharacterState(
     characterId,
