@@ -8,14 +8,12 @@ import {
   constructCharacterPortraitFolderPath,
   getCharacterDoc,
 } from "./_getRef";
-import { deleteAllLogs } from "api-calls/game-log/deleteAllLogs";
 import { deleteAllProgressTracks } from "api-calls/tracks/deleteAllProgressTracks";
 import { deleteAllAssets } from "api-calls/assets/deleteAllAssets";
 import { deleteImage } from "lib/storage.lib";
 
 export const deleteCharacter = createApiFunction<
   {
-    uid: string;
     characterId: string;
     campaignId?: string;
     portraitFilename?: string;
@@ -23,7 +21,7 @@ export const deleteCharacter = createApiFunction<
   void
 >((params) => {
   return new Promise((resolve, reject) => {
-    const { uid, characterId, campaignId, portraitFilename } = params;
+    const { characterId, campaignId, portraitFilename } = params;
 
     let removeCharacterFromCampaignPromise: Promise<void> = Promise.resolve();
     if (campaignId) {
@@ -41,7 +39,7 @@ export const deleteCharacter = createApiFunction<
         if (portraitFilename) {
           promises.push(
             deleteImage(
-              constructCharacterPortraitFolderPath(uid, characterId),
+              constructCharacterPortraitFolderPath(characterId),
               portraitFilename
             )
           );
@@ -50,7 +48,6 @@ export const deleteCharacter = createApiFunction<
         promises.push(deleteNotes({ characterId }));
         promises.push(deleteDoc(getCharacterSettingsDoc(characterId)));
         promises.push(deleteAllAssets({ characterId }));
-        promises.push(deleteAllLogs({ characterId }));
         promises.push(deleteAllProgressTracks({ characterId }));
 
         Promise.all(promises)

@@ -34,34 +34,6 @@ export function getCampaignGameLogDocument(campaignId: string, logId: string) {
   ) as DocumentReference<GameLogDocument>;
 }
 
-export function constructCharacterGameLogCollectionPath(characterId: string) {
-  return `/characters/${characterId}/game-log`;
-}
-
-export function constructCharacterGameLogDocPath(
-  characterId: string,
-  logId: string
-) {
-  return `/characters/${characterId}/game-log/${logId}`;
-}
-
-export function getCharacterGameLogCollection(characterId: string) {
-  return collection(
-    firestore,
-    constructCharacterGameLogCollectionPath(characterId)
-  ) as CollectionReference<GameLogDocument>;
-}
-
-export function getCharacterGameLogDocument(
-  characterId: string,
-  logId: string
-) {
-  return doc(
-    firestore,
-    constructCharacterGameLogDocPath(characterId, logId)
-  ) as DocumentReference<GameLogDocument>;
-}
-
 export function convertFromDatabase(log: GameLogDocument): Roll {
   return {
     ...log,

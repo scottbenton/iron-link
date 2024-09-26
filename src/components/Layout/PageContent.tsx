@@ -18,6 +18,7 @@ export function PageContent(props: PageContentProps) {
       maxWidth={maxWidth ?? "xl"}
       sx={[
         (theme) => ({
+          bgcolor: "background.paper",
           position: "relative",
           borderRadius: isPaper ? `${theme.shape.borderRadius}px` : 0,
           borderBottomLeftRadius: 0,
@@ -33,7 +34,7 @@ export function PageContent(props: PageContentProps) {
               [theme.breakpoints.up("md")]: {
                 display: "flex",
                 flexDirection: "column",
-                height: "100vh",
+                minHeight: "100vh",
               },
               mt: hiddenHeader ? -4 : 0,
               borderRadius: hiddenHeader ? 0 : undefined,

@@ -15,7 +15,7 @@ export function NavRail(props: NavRailProps) {
     <Box flexShrink={0}>
       <Box
         sx={(theme) => ({
-          bgcolor: "grey.800",
+          bgcolor: "grey.900",
           color: "common.white",
           width: 80,
           height: "100%",

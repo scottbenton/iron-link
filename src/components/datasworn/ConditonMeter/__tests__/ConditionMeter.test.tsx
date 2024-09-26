@@ -36,14 +36,10 @@ describe("ConditionMeter", () => {
     expect(screen.getByRole("button", { name: /add/i })).toBeInTheDocument();
   });
 
-  it("should not render the increment and decrement buttons when onChange is not provided", () => {
+  it("should disable the increment and decrement buttons when onChange is not provided", () => {
     setup();
-    expect(
-      screen.queryByRole("button", { name: /subtract/i })
-    ).not.toBeInTheDocument();
-    expect(
-      screen.queryByRole("button", { name: /add/i })
-    ).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /subtract/i })).toBeDisabled();
+    expect(screen.getByRole("button", { name: /add/i })).toBeDisabled();
   });
 
   it("should call onChange with the correct value when increment button is clicked", () => {
@@ -78,7 +74,7 @@ describe("ConditionMeter", () => {
   it("should call onActionClick when the action button is clicked", () => {
     const handleActionClick = vi.fn();
     setup({ onActionClick: handleActionClick });
-    screen.getByRole("button").click();
+    screen.getByText("+5").click();
     expect(handleActionClick).toHaveBeenCalled();
   });
 });

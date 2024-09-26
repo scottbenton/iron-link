@@ -1,4 +1,5 @@
 import { useListenToAuth } from "atoms/auth.atom";
+import { useSyncUsersCampaigns } from "atoms/users.campaigns";
 import { useSyncUsersCharacters } from "atoms/users.characters";
 import { Outlet } from "react-router-dom";
 
@@ -6,6 +7,7 @@ import { Outlet } from "react-router-dom";
 export function App() {
   useListenToAuth();
   useSyncUsersCharacters();
+  useSyncUsersCampaigns();
 
   return <Outlet />;
 }

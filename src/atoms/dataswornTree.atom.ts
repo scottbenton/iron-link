@@ -1,7 +1,7 @@
 import { Datasworn } from "@datasworn/core";
 import { ironLinkAskTheOracleRulesPackage } from "data/askTheOracle";
 import { atom, useAtomValue, useSetAtom } from "jotai";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 
 export const dataswornTreeAtom = atom<Record<string, Datasworn.RulesPackage>>(
   {}
@@ -21,4 +21,18 @@ export function useSetDataswornTree(
       ...tree,
     });
   }, [tree, setTree]);
+}
+
+export function useDataswornTreeSetter() {
+  const setTree = useSetAtom(dataswornTreeAtom);
+  return useCallback(
+    (tree: Record<string, Datasworn.RulesPackage>) => {
+      setTree({
+        [ironLinkAskTheOracleRulesPackage._id]:
+          ironLinkAskTheOracleRulesPackage,
+        ...tree,
+      });
+    },
+    [setTree]
+  );
 }

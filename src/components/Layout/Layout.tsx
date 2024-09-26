@@ -7,6 +7,7 @@ import { authenticatedNavRoutes, unauthenticatedNavRoutes } from "./navRoutes";
 import { Outlet } from "react-router-dom";
 import { AuthState, useAuthAtom } from "atoms/auth.atom";
 import { LayoutPathListener } from "./LayoutPathListener";
+import { RollSnackbarSection } from "components/characters/rolls/RollSnackbarSection";
 
 export function Layout() {
   const authStatus = useAuthAtom()[0].status;
@@ -46,6 +47,7 @@ export function Layout() {
           <Outlet />
         </Box>
       </Box>
+      <RollSnackbarSection />
       {/* <UserNameDialog
           open={userNameDialogOpen}
           handleClose={closeUserNameDialog}

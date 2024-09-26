@@ -8,6 +8,7 @@ import {
 import { getCharacterAssetCollection } from "../assets/_getRef";
 import { getCharacterCollection } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
+import { updateCharacterPortrait } from "./updateCharacterPortrait";
 
 export const createCharacter = createApiFunction<
   {
@@ -15,12 +16,12 @@ export const createCharacter = createApiFunction<
     name: string;
     stats: StatsMap;
     assets: AssetDocument[];
-    expansionIds?: string[];
+    campaignId: string;
   },
   string
 >((params) => {
   return new Promise((resolve, reject) => {
-    const { uid, name, stats, assets, expansionIds } = params;
+    const { uid, name, stats, assets, campaignId } = params;
     const character: CharacterDocument = {
       uid: uid,
       name: name,
@@ -28,10 +29,8 @@ export const createCharacter = createApiFunction<
       conditionMeters: {},
       specialTracks: {},
       momentum: momentumTrack.startingValue,
+      campaignId,
     };
-    if (expansionIds) {
-      character.expansionIds = expansionIds;
-    }
 
     addDoc(getCharacterCollection(), character)
       .then((doc) => {
@@ -52,3 +51,48 @@ export const createCharacter = createApiFunction<
       });
   });
 }, "Failed to create your character");
+
+export function createCharacterAndUploadPortrait(
+  uid: string,
+  name: string,
+  stats: Record<string, number>,
+  assets: AssetDocument[],
+  portrait:
+    | {
+        image: File | string;
+        scale: number;
+        position: {
+          x: number;
+          y: number;
+        };
+      }
+    | undefined,
+  campaignId: string
+) {
+  return new Promise<string>((resolve) => {
+    createCharacter({
+      uid,
+      name,
+      stats,
+      assets,
+      campaignId,
+    }).then((characterId) => {
+      if (portrait && portrait.image && typeof portrait.image !== "string") {
+        updateCharacterPortrait({
+          characterId,
+          portrait: portrait.image,
+          scale: portrait.scale,
+          position: portrait.position,
+        })
+          .then(() => {
+            resolve(characterId);
+          })
+          .catch(() => {
+            resolve(characterId);
+          });
+      } else {
+        resolve(characterId);
+      }
+    });
+  });
+}

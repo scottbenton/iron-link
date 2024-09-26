@@ -1,5 +1,5 @@
 import CharacterIcon from "@mui/icons-material/Person";
-import CampaignsIcon from "@mui/icons-material/Groups2";
+import GamesIcon from "@mui/icons-material/Group";
 import WorldsIcon from "@mui/icons-material/TravelExplore";
 import HomebrewIcon from "@mui/icons-material/Edit";
 import SignInIcon from "@mui/icons-material/Person";
@@ -16,16 +16,10 @@ export interface NavRouteConfig {
 
 export const authenticatedNavRoutes: NavRouteConfig[] = [
   {
-    Logo: CharacterIcon,
-    title: i18n.t("Characters"),
-    href: pathConfig.characterSelect,
-    checkIsSelected: (path) => path.startsWith(pathConfig.characterSelect),
-  },
-  {
-    Logo: CampaignsIcon,
-    title: i18n.t("Campaigns"),
-    href: pathConfig.campaignSelect,
-    checkIsSelected: (path) => path.startsWith(pathConfig.campaignSelect),
+    Logo: GamesIcon,
+    title: i18n.t("Games"),
+    href: pathConfig.gameSelect,
+    checkIsSelected: (path) => path.startsWith(pathConfig.gameSelect),
   },
   {
     Logo: WorldsIcon,

@@ -14,7 +14,7 @@ export function DebouncedClockCircle(props: DebouncedClockCircleProps) {
   const { segments, value, onFilledSegmentsChange, size, voiceLabel } = props;
 
   const [localFilledSegments, setLocalFilledSegments] = useDebouncedSync(
-    onFilledSegmentsChange ? onFilledSegmentsChange : () => {},
+    onFilledSegmentsChange,
     value
   );
 

@@ -13,7 +13,7 @@ export function AssetAbilities(props: AssetAbilitiesProps) {
   const { abilities, assetDocument, onAbilityToggle } = props;
 
   return (
-    <Stack spacing={1} flexGrow={1} sx={{ ml: -1 }}>
+    <Stack spacing={1} flexGrow={1} sx={{ ml: -1, flexGrow: 1 }}>
       {abilities.map((ability, index) => (
         <Box display={"flex"} alignItems={"flex-start"} key={index}>
           <Checkbox

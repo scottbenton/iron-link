@@ -1,4 +1,4 @@
-import { atom, useAtom } from "jotai";
+import { atom, useAtom, useSetAtom } from "jotai";
 
 export enum ColorScheme {
   Default = "default",
@@ -13,4 +13,8 @@ export const colorSchemeAtom = atom<ColorScheme>(ColorScheme.Default);
 
 export function useColorScheme() {
   return useAtom(colorSchemeAtom);
+}
+
+export function useSetColorScheme() {
+  return useSetAtom(colorSchemeAtom);
 }

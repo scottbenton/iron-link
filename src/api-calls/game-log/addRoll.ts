@@ -1,31 +1,24 @@
 import { createApiFunction } from "api-calls/createApiFunction";
-import { addDoc } from "firebase/firestore";
+import { setDoc } from "firebase/firestore";
 import { Roll } from "types/DieRolls.type";
 import {
   convertRollToGameLogDocument,
-  getCampaignGameLogCollection,
-  getCharacterGameLogCollection,
+  getCampaignGameLogDocument,
 } from "./_getRef";
 
 export const addRoll = createApiFunction<
-  { roll: Roll; campaignId?: string; characterId?: string },
-  string
+  { roll: Roll; campaignId: string; rollId: string },
+  void
 >((params) => {
-  const { characterId, campaignId, roll } = params;
+  const { campaignId, rollId, roll } = params;
 
   return new Promise((resolve, reject) => {
-    if (!characterId && !campaignId) {
-      reject(new Error("Either campaign or character ID must be defined."));
-    }
-
-    addDoc(
-      campaignId
-        ? getCampaignGameLogCollection(campaignId)
-        : getCharacterGameLogCollection(characterId as string),
+    setDoc(
+      getCampaignGameLogDocument(campaignId, rollId),
       convertRollToGameLogDocument(roll)
     )
-      .then((doc) => {
-        resolve(doc.id);
+      .then(() => {
+        resolve();
       })
       .catch((e) => {
         reject(e);

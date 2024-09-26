@@ -4,6 +4,7 @@ import { firebaseAuth } from "config/firebase.config";
 import { onAuthStateChanged, User } from "firebase/auth";
 import { atom, useAtom, useAtomValue } from "jotai";
 import { useEffect } from "react";
+import { derivedAtomWithEquality } from "./derivedAtomWithEquality";
 
 export enum AuthState {
   Loading,
@@ -11,7 +12,7 @@ export enum AuthState {
   Authenticated,
 }
 
-const authAtom = atom<{
+export const authAtom = atom<{
   user?: User;
   uid: string;
   status: AuthState;
@@ -71,7 +72,7 @@ export function useListenToAuth() {
   }, [setAuth]);
 }
 
-const authStatusAtom = atom((get) => get(authAtom).status);
+const authStatusAtom = derivedAtomWithEquality(authAtom, (atom) => atom.status);
 export function useAuthStatus() {
   return useAtomValue(authStatusAtom);
 }

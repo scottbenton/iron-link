@@ -16,7 +16,7 @@ export function AssetCheckboxField(props: AssetCheckboxFieldProps) {
         <Checkbox
           checked={value ?? field.value ?? false}
           disabled={!onChange}
-          onChange={(evt, checked) => onChange && onChange(checked)}
+          onChange={(_, checked) => onChange && onChange(checked)}
         />
       }
       label={capitalize(field.label)}

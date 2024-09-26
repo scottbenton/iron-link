@@ -8,7 +8,6 @@ import { createApiFunction } from "api-calls/createApiFunction";
 
 export const updateCharacterPortrait = createApiFunction<
   {
-    uid: string;
     characterId: string;
     oldPortraitFilename?: string;
     portrait?: File;
@@ -17,7 +16,7 @@ export const updateCharacterPortrait = createApiFunction<
   },
   void
 >((params) => {
-  const { uid, characterId, oldPortraitFilename, portrait, scale, position } =
+  const { characterId, oldPortraitFilename, portrait, scale, position } =
     params;
 
   return new Promise((resolve, reject) => {
@@ -25,7 +24,7 @@ export const updateCharacterPortrait = createApiFunction<
 
     if (portrait) {
       replaceImagePromise = replaceImage(
-        constructCharacterPortraitFolderPath(uid, characterId),
+        constructCharacterPortraitFolderPath(characterId),
         oldPortraitFilename,
         portrait
       );

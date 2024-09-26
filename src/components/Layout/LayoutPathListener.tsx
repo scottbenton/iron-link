@@ -29,7 +29,7 @@ export function LayoutPathListener() {
       onlyUnauthenticatedPaths.includes(pathname) &&
       authStatus === AuthState.Authenticated
     ) {
-      navigateToContinueURL(pathConfig.characterSelect);
+      navigateToContinueURL(pathConfig.gameSelect);
     }
   }, [pathname, navigateToContinueURL, redirectWithContinueUrl, authStatus]);
 

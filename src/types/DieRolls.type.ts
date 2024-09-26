@@ -1,21 +1,21 @@
 import { TrackTypes } from "types/Track.type";
 import { LEGACY_TrackTypes } from "./LegacyTrack.type";
 
-export enum ROLL_RESULT {
-  HIT,
-  WEAK_HIT,
-  MISS,
+export enum RollResult {
+  StrongHit = "strong_hit",
+  WeakHit = "weak_hit",
+  Miss = "miss",
 }
 
-export enum ROLL_TYPE {
-  STAT,
-  ORACLE_TABLE,
-  TRACK_PROGRESS,
-  CLOCK_PROGRESSION,
+export enum RollType {
+  Stat = "stat",
+  OracleTable = "oracle_table",
+  TrackProgress = "track_progress",
+  ClockProgression = "clock_progression",
 }
 
 export interface BaseRoll {
-  type: ROLL_TYPE;
+  type: RollType;
   rollLabel: string;
   timestamp: Date;
   characterId: string | null;
@@ -23,21 +23,22 @@ export interface BaseRoll {
   gmsOnly: boolean;
 }
 export interface StatRoll extends BaseRoll {
-  type: ROLL_TYPE.STAT;
-  moveName?: string;
-  moveId?: string;
+  type: RollType.Stat;
+  moveId: string | null;
+  rolled: string;
   action: number;
+  actionTotal: number;
   challenge1: number;
   challenge2: number;
-  modifier?: number;
-  adds?: number;
-  result: ROLL_RESULT;
-  matchedNegativeMomentum?: boolean;
-  momentumBurned?: number;
+  modifier: number;
+  matchedNegativeMomentum: boolean;
+  adds: number;
+  result: RollResult;
+  momentumBurned: number | null;
 }
 
 export interface OracleTableRoll extends BaseRoll {
-  type: ROLL_TYPE.ORACLE_TABLE;
+  type: RollType.OracleTable;
   roll: number | number[];
   result: string;
   oracleCategoryName?: string;
@@ -46,17 +47,17 @@ export interface OracleTableRoll extends BaseRoll {
 }
 
 export interface TrackProgressRoll extends BaseRoll {
-  type: ROLL_TYPE.TRACK_PROGRESS;
+  type: RollType.TrackProgress;
   challenge1: number;
   challenge2: number;
   trackProgress: number;
-  result: ROLL_RESULT;
+  result: RollResult;
   trackType: TrackTypes | LEGACY_TrackTypes;
   moveId?: string;
 }
 
 export interface ClockProgressionRoll extends BaseRoll {
-  type: ROLL_TYPE.CLOCK_PROGRESSION;
+  type: RollType.ClockProgression;
   roll: number;
   oracleTitle: string;
   result: string;

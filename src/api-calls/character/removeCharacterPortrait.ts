@@ -5,13 +5,12 @@ import { updateCharacter } from "./updateCharacter";
 
 export const removeCharacterPortrait = createApiFunction<
   {
-    uid: string;
     characterId: string;
     oldPortraitFilename: string;
   },
   void
 >((params) => {
-  const { uid, characterId, oldPortraitFilename } = params;
+  const { characterId, oldPortraitFilename } = params;
 
   return new Promise((resolve, reject) => {
     updateCharacter({
@@ -22,7 +21,7 @@ export const removeCharacterPortrait = createApiFunction<
     })
       .then(() => {
         deleteImage(
-          constructCharacterPortraitFolderPath(uid, characterId),
+          constructCharacterPortraitFolderPath(characterId),
           oldPortraitFilename
         )
           .then(() => {

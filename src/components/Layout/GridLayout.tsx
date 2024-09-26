@@ -1,14 +1,15 @@
-import { Box, LinearProgress } from "@mui/material";
+import { Box, LinearProgress, SxProps, Theme } from "@mui/material";
 import { EmptyState } from "./EmptyState";
 
 export interface GridLayoutProps<T> {
   items: T[];
-  renderItem: (item: T) => React.ReactNode;
+  renderItem: (item: T, index: number) => React.ReactNode;
   loading?: boolean;
   error?: string;
   emptyStateAction?: React.ReactNode;
   emptyStateMessage: string;
   minWidth: number;
+  sx?: SxProps<Theme>;
 }
 
 export function GridLayout<T>(props: GridLayoutProps<T>) {
@@ -20,6 +21,7 @@ export function GridLayout<T>(props: GridLayoutProps<T>) {
     emptyStateAction,
     emptyStateMessage,
     minWidth,
+    sx,
   } = props;
 
   if (loading) {
@@ -41,26 +43,34 @@ export function GridLayout<T>(props: GridLayoutProps<T>) {
   }
 
   return (
-    <Box
-      sx={{
-        display: "grid",
-        gridTemplateColumns: `repeat(auto-fill, minmax(${minWidth}px, 1fr))`,
-        gap: 2,
-      }}
-    >
-      {items.map((item, index) => (
-        <Box
-          key={index}
-          height={"100%"}
-          sx={{
-            "&>": {
-              height: "100%",
+    <Box sx={{ containerType: "inline-size" }}>
+      <Box
+        sx={[
+          {
+            display: "grid",
+            gridTemplateColumns: `repeat(auto-fill, minmax(${minWidth}px, 1fr))`,
+            gap: 2,
+            [`@container (max-width: ${minWidth}px)`]: {
+              gridTemplateColumns: "1fr",
             },
-          }}
-        >
-          {renderItem(item)}
-        </Box>
-      ))}
+          },
+          ...(Array.isArray(sx) ? sx : [sx]),
+        ]}
+      >
+        {items.map((item, index) => (
+          <Box
+            key={index}
+            height={"100%"}
+            sx={{
+              "&>": {
+                height: "100%",
+              },
+            }}
+          >
+            {renderItem(item, index)}
+          </Box>
+        ))}
+      </Box>
     </Box>
   );
 }

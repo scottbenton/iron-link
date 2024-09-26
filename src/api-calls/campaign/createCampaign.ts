@@ -7,10 +7,16 @@ import { getCampaignCollection } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
 
 export const createCampaign = createApiFunction<
-  { uid: string; campaignName: string; campaignType: CampaignType },
+  {
+    uid: string;
+    campaignName: string;
+    campaignType: CampaignType;
+    rulesets: Record<string, boolean>;
+    expansions: Record<string, Record<string, boolean>>;
+  },
   string
 >((params) => {
-  const { uid, campaignName, campaignType } = params;
+  const { uid, campaignName, campaignType, rulesets, expansions } = params;
   return new Promise((resolve, reject) => {
     const storedCampaign: CampaignDocument = {
       name: campaignName,
@@ -18,6 +24,8 @@ export const createCampaign = createApiFunction<
       gmIds: campaignType === CampaignType.Coop ? [uid] : [],
       characters: [],
       type: campaignType,
+      rulesets,
+      expansions,
     };
 
     addDoc(getCampaignCollection(), storedCampaign)

@@ -1,5 +1,5 @@
 import { Datasworn } from "@datasworn/core";
-import { OracleTableRoll, ROLL_TYPE } from "types/DieRolls.type";
+import { OracleTableRoll, RollType } from "types/DieRolls.type";
 import { rollDie } from "lib/rollDie";
 import { getOracleRollable } from "./datasworn/useOracleRollable";
 import { getOracleCollection } from "./datasworn/useOracleCollection";
@@ -75,7 +75,7 @@ export function rollOracle(
 
   if (resultString && rolls !== undefined) {
     return {
-      type: ROLL_TYPE.ORACLE_TABLE,
+      type: RollType.OracleTable,
       rollLabel: oracle.name,
       timestamp: new Date(),
       characterId,

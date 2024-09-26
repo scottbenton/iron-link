@@ -63,7 +63,6 @@ export function AssetCard(props: AssetCardProps) {
         </Box>
       </Card>
     );
-    return;
   }
 
   const assetControls: Record<
@@ -106,6 +105,8 @@ export function AssetCard(props: AssetCardProps) {
         {
           width: "100%",
           height: "100%",
+          display: "flex",
+          flexDirection: "column",
         },
         ...(Array.isArray(sx) ? sx : [sx]),
       ]}
@@ -115,7 +116,14 @@ export function AssetCard(props: AssetCardProps) {
         category={asset.category}
         actions={headerActions}
       />
-      <Box px={2} pt={1} pb={2}>
+      <Box
+        px={2}
+        pt={1}
+        pb={2}
+        display="flex"
+        flexDirection={"column"}
+        flexGrow={1}
+      >
         <AssetNameAndDescription
           name={asset.name}
           description={asset.requirement}
@@ -139,7 +147,17 @@ export function AssetCard(props: AssetCardProps) {
         />
       </Box>
       {actions && (
-        <Stack direction={"row"} spacing={1} mt={2} justifyContent={"flex-end"}>
+        <Stack
+          direction={"row"}
+          spacing={1}
+          mt={2}
+          justifyContent={"flex-end"}
+          bgcolor={(theme) =>
+            theme.palette.mode === "light" ? "grey.200" : "grey.800"
+          }
+          px={1}
+          py={1}
+        >
           {actions}
         </Stack>
       )}

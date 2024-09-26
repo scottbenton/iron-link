@@ -1,13 +1,25 @@
-import { Box, ButtonBase, ButtonBaseProps, Typography } from "@mui/material";
+import { Box, ButtonBase, SxProps, Theme, Typography } from "@mui/material";
 import { GradientBox } from "./GradientBox";
+import { LinkComponent } from "./LinkComponent";
 
-// export interface GradientButtonProps extends ButtonBaseProps { }
+export interface GradientButtonProps {
+  href?: string;
+  sx?: SxProps<Theme>;
+  type?: "button" | "submit" | "reset";
+  children: React.ReactNode;
+  disabled?: boolean;
+  onClick?: () => void;
+}
 
-export function GradientButton(props: ButtonBaseProps) {
-  const { sx, children, ...restProps } = props;
+export function GradientButton(props: GradientButtonProps) {
+  const { sx, children, href, onClick, type = "button", disabled } = props;
   return (
     <ButtonBase
+      LinkComponent={href ? LinkComponent : undefined}
+      href={href ?? ""}
       focusRipple
+      disabled={disabled}
+      type={type}
       sx={[
         (theme) => ({
           color: "common.white",
@@ -37,7 +49,7 @@ export function GradientButton(props: ButtonBaseProps) {
         }),
         ...(Array.isArray(sx) ? sx : [sx]),
       ]}
-      {...restProps}
+      onClick={onClick}
     >
       <GradientBox className="gradient-box">
         <Box

@@ -33,7 +33,7 @@ export function GradientBox(props: GradientBoxProps) {
                   `radial-gradient(142% 91% at 111% 84%, ${theme.palette.secondary.dark} 20%, ${theme.palette.primary.light} 80%)`,
                 animation: prefersReducedMotion
                   ? "none"
-                  : "spin-gradient 10s linear infinite",
+                  : "spin-gradient 5s linear infinite",
                 zIndex: 1,
               },
         },

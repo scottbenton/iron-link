@@ -2,7 +2,7 @@ import { Unsubscribe } from "firebase/auth";
 import { onSnapshot } from "firebase/firestore";
 import { GMLore } from "types/Lore.type";
 import { getPrivateDetailsLoreDoc } from "./_getRef";
-import { getErrorMessage } from "functions/getErrorMessage";
+import { getErrorMessage } from "lib/getErrorMessage";
 
 export function listenToLoreGMProperties(
   worldId: string,

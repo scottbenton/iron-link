@@ -19,7 +19,7 @@ export interface SpecialTrack {
 export interface CharacterDocument {
   uid: string;
 
-  campaignId?: Nullable<string>;
+  campaignId: string;
 
   // If the character is in a campaign, this ID will be ignored
   worldId?: Nullable<string>;
@@ -52,10 +52,11 @@ export interface CharacterDocument {
     scale: number;
   }>;
 
-  expansionIds?: string[];
   customTracks?: {
     [trackName: string]: number;
   };
 
+  // TODO - when migrating, don't forget these new propertys
+  unspentExperience?: number;
   colorScheme?: ColorScheme;
 }

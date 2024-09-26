@@ -8,24 +8,18 @@ import {
   where,
 } from "firebase/firestore";
 import { Roll } from "types/DieRolls.type";
-import {
-  convertFromDatabase,
-  getCampaignGameLogCollection,
-  getCharacterGameLogCollection,
-} from "./_getRef";
+import { convertFromDatabase, getCampaignGameLogCollection } from "./_getRef";
 
 export function listenToMostRecentCharacterLog(params: {
   isGM: boolean;
-  campaignId?: string;
+  campaignId: string;
   characterId: string;
   onRoll: (rollId: string, roll: Roll) => void;
   onError: (error: string) => void;
 }): Unsubscribe {
   const { isGM, campaignId, characterId, onRoll, onError } = params;
 
-  const collection = campaignId
-    ? getCampaignGameLogCollection(campaignId)
-    : getCharacterGameLogCollection(characterId as string);
+  const collection = getCampaignGameLogCollection(campaignId);
 
   const queryConstraints: QueryConstraint[] = [
     where("timestamp", ">", new Date()),

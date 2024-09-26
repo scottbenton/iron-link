@@ -2,25 +2,12 @@ import { deleteDoc, getDocs } from "firebase/firestore";
 import {
   getCampaignGameLogCollection,
   getCampaignGameLogDocument,
-  getCharacterGameLogCollection,
-  getCharacterGameLogDocument,
 } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
 
-function getAllLogs(
-  campaignId: string | undefined,
-  characterId: string | undefined
-): Promise<string[]> {
+function getAllLogs(campaignId: string): Promise<string[]> {
   return new Promise<string[]>((resolve, reject) => {
-    if (!characterId && !campaignId) {
-      reject(new Error("Either character or campaign ID must be defined."));
-      return;
-    }
-    getDocs(
-      characterId
-        ? getCharacterGameLogCollection(characterId)
-        : getCampaignGameLogCollection(campaignId as string)
-    )
+    getDocs(getCampaignGameLogCollection(campaignId))
       .then((snapshot) => {
         const ids = snapshot.docs.map((doc) => doc.id);
         resolve(ids);
@@ -31,23 +18,12 @@ function getAllLogs(
   });
 }
 
-export const deleteAllLogs = createApiFunction<
-  { characterId?: string; campaignId?: string },
-  void
->(({ campaignId, characterId }) => {
+export const deleteAllLogs = createApiFunction<string, void>((campaignId) => {
   return new Promise<void>((resolve, reject) => {
-    if (!campaignId && !characterId) {
-      reject("Either campaign or character ID must be defined.");
-      return;
-    }
-    getAllLogs(campaignId, characterId)
+    getAllLogs(campaignId)
       .then((logIds) => {
         const promises = logIds.map((logId) =>
-          deleteDoc(
-            characterId
-              ? getCharacterGameLogDocument(characterId, logId)
-              : getCampaignGameLogDocument(campaignId as string, logId)
-          )
+          deleteDoc(getCampaignGameLogDocument(campaignId, logId))
         );
         Promise.all(promises)
           .then(() => {

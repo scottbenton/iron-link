@@ -13,6 +13,8 @@ const firebaseConfig: FirebaseOptions = {
   appId: import.meta.env.VITE_FIREBASE_APPID,
 };
 
+export const projectId = firebaseConfig.projectId;
+
 export const firebaseApp = initializeApp(firebaseConfig);
 
 export const firebaseAuth = getAuth(firebaseApp);

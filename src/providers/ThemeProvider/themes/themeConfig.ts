@@ -145,24 +145,37 @@ export function getTheme(colorScheme: ColorScheme): Theme {
         palette: {
           mode: "dark",
           grey,
+          divider: grey[600],
           background: {
-            paper: grey[800],
+            paper: grey[900],
             default: grey[950],
           },
           text: {
             primary: grey[50],
-            secondary: grey[200],
+            secondary: grey[300],
             disabled: grey[400],
           },
           action: {
             hover: grey[100] + "14",
             selected: grey[100] + "29",
-            disabled: grey[100] + "4d",
+            disabled: grey[100] + "90",
             disabledBackground: grey[100] + "1f",
             focus: grey[100] + "1f",
           },
           ...config[colorScheme],
           ...sharedStatusColors,
+        },
+      },
+    },
+    components: {
+      MuiPaper: {
+        styleOverrides: {
+          root: {
+            // border: `1px solid ${
+            //   config.palette.grey[type === ThemeType.Light ? 300 : 700]
+            // }`,
+            backgroundImage: "unset!important", // Remove the annoying elevation background filter
+          },
         },
       },
     },

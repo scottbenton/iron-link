@@ -7,40 +7,21 @@ import {
   query,
   where,
 } from "firebase/firestore";
-import {
-  convertFromDatabase,
-  getCampaignGameLogCollection,
-  getCharacterGameLogCollection,
-} from "./_getRef";
+import { convertFromDatabase, getCampaignGameLogCollection } from "./_getRef";
 import { Roll } from "types/DieRolls.type";
 
 export function listenToLogs(params: {
   isGM: boolean;
-  campaignId?: string;
-  characterId?: string;
+  campaignId: string;
   totalLogsToLoad: number;
   updateLog: (rollId: string, roll: Roll) => void;
   removeLog: (rollId: string) => void;
   onError: (error: string) => void;
 }): Unsubscribe {
-  const {
-    isGM,
-    campaignId,
-    characterId,
-    totalLogsToLoad,
-    updateLog,
-    removeLog,
-    onError,
-  } = params;
+  const { isGM, campaignId, totalLogsToLoad, updateLog, removeLog, onError } =
+    params;
 
-  if (!campaignId && !characterId) {
-    onError("Either campaign or character ID must be defined.");
-    return () => {};
-  }
-
-  const collection = campaignId
-    ? getCampaignGameLogCollection(campaignId)
-    : getCharacterGameLogCollection(characterId as string);
+  const collection = getCampaignGameLogCollection(campaignId);
 
   const queryConstraints: QueryConstraint[] = [
     limit(totalLogsToLoad),

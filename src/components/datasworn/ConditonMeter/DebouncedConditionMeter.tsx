@@ -2,12 +2,13 @@ import { ConditionMeter, ConditionMeterProps } from "./ConditionMeter";
 import { useDebouncedSync } from "hooks/useDebouncedSync";
 
 export interface DebouncedConditionMeterProps
-  extends Omit<ConditionMeterProps, "onChange"> {
+  extends Omit<ConditionMeterProps, "onChange" | "onActionClick"> {
+  onActionClick?: (setValue: (value: number) => void) => void;
   onChange: (value: number) => void;
 }
 
 export function DebouncedConditionMeter(props: DebouncedConditionMeterProps) {
-  const { onChange, ...conditionMeterProps } = props;
+  const { onChange, onActionClick, ...conditionMeterProps } = props;
 
   const [value, setValue] = useDebouncedSync(
     onChange,
@@ -17,6 +18,7 @@ export function DebouncedConditionMeter(props: DebouncedConditionMeterProps) {
   return (
     <ConditionMeter
       {...conditionMeterProps}
+      onActionClick={onActionClick ? () => onActionClick(setValue) : undefined}
       value={value}
       onChange={setValue}
     />

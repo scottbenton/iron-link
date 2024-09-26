@@ -4,15 +4,14 @@ import { createApiFunction } from "api-calls/createApiFunction";
 
 export const getCharacterPortraitUrl = createApiFunction<
   {
-    uid: string;
     characterId: string;
     filename: string;
   },
   string
 >((params) => {
-  const { uid, characterId, filename } = params;
+  const { characterId, filename } = params;
   return new Promise((resolve, reject) => {
-    getImageUrl(constructCharacterPortraitPath(uid, characterId, filename))
+    getImageUrl(constructCharacterPortraitPath(characterId, filename))
       .then((url) => resolve(url))
       .catch((e) => {
         console.error(e);

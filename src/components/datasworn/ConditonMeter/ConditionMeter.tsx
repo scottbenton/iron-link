@@ -71,21 +71,19 @@ export function ConditionMeter(props: ConditionMeterProps) {
         {label}
       </Typography>
       <Box display="flex" alignItems="center" px={onChange ? 0 : 0.5} pb={0.5}>
-        {onChange && (
-          <IconButton
-            aria-label={t("subtract 1 from {{label}}", { label })}
-            size={"small"}
-            disabled={currentValue <= min || disabled}
-            onClick={() => onChange(currentValue - 1)}
-          >
-            <DecrementIcon />
-          </IconButton>
-        )}
+        <IconButton
+          aria-label={t("subtract 1 from {{label}}", { label })}
+          size={"small"}
+          disabled={!onChange || currentValue <= min || disabled}
+          onClick={() => onChange && onChange(currentValue - 1)}
+        >
+          <DecrementIcon />
+        </IconButton>
         <Box
           id={id}
           component={onActionClick && !disabled ? ButtonBase : "div"}
           onClick={onActionClick}
-          {...(onActionClick ? { focusRipple: true } : {})}
+          {...(onActionClick && !disabled ? { focusRipple: true } : {})}
           display="block"
           color="common.white"
           borderRadius={normalBorderRadius}
@@ -113,7 +111,7 @@ export function ConditionMeter(props: ConditionMeterProps) {
                 }),
               },
             }),
-            onActionClick
+            onActionClick && !disabled
               ? {
                   "&:hover, &:focus-visible": {
                     "& .gradient-box": {
@@ -150,7 +148,11 @@ export function ConditionMeter(props: ConditionMeterProps) {
                   aria-label={actionLabel}
                   color={"inherit"}
                   fontSize={"small"}
-                  sx={{ ml: -0.5, mr: 0.5, color: "grey.300" }}
+                  sx={{
+                    ml: -0.5,
+                    mr: 0.5,
+                    color: "grey.300",
+                  }}
                 />
               )}
               <Typography
@@ -164,16 +166,14 @@ export function ConditionMeter(props: ConditionMeterProps) {
             </Box>
           </GradientBox>
         </Box>
-        {onChange && (
-          <IconButton
-            aria-label={t("add 1 to {{label}}", { label })}
-            size={"small"}
-            disabled={currentValue >= max || disabled}
-            onClick={() => onChange(currentValue + 1)}
-          >
-            <IncrementIcon />
-          </IconButton>
-        )}
+        <IconButton
+          aria-label={t("add 1 to {{label}}", { label })}
+          size={"small"}
+          disabled={!onChange || currentValue >= max || disabled}
+          onClick={() => onChange && onChange(currentValue + 1)}
+        >
+          <IncrementIcon />
+        </IconButton>
       </Box>
     </Card>
   );

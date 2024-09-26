@@ -9,6 +9,7 @@ import { ConditionMeter } from "../ConditonMeter";
 import { AssetSelectEnhancementField } from "./fields/AssetSelectEnhancementField";
 import { AssetCheckboxField } from "./fields/AssetCheckboxField";
 import { AssetTextField } from "./fields/AssetTextField";
+import { useCallback } from "react";
 
 export interface AssetControlProps {
   controlId: string;
@@ -23,17 +24,22 @@ export interface AssetControlProps {
 export function AssetControl(props: AssetControlProps) {
   const { controlId, control, value, onControlChange, assetDocument } = props;
 
+  const handleControlChange = useCallback(
+    (value: boolean | string | number) => {
+      if (onControlChange) {
+        onControlChange(controlId, !value);
+      }
+    },
+    [onControlChange, controlId]
+  );
+
   switch (control.field_type) {
     case "select_enhancement":
       return (
         <AssetSelectEnhancementField
           field={control}
           value={typeof value === "string" ? value : undefined}
-          onChange={
-            onControlChange
-              ? (value) => onControlChange(controlId, value)
-              : undefined
-          }
+          onChange={onControlChange ? handleControlChange : undefined}
         />
       );
     case "card_flip":
@@ -41,11 +47,7 @@ export function AssetControl(props: AssetControlProps) {
         <AssetCheckboxField
           field={control}
           value={typeof value === "boolean" ? value : undefined}
-          onChange={
-            onControlChange
-              ? (checked) => onControlChange(controlId, checked)
-              : undefined
-          }
+          onChange={onControlChange ? handleControlChange : undefined}
         />
       );
     case "checkbox":
@@ -53,17 +55,13 @@ export function AssetControl(props: AssetControlProps) {
         <AssetCheckboxField
           field={control}
           value={typeof value === "boolean" ? value : undefined}
-          onChange={
-            onControlChange
-              ? (checked) => onControlChange(controlId, checked)
-              : undefined
-          }
+          onChange={onControlChange ? handleControlChange : undefined}
         />
       );
     case "condition_meter": {
       const subControls = control.controls;
       return (
-        <Box display={"flex"} alignItems="flex-start">
+        <Box display={"flex"} alignItems="flex-start" flexWrap="wrap" gap={2}>
           <ConditionMeter
             label={control.label}
             defaultValue={control.value}
@@ -71,16 +69,10 @@ export function AssetControl(props: AssetControlProps) {
             max={control.max}
             value={typeof value === "number" ? (value as number) : undefined}
             disabled={!onControlChange}
-            onChange={
-              onControlChange
-                ? (value) => {
-                    onControlChange(controlId, value);
-                  }
-                : undefined
-            }
+            onChange={onControlChange ? handleControlChange : undefined}
           />
           {subControls && (
-            <Box ml={2} mt={-1}>
+            <Box mt={-1}>
               <AssetControls
                 spacing={0}
                 controls={subControls}
@@ -97,11 +89,7 @@ export function AssetControl(props: AssetControlProps) {
         <AssetTextField
           field={control}
           value={typeof value === "string" ? value : undefined}
-          onChange={
-            onControlChange
-              ? (value) => onControlChange(controlId, value)
-              : undefined
-          }
+          onChange={onControlChange ? handleControlChange : undefined}
         />
       );
     }
@@ -110,11 +98,7 @@ export function AssetControl(props: AssetControlProps) {
         <AssetClockField
           field={control}
           value={typeof value === "number" ? value : undefined}
-          onChange={
-            onControlChange
-              ? (value) => onControlChange(controlId, value)
-              : undefined
-          }
+          onChange={onControlChange ? handleControlChange : undefined}
         />
       );
     }
@@ -123,11 +107,7 @@ export function AssetControl(props: AssetControlProps) {
         <AssetCounterField
           value={typeof value === "number" ? value : undefined}
           field={control}
-          onChange={
-            onControlChange
-              ? (value) => onControlChange(controlId, value)
-              : undefined
-          }
+          onChange={onControlChange ? handleControlChange : undefined}
         />
       );
     }

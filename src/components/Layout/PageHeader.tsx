@@ -1,25 +1,49 @@
-import { Box, Container, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  Breakpoint,
+  Container,
+  Stack,
+  SxProps,
+  Theme,
+  Typography,
+} from "@mui/material";
 import React, { PropsWithChildren } from "react";
 
 export interface PageHeaderProps extends PropsWithChildren {
   label?: string | React.ReactNode;
   subLabel?: string | React.ReactNode;
   actions?: React.ReactNode;
+  maxWidth?: false | Breakpoint;
+  disablePadding?: boolean;
+  sx?: SxProps<Theme>;
 }
 
 export function PageHeader(props: PageHeaderProps) {
-  const { label, subLabel, actions, children } = props;
+  const {
+    label,
+    subLabel,
+    actions,
+    maxWidth = "xl",
+    disablePadding,
+    sx,
+    children,
+  } = props;
 
   return (
     <Container
-      maxWidth={"xl"}
-      sx={{
-        display: "flex",
-        flexWrap: "wrap",
-        alignItems: "center",
-        justifyContent: "space-between",
-        py: 4,
-      }}
+      maxWidth={maxWidth}
+      sx={[
+        {
+          display: "flex",
+          flexWrap: "wrap",
+          alignItems: "center",
+          justifyContent: "space-between",
+          py: disablePadding ? 0 : 4,
+
+          bgcolor: "background.paper",
+        },
+        ...(Array.isArray(sx) ? sx : [sx]),
+      ]}
     >
       {children ? (
         <>{children}</>

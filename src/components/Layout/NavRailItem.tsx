@@ -22,16 +22,16 @@ export function NavRailItem(props: NavRouteConfig) {
           color: "common.white",
           textDecoration: "none",
           "&:hover .pill": {
-            bgcolor: "grey.700",
+            bgcolor: "grey.800",
           },
         },
         {
           "& .pill": {
-            bgcolor: isSelected ? "grey.900" : "grey.800",
+            bgcolor: isSelected ? "grey.800" : "grey.900",
             px: isSelected ? 2.25 : 2.5,
             py: isSelected ? 0.5 : 0.75,
             border: "1px solid",
-            borderColor: isSelected ? "transparent" : "grey.800",
+            borderColor: isSelected ? "transparent" : "grey.900",
           },
           "& .pill-gradient": {
             padding: isSelected ? 0.25 : 0,

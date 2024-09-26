@@ -1,24 +1,15 @@
 import { createApiFunction } from "api-calls/createApiFunction";
 import { deleteDoc } from "firebase/firestore";
-import {
-  getCampaignGameLogDocument,
-  getCharacterGameLogDocument,
-} from "./_getRef";
+import { getCampaignGameLogDocument } from "./_getRef";
 
 export const removeLog = createApiFunction<
-  { campaignId?: string; characterId?: string; logId: string },
+  { campaignId: string; logId: string },
   void
 >((params) => {
-  const { campaignId, characterId, logId } = params;
+  const { campaignId, logId } = params;
 
   return new Promise((resolve, reject) => {
-    if (!characterId && !campaignId) {
-      reject(new Error("Either campaign or character ID must be defined."));
-    }
-
-    const docRef = campaignId
-      ? getCampaignGameLogDocument(campaignId as string, logId)
-      : getCharacterGameLogDocument(characterId as string, logId);
+    const docRef = getCampaignGameLogDocument(campaignId as string, logId);
 
     deleteDoc(docRef)
       .then(() => {

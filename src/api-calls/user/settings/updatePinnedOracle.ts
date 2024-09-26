@@ -1,5 +1,5 @@
 import { updateDoc } from "firebase/firestore";
-import { encodeDataswornId } from "functions/dataswornIdEncoder";
+import { encodeDataswornId } from "lib/dataswornIdEncoder";
 import { getUserOracleSettingsDoc } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
 

@@ -13,10 +13,13 @@ export interface CampaignDocument {
   characters: { uid: string; characterId: string }[];
   gmIds?: string[];
   worldId?: string;
-  expansionIds?: string[];
   customTracks?: Record<string, number>;
   conditionMeters?: Record<string, number>;
   specialTracks?: Record<string, LegacyTrack>;
   type?: CampaignType;
   colorScheme?: ColorScheme;
+
+  // To migrate
+  rulesets: Record<string, boolean>;
+  expansions: Record<string, Record<string, boolean>>;
 }

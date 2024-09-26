@@ -1,10 +1,12 @@
 export const pathConfig = {
   home: "/",
-  characterSelect: "/characters",
-  characterCreate: "/characters/create",
-  character: (characterId: string) => `/characters/${characterId}`,
-  campaignSelect: "/campaigns",
-  campaign: (campaignId: string) => `/campaigns/${campaignId}`,
+  gameSelect: "/games",
+  gameCreate: "/games/create",
+  game: (gameId: string) => `/games/${gameId}`,
+  gameCharacter: (gameId: string, characterId: string) =>
+    `/games/${gameId}/c/${characterId}`,
+  gameCharacterCreate: (gameId: string) => `/games/${gameId}/create`,
+  gameJoin: (gameId: string) => `/games/${gameId}/join`,
   worldSelect: "/worlds",
   world: (worldId: string) => `/worlds/${worldId}`,
   homebrewSelect: "/homebrew",

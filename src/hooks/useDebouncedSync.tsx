@@ -7,7 +7,7 @@ import {
 } from "react";
 
 export function useDebouncedSync<State>(
-  persistChanges: (state: State) => void,
+  persistChanges: ((state: State) => void) | undefined,
   initialState: State,
   delay = 2000
 ): [State, (value: SetStateAction<State>) => void] {
@@ -23,7 +23,14 @@ export function useDebouncedSync<State>(
       stateRef.current = initialState;
       lastUpdateState.current = initialState;
     }
-  }, [initialState]);
+
+    return () => {
+      if (stateRef.current !== lastUpdateState.current) {
+        persistChanges?.(stateRef.current);
+        lastUpdateState.current = stateRef.current;
+      }
+    };
+  }, [initialState, persistChanges]);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -32,24 +39,14 @@ export function useDebouncedSync<State>(
         state !== lastUpdateState.current
       ) {
         lastUpdateState.current = state;
-        persistChanges(state);
+        persistChanges?.(state);
       }
     }, delay);
 
     return () => {
       clearTimeout(timeout);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state, delay]);
-
-  useEffect(() => {
-    return () => {
-      if (stateRef.current !== lastUpdateState.current) {
-        persistChanges(stateRef.current);
-      }
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [state, delay, persistChanges]);
 
   const setStateCallback = useCallback((newState: SetStateAction<State>) => {
     if (typeof newState === "function") {

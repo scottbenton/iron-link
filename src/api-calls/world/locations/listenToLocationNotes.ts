@@ -1,7 +1,7 @@
 import { Unsubscribe } from "firebase/auth";
 import { onSnapshot } from "firebase/firestore";
 import { getPublicNotesLocationDoc } from "./_getRef";
-import { getErrorMessage } from "functions/getErrorMessage";
+import { getErrorMessage } from "lib/getErrorMessage";
 
 export function listenToLocationNotes(
   worldId: string,
