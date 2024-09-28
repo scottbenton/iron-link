@@ -1,0 +1,98 @@
+import { Box, Input, InputAdornment, List, ListSubheader } from "@mui/material";
+import { useDeferredValue, useMemo, useState } from "react";
+import SearchIcon from "@mui/icons-material/Search";
+import { useTranslation } from "react-i18next";
+import { MoveCategoryListItem } from "./MoveCategoryListItem";
+import {
+  CategoryVisibilityState,
+  getMoveCategoryVisibility,
+  MoveVisibilityState,
+  VisibilitySettings,
+} from "./getMoveCategoryVisibility";
+import { useMoves } from "atoms/dataswornRules/useMoves";
+
+export function MoveTree() {
+  const { t } = useTranslation();
+
+  const [searchValue, setSearchValue] = useState("");
+  const deferredSearchValue = useDeferredValue(searchValue);
+
+  const { rootMoveCategories, moveCategoryMap, moveMap } = useMoves();
+
+  const visibilitySettings = useMemo(() => {
+    const visibleCollections: Record<string, CategoryVisibilityState> = {};
+    const visibleOracles: Record<string, MoveVisibilityState> = {};
+
+    Object.values(rootMoveCategories).forEach(({ rootMoves }) => {
+      rootMoves.forEach((moveId) => {
+        getMoveCategoryVisibility(
+          deferredSearchValue,
+          moveId,
+          moveCategoryMap,
+          moveMap,
+          visibleCollections,
+          visibleOracles
+        );
+      });
+    });
+
+    return {
+      visibleCategories: visibleCollections,
+      visibleMoves: visibleOracles,
+    } as VisibilitySettings;
+  }, [rootMoveCategories, moveCategoryMap, moveMap, deferredSearchValue]);
+
+  return (
+    <Box bgcolor={"background.paper"}>
+      <Input
+        value={searchValue}
+        onChange={(e) => setSearchValue(e.target.value)}
+        fullWidth
+        startAdornment={
+          <InputAdornment position={"start"}>
+            <SearchIcon sx={(theme) => ({ color: theme.palette.grey[300] })} />
+          </InputAdornment>
+        }
+        aria-label={t("Filter Oracles")}
+        placeholder={t("Filter Oracles")}
+        color={"primary"}
+        sx={{
+          bgcolor: "background.paper",
+          color: "text.primary",
+          px: 2,
+        }}
+      />
+      {Object.entries(rootMoveCategories).map(
+        ([rulesetKey, ruleset], index, arr) => (
+          <List key={rulesetKey} disablePadding>
+            {arr.length > 1 && (
+              <ListSubheader
+                sx={(theme) => ({
+                  bgcolor:
+                    theme.palette.mode === "light" ? "grey.300" : "grey.950",
+                  mt: 0,
+                  borderBottom: `1px solid ${theme.palette.divider}`,
+                  px: 2,
+                  fontFamily: theme.typography.fontFamilyTitle,
+                })}
+                key={rulesetKey}
+              >
+                {ruleset.title}
+              </ListSubheader>
+            )}
+            {ruleset.rootMoves.map((categoryKey) => (
+              <MoveCategoryListItem
+                key={categoryKey}
+                moveCategoryId={categoryKey}
+                moveCategoryMap={moveCategoryMap}
+                moveMap={moveMap}
+                visibilitySettings={visibilitySettings}
+                isSearchActive={!!deferredSearchValue.trim()}
+              />
+            ))}
+          </List>
+        )
+      )}
+    </Box>
+  );
+}

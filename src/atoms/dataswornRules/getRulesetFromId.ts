@@ -3,7 +3,7 @@ import { Datasworn, IdParser } from "@datasworn/core";
 export function getRulesetFromId(
   id: string,
   tree: Record<string, Datasworn.RulesPackage>
-): { id: string; title: string } | undefined {
+): { id: string; title: string; isFromExpansion: boolean } | undefined {
   try {
     const result = IdParser.parse(id);
     const rulesPackageId = result.rulesPackageId;
@@ -19,6 +19,7 @@ export function getRulesetFromId(
     return {
       id: ruleset._id,
       title: ruleset.title,
+      isFromExpansion: ruleset.type === "expansion",
     };
   } catch {
     return undefined;

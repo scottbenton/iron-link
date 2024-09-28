@@ -30,10 +30,8 @@ export function useRollOracleAndAddToLog() {
         };
         if (campaignId) {
           const rollId = createId();
-          addRoll({ campaignId, rollId, roll: resultWithAdditions }).then(
-            () => {
-              console.log("Roll added to log");
-            }
+          addRoll({ campaignId, rollId, roll: resultWithAdditions }).catch(
+            () => {}
           );
           return {
             id: rollId,
