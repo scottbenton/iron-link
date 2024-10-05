@@ -57,7 +57,7 @@ export function useSyncCampaign() {
             campaignId,
             campaign: null,
             loading: false,
-            error: t("Error loading game"),
+            error: t("game.load-failure", "Error loading game"),
           });
         }
       );
@@ -126,7 +126,7 @@ export function useSyncCampaign() {
               characterDocument: {
                 ...characters[characterId].characterDocument,
                 loading: false,
-                error: t("Error loading character"),
+                error: t("character.load-failure", "Error loading character"),
               },
             },
           }));

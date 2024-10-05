@@ -61,7 +61,10 @@ export function OracleTextField(props: OracleTextFieldProps) {
       InputProps={{
         endAdornment: doesOracleExist ? (
           <InputAdornment position={"end"}>
-            <Tooltip title={t("Consult the Oracle")} enterDelay={500}>
+            <Tooltip
+              title={t("datasworn.consult-the-oracle", "Consult the Oracle")}
+              enterDelay={500}
+            >
               <IconButton onClick={() => handleOracleRoll()}>
                 <RollIcon />
               </IconButton>

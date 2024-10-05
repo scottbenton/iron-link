@@ -4,6 +4,7 @@ import { useCampaignId } from "../gamePageLayout/hooks/useCampaignId";
 import { useCampaignPermissions } from "../gamePageLayout/hooks/usePermissions";
 import { pathConfig } from "pages/pathConfig";
 import { useSnackbar } from "providers/SnackbarProvider";
+import { ReferenceSidebarContents } from "../characterSheet/components/ReferenceSidebarContents";
 
 export function GameOverviewSheet() {
   const campaignId = useCampaignId();
@@ -21,9 +22,16 @@ export function GameOverviewSheet() {
     }
   };
   return (
-    <Box mt={2}>
-      <Typography>{campaignType}</Typography>
-      <Button onClick={handleCopy}>{t("Copy Invite Link")}</Button>
+    <Box display="flex">
+      <Box mt={2}>
+        <Typography>{campaignType}</Typography>
+        <Button onClick={handleCopy}>
+          {t("game.copy-invite-link", "Copy Invite Link")}
+        </Button>
+      </Box>
+      <Box>
+        <ReferenceSidebarContents />
+      </Box>
     </Box>
   );
 }

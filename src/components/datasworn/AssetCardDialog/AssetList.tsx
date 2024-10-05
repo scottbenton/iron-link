@@ -38,12 +38,15 @@ export function AssetList(props: AssetListProps) {
                   });
                 }}
               >
-                {t("Select Asset")}
+                {t("character.select-asset", "Select Asset")}
               </Button>
             }
           />
         )}
-        emptyStateMessage={t("No assets found in collection")}
+        emptyStateMessage={t(
+          "datasworn.no-assets-in-collection",
+          "No assets found in collection"
+        )}
         minWidth={300}
       />
     </Box>

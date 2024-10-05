@@ -18,19 +18,36 @@ export function ChooseGameType() {
   const gameType = useAtomValue(gameTypeAtom);
   const setCreateGame = useSetCreateGameAtom();
 
+  const labels: Record<CampaignType, string> = {
+    [CampaignType.Solo]: t("game.type-solo", "Solo"),
+    [CampaignType.Coop]: t("game.type-coop", "Co-op"),
+    [CampaignType.Guided]: t("game.type-guided", "Guided"),
+  };
+
   const descriptions: Record<CampaignType, string> = {
-    [CampaignType.Solo]: t("One player, playing one or more characters."),
-    [CampaignType.Coop]: t("Two or more players, all playing characters."),
+    [CampaignType.Solo]: t(
+      "game.type.solo-description",
+      "One player, playing one or more characters."
+    ),
+    [CampaignType.Coop]: t(
+      "game.type.coop-description",
+      "Two or more players, all playing characters."
+    ),
     [CampaignType.Guided]: t(
+      "game.type.guided-desciption",
       "One player takes the role of guide, with the rest playing characters."
     ),
   };
 
   return (
     <Box>
-      <SectionHeading breakContainer label={t("Choose Game Type")} />
+      <SectionHeading
+        breakContainer
+        label={t("game.type.choose-game-type", "Choose Game Type")}
+      />
       <Typography mt={1} color="text.secondary">
         {t(
+          "game.type.guided-description",
           "How will you be playing your game? Game types help to streamline your experience."
         )}
       </Typography>
@@ -88,7 +105,7 @@ export function ChooseGameType() {
                     fontFamily={"fontFamilyTitle"}
                     ml={2}
                   >
-                    {t(type)}
+                    {labels[type]}
                   </Typography>
                 </Box>
                 <Box width={24} height={24}>

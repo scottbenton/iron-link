@@ -61,7 +61,7 @@ export function ThemedBox(props: {
               right: 8,
             }}
           >
-            <CheckCircleIcon aria-label={t("Selected")} />
+            <CheckCircleIcon aria-label={t("common.selected", "Selected")} />
           </Box>
         )}
         <IronLinkLogo sx={{ width: 64, height: 64 }} />

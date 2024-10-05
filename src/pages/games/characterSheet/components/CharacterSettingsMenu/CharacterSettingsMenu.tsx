@@ -62,7 +62,12 @@ export function CharacterSettingsMenu() {
           <ListItemIcon>
             <CharacterIcon />
           </ListItemIcon>
-          <ListItemText primary={t("Change Name or Portrait")} />
+          <ListItemText
+            primary={t(
+              "character.character-sidebar.change-name-or-portrait",
+              "Change Name or Portrait"
+            )}
+          />
         </MenuItem>
         <MenuItem
           onClick={() => {
@@ -73,7 +78,12 @@ export function CharacterSettingsMenu() {
           <ListItemIcon>
             <StatsIcon />
           </ListItemIcon>
-          <ListItemText primary={t("Update Stats")} />
+          <ListItemText
+            primary={t(
+              "character.character-sidebar.update-stats",
+              "Update Stats"
+            )}
+          />
         </MenuItem>
         <MenuItem
           onClick={() => {
@@ -84,13 +94,23 @@ export function CharacterSettingsMenu() {
           <ListItemIcon>
             <ThemeIcon />
           </ListItemIcon>
-          <ListItemText primary={t("Change Theme")} />
+          <ListItemText
+            primary={t(
+              "character.character-sidebar.change-theme",
+              "Change Theme"
+            )}
+          />
         </MenuItem>
         <MenuItem onClick={() => {}}>
           <ListItemIcon>
             <DeleteIcon />
           </ListItemIcon>
-          <ListItemText primary={t("Delete Character")} />
+          <ListItemText
+            primary={t(
+              "character.character-sidebar.delete-character",
+              "Delete Character"
+            )}
+          />
         </MenuItem>
       </Menu>
       <CharacterDetailsDialog

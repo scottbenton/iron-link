@@ -40,7 +40,7 @@ export function CharacterStatsDialog(props: CharacterStatsDialogProps) {
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitleWithCloseButton onClose={onClose}>
-        {t("Update Stats")}
+        {t("character.character-sidebar.update-stats", "Update Stats")}
       </DialogTitleWithCloseButton>
       <DialogContent sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
         {Object.entries(statRules).map(([statKey, statRule]) => (
@@ -63,10 +63,10 @@ export function CharacterStatsDialog(props: CharacterStatsDialogProps) {
       </DialogContent>
       <DialogActions>
         <Button color="inherit" onClick={onClose}>
-          {t("Cancel")}
+          {t("common.cancel", "Cancel")}
         </Button>
         <Button variant="contained" onClick={handleSave}>
-          {t("Save Changes")}
+          {t("common.save-changes", "Save Changes")}
         </Button>
       </DialogActions>
     </Dialog>

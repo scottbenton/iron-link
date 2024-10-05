@@ -37,7 +37,7 @@ export function CharacterSidebarContents() {
     <>
       <Box display="flex" justifyContent="space-between">
         <Typography fontFamily={"fontFamilyTitle"} textTransform={"uppercase"}>
-          {t("Character")}
+          {t("character.character-sidebar.header", "Character")}
         </Typography>
         <CharacterSettingsMenu />
       </Box>
@@ -47,9 +47,18 @@ export function CharacterSidebarContents() {
         value={currentTab}
         onChange={(_, value) => setCurrentTab(value as unknown as Tabs)}
       >
-        <StyledTab label={t("Overview")} {...tabProps(Tabs.Overview)} />
-        <StyledTab label={t("Assets")} {...tabProps(Tabs.Assets)} />
-        <StyledTab label={t("Tracks")} {...tabProps(Tabs.Tracks)} />
+        <StyledTab
+          label={t("character.character-sidebar.overview", "Overview")}
+          {...tabProps(Tabs.Overview)}
+        />
+        <StyledTab
+          label={t("character.character-sidebar.assets", "Assets")}
+          {...tabProps(Tabs.Assets)}
+        />
+        <StyledTab
+          label={t("character.character-sidebar.tracks", "Tracks")}
+          {...tabProps(Tabs.Tracks)}
+        />
       </StyledTabs>
       <div {...tabPanelProps(Tabs.Overview, currentTab)}>
         <CharacterSection />

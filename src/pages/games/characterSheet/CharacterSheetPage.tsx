@@ -17,7 +17,14 @@ export function CharacterSheetPage() {
   }
 
   if (error) {
-    return <EmptyState message={t("Error loading character")} />;
+    return (
+      <EmptyState
+        message={t(
+          "character.error-loading-character",
+          "Error loading character"
+        )}
+      />
+    );
   }
 
   return (

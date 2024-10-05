@@ -25,11 +25,11 @@ export function AddCharacter() {
     const { name, stats, assets, portrait } = characterValue;
 
     if (!campaignId) {
-      setError(t("No campaign found"));
+      setError(t("character.no-game-found-error", "No game found"));
       return;
     }
     if (!name) {
-      setError(t("Please enter a name"));
+      setError(t("character.no-name-entered-error", "Please enter a name"));
       return;
     }
 
@@ -50,12 +50,19 @@ export function AddCharacter() {
           })
           .catch((e) => {
             console.error(e);
-            setError(t("Error adding character to game"));
+            setError(
+              t(
+                "character.error-adding-character-to-game",
+                "Error adding character to game"
+              )
+            );
           });
       })
       .catch((e) => {
         console.error(e);
-        setError(t("Error creating character"));
+        setError(
+          t("character.error-creating-character", "Error creating character")
+        );
       });
 
     // Create campaign & character, then link them
@@ -75,7 +82,7 @@ export function AddCharacter() {
       <CreateCharacter />
       <Box mt={4} display="flex" justifyContent={"flex-end"}>
         <GradientButton onClick={handleCreate}>
-          {t("Add Character")}
+          {t("character.add-character", "Add Character")}
         </GradientButton>
       </Box>
     </>

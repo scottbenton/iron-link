@@ -45,7 +45,10 @@ export function RulesetExpansionSection() {
 
   return (
     <>
-      <SectionHeading label={t("Choose your Rules")} breakContainer />
+      <SectionHeading
+        label={t("game.create.choose-ruleset-heading", "Choose your Rules")}
+        breakContainer
+      />
       <RulesPackageSelector
         sx={{ mt: 1 }}
         activeRulesetConfig={rulesets}

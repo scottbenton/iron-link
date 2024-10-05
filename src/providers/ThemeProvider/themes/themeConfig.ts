@@ -1,12 +1,12 @@
-import { createTheme, PaletteColorOptions, Theme } from "@mui/material";
+import { createTheme, SimplePaletteColorOptions, Theme } from "@mui/material";
 import { ColorScheme } from "atoms/theme.atom";
 import { grey, sharedStatusColors } from "./colors";
 
 export type ThemeConfig = Record<
   ColorScheme,
   {
-    primary: PaletteColorOptions;
-    secondary: PaletteColorOptions;
+    primary: SimplePaletteColorOptions;
+    secondary: SimplePaletteColorOptions;
   }
 >;
 

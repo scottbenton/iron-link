@@ -10,6 +10,7 @@ import {
   OracleVisibilityState,
   VisibilitySettings,
 } from "./getOracleCollectionVisiblity";
+import { AskTheOracleButtons } from "./AskTheOracleButtons";
 
 export function OracleTree() {
   const { t } = useTranslation();
@@ -50,6 +51,7 @@ export function OracleTree() {
 
   return (
     <Box bgcolor={"background.paper"}>
+      <AskTheOracleButtons />
       <Input
         value={searchValue}
         onChange={(e) => setSearchValue(e.target.value)}
@@ -59,17 +61,18 @@ export function OracleTree() {
             <SearchIcon sx={(theme) => ({ color: theme.palette.grey[300] })} />
           </InputAdornment>
         }
-        aria-label={t("Filter Oracles")}
-        placeholder={t("Filter Oracles")}
+        aria-label={t("datasworn.filter-oracles", "Filter Oracles")}
+        placeholder={t("datasworn.filter-oracles", "Filter Oracles")}
         color={"primary"}
         sx={{
           bgcolor: "background.paper",
           color: "text.primary",
           px: 2,
+          py: 1,
         }}
       />
       {Object.entries(rootOracleCollections).map(
-        ([rulesetKey, ruleset], index, arr) => (
+        ([rulesetKey, ruleset], _, arr) => (
           <List key={rulesetKey} disablePadding>
             {arr.length > 1 && (
               <ListSubheader

@@ -1,7 +1,6 @@
 import { Box, Fab, Slide } from "@mui/material";
 import { TransitionGroup } from "react-transition-group";
 import ClearIcon from "@mui/icons-material/Close";
-import { useMemo } from "react";
 import {
   useClearAllRollSnackbars,
   useClearRollSnackbar,
@@ -13,12 +12,6 @@ export function RollSnackbarSection() {
   const rolls = useVisibleRolls();
   const clearRoll = useClearRollSnackbar();
   const clearRolls = useClearAllRollSnackbars();
-
-  const sortedRolls = useMemo(() => {
-    return Object.entries(rolls).sort(
-      ([, r1], [, r2]) => r1.timestamp.getTime() - r2.timestamp.getTime()
-    );
-  }, [rolls]);
 
   return (
     <Box
@@ -41,20 +34,20 @@ export function RollSnackbarSection() {
       })}
     >
       <TransitionGroup>
-        {sortedRolls.map(([rollId, roll], index, array) => (
-          <Slide direction={"left"} key={rollId}>
+        {rolls.map(({ id, roll }, index, array) => (
+          <Slide direction={"left"} key={index}>
             <Box mt={1}>
               <RollSnackbar
                 roll={roll}
-                rollId={rollId}
+                rollId={id}
                 isExpanded={index === array.length - 1}
-                onSnackbarClick={() => clearRoll(rollId)}
+                onSnackbarClick={() => clearRoll(index)}
               />
             </Box>
           </Slide>
         ))}
       </TransitionGroup>
-      <Slide direction={"left"} in={sortedRolls.length > 0} unmountOnExit>
+      <Slide direction={"left"} in={rolls.length > 0} unmountOnExit>
         <Fab
           variant={"extended"}
           size={"medium"}

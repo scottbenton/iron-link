@@ -13,6 +13,7 @@ import remarkGfm from "remark-gfm";
 import { OracleTableRenderer } from "./OracleTableRenderer";
 import { idMap } from "data/idMap";
 import { Datasworn, IdParser } from "@datasworn/core";
+import { useOpenDataswornDialog } from "atoms/dataswornDialog.atom";
 
 export interface MarkdownRendererProps {
   inlineParagraph?: boolean;
@@ -33,6 +34,7 @@ export function MarkdownRenderer(props: MarkdownRendererProps) {
     sx,
   } = props;
 
+  const openDialog = useOpenDataswornDialog();
   // const openDialog = useStore((store) => store.appState.openDialog);
 
   const theme = useTheme();
@@ -218,7 +220,7 @@ export function MarkdownRenderer(props: MarkdownRendererProps) {
                   color={
                     theme.palette.mode === "light" ? "info.dark" : "info.light"
                   }
-                  // onClick={() => openDialog(id)}
+                  onClick={() => openDialog(id)}
                 >
                   {linkProps.children}
                 </Link>

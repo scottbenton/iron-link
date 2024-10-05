@@ -64,7 +64,7 @@ export function CampaignTabs() {
         LinkComponent={LinkComponent}
         href={pathConfig.game(campaignId)}
         value={"overview"}
-        label={t("Overview")}
+        label={t("game.layout.overview", "Overview")}
       />
       {sortedCharacterList.map((character) => (
         <Tab
@@ -72,14 +72,14 @@ export function CampaignTabs() {
           href={pathConfig.gameCharacter(campaignId, character.characterId)}
           key={character.characterId}
           value={character.characterId}
-          label={names[character.characterId] ?? t("Loading")}
+          label={names[character.characterId] ?? t("common.loading", "Loading")}
         />
       ))}
       <Tab
         LinkComponent={LinkComponent}
         href={pathConfig.gameCharacterCreate(campaignId)}
         value={"create-character"}
-        label={t("Add Character")}
+        label={t("game.layout.add-character", "Add Character")}
       />
     </Tabs>
   );

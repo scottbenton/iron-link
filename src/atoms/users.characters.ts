@@ -64,7 +64,7 @@ export function useSyncUsersCharacters() {
         (error) => {
           const errorMessage = getErrorMessage(
             error,
-            t("Failed to load characters")
+            t("character.load-failure", "Failed to load characters")
           );
           setUsersCharacters((prev) => ({
             ...prev,

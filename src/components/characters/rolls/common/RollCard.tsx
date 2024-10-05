@@ -18,6 +18,8 @@ export function RollCard(props: PropsWithChildren<RollCardProps>) {
           flexDirection: "column",
           alignItems: "flex-start",
           position: "relative",
+          bgcolor: "grey.800",
+          color: "common.white",
         },
         ...(Array.isArray(sx) ? sx : [sx]),
       ]}

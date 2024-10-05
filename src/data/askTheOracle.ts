@@ -198,8 +198,13 @@ export const askTheOracleIds = [
   askTheOracleCollection.contents.almost_certain._id,
 ];
 
+export const askTheOracleLabels: Record<string, string> = {};
+Object.values(askTheOracleCollection.contents).forEach((oracle) => {
+  askTheOracleLabels[oracle._id] = oracle.name;
+});
+
 export const ironLinkAskTheOracleRulesPackage: Datasworn.Ruleset = {
-  _id: "iron_link_common",
+  _id: "ironlink",
   datasworn_version: "0.1.0",
   title: "Iron Link Ask the Oracle Oracles",
   type: "ruleset",

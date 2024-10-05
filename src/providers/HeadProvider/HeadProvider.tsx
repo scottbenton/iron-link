@@ -9,7 +9,7 @@ export function HeadProvider(props: PropsWithChildren) {
   // const url = window.location.origin + pathname;
 
   const { t } = useTranslation();
-  const appName = t("Iron Link");
+  const appName = t("iron-link.title", "Iron Link");
 
   return (
     <HelmetProvider>
@@ -21,6 +21,7 @@ export function HeadProvider(props: PropsWithChildren) {
         <meta
           property="og:description"
           content={t(
+            "iron-link.description",
             "A character sheet and campaign manager for players and guides playing Ironsworn or Starforged"
           )}
         />

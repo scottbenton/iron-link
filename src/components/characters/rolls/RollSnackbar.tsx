@@ -1,9 +1,10 @@
 import { Roll, RollType } from "types/DieRolls.type";
 import { StatRollSnackbar } from "./StatRollSnackbar";
 import { RollCard } from "./common";
+import { OracleRollSnackbar } from "./OracleRollSnackbar";
 
 export interface RollSnackbarProps {
-  rollId: string;
+  rollId: string | undefined;
   roll: Roll;
   isExpanded: boolean;
   onSnackbarClick?: () => void;
@@ -16,6 +17,13 @@ export function RollSnackbar(props: RollSnackbarProps) {
     <RollCard onClick={onSnackbarClick}>
       {roll.type === RollType.Stat && (
         <StatRollSnackbar rollId={rollId} roll={roll} isExpanded={isExpanded} />
+      )}
+      {roll.type === RollType.OracleTable && (
+        <OracleRollSnackbar
+          rollId={rollId}
+          roll={roll}
+          isExpanded={isExpanded}
+        />
       )}
     </RollCard>
   );

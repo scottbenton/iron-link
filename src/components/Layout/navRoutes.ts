@@ -17,19 +17,19 @@ export interface NavRouteConfig {
 export const authenticatedNavRoutes: NavRouteConfig[] = [
   {
     Logo: GamesIcon,
-    title: i18n.t("Games"),
+    title: i18n.t("datasworn.games", "Games"),
     href: pathConfig.gameSelect,
     checkIsSelected: (path) => path.startsWith(pathConfig.gameSelect),
   },
   {
     Logo: WorldsIcon,
-    title: i18n.t("Worlds"),
+    title: i18n.t("datasworn.worlds", "Worlds"),
     href: pathConfig.worldSelect,
     checkIsSelected: (path) => path.startsWith(pathConfig.worldSelect),
   },
   {
     Logo: HomebrewIcon,
-    title: i18n.t("Homebrew"),
+    title: i18n.t("datasworn.homebrew", "Homebrew"),
     href: pathConfig.homebrewSelect,
     checkIsSelected: (path) => path.startsWith(pathConfig.homebrewSelect),
   },
@@ -37,13 +37,13 @@ export const authenticatedNavRoutes: NavRouteConfig[] = [
 export const unauthenticatedNavRoutes: NavRouteConfig[] = [
   {
     Logo: SignInIcon,
-    title: i18n.t("Sign In"),
+    title: i18n.t("datasworn.sign-in", "Sign In"),
     href: pathConfig.signIn,
     checkIsSelected: (path) => path.startsWith(pathConfig.signIn),
   },
   {
     Logo: SignUpIcon,
-    title: i18n.t("Sign Up"),
+    title: i18n.t("datasworn.sign-up", "Sign Up"),
     href: pathConfig.signUp,
     checkIsSelected: (path) => path.startsWith(pathConfig.signUp),
   },

@@ -53,17 +53,18 @@ export function MoveTree() {
             <SearchIcon sx={(theme) => ({ color: theme.palette.grey[300] })} />
           </InputAdornment>
         }
-        aria-label={t("Filter Oracles")}
-        placeholder={t("Filter Oracles")}
+        aria-label={t("datasworn.filter-moves", "Filter Moves")}
+        placeholder={t("datasworn.filter-moves", "Filter Moves")}
         color={"primary"}
         sx={{
           bgcolor: "background.paper",
           color: "text.primary",
           px: 2,
+          py: 1,
         }}
       />
       {Object.entries(rootMoveCategories).map(
-        ([rulesetKey, ruleset], index, arr) => (
+        ([rulesetKey, ruleset], _, arr) => (
           <List key={rulesetKey} disablePadding>
             {arr.length > 1 && (
               <ListSubheader

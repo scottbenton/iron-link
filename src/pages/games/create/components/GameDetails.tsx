@@ -10,10 +10,13 @@ export function GameDetails() {
 
   return (
     <>
-      <SectionHeading label={t("Game Details")} breakContainer />
+      <SectionHeading
+        label={t("game.create.game-details", "Game Details")}
+        breakContainer
+      />
       <TextField
         sx={{ mt: 2 }}
-        label={t("Game Name")}
+        label={t("game.create.game-name", "Game Name")}
         value={gameDetails.gameName}
         onChange={(e) =>
           setGameDetails({ ...gameDetails, gameName: e.target.value })

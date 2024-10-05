@@ -1,5 +1,5 @@
 import { PageContent, PageHeader } from "components/Layout";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ChooseGameType } from "./components/ChooseGameType";
 import {
@@ -24,6 +24,7 @@ import { addCharacterToCampaign } from "api-calls/campaign/addCharacterToCampaig
 import { useNavigate } from "react-router-dom";
 import { pathConfig } from "pages/pathConfig";
 import { GameDetails } from "./components/GameDetails";
+import { TFunction } from "i18next";
 
 interface StepConfig {
   label: string;
@@ -32,45 +33,62 @@ interface StepConfig {
   getErrorIfExists?: (state: ICreateGameAtom) => string | undefined;
 }
 
-const chooseGameTypeStep: StepConfig = {
-  label: "Choose Game Type",
+const chooseGameTypeStep = (t: TFunction): StepConfig => ({
+  label: t("game.create.choose-game-type-step", "Choose Game Type"),
   component: <ChooseGameType />,
-};
-const chooseRulesetStep: StepConfig = {
-  label: "Choose Rulesets",
+});
+const chooseRulesetStep = (t: TFunction): StepConfig => ({
+  label: t("game.create.choose-rulesets-step", "Choose Rulesets"),
   component: <RulesetExpansionSection />,
   getErrorIfExists: (state) => {
     if (
       Object.values(state.rulesets).filter((isActive) => isActive).length === 0
     ) {
-      return "Please select at least one ruleset";
+      return t(
+        "game.create.rulesets-required-error",
+        "Please select at least one ruleset"
+      );
     }
   },
-};
-const createCharacterStep: StepConfig = {
-  label: "Create Character",
+});
+const createCharacterStep = (t: TFunction): StepConfig => ({
+  label: t("game.create.create-character-step", "Create Character"),
   component: <CreateCharacter />,
-  actionLabel: "Create Character",
-};
-const gameSettingsStep: StepConfig = {
-  label: "Game Details",
-  component: <GameDetails />,
-  actionLabel: "Create Game",
-};
+  actionLabel: t("game.create.create-character-submit", "Create Character"),
+});
 
-const derivedSteps = derivedAtomWithEquality<ICreateGameAtom, StepConfig[]>(
-  createGameAtom,
-  (atom) => {
-    const { gameType } = atom;
-    if (gameType === CampaignType.Solo) {
-      return [chooseGameTypeStep, chooseRulesetStep, createCharacterStep];
-    } else if (gameType === CampaignType.Coop) {
-      return [chooseGameTypeStep, chooseRulesetStep, gameSettingsStep];
-    } else {
-      return [chooseGameTypeStep, chooseRulesetStep, gameSettingsStep];
+const gameSettingsStep = (t: TFunction): StepConfig => ({
+  label: t("game.create.game-details-step", "Game Details"),
+  component: <GameDetails />,
+  actionLabel: t("game.create.create-game-submit", "Create Game"),
+});
+
+const derivedSteps = (t: TFunction) =>
+  derivedAtomWithEquality<ICreateGameAtom, StepConfig[]>(
+    createGameAtom,
+    (atom) => {
+      const { gameType } = atom;
+      if (gameType === CampaignType.Solo) {
+        return [
+          chooseGameTypeStep(t),
+          chooseRulesetStep(t),
+          createCharacterStep(t),
+        ];
+      } else if (gameType === CampaignType.Coop) {
+        return [
+          chooseGameTypeStep(t),
+          chooseRulesetStep(t),
+          gameSettingsStep(t),
+        ];
+      } else {
+        return [
+          chooseGameTypeStep(t),
+          chooseRulesetStep(t),
+          gameSettingsStep(t),
+        ];
+      }
     }
-  }
-);
+  );
 
 export function CreateGamePage() {
   const { t } = useTranslation();
@@ -87,7 +105,7 @@ export function CreateGamePage() {
     };
   }, [setCreateGameAtom, resetCharacter]);
 
-  const steps = useAtomValue(derivedSteps);
+  const steps = useAtomValue(useMemo(() => derivedSteps(t), [t]));
   const [step, setStep] = useState(0);
   const [error, setError] = useState<string | undefined>();
 
@@ -107,7 +125,7 @@ export function CreateGamePage() {
 
     const campaignName = gameType === CampaignType.Solo ? name : gameName;
     if (!campaignName) {
-      setError(t("Please enter a name"));
+      setError(t("game.create.error-no-name", "Please enter a name"));
       return;
     }
 
@@ -137,12 +155,22 @@ export function CreateGamePage() {
                 })
                 .catch((e) => {
                   console.error(e);
-                  setError(t("Error adding character to game"));
+                  setError(
+                    t(
+                      "game.create.error-adding-character-to-game",
+                      "Error adding character to game"
+                    )
+                  );
                 });
             })
             .catch((e) => {
               console.error(e);
-              setError(t("Error creating character"));
+              setError(
+                t(
+                  "game.create.error-creating-character",
+                  "Error creating character"
+                )
+              );
             });
         } else {
           // Redirect to game page
@@ -151,7 +179,7 @@ export function CreateGamePage() {
       })
       .catch((e) => {
         console.error(e);
-        setError(t("Error creating game"));
+        setError(t("game.create.error-creating-game", "Error creating game"));
       });
     // Create campaign & character, then link them
   }, [characterValue, createGameValue, uid, t, navigate]);
@@ -163,18 +191,18 @@ export function CreateGamePage() {
 
   return (
     <>
-      <PageHeader label={t("New Game")} maxWidth="md" />
+      <PageHeader label={t("game.create.new-game", "New Game")} maxWidth="md" />
       <PageContent maxWidth="md">
         <Stepper activeStep={step} alternativeLabel sx={{ mb: 3 }}>
           {steps.map((stepConfig) => (
             <Step key={stepConfig.label}>
-              <StepLabel>{t(stepConfig.label)}</StepLabel>
+              <StepLabel>{stepConfig.label}</StepLabel>
             </Step>
           ))}
         </Stepper>
         {error && (
           <Alert severity="error" variant="filled" sx={{ mb: 2 }}>
-            {t(error)}
+            {error}
           </Alert>
         )}
         {steps[step]?.component}
@@ -188,11 +216,12 @@ export function CreateGamePage() {
               setStep((step) => step - 1);
             }}
           >
-            {t("Back")}
+            {t("common.back", "Back")}
           </Button>
           {step === steps.length - 1 ? (
             <GradientButton onClick={() => handleCreate()}>
-              {t(steps[step]?.actionLabel ?? "Start Game")}
+              {steps[step]?.actionLabel ??
+                t("game.create.start-game", "Start Game")}
             </GradientButton>
           ) : (
             <Button
@@ -200,7 +229,7 @@ export function CreateGamePage() {
               disabled={step >= steps.length}
               onClick={handleNextClick}
             >
-              {t("Next")}
+              {t("common.next", "Next")}
             </Button>
           )}
         </Box>

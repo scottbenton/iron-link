@@ -84,9 +84,13 @@ export function CharacterDetailsDialog(props: CharacterDetailsDialogProps) {
     if (files && files.length > 0) {
       if (files[0].size > MAX_FILE_SIZE) {
         error(
-          t("File is too large. The max file size is {{maxFileSize}}", {
-            maxFileSize: MAX_FILE_SIZE_LABEL,
-          })
+          t(
+            "common.file-size-error",
+            "File is too large. The max file size is {{maxFileSize}}",
+            {
+              maxFileSize: MAX_FILE_SIZE_LABEL,
+            }
+          )
         );
         evt.target.value = "";
         return;
@@ -157,18 +161,23 @@ export function CharacterDetailsDialog(props: CharacterDetailsDialogProps) {
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitleWithCloseButton onClose={onClose}>
-        {t("Change Character Name and Portrait")}
+        {t(
+          "character.character-sidebar.change-character-name-portrait",
+          "Change Character Name and Portrait"
+        )}
       </DialogTitleWithCloseButton>
       <DialogContent>
         <TextField
           sx={{ mt: 1 }}
-          label={t("Name")}
+          label={t("character.name", "Name")}
           value={name}
           onChange={(evt) => setName(evt.currentTarget.value)}
         />
         <Box mt={2}>
           <Button variant="outlined" component="label" color={"inherit"}>
-            {file ? t("Change Image") : t("Upload Image")}
+            {file
+              ? t("character.character-sidebar.change-image", "Change Image")
+              : t("character.character-sidebar.upload-image", "Upload Image")}
             <input
               hidden
               accept="image/*"
@@ -184,7 +193,7 @@ export function CharacterDetailsDialog(props: CharacterDetailsDialogProps) {
               sx={{ ml: 1 }}
               onClick={handleClearFile}
             >
-              {t("Remove Image")}
+              {t("character.character-sidebar.remove-image", "Remove Image")}
             </Button>
           )}
           {file && (
@@ -229,10 +238,10 @@ export function CharacterDetailsDialog(props: CharacterDetailsDialogProps) {
       </DialogContent>
       <DialogActions>
         <Button color={"inherit"} onClick={onClose} disabled={isLoading}>
-          {t("Cancel")}
+          {t("common.cancel", "Cancel")}
         </Button>
         <Button variant={"contained"} onClick={handleSave} disabled={isLoading}>
-          {t("Save Changes")}
+          {t("common.save-changes", "Save Changes")}
         </Button>
       </DialogActions>
     </Dialog>

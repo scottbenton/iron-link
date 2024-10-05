@@ -40,7 +40,7 @@ export function ImpactsSection() {
         ([impactKey, impactValue]) => impactValue && impactRules[impactKey]
       )
       .map(([impactKey]) => impactRules[impactKey].label)
-      .join(", ") || t("None");
+      .join(", ") || t("character.character-sidebar.no-impacts", "None");
 
   const [isImpactDialogOpen, setIsImpactDialogOpen] = useState(false);
 
@@ -51,7 +51,7 @@ export function ImpactsSection() {
         textTransform="uppercase"
         fontFamily="fontFamilyTitle"
       >
-        {t("Impacts")}
+        {t("character.character-sidebar.impacts", "Impacts")}
       </Typography>
       <Card variant="outlined">
         <Box
@@ -61,11 +61,14 @@ export function ImpactsSection() {
           sx={{ pl: 2, pr: 1 }}
         >
           <Typography variant="body2" color="text.secondary" sx={{ py: 2 }}>
-            {t("Active Impacts")}
+            {t("character.character-sidebar.active-impacts", "Active Impacts")}
           </Typography>
           {isCharacterOwner && (
             <IconButton
-              aria-label={t("Edit Impacts")}
+              aria-label={t(
+                "character.character-sidebar.edit-impacts",
+                "Edit Impacts"
+              )}
               onClick={() => setIsImpactDialogOpen(true)}
             >
               <EditIcon />
@@ -85,7 +88,7 @@ export function ImpactsSection() {
         <DialogTitleWithCloseButton
           onClose={() => setIsImpactDialogOpen(false)}
         >
-          {t("Edit Impacts")}
+          {t("character.character-sidebar.edit-impacts", "Edit Impacts")}
         </DialogTitleWithCloseButton>
         <DialogContent>
           <GridLayout
@@ -122,7 +125,10 @@ export function ImpactsSection() {
                 </Box>
               </Box>
             )}
-            emptyStateMessage={t("No impacts found")}
+            emptyStateMessage={t(
+              "character.character-sidebar.no-impacts-found",
+              "No impacts found"
+            )}
             minWidth={150}
           />
         </DialogContent>
@@ -131,7 +137,7 @@ export function ImpactsSection() {
             variant={"contained"}
             onClick={() => setIsImpactDialogOpen(false)}
           >
-            {t("Done")}
+            {t("common.done", "Done")}
           </Button>
         </DialogActions>
       </Dialog>

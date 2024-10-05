@@ -20,6 +20,7 @@ interface StatRollConfig {
   adds?: number;
   momentum: number;
   hideSnackbar?: boolean;
+  characterId?: string;
 }
 
 export function useRollStatAndAddToLog() {
@@ -37,7 +38,11 @@ export function useRollStatAndAddToLog() {
 
   const rollStat = useCallback(
     (config: StatRollConfig) => {
-      const result = getStatRollResult(config, uid, characterId);
+      const result = getStatRollResult(
+        config,
+        uid,
+        config.characterId ?? characterId
+      );
 
       const rollId = uploadRoll(result, campaignId);
 
@@ -134,18 +139,27 @@ function announceRoll(
   let announcement: string;
 
   if (move) {
-    announcement = t("Rolled {{moveName}} using stat {{statLabel}}.", {
-      moveName: move.name,
-      statLabel: roll.rollLabel,
-    });
+    announcement = t(
+      "datasworn.a11y.action-roll-with-move",
+      "Rolled {{moveName}} using stat {{statLabel}}.",
+      {
+        moveName: move.name,
+        statLabel: roll.rollLabel,
+      }
+    );
   } else {
-    announcement = t("Rolled plus {{statLabel}}.", {
-      statLabel: roll.rollLabel,
-    });
+    announcement = t(
+      "datasworn.a11y.action-roll-no-move",
+      "Rolled plus {{statLabel}}.",
+      {
+        statLabel: roll.rollLabel,
+      }
+    );
   }
 
   if (roll.matchedNegativeMomentum) {
     announcement += t(
+      "datasworn.a11y.action-roll-total-matched-negative-momentum",
       " On your action die you rolled a {{action}} which matched your momentum of {{momentum}}, so your action die got cancelled out. Your modifiers are {{statModifier}} plus {{adds}} for a total of {{actionTotal}}.",
       {
         action: roll.actionTotal === 10 ? t("max of 10") : roll.actionTotal,
@@ -157,6 +171,7 @@ function announceRoll(
     );
   } else {
     announcement += t(
+      "datasworn.a11y.action-roll-total",
       " On your action die you rolled a {{action}} plus {{statModifier}} plus {{adds}} for a total of {{actionTotal}}.",
       {
         action: roll.actionTotal === 10 ? t("max of 10") : roll.actionTotal,
@@ -166,13 +181,14 @@ function announceRoll(
       }
     );
   }
-  const resultLabel = t("Weak Hit");
+  const resultLabel = t("datasworn.weak-hit", "Weak Hit");
   if (roll.result === RollResult.StrongHit) {
-    t("Strong Hit");
+    t("datasworn.strong-hit", "Strong Hit");
   } else if (roll.result === RollResult.Miss) {
-    t("Miss");
+    t("datasworn.miss", "Miss");
   }
   announcement += t(
+    "datasworn.a11y.action-roll-result",
     " On your challenge die you rolled a {{challenge1}} and a {{challenge2}}, for a {{resultLabel}}.",
     {
       challenge1: roll.challenge1,

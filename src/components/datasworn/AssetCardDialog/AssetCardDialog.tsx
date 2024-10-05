@@ -36,7 +36,7 @@ export function AssetCardDialog(props: AssetCardDialogProps) {
   return (
     <Dialog open={open} onClose={handleClose} maxWidth={"lg"}>
       <DialogTitleWithCloseButton onClose={handleClose}>
-        {t("Assets")}
+        {t("datasworn.assets", "Assets")}
       </DialogTitleWithCloseButton>
       <DialogContent
         sx={{

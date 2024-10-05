@@ -1,4 +1,5 @@
 import { Datasworn, IdParser } from "@datasworn/core";
+import { ironLinkAskTheOracleRulesPackage } from "data/askTheOracle";
 
 export function getRulesetFromId(
   id: string,
@@ -14,7 +15,8 @@ export function getRulesetFromId(
       rulesPackage.type === "ruleset" ? rulesPackage._id : rulesPackage.ruleset;
     const ruleset = tree[rulesetId];
 
-    if (!ruleset) return undefined;
+    if (!ruleset || ruleset._id === ironLinkAskTheOracleRulesPackage._id)
+      return undefined;
 
     return {
       id: ruleset._id,

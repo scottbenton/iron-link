@@ -30,7 +30,7 @@ export function AppSettingsMenu() {
       <IconButton
         ref={buttonRef}
         color="inherit"
-        aria-label={t("App Settings")}
+        aria-label={t("iron-link.app-settings", "App Settings")}
         onClick={() => setOpen(true)}
       >
         <SettingsIcon />
@@ -40,7 +40,9 @@ export function AppSettingsMenu() {
         onClose={() => setOpen(false)}
         anchorEl={buttonRef.current}
       >
-        <ListSubheader>{t("App Settings")}</ListSubheader>
+        <ListSubheader>
+          {t("iron-link.app-settings", "App Settings")}
+        </ListSubheader>
         <MenuItem
           onClick={() => {
             setColorScheme(colorScheme === "light" ? "dark" : "light");
@@ -50,7 +52,9 @@ export function AppSettingsMenu() {
           <ListItemIcon>
             {colorScheme === "light" ? <DarkModeIcon /> : <LightModeIcon />}
           </ListItemIcon>
-          {colorScheme === "light" ? t("Dark Mode") : t("Light Mode")}
+          {colorScheme === "light"
+            ? t("iron-link.dark-mode", "Dark Mode")
+            : t("iron-link.light-mode", "Light Mode")}
         </MenuItem>
         {status === AuthState.Authenticated && (
           <MenuItem
@@ -63,7 +67,7 @@ export function AppSettingsMenu() {
               <LogoutIcon />
             </ListItemIcon>
 
-            {t("Sign Out")}
+            {t("iron-link.sign-out", "Sign Out")}
           </MenuItem>
         )}
       </Menu>

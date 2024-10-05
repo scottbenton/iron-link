@@ -15,7 +15,7 @@ export function IronLinkLogo(props: IronLinkLogoProps) {
   const { t } = useTranslation();
   return (
     <Box
-      aria-label={t("Iron Link")}
+      aria-label={t("iron-link.title", "Iron Link")}
       component={"svg"}
       sx={sx}
       viewBox="0 0 128 128"

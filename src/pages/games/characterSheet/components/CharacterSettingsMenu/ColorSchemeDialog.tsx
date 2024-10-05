@@ -43,7 +43,10 @@ export function ColorSchemeDialog(props: ColorSchemeDialogProps) {
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitleWithCloseButton onClose={onClose}>
-        {t("Change Color Scheme")}
+        {t(
+          "character.character-sidebar.change-color-scheme",
+          "Change Color Scheme"
+        )}
       </DialogTitleWithCloseButton>
       <DialogContent>
         {/* Add your color scheme selection UI here */}
@@ -54,10 +57,10 @@ export function ColorSchemeDialog(props: ColorSchemeDialogProps) {
       </DialogContent>
       <DialogActions>
         <Button color="inherit" onClick={onClose}>
-          Cancel
+          {t("common.cancel", "Cancel")}
         </Button>
         <Button variant="contained" onClick={handleSave}>
-          Save
+          {t("common.save-changes", "Save Changes")}
         </Button>
       </DialogActions>
     </Dialog>

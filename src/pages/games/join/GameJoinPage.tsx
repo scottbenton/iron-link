@@ -37,11 +37,11 @@ export function GameJoinPage() {
         .catch((err) => {
           console.error(err);
           setLoading(false);
-          setError(t("Failed to load campaign"));
+          setError(t("game.load-failure", "Failed to load game"));
         });
     } else {
       setLoading(false);
-      setError(t("Could not find campaign"));
+      setError(t("game.find-failure", "Could not find game"));
     }
   }, [campaignId, uid, t, navigate]);
 
@@ -53,7 +53,7 @@ export function GameJoinPage() {
           navigate(pathConfig.game(campaignId));
         })
         .catch(() => {
-          setError(t("Failed to join campaign"));
+          setError(t("game.join-failure", "Failed to join game"));
         });
     }
   };
@@ -72,12 +72,16 @@ export function GameJoinPage() {
   return (
     <>
       <PageHeader
-        label={t("Join {{campaignName}}", { campaignName: campaign.name })}
+        label={t("game.join-name", "Join {{campaignName}}", {
+          campaignName: campaign.name,
+        })}
         maxWidth="md"
       />
       <PageContent maxWidth="md">
         <div>
-          <GradientButton onClick={addUser}>{t("Join")}</GradientButton>
+          <GradientButton onClick={addUser}>
+            {t("game.join", "Join")}
+          </GradientButton>
         </div>
       </PageContent>
     </>

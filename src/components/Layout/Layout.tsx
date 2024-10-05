@@ -8,6 +8,7 @@ import { Outlet } from "react-router-dom";
 import { AuthState, useAuthAtom } from "atoms/auth.atom";
 import { LayoutPathListener } from "./LayoutPathListener";
 import { RollSnackbarSection } from "components/characters/rolls/RollSnackbarSection";
+import { DataswornDialog } from "components/datasworn/DataswornDialog";
 
 export function Layout() {
   const authStatus = useAuthAtom()[0].status;
@@ -48,6 +49,7 @@ export function Layout() {
         </Box>
       </Box>
       <RollSnackbarSection />
+      <DataswornDialog />
       {/* <UserNameDialog
           open={userNameDialogOpen}
           handleClose={closeUserNameDialog}

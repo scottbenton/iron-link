@@ -72,7 +72,11 @@ export function ConditionMeter(props: ConditionMeterProps) {
       </Typography>
       <Box display="flex" alignItems="center" px={onChange ? 0 : 0.5} pb={0.5}>
         <IconButton
-          aria-label={t("subtract 1 from {{label}}", { label })}
+          aria-label={t(
+            "datasworn.meter-subtract-1",
+            "subtract 1 from {{label}}",
+            { label }
+          )}
           size={"small"}
           disabled={!onChange || currentValue <= min || disabled}
           onClick={() => onChange && onChange(currentValue - 1)}
@@ -167,7 +171,9 @@ export function ConditionMeter(props: ConditionMeterProps) {
           </GradientBox>
         </Box>
         <IconButton
-          aria-label={t("add 1 to {{label}}", { label })}
+          aria-label={t("datasworn.meter-add-1", "add 1 to {{label}}", {
+            label,
+          })}
           size={"small"}
           disabled={!onChange || currentValue >= max || disabled}
           onClick={() => onChange && onChange(currentValue + 1)}

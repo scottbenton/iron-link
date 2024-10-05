@@ -1,4 +1,6 @@
 import { Box, Typography } from "@mui/material";
+import { MoveTree } from "components/datasworn/MoveTree";
+import { OracleTree } from "components/datasworn/OracleTree";
 import { StyledTab, StyledTabs } from "components/StyledTabs";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -23,6 +25,7 @@ function tabPanelProps(tab: Tabs, value: Tabs) {
     role: "tabpanel",
     id: `tabpanel-${tab}`,
     "aria-labelledby": `tab-${tab}`,
+    mx: -2,
   };
 }
 
@@ -34,28 +37,37 @@ export function ReferenceSidebarContents() {
     <>
       <Box display="flex" justifyContent="space-between">
         <Typography fontFamily={"fontFamilyTitle"} textTransform={"uppercase"}>
-          {t("Reference")}
+          {t("character.reference-sidebar-title", "Reference")}
         </Typography>
       </Box>
       <StyledTabs
-        sx={{ mx: -2, mb: 2 }}
+        sx={{ mx: -2 }}
         centered
         value={currentTab}
         onChange={(_, value) => setCurrentTab(value as unknown as Tabs)}
       >
-        <StyledTab label={t("Moves")} {...tabProps(Tabs.Moves)} />
-        <StyledTab label={t("Oracles")} {...tabProps(Tabs.Oracles)} />
-        <StyledTab label={t("Game Log")} {...tabProps(Tabs.GameLog)} />
+        <StyledTab
+          label={t("character.reference-sidebar-moves", "Moves")}
+          {...tabProps(Tabs.Moves)}
+        />
+        <StyledTab
+          label={t("character.reference-sidebar-oracles", "Oracles")}
+          {...tabProps(Tabs.Oracles)}
+        />
+        <StyledTab
+          label={t("character.reference-sidebar-game-log", "Game Log")}
+          {...tabProps(Tabs.GameLog)}
+        />
       </StyledTabs>
-      <div {...tabPanelProps(Tabs.Moves, currentTab)}>
-        <Typography>Moves</Typography>
-      </div>
-      <div {...tabPanelProps(Tabs.Oracles, currentTab)}>
-        <Typography>Oracles</Typography>
-      </div>
-      <div {...tabPanelProps(Tabs.GameLog, currentTab)}>
+      <Box {...tabPanelProps(Tabs.Moves, currentTab)}>
+        <MoveTree />
+      </Box>
+      <Box {...tabPanelProps(Tabs.Oracles, currentTab)}>
+        <OracleTree />
+      </Box>
+      <Box {...tabPanelProps(Tabs.GameLog, currentTab)}>
         <Typography>Game Log</Typography>
-      </div>
+      </Box>
     </>
   );
 }

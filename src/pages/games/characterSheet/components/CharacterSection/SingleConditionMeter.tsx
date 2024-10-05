@@ -61,7 +61,7 @@ export function SingleConditionMeter(props: SingleConditionMeterProps) {
         isCharacterOwner
           ? {
               ActionIcon: RollIcon,
-              actionLabel: t("Roll"),
+              actionLabel: t("datasworn.roll", "Roll"),
             }
           : undefined
       }

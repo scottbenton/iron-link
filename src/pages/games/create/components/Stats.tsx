@@ -20,7 +20,10 @@ export function Stats() {
           color={"text.secondary"}
           sx={{ mr: 1 }}
         >
-          {t("Select a value for each stat.")}
+          {t(
+            "character.create.choose-stats-helper-text",
+            "Select a value for each stat."
+          )}
         </Typography>
       </Box>
       <Box display={"flex"} flexWrap={"wrap"} gap={1}>

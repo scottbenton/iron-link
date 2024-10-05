@@ -13,10 +13,10 @@ export function GameSelectPage() {
   return (
     <>
       <PageHeader
-        label={t("Your Games")}
+        label={t("game.list.header", "Your Games")}
         actions={
           <GradientButton href={pathConfig.gameCreate}>
-            {t("Create Game")}
+            {t("game.list.create", "Create Game")}
           </GradientButton>
         }
       />
@@ -28,10 +28,10 @@ export function GameSelectPage() {
           )}
           loading={campaignState.loading}
           error={campaignState.error}
-          emptyStateMessage={t("No games found")}
+          emptyStateMessage={t("game.list.no-games-found", "No games found")}
           emptyStateAction={
             <GradientButton href={pathConfig.gameCreate}>
-              {t("Create Game")}
+              {t("game.list.create", "Create Game")}
             </GradientButton>
           }
           minWidth={300}

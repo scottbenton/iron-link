@@ -48,7 +48,7 @@ export function Stats() {
         textTransform={"uppercase"}
         fontFamily="fontFamilyTitle"
       >
-        {t("Stats")}
+        {t("character.character-sidebar.stats", "Stats")}
       </Typography>
       <Box display="flex" flexWrap="wrap" gap={1}>
         {Object.entries(statRules).map(([key, statRule]) => (
@@ -59,7 +59,7 @@ export function Stats() {
             action={
               isCharacterOwner
                 ? {
-                    actionLabel: t("Roll"),
+                    actionLabel: t("common.roll", "Roll"),
                     ActionIcon: RollIcon,
                   }
                 : undefined
@@ -79,7 +79,7 @@ export function Stats() {
           />
         ))}
         <DebouncedConditionMeter
-          label={t("Adds")}
+          label={t("character.character-sidebar.adds", "Adds")}
           min={-9}
           max={9}
           defaultValue={0}

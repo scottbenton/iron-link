@@ -31,7 +31,9 @@ export function GameLayout() {
   }
 
   if (error) {
-    return <EmptyState message={t("Failed to load game.")} />;
+    return (
+      <EmptyState message={t("game.load-failure", "Failed to load game.")} />
+    );
   }
 
   return (

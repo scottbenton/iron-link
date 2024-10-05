@@ -2,14 +2,13 @@ import { atom, useAtomValue, useSetAtom } from "jotai";
 import { useCallback } from "react";
 import { Roll } from "types/DieRolls.type";
 
-export interface RollDisplay {
-  [rollId: string]: Roll;
-}
+export type RollDisplay = { id?: string; roll: Roll }[];
+
 // addRoll: (rollId: string, roll: Roll) => void;
 // clearRoll: (rollId: string) => void;
 // clearRolls: () => void;
 
-export const rollDisplayAtom = atom<RollDisplay>({});
+export const rollDisplayAtom = atom<RollDisplay>([]);
 
 export function useVisibleRolls() {
   return useAtomValue(rollDisplayAtom);
@@ -19,21 +18,14 @@ export function useAddRollSnackbar() {
   const setRolls = useSetAtom(rollDisplayAtom);
 
   const addRoll = useCallback(
-    (rollId: string, roll: Roll) => {
+    (rollId: string | undefined, roll: Roll) => {
       setRolls((rolls) => {
-        const newRolls = { ...rolls };
+        const newRolls = [...rolls, { rollId, roll }];
 
-        const newRollIds = Object.entries(newRolls)
-          .sort(
-            ([, r1], [, r2]) => r1.timestamp.getTime() - r2.timestamp.getTime()
-          )
-          .map(([rollId]) => rollId);
-
-        if (newRollIds.length >= 3) {
-          delete newRolls[newRollIds[0]];
+        if (newRolls.length > 3) {
+          newRolls.splice(0, 1);
         }
 
-        newRolls[rollId] = roll;
         return newRolls;
       });
     },
@@ -47,10 +39,10 @@ export function useClearRollSnackbar() {
   const setRolls = useSetAtom(rollDisplayAtom);
 
   const clearRoll = useCallback(
-    (rollId: string) => {
+    (rollIndex: number) => {
       setRolls((rolls) => {
-        const newRolls = { ...rolls };
-        delete newRolls[rollId];
+        const newRolls = [...rolls];
+        newRolls.splice(rollIndex, 1);
         return newRolls;
       });
     },
@@ -64,7 +56,7 @@ export function useClearAllRollSnackbars() {
   const setRolls = useSetAtom(rollDisplayAtom);
 
   const clearRolls = useCallback(() => {
-    setRolls({});
+    setRolls([]);
   }, [setRolls]);
 
   return clearRolls;

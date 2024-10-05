@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { RollResult as RollResultEnum } from "types/DieRolls.type";
 
 export interface StatRollSnackbarProps {
-  rollId: string;
+  rollId: string | undefined;
   roll: StatRoll;
   isExpanded: boolean;
 }
@@ -16,11 +16,11 @@ export function StatRollSnackbar(props: StatRollSnackbarProps) {
 
   const move = useMove(roll.moveId ?? "");
 
-  const resultLabel = t("Weak Hit");
+  const resultLabel = t("datasworn.weak-hit", "Weak Hit");
   if (roll.result === RollResultEnum.StrongHit) {
-    t("Strong Hit");
+    t("datasworn.strong-hit", "Strong Hit");
   } else if (roll.result === RollResultEnum.Miss) {
-    t("Miss");
+    t("datasworn.miss", "Miss");
   }
 
   return (
@@ -51,10 +51,19 @@ export function StatRollSnackbar(props: StatRollSnackbarProps) {
         <RollResult
           result={resultLabel}
           extras={[
-            ...(roll.challenge1 === roll.challenge2 ? [t("Match")] : []),
-            ...(roll.action === 1 ? [t("One on the action die")] : []),
+            ...(roll.challenge1 === roll.challenge2
+              ? [t("datasworn.match", "Match")]
+              : []),
+            ...(roll.action === 1
+              ? [t("datasworn.one-on-the-action-die", "One on the action die")]
+              : []),
             ...(roll.matchedNegativeMomentum
-              ? [t("Matched negative momentum")]
+              ? [
+                  t(
+                    "datasworn.matched-negative-momentum",
+                    "Matched negative momentum"
+                  ),
+                ]
               : []),
           ]}
         />

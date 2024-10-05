@@ -92,7 +92,7 @@ export function useSyncUsersCampaigns() {
         (error) => {
           const errorMessage = getErrorMessage(
             error,
-            t("Failed to load campaigns")
+            t("game.list.load-failure", "Failed to load games")
           );
           setUsersCampaigns((prev) => ({
             ...prev,

@@ -26,6 +26,10 @@ export function useAuthAtom() {
   return useAtom(authAtom);
 }
 
+export function useUID() {
+  return useAtomValue(authAtom).uid;
+}
+
 export function useListenToAuth() {
   const [, setAuth] = useAuthAtom();
   useEffect(() => {

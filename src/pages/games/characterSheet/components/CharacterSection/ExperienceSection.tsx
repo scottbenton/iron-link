@@ -37,10 +37,13 @@ export function ExperienceSection() {
         textTransform="uppercase"
         fontFamily="fontFamilyTitle"
       >
-        {t("Experience")}
+        {t("character.character-sidebar.experience", "Experience")}
       </Typography>
       <DebouncedConditionMeter
-        label={t("Unspent Experience")}
+        label={t(
+          "character.character-sidebar.unspent-experience",
+          "Unspent Experience"
+        )}
         min={0}
         max={100}
         defaultValue={0}

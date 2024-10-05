@@ -51,7 +51,10 @@ export function DialogTitleWithCloseButton(
         </Typography>
         <Box display={"flex"} alignItems={"center"} flexShrink={0} ml={1}>
           {actions}
-          <IconButton aria-label={t("Close Dialog")} onClick={() => onClose()}>
+          <IconButton
+            aria-label={t("common.close-dialog", "Close Dialog")}
+            onClick={() => onClose()}
+          >
             <CloseIcon />
           </IconButton>
         </Box>

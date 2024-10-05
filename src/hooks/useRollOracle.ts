@@ -67,6 +67,10 @@ export function rollOracle(
     rolls = tmpRolls;
   } else {
     const rollResult = rollOracleColumn(oracle);
+
+    // We need to roll other tables
+    // if (rollResult?.result.oracle_rolls) {
+    // }
     if (rollResult) {
       rolls = rollResult.roll;
       resultString = rollResult.result.text;

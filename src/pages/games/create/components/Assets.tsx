@@ -44,14 +44,17 @@ export function Assets() {
           />
         )}
         minWidth={300}
-        emptyStateMessage="Add an asset now, or add one later from the character sheet."
+        emptyStateMessage={t(
+          "character.create.add-asset-empty-state",
+          "Add an asset now, or add one later from the character sheet."
+        )}
         emptyStateAction={
           <Button
             variant="outlined"
             color="inherit"
             onClick={() => setIsAddAssetDialogOpen(true)}
           >
-            {t("Add Asset")}
+            {t("character.create.add-asset", "Add Asset")}
           </Button>
         }
       />
@@ -63,7 +66,7 @@ export function Assets() {
             onClick={() => setIsAddAssetDialogOpen(true)}
             sx={{ mt: 2 }}
           >
-            {t("Add Asset")}
+            {t("character.create.add-asset", "Add Asset")}
           </Button>
         </div>
       )}
@@ -121,7 +124,7 @@ function AssetGridCard(props: AssetGridCardProps) {
       assetDocument={assetDocument}
       headerActions={
         <IconButton
-          aria-label={t("Remove Asset")}
+          aria-label={t("character.assets.remove-asset", "Remove Asset")}
           onClick={() =>
             setCharacter((prev) => {
               const newAssets = [...prev.assets];

@@ -15,8 +15,10 @@ function parseOracleCollection(
   collection: Datasworn.OracleCollection,
   tree: Record<string, Datasworn.RulesPackage>,
   oracleCollectionMap: OracleCollectionMap,
-  oracleRollableMap: OracleRollableMap
+  oracleRollableMap: OracleRollableMap,
+  isParentReplaced: boolean
 ) {
+  let isCollectionReplaced = false;
   Object.keys(collection.contents).forEach((oracleKey) => {
     const oracle = collection.contents[oracleKey];
     if (oracle.replaces) {
@@ -24,7 +26,7 @@ function parseOracleCollection(
         const replacedItems = IdParser.getMatches(replacesKey as Primary, tree);
         replacedItems.forEach((value) => {
           if (value.type === "oracle_rollable") {
-            oracleRollableMap[value._id] = value;
+            oracleRollableMap[value._id] = oracle;
           }
         });
       });
@@ -32,20 +34,11 @@ function parseOracleCollection(
     oracleRollableMap[oracle._id] = oracle;
   });
 
-  if (collection.oracle_type === "tables") {
-    Object.values(collection.collections).forEach((subCollection) => {
-      oracleCollectionMap[subCollection._id] = subCollection;
-      parseOracleCollection(
-        subCollection,
-        tree,
-        oracleCollectionMap,
-        oracleRollableMap
-      );
-    });
-  }
-
   if (collection.replaces) {
-    delete oracleCollectionMap[collection._id];
+    isCollectionReplaced = true;
+    if (!isParentReplaced) {
+      delete oracleCollectionMap[collection._id];
+    }
     collection.replaces.forEach((replacesKey) => {
       const replacedItems = IdParser.getMatches(replacesKey as Primary, tree);
       replacedItems.forEach((value) => {
@@ -90,6 +83,19 @@ function parseOracleCollection(
       });
     });
   }
+
+  if (collection.oracle_type === "tables") {
+    Object.values(collection.collections).forEach((subCollection) => {
+      oracleCollectionMap[subCollection._id] = subCollection;
+      parseOracleCollection(
+        subCollection,
+        tree,
+        oracleCollectionMap,
+        oracleRollableMap,
+        isCollectionReplaced
+      );
+    });
+  }
 }
 
 const oraclesAtom = atom((get) => {
@@ -127,7 +133,8 @@ const oraclesAtom = atom((get) => {
           collection,
           trees,
           oracleCollectionMap,
-          oracleRollableMap
+          oracleRollableMap,
+          false
         );
       }
     });

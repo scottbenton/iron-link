@@ -11,7 +11,7 @@ export function Head(props: HeadProps) {
   const { title, description, openGraphImageSrc } = props;
 
   const { t } = useTranslation();
-  const appName = t("Iron Link");
+  const appName = t("iron-link.title", "Iron Link");
   return (
     <Helmet>
       <title>

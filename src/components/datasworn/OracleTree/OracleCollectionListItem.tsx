@@ -14,6 +14,7 @@ import {
   CollectionVisibilityState,
   VisibilitySettings,
 } from "./getOracleCollectionVisiblity";
+import { OracleTableSharedTextListItem } from "./OracleTableSharedTextListItem";
 
 export interface OracleCollectionListItemProps {
   oracleCollectionId: string;
@@ -55,6 +56,19 @@ export function OracleCollectionListItem(props: OracleCollectionListItemProps) {
   }
 
   const isExpandedOrForced = isExpanded || isSearchActive;
+
+  if (
+    oracleCollection.oracle_type === "table_shared_text" ||
+    oracleCollection.oracle_type === "table_shared_text2" ||
+    oracleCollection.oracle_type === "table_shared_text3"
+  ) {
+    return (
+      <OracleTableSharedTextListItem
+        collection={oracleCollection}
+        disabled={disabled}
+      />
+    );
+  }
 
   return (
     <>
@@ -111,22 +125,44 @@ export function OracleCollectionListItem(props: OracleCollectionListItemProps) {
             />
           ))}
           {oracleCollection.oracle_type === "tables" &&
-            Object.values(oracleCollection.collections).map((subCollection) => (
-              <OracleCollectionListItem
-                key={oracleCollection._id + "-" + subCollection._id}
-                disabled={!isExpandedOrForced || disabled}
-                oracleCollectionId={subCollection._id}
-                oracleCollectionMap={oracleCollectionMap}
-                oracleRollableMap={oracleRollableMap}
-                visibilitySettings={visibilitySettings}
-                isSearchActive={isSearchActive}
-                isFullCollectionVisible={
-                  collectionVisibilityState === CollectionVisibilityState.All
-                }
-              />
-            ))}
+            Object.values(oracleCollection.collections)
+              .sort(sortOracleSubCollections)
+              .map((subCollection) => (
+                <OracleCollectionListItem
+                  key={oracleCollection._id + "-" + subCollection._id}
+                  disabled={!isExpandedOrForced || disabled}
+                  oracleCollectionId={subCollection._id}
+                  oracleCollectionMap={oracleCollectionMap}
+                  oracleRollableMap={oracleRollableMap}
+                  visibilitySettings={visibilitySettings}
+                  isSearchActive={isSearchActive}
+                  isFullCollectionVisible={
+                    collectionVisibilityState === CollectionVisibilityState.All
+                  }
+                />
+              ))}
         </List>
       </Collapse>
     </>
   );
+}
+
+// Bubble tablesharedreesults to the top
+const tableSharedTexts = [
+  "table_shared_text",
+  "table_shared_text2",
+  "table_shared_text3",
+];
+function sortOracleSubCollections(
+  c1: Datasworn.OracleCollection,
+  c2: Datasworn.OracleCollection
+) {
+  const isC1SharedText = tableSharedTexts.includes(c1.oracle_type);
+  const isC2SharedText = tableSharedTexts.includes(c2.oracle_type);
+  if (isC1SharedText && !isC2SharedText) {
+    return -1;
+  } else if (!isC1SharedText && isC2SharedText) {
+    return 1;
+  }
+  return 0;
 }

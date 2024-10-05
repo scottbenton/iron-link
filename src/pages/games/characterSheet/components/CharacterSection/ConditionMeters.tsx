@@ -78,7 +78,7 @@ export function ConditionMeters() {
         textTransform="uppercase"
         fontFamily="fontFamilyTitle"
       >
-        {t("Meters")}
+        {t("character.character-sidebar.meters", "Meters")}
       </Typography>
       <Box display="flex" flexWrap="wrap" gap={1}>
         {Object.entries(conditionMeterRules).map(([key, rule]) => (
@@ -98,7 +98,7 @@ export function ConditionMeters() {
           />
         ))}
         <DebouncedConditionMeter
-          label={t("Momentum")}
+          label={t("character.character-sidebar.momentum-track", "Momentum")}
           min={momentumTrack.min}
           max={max}
           defaultValue={resetValue}
@@ -108,7 +108,10 @@ export function ConditionMeters() {
             setValue(resetValue);
           }}
           action={{
-            actionLabel: t("Reset"),
+            actionLabel: t(
+              "character.character-sidebar.momentum-track-reset",
+              "Reset"
+            ),
             ActionIcon: ResetIcon,
           }}
           disabled={!isCharacterOwner}
