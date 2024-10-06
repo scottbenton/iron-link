@@ -10,16 +10,7 @@ export function useRollOracle() {
   const tree = useDataswornTree();
 
   const handleRollOracle = useCallback(
-    (oracleId: string) => {
-      const oracle =
-        getOracleRollable(oracleId, tree) ??
-        getOracleCollection(oracleId, tree);
-      if (!oracle) {
-        console.error("Oracle not found");
-        return undefined;
-      }
-      return rollOracle(oracle, null, "uid", false);
-    },
+    (oracleId: string) => rollOracle(oracleId, tree, null, "uid", false),
     [tree]
   );
 
@@ -27,12 +18,19 @@ export function useRollOracle() {
 }
 
 export function rollOracle(
-  oracle: Datasworn.OracleCollection | Datasworn.OracleRollable,
+  oracleId: string,
+  tree: Record<string, Datasworn.RulesPackage>,
   characterId: string | null,
   uid: string,
   gmsOnly: boolean
 ): OracleTableRoll | undefined {
+  const oracle =
+    getOracleRollable(oracleId, tree) ?? getOracleCollection(oracleId, tree);
   // We cannot roll across multiple tables like this
+  if (!oracle) {
+    console.error(`Could not find oracle with id ${oracleId}.`);
+    return undefined;
+  }
   if (oracle.oracle_type === "tables") {
     console.error("Oracle table collections cannot be rolled");
     return undefined;
@@ -67,13 +65,36 @@ export function rollOracle(
     rolls = tmpRolls;
   } else {
     const rollResult = rollOracleColumn(oracle);
-
     // We need to roll other tables
-    // if (rollResult?.result.oracle_rolls) {
-    // }
+
     if (rollResult) {
-      rolls = rollResult.roll;
-      resultString = rollResult.result.text;
+      if (rollResult.result.oracle_rolls) {
+        const oracleRolls = rollResult.result.oracle_rolls;
+        const results: string[] = [];
+        oracleRolls.map((oracleRoll) => {
+          const subRollId = oracleRoll.oracle ?? oracleId;
+          if (oracleRoll.auto) {
+            for (let i = 0; i < oracleRoll.number_of_rolls; i++) {
+              const subResult = rollOracle(
+                subRollId,
+                tree,
+                characterId,
+                uid,
+                gmsOnly
+              );
+              if (subResult) {
+                results.push(subResult.result);
+              }
+            }
+          }
+        });
+        rolls = rollResult.roll;
+        resultString = results.join(", ");
+      }
+      if (!resultString) {
+        rolls = rollResult.roll;
+        resultString = rollResult.result.text;
+      }
     }
   }
 
