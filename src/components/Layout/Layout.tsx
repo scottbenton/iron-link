@@ -23,7 +23,12 @@ export function Layout() {
       : unauthenticatedNavRoutes;
 
   return (
-    <Box minHeight={"100vh"} display={"flex"} flexDirection={"column"}>
+    <Box
+      minHeight={"100vh"}
+      display={"flex"}
+      flexDirection={"column"}
+      bgcolor="grey.950"
+    >
       <Box
         display={"flex"}
         flexDirection={{ xs: "column", sm: "row" }}

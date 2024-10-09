@@ -53,8 +53,9 @@ export function CharacterSheetPage() {
         sx={{
           bgcolor: "background.default",
           width: 350,
-          p: 2,
-          overflow: "auto",
+          overflow: "hidden",
+          display: "flex",
+          flexDirection: "column",
         }}
       >
         <ReferenceSidebarContents />
