@@ -17,6 +17,7 @@ import { derivedAtomWithEquality } from "atoms/derivedAtomWithEquality";
 import { useAtomValue } from "jotai";
 import { listenToCharacter } from "api-calls/character/listenToCharacter";
 import { useSetCampaignCharacters } from "../atoms/campaign.characters.atom";
+import { useListenToLogs } from "../atoms/gameLog.atom";
 
 const expansionsAndRulesetsAtom = derivedAtomWithEquality(
   currentCampaignAtom,
@@ -145,4 +146,6 @@ export function useSyncCampaign() {
       setCurrentCampaignCharacters({});
     };
   }, [campaignId, setCurrentCampaignCharacters]);
+
+  useListenToLogs();
 }
