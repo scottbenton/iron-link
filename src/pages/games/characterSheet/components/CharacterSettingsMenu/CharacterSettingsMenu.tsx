@@ -10,7 +10,6 @@ import { useRef, useState } from "react";
 import CharacterIcon from "@mui/icons-material/AccountBox";
 import StatsIcon from "@mui/icons-material/Numbers";
 import ThemeIcon from "@mui/icons-material/Palette";
-import DeleteIcon from "@mui/icons-material/Delete";
 import { useTranslation } from "react-i18next";
 import { CharacterDetailsDialog } from "./CharacterDetailsDialog";
 import { CharacterStatsDialog } from "./CharacterStatsDialog";
@@ -19,6 +18,7 @@ import {
   CharacterPermissionType,
   useCampaignPermissions,
 } from "pages/games/gamePageLayout/hooks/usePermissions";
+import { DeleteCharacterButton } from "./DeleteCharacterButton";
 
 export function CharacterSettingsMenu() {
   const [isSettingsMenuOpen, setIsSettingsMenuOpen] = useState(false);
@@ -101,17 +101,7 @@ export function CharacterSettingsMenu() {
             )}
           />
         </MenuItem>
-        <MenuItem onClick={() => {}}>
-          <ListItemIcon>
-            <DeleteIcon />
-          </ListItemIcon>
-          <ListItemText
-            primary={t(
-              "character.character-sidebar.delete-character",
-              "Delete Character"
-            )}
-          />
-        </MenuItem>
+        <DeleteCharacterButton closeMenu={() => setIsSettingsMenuOpen(false)} />
       </Menu>
       <CharacterDetailsDialog
         open={isCharacterDetailsDialogOpen}
