@@ -10,6 +10,7 @@ import { useTranslation } from "react-i18next";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { deleteCharacter } from "api-calls/character/deleteCharacter";
 import { deleteCampaign } from "api-calls/campaign/deleteCampaign";
+import { useConfirm } from "material-ui-confirm";
 
 export interface DeleteCharacterButtonProps {
   closeMenu: () => void;
@@ -31,28 +32,56 @@ export function DeleteCharacterButton(props: DeleteCharacterButtonProps) {
     (state) => state?.characters
   );
 
+  const confirm = useConfirm();
   const handleDeleteCharacter = useCallback(() => {
-    if (Array.isArray(campaignCharacters)) {
-      const alsoDeleteCampaign = campaignCharacters.length === 1;
-      navigate(
-        alsoDeleteCampaign ? pathConfig.gameSelect : pathConfig.game(campaignId)
-      );
-      deleteCharacter({
-        characterId,
-        campaignId: alsoDeleteCampaign ? undefined : campaignId,
-        portraitFilename,
+    confirm({
+      title: t(
+        "character.character-sidebar.delete-character",
+        "Delete Character"
+      ),
+      description: t(
+        "character.character-sidebar.delete-character-confirmation",
+        "Are you sure you want to delete this character? This action cannot be undone."
+      ),
+      confirmationText: t("common.delete", "Delete"),
+    })
+      .then(() => {
+        closeMenu();
+        if (Array.isArray(campaignCharacters)) {
+          const alsoDeleteCampaign = campaignCharacters.length === 1;
+          navigate(
+            alsoDeleteCampaign
+              ? pathConfig.gameSelect
+              : pathConfig.game(campaignId)
+          );
+          deleteCharacter({
+            characterId,
+            campaignId: alsoDeleteCampaign ? undefined : campaignId,
+            portraitFilename,
+          });
+          if (alsoDeleteCampaign) {
+            deleteCampaign({ campaignId, characterIds: [] }).catch(() => {});
+          }
+        }
+      })
+      .catch(() => {
+        closeMenu();
       });
-      if (alsoDeleteCampaign) {
-        deleteCampaign({ campaignId, characterIds: [] }).catch(() => {});
-      }
-    }
-  }, [campaignCharacters, campaignId, characterId, portraitFilename, navigate]);
+  }, [
+    confirm,
+    t,
+    campaignCharacters,
+    campaignId,
+    characterId,
+    portraitFilename,
+    navigate,
+    closeMenu,
+  ]);
 
   return (
     <MenuItem
       onClick={() => {
         handleDeleteCharacter();
-        closeMenu();
       }}
     >
       <ListItemIcon>
