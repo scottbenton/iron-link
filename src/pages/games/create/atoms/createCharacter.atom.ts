@@ -13,14 +13,16 @@ export interface ICreateCharacterAtom {
     };
   };
   stats: Record<string, number>;
-  assets: AssetDocument[];
+  characterAssets: AssetDocument[];
+  gameAssets: AssetDocument[];
 }
 
 const defaultState: ICreateCharacterAtom = {
   name: "",
   portrait: undefined,
   stats: {},
-  assets: [],
+  characterAssets: [],
+  gameAssets: [],
 };
 
 const createCharacterAtom = atom<ICreateCharacterAtom>(defaultState);

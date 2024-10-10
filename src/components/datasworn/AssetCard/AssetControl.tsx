@@ -27,7 +27,7 @@ export function AssetControl(props: AssetControlProps) {
   const handleControlChange = useCallback(
     (value: boolean | string | number) => {
       if (onControlChange) {
-        onControlChange(controlId, !value);
+        onControlChange(controlId, value);
       }
     },
     [onControlChange, controlId]

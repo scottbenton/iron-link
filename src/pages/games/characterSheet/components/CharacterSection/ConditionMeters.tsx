@@ -10,7 +10,7 @@ import { useCharacterId } from "../../hooks/useCharacterId";
 import { useDerivedCharacterState } from "../../hooks/useDerivedCharacterState";
 import { useCallback } from "react";
 import { SingleConditionMeter } from "./SingleConditionMeter";
-import { useDerivedCampaignState } from "pages/games/gamePageLayout/hooks/useDerivedCampaignState";
+import { useDerivedCampaignDocumentState } from "pages/games/gamePageLayout/hooks/useDerivedCampaignState";
 import { updateCampaign } from "api-calls/campaign/updateCampaign";
 import { useCampaignId } from "pages/games/gamePageLayout/hooks/useCampaignId";
 import { useIsOwnerOfCharacter } from "../../hooks/useIsOwnerOfCharacter";
@@ -20,7 +20,7 @@ export function ConditionMeters() {
   const characterId = useCharacterId();
   const isCharacterOwner = useIsOwnerOfCharacter();
 
-  const campaignConditionMeterValues = useDerivedCampaignState(
+  const campaignConditionMeterValues = useDerivedCampaignDocumentState(
     (campaign) => campaign?.conditionMeters ?? {}
   );
   const { conditionMeterValues, momentum, adds } = useDerivedCharacterState(

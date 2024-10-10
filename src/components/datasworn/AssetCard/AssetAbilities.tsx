@@ -7,14 +7,27 @@ export interface AssetAbilitiesProps {
   abilities: Datasworn.AssetAbility[];
   assetDocument?: AssetDocument;
   onAbilityToggle?: (abilityIndex: number, checked: boolean) => void;
+  hideUnavailableAbilities?: boolean;
 }
 
 export function AssetAbilities(props: AssetAbilitiesProps) {
-  const { abilities, assetDocument, onAbilityToggle } = props;
+  const {
+    abilities,
+    assetDocument,
+    onAbilityToggle,
+    hideUnavailableAbilities,
+  } = props;
+
+  const filteredAbilities = hideUnavailableAbilities
+    ? abilities.filter(
+        (ability, index) =>
+          (ability.enabled || assetDocument?.enabledAbilities[index]) ?? false
+      )
+    : abilities;
 
   return (
     <Stack spacing={1} flexGrow={1} sx={{ ml: -1, flexGrow: 1 }}>
-      {abilities.map((ability, index) => (
+      {filteredAbilities.map((ability, index) => (
         <Box display={"flex"} alignItems={"flex-start"} key={index}>
           <Checkbox
             checked={

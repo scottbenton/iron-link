@@ -25,6 +25,7 @@ import { useNavigate } from "react-router-dom";
 import { pathConfig } from "pages/pathConfig";
 import { GameDetails } from "./components/GameDetails";
 import { TFunction } from "i18next";
+import { addAsset } from "api-calls/assets/addAsset";
 
 interface StepConfig {
   label: string;
@@ -121,7 +122,8 @@ export function CreateGamePage() {
 
   const handleCreate = useCallback(() => {
     const { gameType, gameName, rulesets, expansions } = createGameValue;
-    const { name, stats, assets, portrait } = characterValue;
+    const { name, stats, characterAssets, gameAssets, portrait } =
+      characterValue;
 
     const campaignName = gameType === CampaignType.Solo ? name : gameName;
     if (!campaignName) {
@@ -139,14 +141,25 @@ export function CreateGamePage() {
     })
       .then((campaignId) => {
         if (createGameValue.gameType === CampaignType.Solo) {
-          createCharacterAndUploadPortrait(
+          const characterPromise = createCharacterAndUploadPortrait(
             uid,
             name,
             stats,
-            assets,
+            characterAssets,
             portrait,
             campaignId
-          )
+          );
+
+          const gameAssetPromises = gameAssets.map((asset) => {
+            return addAsset({
+              asset,
+              campaignId,
+            });
+          });
+          Promise.all(gameAssetPromises).catch(() => {
+            console.error("Failed to link game assets to campaign");
+          });
+          characterPromise
             .then((characterId) => {
               addCharacterToCampaign({ uid, campaignId, characterId })
                 .then(() => {

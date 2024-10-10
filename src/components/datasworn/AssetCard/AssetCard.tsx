@@ -21,6 +21,7 @@ export interface AssetCardProps {
     value: boolean | string | number
   ) => void;
 
+  hideUnavailableAbilities?: boolean;
   showSharedIcon?: boolean;
   sx?: SxProps<Theme>;
 }
@@ -35,6 +36,7 @@ export function AssetCard(props: AssetCardProps) {
     onAssetOptionChange,
     onAssetControlChange,
     showSharedIcon,
+    hideUnavailableAbilities,
     sx,
   } = props;
 
@@ -139,6 +141,7 @@ export function AssetCard(props: AssetCardProps) {
           abilities={asset.abilities}
           assetDocument={assetDocument}
           onAbilityToggle={onAssetAbilityToggle}
+          hideUnavailableAbilities={hideUnavailableAbilities}
         />
         <AssetControls
           controls={assetControls}

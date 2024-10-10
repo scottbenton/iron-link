@@ -35,6 +35,7 @@ export function AssetList(props: AssetListProps) {
                   selectAsset({
                     id: asset._id,
                     enabledAbilities: {},
+                    shared: asset.shared,
                   });
                 }}
               >

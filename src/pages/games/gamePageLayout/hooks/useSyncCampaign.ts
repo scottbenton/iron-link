@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import {
   currentCampaignAtom,
+  defaultCurrentCampaignAtom,
   useSetCurrentCampaignAtom,
 } from "../atoms/campaign.atom";
 import { Unsubscribe } from "firebase/firestore";
@@ -18,6 +19,7 @@ import { useAtomValue } from "jotai";
 import { listenToCharacter } from "api-calls/character/listenToCharacter";
 import { useSetCampaignCharacters } from "../atoms/campaign.characters.atom";
 import { useListenToLogs } from "../atoms/gameLog.atom";
+import { listenToAssets } from "api-calls/assets/listenToAssets";
 
 const expansionsAndRulesetsAtom = derivedAtomWithEquality(
   currentCampaignAtom,
@@ -45,37 +47,63 @@ export function useSyncCampaign() {
   const campaignCharacters = useAtomValue(charactersAtom);
 
   useEffect(() => {
-    let unsubscribe: Unsubscribe | undefined = undefined;
+    const unsubscribes: Unsubscribe[] = [];
     if (campaignId) {
-      unsubscribe = listenToCampaign(
-        campaignId,
-        (campaign) => {
-          setCurrentCampaign({ campaignId, campaign, loading: false });
-        },
-        (error) => {
-          console.error(error);
-          setCurrentCampaign({
-            campaignId,
-            campaign: null,
-            loading: false,
-            error: t("game.load-failure", "Error loading game"),
-          });
-        }
+      unsubscribes.push(
+        listenToCampaign(
+          campaignId,
+          (campaign) => {
+            setCurrentCampaign((prev) => ({
+              ...prev,
+              campaignId,
+              campaign,
+              loading: false,
+            }));
+          },
+          (error) => {
+            console.error(error);
+            setCurrentCampaign((prev) => ({
+              ...prev,
+              campaignId,
+              campaign: null,
+              loading: false,
+              error: t("game.load-failure", "Error loading game"),
+            }));
+          }
+        )
+      );
+      unsubscribes.push(
+        listenToAssets(
+          undefined,
+          campaignId,
+          (assets) => {
+            setCurrentCampaign((prev) => ({
+              ...prev,
+              sharedAssets: {
+                loading: false,
+                assets,
+              },
+            }));
+          },
+          (error) => {
+            console.debug(error);
+            setCurrentCampaign((prev) => ({
+              ...prev,
+              sharedAssets: {
+                loading: false,
+                assets: {},
+                error: "Failed to load assets",
+              },
+            }));
+          }
+        )
       );
     } else {
-      setCurrentCampaign({
-        campaignId: "",
-        campaign: null,
-        loading: false,
-      });
+      setCurrentCampaign(defaultCurrentCampaignAtom);
     }
     return () => {
-      unsubscribe?.();
-      setCurrentCampaign({
-        campaignId: "",
-        campaign: null,
-        loading: true,
-      });
+      unsubscribes.forEach((unsubscribe) => unsubscribe());
+      setCurrentCampaign(defaultCurrentCampaignAtom);
     };
   }, [campaignId, t, setCurrentCampaign]);
 
@@ -103,37 +131,70 @@ export function useSyncCampaign() {
     const unsubscribes: Unsubscribe[] = [];
 
     campaignCharacters.forEach(({ characterId }) => {
-      const unsubscribe = listenToCharacter(
-        characterId,
-        (character) => {
-          setCurrentCampaignCharacters((characters) => ({
-            ...characters,
-            [characterId]: {
-              ...characters[characterId],
-              characterDocument: {
-                data: character,
-                loading: false,
-                error: undefined,
+      unsubscribes.push(
+        listenToCharacter(
+          characterId,
+          (character) => {
+            setCurrentCampaignCharacters((characters) => ({
+              ...characters,
+              [characterId]: {
+                ...characters[characterId],
+                characterDocument: {
+                  data: character,
+                  loading: false,
+                  error: undefined,
+                },
               },
-            },
-          }));
-        },
-        (error) => {
-          console.error(error);
-          setCurrentCampaignCharacters((characters) => ({
-            ...characters,
-            [characterId]: {
-              ...characters[characterId],
-              characterDocument: {
-                ...characters[characterId].characterDocument,
-                loading: false,
-                error: t("character.load-failure", "Error loading character"),
+            }));
+          },
+          (error) => {
+            console.error(error);
+            setCurrentCampaignCharacters((characters) => ({
+              ...characters,
+              [characterId]: {
+                ...characters[characterId],
+                characterDocument: {
+                  ...characters[characterId].characterDocument,
+                  loading: false,
+                  error: t("character.load-failure", "Error loading character"),
+                },
               },
-            },
-          }));
-        }
+            }));
+          }
+        )
       );
-      unsubscribes.push(unsubscribe);
+      unsubscribes.push(
+        listenToAssets(
+          characterId,
+          undefined,
+          (assets) => {
+            setCurrentCampaignCharacters((prev) => ({
+              ...prev,
+              [characterId]: {
+                ...prev[characterId],
+                assets: {
+                  loading: false,
+                  assets,
+                },
+              },
+            }));
+          },
+          (error) => {
+            console.debug(error);
+            setCurrentCampaignCharacters((prev) => ({
+              ...prev,
+              [characterId]: {
+                ...prev[characterId],
+                assets: {
+                  loading: false,
+                  assets: {},
+                  error: "Failed to load assets",
+                },
+              },
+            }));
+          }
+        )
+      );
     });
 
     return () => {
