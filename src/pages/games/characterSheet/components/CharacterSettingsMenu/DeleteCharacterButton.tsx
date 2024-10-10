@@ -4,7 +4,7 @@ import { pathConfig } from "pages/pathConfig";
 import { useNavigate } from "react-router-dom";
 import { useCharacterId } from "../../hooks/useCharacterId";
 import { useDerivedCharacterState } from "../../hooks/useDerivedCharacterState";
-import { useDerivedCampaignState } from "pages/games/gamePageLayout/hooks/useDerivedCampaignState";
+import { useDerivedCampaignDocumentState } from "pages/games/gamePageLayout/hooks/useDerivedCampaignState";
 import { useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -27,7 +27,7 @@ export function DeleteCharacterButton(props: DeleteCharacterButtonProps) {
     characterId,
     (store) => store?.characterDocument.data?.profileImage?.filename
   );
-  const campaignCharacters = useDerivedCampaignState(
+  const campaignCharacters = useDerivedCampaignDocumentState(
     (state) => state?.characters
   );
 

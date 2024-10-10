@@ -4,6 +4,7 @@ import { CharacterSection } from "./CharacterSection";
 import { Box, Typography } from "@mui/material";
 import { useState } from "react";
 import { CharacterSettingsMenu } from "./CharacterSettingsMenu";
+import { AssetsSection } from "./AssetsSection";
 
 enum Tabs {
   Overview = "overview",
@@ -64,7 +65,7 @@ export function CharacterSidebarContents() {
         <CharacterSection />
       </div>
       <div {...tabPanelProps(Tabs.Assets, currentTab)}>
-        <Typography>Assets</Typography>
+        <AssetsSection />
       </div>
       <div {...tabPanelProps(Tabs.Tracks, currentTab)}>
         <Typography>Tracks</Typography>

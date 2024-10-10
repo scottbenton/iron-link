@@ -41,7 +41,7 @@ export function DebouncedClockCircle(props: DebouncedClockCircleProps) {
       segments={segments}
       value={localFilledSegments}
       size={size}
-      onClick={handleIncrement}
+      onClick={onFilledSegmentsChange ? handleIncrement : undefined}
     />
   );
 }

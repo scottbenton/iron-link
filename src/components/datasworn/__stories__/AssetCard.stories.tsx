@@ -27,6 +27,7 @@ export const HawkExample: Story = {
       optionValues: {
         name: "Leo",
       },
+      shared: false,
     },
     onAssetAbilityToggle: () => {},
     onAssetControlChange: () => {},
@@ -46,6 +47,7 @@ export const FlagshipExample: Story = {
       optionValues: {
         name: "Leo",
       },
+      shared: false,
     },
     onAssetAbilityToggle: () => {},
     onAssetControlChange: () => {},
@@ -63,6 +65,7 @@ export const KrakenExample: Story = {
       optionValues: {
         name: "Leo",
       },
+      shared: false,
     },
     onAssetAbilityToggle: () => {},
     onAssetControlChange: () => {},
@@ -82,6 +85,7 @@ export const SnubFighterExample: Story = {
       optionValues: {
         name: "Leo",
       },
+      shared: false,
     },
     onAssetAbilityToggle: () => {},
     onAssetControlChange: () => {},
@@ -107,6 +111,7 @@ export const IroncladExample: Story = {
       controlValues: {
         equipped: "lightly_armored",
       },
+      shared: false,
     },
     onAssetAbilityToggle: () => {},
     onAssetControlChange: () => {},
@@ -123,6 +128,7 @@ export const LuckyFigureheadExample: Story = {
         2: true,
       },
       order: 1,
+      shared: false,
     },
     onAssetAbilityToggle: () => {},
     onAssetControlChange: () => {},

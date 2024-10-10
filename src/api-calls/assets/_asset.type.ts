@@ -4,4 +4,5 @@ export interface AssetDocument {
   optionValues?: Record<string, string>;
   controlValues?: Record<string, boolean | string | number>;
   order: number;
+  shared: boolean;
 }

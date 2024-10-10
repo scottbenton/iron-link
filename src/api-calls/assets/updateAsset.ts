@@ -13,7 +13,6 @@ export const updateAsset = createApiFunction<
   void
 >((params) => {
   const { characterId, campaignId, assetId, asset } = params;
-
   return new Promise((resolve, reject) => {
     if (!characterId && !campaignId) {
       reject("Either campaign or character ID must be defined.");

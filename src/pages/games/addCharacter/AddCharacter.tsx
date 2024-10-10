@@ -9,6 +9,7 @@ import { useCreateCharacterAtom } from "../create/atoms/createCharacter.atom";
 import { createCharacterAndUploadPortrait } from "api-calls/character/createCharacter";
 import { addCharacterToCampaign } from "api-calls/campaign/addCharacterToCampaign";
 import { pathConfig } from "pages/pathConfig";
+import { addAsset } from "api-calls/assets/addAsset";
 
 export function AddCharacter() {
   const { campaignId } = useParams<{ campaignId: string }>();
@@ -22,7 +23,8 @@ export function AddCharacter() {
   const navigate = useNavigate();
 
   const handleCreate = useCallback(() => {
-    const { name, stats, assets, portrait } = characterValue;
+    const { name, stats, characterAssets, gameAssets, portrait } =
+      characterValue;
 
     if (!campaignId) {
       setError(t("character.no-game-found-error", "No game found"));
@@ -33,11 +35,22 @@ export function AddCharacter() {
       return;
     }
 
+    if (campaignId) {
+      Promise.all(
+        gameAssets.map((asset) => {
+          addAsset({
+            campaignId,
+            asset,
+          });
+        })
+      ).catch(() => {});
+    }
+
     createCharacterAndUploadPortrait(
       uid,
       name,
       stats,
-      assets,
+      characterAssets,
       portrait,
       campaignId
     )

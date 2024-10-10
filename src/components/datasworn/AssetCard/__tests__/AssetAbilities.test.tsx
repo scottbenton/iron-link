@@ -19,6 +19,7 @@ describe("AssetAbilities", () => {
       2: false,
     },
     order: 1,
+    shared: false,
   };
 
   it("renders correctly with given props", () => {

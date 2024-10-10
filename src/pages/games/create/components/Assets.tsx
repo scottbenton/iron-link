@@ -15,10 +15,17 @@ export function Assets() {
   const [isAddAssetDialogOpen, setIsAddAssetDialogOpen] = useState(false);
 
   const handleAssetControlChange = useCallback(
-    (index: number, controlKey: string, value: string | boolean | number) => {
+    (
+      index: number,
+      controlKey: string,
+      value: string | boolean | number,
+      shared: boolean
+    ) => {
       setCharacter((prev) => {
-        const newAssets = [...prev.assets];
-        const newAsset = { ...prev.assets[index] };
+        const newAssets = [...prev[shared ? "gameAssets" : "characterAssets"]];
+        const newAsset = {
+          ...prev[shared ? "gameAssets" : "characterAssets"][index],
+        };
         if (!newAsset.controlValues) {
           newAsset.controlValues = {};
         }
@@ -30,11 +37,16 @@ export function Assets() {
     [setCharacter]
   );
 
+  const combinedAssets = [
+    ...character.gameAssets,
+    ...character.characterAssets,
+  ];
+
   return (
     <>
       <GridLayout
         sx={{ mt: 2 }}
-        items={character.assets}
+        items={combinedAssets}
         renderItem={(assetDocument, index) => (
           <AssetGridCard
             index={index}
@@ -58,7 +70,7 @@ export function Assets() {
           </Button>
         }
       />
-      {character.assets.length > 0 && (
+      {combinedAssets.length > 0 && (
         <div>
           <Button
             variant="outlined"
@@ -76,17 +88,31 @@ export function Assets() {
         handleAssetSelection={(asset) => {
           setCharacter((prev) => {
             const newCharacter = { ...prev };
-            const existingAssets = newCharacter.assets;
-            newCharacter.assets = [
-              ...newCharacter.assets,
-              {
-                ...asset,
-                order:
-                  existingAssets.length > 0
-                    ? existingAssets[existingAssets.length - 1].order + 1
-                    : 0,
-              },
-            ];
+            if (asset.shared) {
+              const existingAssets = newCharacter.characterAssets;
+              newCharacter.characterAssets = [
+                ...newCharacter.characterAssets,
+                {
+                  ...asset,
+                  order:
+                    existingAssets.length > 0
+                      ? existingAssets[existingAssets.length - 1].order + 1
+                      : 0,
+                },
+              ];
+            } else {
+              const existingAssets = newCharacter.gameAssets;
+              newCharacter.gameAssets = [
+                ...newCharacter.gameAssets,
+                {
+                  ...asset,
+                  order:
+                    existingAssets.length > 0
+                      ? existingAssets[existingAssets.length - 1].order + 1
+                      : 0,
+                },
+              ];
+            }
             return newCharacter;
           });
           setIsAddAssetDialogOpen(false);
@@ -103,7 +129,8 @@ interface AssetGridCardProps {
   onAssetControlChange: (
     index: number,
     controlKey: string,
-    value: string | boolean | number
+    value: string | boolean | number,
+    shared: boolean
   ) => void;
 }
 
@@ -111,11 +138,12 @@ function AssetGridCard(props: AssetGridCardProps) {
   const { index, assetDocument, setCharacter, onAssetControlChange } = props;
   const { t } = useTranslation();
 
+  const shared = assetDocument.shared;
   const handleAssetControlChange = useCallback(
     (controlKey: string, value: string | boolean | number) => {
-      onAssetControlChange(index, controlKey, value);
+      onAssetControlChange(index, controlKey, value, shared);
     },
-    [onAssetControlChange, index]
+    [onAssetControlChange, index, shared]
   );
 
   return (
@@ -127,9 +155,15 @@ function AssetGridCard(props: AssetGridCardProps) {
           aria-label={t("character.assets.remove-asset", "Remove Asset")}
           onClick={() =>
             setCharacter((prev) => {
-              const newAssets = [...prev.assets];
-              newAssets.splice(index, 1);
-              return { ...prev, assets: newAssets };
+              if (assetDocument.shared) {
+                const newAssets = [...prev.gameAssets];
+                newAssets.splice(index, 1);
+                return { ...prev, gameAssets: newAssets };
+              } else {
+                const newAssets = [...prev.characterAssets];
+                newAssets.splice(index, 1);
+                return { ...prev, characterAssets: newAssets };
+              }
             })
           }
         >
@@ -138,24 +172,36 @@ function AssetGridCard(props: AssetGridCardProps) {
       }
       onAssetAbilityToggle={(abilityIndex, checked) => {
         setCharacter((prev) => {
-          const newAssets = [...prev.assets];
-          const newAsset = { ...prev.assets[index] };
+          const newAssets = [
+            ...prev[shared ? "gameAssets" : "characterAssets"],
+          ];
+
+          const newAsset = { ...newAssets[index] };
           newAsset.enabledAbilities[abilityIndex] = checked;
           newAssets[index] = newAsset;
-          return { ...prev, assets: newAssets };
+          return {
+            ...prev,
+            [shared ? "gameAssets" : "characterAssets"]: newAssets,
+          };
         });
       }}
       onAssetControlChange={handleAssetControlChange}
       onAssetOptionChange={(optionKey, value) => {
         setCharacter((prev) => {
-          const newAssets = [...prev.assets];
-          const newAsset = { ...prev.assets[index] };
+          const newAssets = [
+            ...prev[shared ? "gameAssets" : "characterAssets"],
+          ];
+
+          const newAsset = { ...newAssets[index] };
           if (!newAsset.optionValues) {
             newAsset.optionValues = {};
           }
           newAsset.optionValues[optionKey] = value;
           newAssets[index] = newAsset;
-          return { ...prev, assets: newAssets };
+          return {
+            ...prev,
+            [shared ? "gameAssets" : "characterAssets"]: newAssets,
+          };
         });
       }}
       sx={{ height: "100%", width: "100%" }}
