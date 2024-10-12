@@ -133,6 +133,7 @@ function extractActionRollOptions(
     stats: {},
     conditionMeters: {},
     custom: {},
+    assetControls: {},
   };
 
   conditions.forEach((condition) => {
@@ -143,6 +144,8 @@ function extractActionRollOptions(
         conditionMap.conditionMeters[option.condition_meter] = option;
       } else if (option.using === "custom") {
         conditionMap.custom[option.label] = option;
+      } else if (option.using === "asset_control") {
+        conditionMap.assetControls[option.control] = option;
       }
     });
   });

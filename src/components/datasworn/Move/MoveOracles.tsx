@@ -21,7 +21,7 @@ export function MoveOracles(props: MoveOraclesProps) {
   return (
     <Box>
       {Object.entries(oracles).map(([key, oracle]) => (
-        <Box mt={1}>
+        <Box mt={1} key={key}>
           <Button
             key={key}
             color="inherit"
