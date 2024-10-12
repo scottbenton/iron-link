@@ -3,6 +3,7 @@ import { Primary } from "@datasworn/core/dist/StringId";
 import { dataswornTreeAtom } from "atoms/dataswornTree.atom";
 import { atom, useAtomValue } from "jotai";
 import { getRulesetFromId } from "./getRulesetFromId";
+import { useActiveAssetMoveCategories } from "components/datasworn/hooks/useActiveAssetMoveCategories";
 
 export type RootMoveCategories = Record<
   string,
@@ -109,5 +110,47 @@ const movesAtom = atom((get) => {
 });
 
 export function useMoves() {
-  return useAtomValue(movesAtom);
+  const assetMoveCategories = useActiveAssetMoveCategories();
+  const { rootMoveCategories, moveCategoryMap, moveMap } =
+    useAtomValue(movesAtom);
+
+  if (Object.keys(assetMoveCategories).length > 0) {
+    const rootMoveCategoriesWithAssetCategories = {
+      ...rootMoveCategories,
+    };
+    let moveCategoryMapWithAssetCategories = {
+      ...moveCategoryMap,
+    };
+    let moveMapWithAssetMoves = {
+      ...moveMap,
+    };
+
+    Object.entries(assetMoveCategories).forEach(
+      ([rulesetId, assetMoveCategory]) => {
+        rootMoveCategoriesWithAssetCategories[rulesetId] = {
+          ...rootMoveCategoriesWithAssetCategories[rulesetId],
+          rootMoves: [
+            ...rootMoveCategoriesWithAssetCategories[rulesetId].rootMoves,
+            assetMoveCategory._id,
+          ],
+        };
+        moveCategoryMapWithAssetCategories = {
+          ...moveCategoryMapWithAssetCategories,
+          [assetMoveCategory._id]: assetMoveCategory,
+        };
+        moveMapWithAssetMoves = {
+          ...moveMapWithAssetMoves,
+          ...assetMoveCategory.contents,
+        };
+      }
+    );
+
+    return {
+      rootMoveCategories: rootMoveCategoriesWithAssetCategories,
+      moveCategoryMap: moveCategoryMapWithAssetCategories,
+      moveMap: moveMapWithAssetMoves,
+    };
+  }
+
+  return { rootMoveCategories, moveCategoryMap, moveMap };
 }

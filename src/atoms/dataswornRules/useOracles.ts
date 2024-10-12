@@ -3,6 +3,7 @@ import { Primary } from "@datasworn/core/dist/StringId";
 import { dataswornTreeAtom } from "atoms/dataswornTree.atom";
 import { atom, useAtomValue } from "jotai";
 import { getRulesetFromId } from "./getRulesetFromId";
+import { useActiveAssetOracleCollections } from "components/datasworn/hooks/useActiveAssetOracleCollections";
 
 export type RootOracleCollections = Record<
   string,
@@ -144,5 +145,48 @@ const oraclesAtom = atom((get) => {
 });
 
 export function useOracles() {
-  return useAtomValue(oraclesAtom);
+  const assetOracleCollections = useActiveAssetOracleCollections();
+  const { rootOracleCollections, oracleCollectionMap, oracleRollableMap } =
+    useAtomValue(oraclesAtom);
+
+  if (Object.keys(assetOracleCollections).length > 0) {
+    const rootOracleCollectionsWithAssetCollections = {
+      ...rootOracleCollections,
+    };
+    let oracleCollectionMapWithAssetCollections = {
+      ...oracleCollectionMap,
+    };
+    let oracleRollableMapWithAssetOracles = {
+      ...oracleRollableMap,
+    };
+
+    Object.entries(assetOracleCollections).forEach(
+      ([rulesetId, assetOracleCollection]) => {
+        rootOracleCollectionsWithAssetCollections[rulesetId] = {
+          ...rootOracleCollectionsWithAssetCollections[rulesetId],
+          rootOracles: [
+            ...rootOracleCollectionsWithAssetCollections[rulesetId].rootOracles,
+            assetOracleCollection._id,
+          ],
+        };
+        oracleCollectionMapWithAssetCollections = {
+          ...oracleCollectionMapWithAssetCollections,
+          [assetOracleCollection._id]: assetOracleCollection,
+        };
+
+        oracleRollableMapWithAssetOracles = {
+          ...oracleRollableMapWithAssetOracles,
+          ...assetOracleCollection.contents,
+        };
+      }
+    );
+
+    return {
+      rootOracleCollections: rootOracleCollectionsWithAssetCollections,
+      oracleCollectionMap: oracleCollectionMapWithAssetCollections,
+      oracleRollableMap: oracleRollableMapWithAssetOracles,
+    };
+  }
+
+  return { rootOracleCollections, oracleCollectionMap, oracleRollableMap };
 }

@@ -1,4 +1,3 @@
-import { Datasworn } from "@datasworn/core";
 import {
   Card,
   List,
@@ -7,39 +6,48 @@ import {
   ListItemText,
   ListSubheader,
 } from "@mui/material";
-import { CollectionMap } from "atoms/dataswornRules/collectionMap.type";
+import {
+  AssetCollectionMap,
+  RootAssetCollections,
+} from "atoms/dataswornRules/useAssets";
 
 export interface AssetCollectionSidebarProps {
-  collections: CollectionMap<Datasworn.AssetCollection>;
+  collectionMap: AssetCollectionMap;
+  rootAssetCollections: RootAssetCollections;
   selectedCollectionId: string;
   setSelectedCollectionId: (rulesetId: string, collectionId: string) => void;
 }
 
 export function AssetCollectionSidebar(props: AssetCollectionSidebarProps) {
-  const { collections, selectedCollectionId, setSelectedCollectionId } = props;
+  const {
+    rootAssetCollections,
+    collectionMap,
+    selectedCollectionId,
+    setSelectedCollectionId,
+  } = props;
 
   // const { t } = useTranslation();
 
   return (
     <Card variant={"outlined"} sx={{ bgcolor: "background.default" }}>
-      {Object.entries(collections).map(([rulesetKey, ruleset], _, arr) => (
-        <List key={rulesetKey}>
-          {arr.length > 1 && (
-            <ListSubheader
-              sx={(theme) => ({
-                px: 2,
-                fontFamily: theme.typography.fontFamilyTitle,
-              })}
-              key={rulesetKey}
-            >
-              {ruleset.title}
-            </ListSubheader>
-          )}
-          {Object.entries(ruleset.collections).map(
-            ([collectionKey, collection], index) => (
+      {Object.entries(rootAssetCollections).map(
+        ([rulesetKey, ruleset], _, arr) => (
+          <List key={rulesetKey}>
+            {arr.length > 1 && (
+              <ListSubheader
+                sx={(theme) => ({
+                  px: 2,
+                  fontFamily: theme.typography.fontFamilyTitle,
+                })}
+                key={rulesetKey}
+              >
+                {ruleset.title}
+              </ListSubheader>
+            )}
+            {ruleset.rootAssets.map((collectionId, index) => (
               <ListItem
                 disablePadding
-                key={collectionKey}
+                key={collectionId}
                 sx={(theme) => ({
                   bgcolor:
                     theme.palette.mode === "light"
@@ -52,18 +60,20 @@ export function AssetCollectionSidebar(props: AssetCollectionSidebarProps) {
                 })}
               >
                 <ListItemButton
-                  selected={collection._id === selectedCollectionId}
+                  selected={collectionId === selectedCollectionId}
                   onClick={() =>
-                    setSelectedCollectionId(rulesetKey, collection._id)
+                    setSelectedCollectionId(rulesetKey, collectionId)
                   }
                 >
-                  <ListItemText primary={collection.name} />
+                  <ListItemText
+                    primary={collectionMap[collectionId]?.name ?? collectionId}
+                  />
                 </ListItemButton>
               </ListItem>
-            )
-          )}
-        </List>
-      ))}
+            ))}
+          </List>
+        )
+      )}
     </Card>
   );
 }

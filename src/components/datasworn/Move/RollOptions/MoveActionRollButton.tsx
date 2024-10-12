@@ -1,30 +1,19 @@
 import { Datasworn } from "@datasworn/core";
-import { Stat } from "../Stat";
-import { CharacterDocument } from "api-calls/character/_character.type";
+import { Stat } from "../../Stat";
 import { useStatRules } from "atoms/dataswornRules/useStatRules";
 import { useTranslation } from "react-i18next";
 import RollIcon from "@mui/icons-material/Casino";
 import { useRollStatAndAddToLog } from "pages/games/hooks/useRollStatAndAddToLog";
 import { useConditionMeterRules } from "atoms/dataswornRules/useConditionMeterRules";
-import { CampaignDocument } from "api-calls/campaign/_campaign.type";
-
-export interface CharacterData {
-  name: string;
-  stats: CharacterDocument["stats"];
-  conditionMeters: CharacterDocument["conditionMeters"];
-  adds: CharacterDocument["adds"];
-  momentum: CharacterDocument["momentum"];
-}
-export interface CampaignData {
-  conditionMeters: CampaignDocument["conditionMeters"];
-}
+import { CampaignState, CharacterState } from "./common.types";
+import { MoveActionAssetControl } from "./MoveActionAssetControl";
 
 export interface MoveActionRollButtonProps {
   moveId: string;
   disabled?: boolean;
   rollOption: Datasworn.RollableValue;
-  characterData: CharacterData;
-  campaignData: CampaignData;
+  characterData: CharacterState;
+  campaignData: CampaignState;
   characterId: string;
 }
 
@@ -127,6 +116,10 @@ export function MoveActionRollButton(props: MoveActionRollButtonProps) {
         }}
       />
     );
+  }
+
+  if (rollOption.using === "asset_control") {
+    return <MoveActionAssetControl {...props} rollOption={rollOption} />;
   }
 
   console.error("Could not find rollOption", rollOption);

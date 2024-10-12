@@ -1,19 +1,20 @@
 import { Datasworn } from "@datasworn/core";
 import { Box, Typography } from "@mui/material";
-import { MoveActionRollButton, CharacterData } from "./MoveActionRollButton";
 import { useParams } from "react-router-dom";
 import { derivedAtomWithEquality } from "atoms/derivedAtomWithEquality";
 import { campaignCharactersAtom } from "pages/games/gamePageLayout/atoms/campaign.characters.atom";
 import { useAtomValue } from "jotai";
 import { useUID } from "atoms/auth.atom";
 import { useMemo } from "react";
-import { MoveActionRollChip } from "./MoveActionRollChip";
 import { currentCampaignAtom } from "pages/games/gamePageLayout/atoms/campaign.atom";
+import { ActionRolls, CharacterState } from "./RollOptions";
+import { AssetEnhancements } from "./AssetEnhancements";
 
 const derivedCampaignState = derivedAtomWithEquality(
   currentCampaignAtom,
   (state) => ({
     conditionMeters: state.campaign?.conditionMeters ?? {},
+    assets: state.sharedAssets.assets ?? {},
   })
 );
 
@@ -22,7 +23,7 @@ const derivedCampaignCharacterState = (
   currentCharacterId?: string
 ) =>
   derivedAtomWithEquality(campaignCharactersAtom, (state) => {
-    const characterData: Record<string, CharacterData> = {};
+    const characterData: Record<string, CharacterState> = {};
     Object.entries(state).forEach(([characterId, characterState]) => {
       if (
         uid === characterState.characterDocument.data?.uid &&
@@ -35,6 +36,7 @@ const derivedCampaignCharacterState = (
             characterState.characterDocument.data?.conditionMeters,
           adds: characterState.characterDocument.data?.adds,
           momentum: characterState.characterDocument.data?.momentum,
+          assets: characterState.assets?.assets ?? {},
         };
       }
     });
@@ -61,16 +63,17 @@ export function MoveRollOptions(props: MoveRollOptions) {
   const campaignData = useAtomValue(derivedCampaignState);
   const actionRollOptions = extractActionRollOptions(move);
 
+  const hasRollOptions = actionRollOptions.length > 0;
   return (
-    <Box mt={1}>
+    <Box mt={hasRollOptions ? 1 : 0}>
       {Object.keys(characterData).length === 0 && (
         <Box display="flex" flexWrap="wrap" gap={1}>
           {move.roll_type === "action_roll" && (
-            <>
-              {actionRollOptions.map((roll, index) => (
-                <MoveActionRollChip key={index} rollOption={roll} />
-              ))}
-            </>
+            <ActionRolls
+              moveId={move._id}
+              actionRolls={actionRollOptions}
+              campaignData={campaignData}
+            />
           )}
         </Box>
       )}
@@ -85,25 +88,34 @@ export function MoveRollOptions(props: MoveRollOptions) {
             {arr.length > 1 && (
               <Typography variant="overline">{character.name}</Typography>
             )}
-            <Box display="flex" flexWrap="wrap" gap={1}>
-              {move.roll_type === "action_roll" && (
-                <>
-                  {actionRollOptions.map((roll, index) => (
-                    <MoveActionRollButton
-                      rollOption={roll}
-                      key={index}
-                      characterId={characterId}
-                      characterData={character}
-                      campaignData={campaignData}
-                      moveId={move._id}
-                    />
-                  ))}
-                </>
-              )}
-            </Box>
+            {move.roll_type === "action_roll" && (
+              <ActionRolls
+                moveId={move._id}
+                actionRolls={actionRollOptions}
+                character={{ id: characterId, data: character }}
+                campaignData={campaignData}
+                includeAdds
+              />
+            )}
+            <AssetEnhancements
+              moveId={move._id}
+              campaign={campaignData}
+              assetDocuments={character.assets}
+              character={{ id: characterId, data: character }}
+            />
           </Box>
         )
       )}
+      <AssetEnhancements
+        moveId={move._id}
+        campaign={campaignData}
+        assetDocuments={campaignData.assets}
+        character={
+          characterId
+            ? { id: characterId, data: characterData[characterId] }
+            : undefined
+        }
+      />
     </Box>
   );
 }
@@ -121,6 +133,7 @@ function extractActionRollOptions(
     stats: {},
     conditionMeters: {},
     custom: {},
+    assetControls: {},
   };
 
   conditions.forEach((condition) => {
@@ -131,6 +144,8 @@ function extractActionRollOptions(
         conditionMap.conditionMeters[option.condition_meter] = option;
       } else if (option.using === "custom") {
         conditionMap.custom[option.label] = option;
+      } else if (option.using === "asset_control") {
+        conditionMap.assetControls[option.control] = option;
       }
     });
   });
