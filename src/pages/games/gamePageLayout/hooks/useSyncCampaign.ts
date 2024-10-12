@@ -86,7 +86,7 @@ export function useSyncCampaign() {
             }));
           },
           (error) => {
-            console.debug(error);
+            console.error(error);
             setCurrentCampaign((prev) => ({
               ...prev,
               sharedAssets: {
@@ -180,7 +180,7 @@ export function useSyncCampaign() {
             }));
           },
           (error) => {
-            console.debug(error);
+            console.error(error);
             setCurrentCampaignCharacters((prev) => ({
               ...prev,
               [characterId]: {

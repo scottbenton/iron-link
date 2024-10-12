@@ -1,6 +1,6 @@
 import { Datasworn } from "@datasworn/core";
 
-const source = {
+export const source = {
   title: "Ironsworn: Starforged Rulebook",
   authors: [
     {

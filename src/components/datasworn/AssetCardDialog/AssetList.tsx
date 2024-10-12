@@ -5,14 +5,16 @@ import { MarkdownRenderer } from "components/MarkdownRenderer";
 import { useTranslation } from "react-i18next";
 import { AssetCard } from "../AssetCard/AssetCard";
 import { AssetDocument } from "api-calls/assets/_asset.type";
+import { AssetMap } from "atoms/dataswornRules/useAssets";
 
 export interface AssetListProps {
   assetCollection: Datasworn.AssetCollection;
   selectAsset: (asset: Omit<AssetDocument, "order">) => void;
+  assetMap: AssetMap;
 }
 
 export function AssetList(props: AssetListProps) {
-  const { assetCollection, selectAsset } = props;
+  const { assetCollection, assetMap, selectAsset } = props;
 
   const { t } = useTranslation();
 
@@ -23,19 +25,21 @@ export function AssetList(props: AssetListProps) {
         <MarkdownRenderer markdown={assetCollection.description} />
       )}
       <GridLayout
-        items={Object.values(assetCollection.contents)}
-        renderItem={(asset) => (
+        items={Object.values(assetCollection.contents).map(
+          (asset) => asset._id
+        )}
+        renderItem={(assetId) => (
           <AssetCard
-            assetId={asset._id}
+            assetId={assetId}
             actions={
               <Button
                 color={"inherit"}
                 variant="outlined"
                 onClick={() => {
                   selectAsset({
-                    id: asset._id,
+                    id: assetId,
                     enabledAbilities: {},
-                    shared: asset.shared,
+                    shared: assetMap[assetId].shared,
                   });
                 }}
               >

@@ -2,9 +2,9 @@ import { Box, Dialog, DialogContent } from "@mui/material";
 import { AssetDocument } from "api-calls/assets/_asset.type";
 import { DialogTitleWithCloseButton } from "components/DialogTitleWithCloseButton";
 import {
-  AssetCollectionMap,
-  useAssetCollections,
-} from "atoms/dataswornRules/useAssetCollections";
+  RootAssetCollections,
+  useAssets,
+} from "atoms/dataswornRules/useAssets";
 import { useTranslation } from "react-i18next";
 import { AssetCollectionSidebar } from "./AssetCollectionSidebar";
 import { useEffect, useState } from "react";
@@ -20,18 +20,15 @@ export function AssetCardDialog(props: AssetCardDialogProps) {
 
   const { t } = useTranslation();
 
-  const assetCollections = useAssetCollections();
+  const { rootAssetCollections, assetCollectionMap, assetMap } = useAssets();
   const [selectedAssetCollectionId, setSelectedAssetCollectionId] = useState(
-    getFirstAssetCollection(assetCollections)
+    getFirstAssetCollection(rootAssetCollections)
   );
-  const collection =
-    assetCollections[selectedAssetCollectionId.rulesetId]?.collections[
-      selectedAssetCollectionId.collectionId
-    ];
+  const collection = assetCollectionMap[selectedAssetCollectionId.collectionId];
 
   useEffect(() => {
-    setSelectedAssetCollectionId(getFirstAssetCollection(assetCollections));
-  }, [assetCollections]);
+    setSelectedAssetCollectionId(getFirstAssetCollection(rootAssetCollections));
+  }, [rootAssetCollections]);
 
   return (
     <Dialog open={open} onClose={handleClose} maxWidth={"lg"}>
@@ -48,7 +45,8 @@ export function AssetCardDialog(props: AssetCardDialogProps) {
       >
         <Box sx={{ position: "sticky", top: 0, flexShrink: 0 }}>
           <AssetCollectionSidebar
-            collections={assetCollections}
+            rootAssetCollections={rootAssetCollections}
+            collectionMap={assetCollectionMap}
             selectedCollectionId={selectedAssetCollectionId.collectionId}
             setSelectedCollectionId={(rulesetId, collectionId) =>
               setSelectedAssetCollectionId({ rulesetId, collectionId })
@@ -59,6 +57,7 @@ export function AssetCardDialog(props: AssetCardDialogProps) {
           {collection && (
             <AssetList
               assetCollection={collection}
+              assetMap={assetMap}
               selectAsset={handleAssetSelection}
             />
           )}
@@ -68,7 +67,7 @@ export function AssetCardDialog(props: AssetCardDialogProps) {
   );
 }
 
-function getFirstAssetCollection(assetCollections: AssetCollectionMap) {
+function getFirstAssetCollection(assetCollections: RootAssetCollections) {
   const firstRuleset = Object.keys(assetCollections)[0];
 
   if (!firstRuleset)
@@ -77,9 +76,7 @@ function getFirstAssetCollection(assetCollections: AssetCollectionMap) {
       collectionId: "",
     };
 
-  const firstCollection = Object.values(
-    assetCollections[firstRuleset].collections
-  )[0];
+  const firstCollection = assetCollections[firstRuleset].rootAssets[0];
 
   if (!firstCollection)
     return {
@@ -89,6 +86,6 @@ function getFirstAssetCollection(assetCollections: AssetCollectionMap) {
 
   return {
     rulesetId: firstRuleset,
-    collectionId: firstCollection._id,
+    collectionId: firstCollection,
   };
 }
