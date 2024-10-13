@@ -2,7 +2,7 @@ import { StatRoll } from "types/DieRolls.type";
 import { RollContainer, RollResult, RollTitle, RollValues } from "../common";
 import { useMove } from "hooks/datasworn/useMove";
 import { useTranslation } from "react-i18next";
-import { RollResult as RollResultEnum } from "types/DieRolls.type";
+import { getRollResultLabel } from "data/rollResultLabel";
 
 export interface StatRollSnackbarProps {
   rollId: string | undefined;
@@ -16,13 +16,7 @@ export function StatRollSnackbar(props: StatRollSnackbarProps) {
 
   const move = useMove(roll.moveId ?? "");
 
-  const resultLabel = t("datasworn.weak-hit", "Weak Hit");
-  if (roll.result === RollResultEnum.StrongHit) {
-    t("datasworn.strong-hit", "Strong Hit");
-  } else if (roll.result === RollResultEnum.Miss) {
-    t("datasworn.miss", "Miss");
-  }
-
+  const resultLabel = getRollResultLabel(roll.result);
   return (
     <>
       <RollTitle
