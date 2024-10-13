@@ -99,11 +99,6 @@ export function useListenToLogs() {
     });
     return () => {
       unsubscribe?.();
-      setGameLogState({
-        loading: true,
-        logs: {},
-        totalLogsToLoad: DEFAULT_AMOUNT_TO_LOAD,
-      });
     };
   }, [
     totalLogsToLoad,
@@ -112,4 +107,14 @@ export function useListenToLogs() {
     campaignId,
     setRollDisplayRolls,
   ]);
+
+  useEffect(() => {
+    return () => {
+      setGameLogState({
+        loading: true,
+        logs: {},
+        totalLogsToLoad: DEFAULT_AMOUNT_TO_LOAD,
+      });
+    };
+  }, [campaignId, setGameLogState]);
 }

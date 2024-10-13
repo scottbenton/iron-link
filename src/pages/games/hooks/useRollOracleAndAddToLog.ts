@@ -1,6 +1,6 @@
 import { useRollOracle } from "hooks/useRollOracle";
 import { useCallback } from "react";
-import { useAuthAtom } from "atoms/auth.atom";
+import { useUID } from "atoms/auth.atom";
 import { useParams } from "react-router-dom";
 import { addRoll } from "api-calls/game-log/addRoll";
 import { createId } from "lib/id.lib";
@@ -8,13 +8,19 @@ import { OracleTableRoll } from "types/DieRolls.type";
 import { useSnackbar } from "providers/SnackbarProvider";
 import { useTranslation } from "react-i18next";
 import { useAddRollSnackbar } from "atoms/rollDisplay.atom";
+import { useDerivedCharacterState } from "../characterSheet/hooks/useDerivedCharacterState";
 
 export function useRollOracleAndAddToLog() {
-  const uid = useAuthAtom()[0].uid;
+  const uid = useUID();
   const { characterId, campaignId } = useParams<{
     characterId?: string;
     campaignId?: string;
   }>();
+
+  const characterOwner = useDerivedCharacterState(
+    characterId,
+    (character) => character?.characterDocument.data?.uid
+  );
 
   const addRollSnackbar = useAddRollSnackbar();
 
@@ -34,7 +40,8 @@ export function useRollOracleAndAddToLog() {
         const resultWithAdditions = {
           ...result,
           uid,
-          characterId: characterId ?? null,
+          characterId:
+            characterId && characterOwner === uid ? characterId : null,
           gmOnly,
         };
         if (campaignId) {
@@ -63,7 +70,16 @@ export function useRollOracleAndAddToLog() {
         result: undefined,
       };
     },
-    [uid, characterId, campaignId, rollOracle, error, t]
+    [
+      uid,
+      characterId,
+      campaignId,
+      rollOracle,
+      error,
+      t,
+      addRollSnackbar,
+      characterOwner,
+    ]
   );
 
   return handleRollOracle;

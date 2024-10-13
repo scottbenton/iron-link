@@ -2,7 +2,6 @@ import { Box, Typography } from "@mui/material";
 import { useMemo } from "react";
 import { Roll } from "types/DieRolls.type";
 import { useUID } from "atoms/auth.atom";
-import { useParams } from "react-router-dom";
 import { derivedAtomWithEquality } from "atoms/derivedAtomWithEquality";
 import { campaignCharactersAtom } from "pages/games/gamePageLayout/atoms/campaign.characters.atom";
 import { useAtomValue } from "jotai";
@@ -21,7 +20,6 @@ export function GameLogEntry(props: GameLogEntryProps) {
   const { t } = useTranslation();
 
   const uid = useUID();
-  const { characterId } = useParams<{ characterId?: string }>();
 
   const logCharacterId = log.characterId;
   const logCharacterName = useAtomValue(
@@ -37,9 +35,7 @@ export function GameLogEntry(props: GameLogEntryProps) {
   );
   const logCreatorName = useUserName(log.uid);
 
-  const isYourEntry = log.characterId
-    ? log.characterId === characterId
-    : log.uid === uid;
+  const isYourEntry = log.uid === uid;
 
   let rollerName = "";
   if (logCharacterName === undefined) {
