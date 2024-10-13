@@ -2,7 +2,7 @@ import { atom, useAtomValue, useSetAtom } from "jotai";
 import { useCallback } from "react";
 import { Roll } from "types/DieRolls.type";
 
-export type RollDisplay = { id: string; roll: Roll }[];
+export type RollDisplay = { id?: string; roll: Roll }[];
 
 // addRoll: (rollId: string, roll: Roll) => void;
 // clearRoll: (rollId: string) => void;
@@ -18,7 +18,7 @@ export function useAddRollSnackbar() {
   const setRolls = useSetAtom(rollDisplayAtom);
 
   const addRoll = useCallback(
-    (rollId: string, roll: Roll) => {
+    (rollId: string | undefined, roll: Roll) => {
       setRolls((rolls) => {
         const newRolls = [...rolls, { id: rollId, roll }];
 

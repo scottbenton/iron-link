@@ -47,7 +47,8 @@ export function RollSnackbarSection() {
                 isExpanded={index === array.length - 1}
                 onSnackbarClick={() => clearRoll(index)}
                 actions={
-                  campaignId && <NormalRollActions rollId={id} roll={roll} />
+                  campaignId &&
+                  id && <NormalRollActions rollId={id} roll={roll} />
                 }
               />
             </Box>
