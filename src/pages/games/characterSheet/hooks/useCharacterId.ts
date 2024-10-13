@@ -8,3 +8,9 @@ export function useCharacterId() {
 
   return characterId;
 }
+
+export function useCharacterIdOptional() {
+  const { characterId } = useParams<{ characterId?: string }>();
+
+  return characterId;
+}

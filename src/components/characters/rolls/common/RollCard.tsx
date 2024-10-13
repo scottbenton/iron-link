@@ -1,14 +1,15 @@
 import { Box, Card, CardActionArea, SxProps, Theme } from "@mui/material";
-import { PropsWithChildren } from "react";
+import { PropsWithChildren, ReactNode } from "react";
 
 export interface RollCardProps {
   sx?: SxProps<Theme>;
   onClick?: () => void;
   isExpanded?: boolean;
+  actions?: ReactNode;
 }
 
 export function RollCard(props: PropsWithChildren<RollCardProps>) {
-  const { sx, children, onClick } = props;
+  const { sx, children, onClick, isExpanded, actions } = props;
 
   return (
     <Card
@@ -31,6 +32,10 @@ export function RollCard(props: PropsWithChildren<RollCardProps>) {
         py={1}
       >
         {children}
+      </Box>
+
+      <Box position={"absolute"} top={0} right={0}>
+        {isExpanded && actions}
       </Box>
     </Card>
   );

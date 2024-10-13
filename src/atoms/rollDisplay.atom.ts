@@ -20,7 +20,7 @@ export function useAddRollSnackbar() {
   const addRoll = useCallback(
     (rollId: string | undefined, roll: Roll) => {
       setRolls((rolls) => {
-        const newRolls = [...rolls, { rollId, roll }];
+        const newRolls = [...rolls, { id: rollId, roll }];
 
         if (newRolls.length > 3) {
           newRolls.splice(0, 1);

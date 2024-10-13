@@ -7,11 +7,15 @@ import {
   useVisibleRolls,
 } from "atoms/rollDisplay.atom";
 import { RollSnackbar } from "./RollSnackbar";
+import { useParams } from "react-router-dom";
+import { NormalRollActions } from "pages/games/characterSheet/components/GameLog/NormalRollActions";
 
 export function RollSnackbarSection() {
   const rolls = useVisibleRolls();
   const clearRoll = useClearRollSnackbar();
   const clearRolls = useClearAllRollSnackbars();
+
+  const campaignId = useParams<{ campaignId: string }>().campaignId;
 
   return (
     <Box
@@ -42,6 +46,10 @@ export function RollSnackbarSection() {
                 rollId={id}
                 isExpanded={index === array.length - 1}
                 onSnackbarClick={() => clearRoll(index)}
+                actions={
+                  campaignId &&
+                  id && <NormalRollActions rollId={id} roll={roll} />
+                }
               />
             </Box>
           </Slide>

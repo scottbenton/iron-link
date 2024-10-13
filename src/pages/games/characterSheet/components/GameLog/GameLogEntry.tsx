@@ -9,6 +9,7 @@ import { useAtomValue } from "jotai";
 import { useUserName } from "atoms/userDetails.atom";
 import { useTranslation } from "react-i18next";
 import { RollSnackbar } from "components/characters/rolls/RollSnackbar";
+import { NormalRollActions } from "./NormalRollActions";
 
 export interface GameLogEntryProps {
   logId: string;
@@ -68,7 +69,12 @@ export function GameLogEntry(props: GameLogEntryProps) {
       alignItems={isYourEntry ? "flex-end" : "flex-start"}
     >
       <Typography>{rollerName}</Typography>
-      <RollSnackbar rollId={logId} roll={log} isExpanded />
+      <RollSnackbar
+        actions={<NormalRollActions rollId={logId} roll={log} />}
+        rollId={logId}
+        roll={log}
+        isExpanded
+      />
       <Typography color={"textSecondary"} variant={"caption"}>
         {getLogTimeString(log.timestamp)}
       </Typography>
