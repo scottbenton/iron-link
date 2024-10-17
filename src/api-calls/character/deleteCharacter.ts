@@ -48,7 +48,6 @@ export const deleteCharacter = createApiFunction<
         promises.push(deleteNotes({ characterId }));
         promises.push(deleteDoc(getCharacterSettingsDoc(characterId)));
         promises.push(deleteAllAssets({ characterId }));
-        promises.push(deleteAllProgressTracks({ characterId }));
 
         Promise.all(promises)
           .then(() => {

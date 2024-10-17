@@ -29,7 +29,7 @@ export const deleteCampaign = createApiFunction<
         promises.push(deleteNotes({ campaignId }));
         promises.push(deleteAllLogs(campaignId));
         promises.push(deleteAllAssets({ campaignId }));
-        promises.push(deleteAllProgressTracks({ campaignId }));
+        promises.push(deleteAllProgressTracks({ gameId: campaignId }));
         promises.push(deleteDoc(getCampaignSettingsDoc(campaignId)));
 
         Promise.all(promises)
