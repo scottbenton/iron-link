@@ -1,36 +1,21 @@
 import { addDoc } from "firebase/firestore";
-import {
-  convertToDatabase,
-  getCampaignTracksCollection,
-  getCharacterTracksCollection,
-} from "./_getRef";
+import { convertToDatabase, getCampaignTracksCollection } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
 import { Track } from "types/Track.type";
 
 export const addProgressTrack = createApiFunction<
   {
-    campaignId?: string;
-    characterId?: string;
+    gameId: string;
     track: Track;
   },
   void
 >((params) => {
-  const { campaignId, characterId, track } = params;
+  const { gameId, track } = params;
 
   const storedTrack = convertToDatabase(track);
 
   return new Promise((resolve, reject) => {
-    if (!campaignId && !characterId) {
-      reject("Must provide either a character or a campaign ID");
-      return;
-    }
-
-    addDoc(
-      campaignId
-        ? getCampaignTracksCollection(campaignId)
-        : getCharacterTracksCollection(characterId as string),
-      storedTrack
-    )
+    addDoc(getCampaignTracksCollection(gameId), storedTrack)
       .then(() => {
         resolve();
       })

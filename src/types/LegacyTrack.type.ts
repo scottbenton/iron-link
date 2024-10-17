@@ -1,4 +1,4 @@
-export enum LEGACY_TrackTypes {
+export enum LegacyTrackTypes {
   QUESTS = "quests",
   BONDS = "bonds",
   DISCOVERIES = "discoveries",

@@ -32,29 +32,6 @@ export function getCampaignTracksDoc(campaignId: string, trackId: string) {
   ) as DocumentReference<TrackDocument>;
 }
 
-export function constructCharacterTracksCollection(characterId: string) {
-  return `/characters/${characterId}/tracks`;
-}
-export function constructCharacterTracksDocPath(
-  characterId: string,
-  trackId: string
-) {
-  return `/characters/${characterId}/tracks/${trackId}`;
-}
-
-export function getCharacterTracksCollection(characterId: string) {
-  return collection(
-    firestore,
-    constructCharacterTracksCollection(characterId)
-  ) as CollectionReference<TrackDocument>;
-}
-export function getCharacterTracksDoc(characterId: string, trackId: string) {
-  return doc(
-    firestore,
-    constructCharacterTracksDocPath(characterId, trackId)
-  ) as DocumentReference<TrackDocument>;
-}
-
 export function convertToDatabase(track: Track): TrackDocument {
   const { createdDate, ...rest } = track;
 

@@ -3,6 +3,7 @@ import { StatRollSnackbar } from "./StatRollSnackbar";
 import { RollCard } from "./common";
 import { OracleRollSnackbar } from "./OracleRollSnackbar";
 import { ReactNode } from "react";
+import { TrackProgressRollSnackbar } from "./TrackProgressRollSnackbar";
 
 export interface RollSnackbarProps {
   rollId: string | undefined;
@@ -26,6 +27,13 @@ export function RollSnackbar(props: RollSnackbarProps) {
       )}
       {roll.type === RollType.OracleTable && (
         <OracleRollSnackbar
+          rollId={rollId}
+          roll={roll}
+          isExpanded={isExpanded}
+        />
+      )}
+      {roll.type === RollType.TrackProgress && (
+        <TrackProgressRollSnackbar
           rollId={rollId}
           roll={roll}
           isExpanded={isExpanded}

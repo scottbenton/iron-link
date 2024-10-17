@@ -1,25 +1,11 @@
 import { getDocs } from "firebase/firestore";
 import { removeProgressTrack } from "./removeProgressTrack";
-import {
-  getCampaignTracksCollection,
-  getCharacterTracksCollection,
-} from "./_getRef";
+import { getCampaignTracksCollection } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
 
-function getAllProgressTracks(
-  campaignId: string | undefined,
-  characterId: string | undefined
-): Promise<string[]> {
+function getAllProgressTracks(gameId: string): Promise<string[]> {
   return new Promise<string[]>((resolve, reject) => {
-    if (!characterId && !campaignId) {
-      reject(new Error("Either character or campaign ID must be defined."));
-      return;
-    }
-    getDocs(
-      characterId
-        ? getCharacterTracksCollection(characterId)
-        : getCampaignTracksCollection(campaignId as string)
-    )
+    getDocs(getCampaignTracksCollection(gameId))
       .then((snapshot) => {
         const ids = snapshot.docs.map((doc) => doc.id);
         resolve(ids);
@@ -31,18 +17,14 @@ function getAllProgressTracks(
 }
 
 export const deleteAllProgressTracks = createApiFunction<
-  { characterId?: string; campaignId?: string },
+  { gameId: string },
   void
->(({ campaignId, characterId }) => {
+>(({ gameId }) => {
   return new Promise<void>((resolve, reject) => {
-    if (!campaignId && !characterId) {
-      reject("Either campaign or character ID must be defined.");
-      return;
-    }
-    getAllProgressTracks(campaignId, characterId)
+    getAllProgressTracks(gameId)
       .then((trackIds) => {
         const promises = trackIds.map((trackId) =>
-          removeProgressTrack({ campaignId, characterId, id: trackId })
+          removeProgressTrack({ gameId, id: trackId })
         );
         Promise.all(promises)
           .then(() => {

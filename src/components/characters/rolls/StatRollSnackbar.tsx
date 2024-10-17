@@ -1,5 +1,5 @@
 import { StatRoll } from "types/DieRolls.type";
-import { RollContainer, RollResult, RollTitle, RollValues } from "../common";
+import { RollContainer, RollResult, RollTitle, RollValues } from "./common";
 import { useMove } from "hooks/datasworn/useMove";
 import { useTranslation } from "react-i18next";
 import { getRollResultLabel } from "data/rollResultLabel";

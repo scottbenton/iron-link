@@ -47,6 +47,7 @@ export function rollOracle(
 
   let resultString: string | undefined = undefined;
   let rolls: number | number[] | undefined = undefined;
+  let matched = false;
 
   if (oracle.oracle_type === "table_shared_rolls") {
     const tmpRolls: number[] = [];
@@ -65,9 +66,10 @@ export function rollOracle(
     rolls = tmpRolls;
   } else {
     const rollResult = rollOracleColumn(oracle);
-    // We need to roll other tables
 
+    // We need to roll other tables
     if (rollResult) {
+      matched = rollResult.matched;
       if (rollResult.result.oracle_rolls) {
         const oracleRolls = rollResult.result.oracle_rolls;
         const results: string[] = [];
@@ -109,6 +111,7 @@ export function rollOracle(
       roll: rolls,
       result: resultString,
       oracleId: oracle._id,
+      match: matched,
     };
   }
 
@@ -119,6 +122,7 @@ function rollOracleColumn(column: Datasworn.OracleRollable):
   | {
       roll: number;
       result: Datasworn.OracleRollableRow;
+      matched: boolean;
     }
   | undefined {
   const roll = rollDie(column.dice);
@@ -136,5 +140,13 @@ function rollOracleColumn(column: Datasworn.OracleRollable):
   return {
     roll,
     result,
+    matched: checkIfMatch(column.dice, roll),
   };
+}
+
+// A bit hacky, check if the last two digits of the number are equal to each other.
+function checkIfMatch(dieExpression: string, num: number) {
+  if (dieExpression !== "1d100") return false;
+
+  return num % 10 === Math.floor(num / 10) % 10;
 }

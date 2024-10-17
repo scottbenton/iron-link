@@ -1,5 +1,5 @@
 import { TrackTypes } from "types/Track.type";
-import { LEGACY_TrackTypes } from "./LegacyTrack.type";
+import { LegacyTrackTypes } from "./LegacyTrack.type";
 
 export enum RollResult {
   StrongHit = "strong_hit",
@@ -52,7 +52,7 @@ export interface TrackProgressRoll extends BaseRoll {
   challenge2: number;
   trackProgress: number;
   result: RollResult;
-  trackType: TrackTypes | LEGACY_TrackTypes;
+  trackType: TrackTypes | LegacyTrackTypes;
   moveId?: string;
 }
 

@@ -2,6 +2,7 @@ import { Box } from "@mui/material";
 import { Tick1, Tick2, Tick3, Tick4 } from "./assets";
 export interface ProgressTrackTickProps {
   value: number;
+  size?: number;
 }
 
 const tickProps = (sizeValue: number) => ({
@@ -12,10 +13,10 @@ const tickProps = (sizeValue: number) => ({
   "aria-hidden": true,
 });
 
-const size = 28;
+const DEFAULT_SIZE = 28;
 
 export function ProgressTrackTick(props: ProgressTrackTickProps) {
-  const { value } = props;
+  const { value, size = DEFAULT_SIZE } = props;
 
   return (
     <Box

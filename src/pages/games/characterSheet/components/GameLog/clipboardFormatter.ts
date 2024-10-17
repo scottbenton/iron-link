@@ -7,7 +7,7 @@ import {
   TrackProgressRoll,
 } from "types/DieRolls.type";
 import { TrackTypes } from "types/Track.type";
-import { LEGACY_TrackTypes } from "types/LegacyTrack.type";
+import { LegacyTrackTypes } from "types/LegacyTrack.type";
 import { Datasworn } from "@datasworn/core";
 import { getRollResultLabel } from "data/rollResultLabel";
 import { getMove } from "hooks/datasworn/useMove";
@@ -183,7 +183,7 @@ interface TrackProgressRollContents {
   result: string;
 }
 
-function getTrackTypeLabel(type: TrackTypes | LEGACY_TrackTypes) {
+function getTrackTypeLabel(type: TrackTypes | LegacyTrackTypes) {
   switch (type) {
     case TrackTypes.Vow:
       return "Vow";
@@ -195,11 +195,11 @@ function getTrackTypeLabel(type: TrackTypes | LEGACY_TrackTypes) {
       return "Fray";
     case TrackTypes.Journey:
       return "Journey";
-    case LEGACY_TrackTypes.BONDS:
+    case LegacyTrackTypes.BONDS:
       return "Bonds";
-    case LEGACY_TrackTypes.DISCOVERIES:
+    case LegacyTrackTypes.DISCOVERIES:
       return "Discoveries";
-    case LEGACY_TrackTypes.QUESTS:
+    case LegacyTrackTypes.QUESTS:
       return "Quests";
     default:
       return "";

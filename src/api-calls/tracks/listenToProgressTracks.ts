@@ -1,28 +1,17 @@
 import { onSnapshot, query, Unsubscribe, where } from "firebase/firestore";
-import {
-  convertFromDatabase,
-  getCampaignTracksCollection,
-  getCharacterTracksCollection,
-} from "./_getRef";
-import { Track, TrackSectionTracks } from "types/Track.type";
+import { convertFromDatabase, getCampaignTracksCollection } from "./_getRef";
+import { Track } from "types/Track.type";
 
 export function listenToProgressTracks(
-  campaignId: string | undefined,
-  characterId: string | undefined,
+  gameId: string,
   status: string,
-  addOrUpdateTracks: (tracks: { [trackId: string]: Track }) => void,
-  removeTrack: (trackId: string, trackType: TrackSectionTracks) => void,
+  addOrUpdateTracks: (tracks: Record<string, Track>) => void,
+  removeTrack: (trackId: string) => void,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onError: (error: any) => void
 ): Unsubscribe | undefined {
-  if (!campaignId && !characterId) {
-    throw new Error("Must provide either a character or campaign ID.");
-    return;
-  }
   const q = query(
-    campaignId
-      ? getCampaignTracksCollection(campaignId)
-      : getCharacterTracksCollection(characterId as string),
+    getCampaignTracksCollection(gameId),
     where("status", "==", status)
   );
 
@@ -33,7 +22,7 @@ export function listenToProgressTracks(
 
       snapshot.docChanges().forEach((change) => {
         if (change.type === "removed") {
-          removeTrack(change.doc.id, change.doc.data().type);
+          removeTrack(change.doc.id);
         } else {
           addOrUpdateChanges[change.doc.id] = convertFromDatabase(
             change.doc.data()
