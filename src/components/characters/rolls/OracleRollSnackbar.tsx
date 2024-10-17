@@ -1,5 +1,5 @@
 import { OracleTableRoll } from "types/DieRolls.type";
-import { RollContainer, RollResult, RollTitle, RollValues } from "../common";
+import { RollContainer, RollResult, RollTitle, RollValues } from "./common";
 import { useOracleRollable } from "hooks/datasworn/useOracleRollable";
 
 export interface OracleRollSnackbarProps {

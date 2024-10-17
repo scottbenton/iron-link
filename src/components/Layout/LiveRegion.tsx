@@ -2,7 +2,7 @@ import { useAnnouncement } from "atoms/announcement.atom";
 import { ScreenReaderOnly } from "components/ScreenReaderOnly";
 import { useEffect } from "react";
 
-const DEBUG_MODE = false;
+const DEBUG_MODE = true;
 
 export function LiveRegion() {
   const [announcement] = useAnnouncement();

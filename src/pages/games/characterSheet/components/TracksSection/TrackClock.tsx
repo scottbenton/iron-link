@@ -133,6 +133,13 @@ export function TrackClock(props: TrackClockProps) {
   return (
     <>
       <Box display={"flex"} flexDirection={"column"} alignItems={"initial"}>
+        <Typography
+          lineHeight={"1em"}
+          variant={"overline"}
+          fontFamily="fontFamilyTitle"
+        >
+          {t("character.character-sidebar.tracks-clock", "Clock")}
+        </Typography>
         <Box
           display={"flex"}
           alignItems={"center"}

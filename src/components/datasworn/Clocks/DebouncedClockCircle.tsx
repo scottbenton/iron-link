@@ -1,6 +1,7 @@
 import { useDebouncedSync } from "hooks/useDebouncedSync";
 import { ClockCircle, ClockSize } from "./ClockCircle";
 import { useSetAnnouncement } from "atoms/announcement.atom";
+import { SxProps, Theme } from "@mui/material";
 
 export interface DebouncedClockCircleProps {
   segments: number;
@@ -8,10 +9,12 @@ export interface DebouncedClockCircleProps {
   onFilledSegmentsChange?: (value: number) => void;
   size?: ClockSize;
   voiceLabel: string;
+  sx?: SxProps<Theme>;
 }
 
 export function DebouncedClockCircle(props: DebouncedClockCircleProps) {
-  const { segments, value, onFilledSegmentsChange, size, voiceLabel } = props;
+  const { segments, value, onFilledSegmentsChange, size, voiceLabel, sx } =
+    props;
 
   const [localFilledSegments, setLocalFilledSegments] = useDebouncedSync(
     onFilledSegmentsChange,
@@ -42,6 +45,7 @@ export function DebouncedClockCircle(props: DebouncedClockCircleProps) {
       value={localFilledSegments}
       size={size}
       onClick={onFilledSegmentsChange ? handleIncrement : undefined}
+      sx={sx}
     />
   );
 }

@@ -1,6 +1,7 @@
 import { Box, Divider, Typography } from "@mui/material";
 import { D6Icon } from "assets/D6Icon";
 import { D10Icon } from "assets/D10Icon";
+import { ProgressTrackTick } from "components/datasworn/ProgressTrack/ProgressTrackTick";
 
 export interface RollValuesProps {
   d10Results?: number[] | number;
@@ -10,6 +11,7 @@ export interface RollValuesProps {
     adds?: number;
     rollTotal: number;
   };
+  progress?: number;
   fixedResult?: {
     title: string;
     value: string | number;
@@ -20,6 +22,7 @@ export interface RollValuesProps {
 }
 export function RollValues(props: RollValuesProps) {
   const {
+    progress,
     d10Results,
     d6Result,
     crossOutD6,
@@ -83,6 +86,26 @@ export function RollValues(props: RollValuesProps) {
                     d6Result.rollTotal > 10 ? "10 (Max)" : d6Result.rollTotal
                   }`
                 : ""}
+            </Typography>
+          </Box>
+        )}
+        {progress && (
+          <Box
+            display={"flex"}
+            alignItems={"center"}
+            justifyContent={"space-between"}
+          >
+            <Box
+              sx={(theme) => ({
+                border: `1px solid ${theme.palette.grey[400]}`,
+                borderRadius: 1,
+                m: "1px",
+              })}
+            >
+              <ProgressTrackTick size={20} value={4} />
+            </Box>
+            <Typography ml={1} color={"grey.200"}>
+              {progress}
             </Typography>
           </Box>
         )}

@@ -17,6 +17,7 @@ import { useTranslation } from "react-i18next";
 import { TrackSectionProgressTracks, TrackTypes } from "types/Track.type";
 import { EditOrCreateTrackDialog } from "./EditOrCreateTrackDialog";
 import { EditOrCreateClockDialog } from "./EditOrCreateClockDialog";
+import { getTrackTypeLabel } from "./common";
 
 export interface TracksSectionHeaderProps {
   showCompletedTracks: boolean;
@@ -107,34 +108,21 @@ export function TracksSectionHeader(props: TracksSectionHeaderProps) {
             onClose={() => setIsAddMenuOpen(false)}
           >
             <MenuItem onClick={() => handleOpenTrack(TrackTypes.Vow)}>
-              <ListItemText
-                primary={t("character.character-sidebar.add-vow", "Vow")}
-              />
+              <ListItemText primary={getTrackTypeLabel(TrackTypes.Vow, t)} />
             </MenuItem>
             <MenuItem onClick={() => handleOpenTrack(TrackTypes.Fray)}>
-              <ListItemText
-                primary={t(
-                  "character.character-sidebar.add-combat-track",
-                  "Combat Track"
-                )}
-              />
+              <ListItemText primary={getTrackTypeLabel(TrackTypes.Fray, t)} />
             </MenuItem>
             <MenuItem onClick={() => handleOpenTrack(TrackTypes.Journey)}>
               <ListItemText
-                primary={t(
-                  "character.character-sidebar.add-journey",
-                  "Journey"
-                )}
+                primary={getTrackTypeLabel(TrackTypes.Journey, t)}
               />
             </MenuItem>
             <MenuItem
               onClick={() => handleOpenTrack(TrackTypes.SceneChallenge)}
             >
               <ListItemText
-                primary={t(
-                  "character.character-sidebar.add-scene-challenge",
-                  "Scene Challenge"
-                )}
+                primary={getTrackTypeLabel(TrackTypes.SceneChallenge, t)}
               />
             </MenuItem>
             <MenuItem
@@ -143,9 +131,7 @@ export function TracksSectionHeader(props: TracksSectionHeaderProps) {
                 setIsAddMenuOpen(false);
               }}
             >
-              <ListItemText
-                primary={t("character.character-sidebar.add-clock", "Clock")}
-              />
+              <ListItemText primary={getTrackTypeLabel(TrackTypes.Clock, t)} />
             </MenuItem>
           </Menu>
         </>

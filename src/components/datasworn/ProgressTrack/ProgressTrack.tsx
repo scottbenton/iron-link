@@ -17,6 +17,7 @@ import { TFunction } from "i18next";
 
 export interface ProgressTrackProps {
   difficulty?: Difficulty;
+  trackType?: string;
   label: string;
   description?: string;
   status?: TrackStatus;
@@ -31,6 +32,7 @@ const maxTicks = 40;
 export function ProgressTrack(props: ProgressTrackProps) {
   const {
     difficulty,
+    trackType,
     label,
     value,
     description,
@@ -127,8 +129,13 @@ export function ProgressTrack(props: ProgressTrackProps) {
       >
         <Box flexGrow={1}>
           {difficulty && (
-            <Typography variant={"overline"} fontFamily="fontFamilyTitle">
+            <Typography
+              lineHeight={"1em"}
+              variant={"overline"}
+              fontFamily="fontFamilyTitle"
+            >
               {getDifficultyLabel(difficulty, t)}
+              {trackType ? " " + trackType : ""}
             </Typography>
           )}
           <Box

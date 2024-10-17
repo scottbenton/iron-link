@@ -16,6 +16,9 @@ import { useConfirm } from "material-ui-confirm";
 import { updateProgressTrack } from "api-calls/tracks/updateProgressTrack";
 import { removeProgressTrack } from "api-calls/tracks/removeProgressTrack";
 import { DebouncedClockCircle } from "components/datasworn/Clocks/DebouncedClockCircle";
+import { getTrackTypeLabel, trackCompletionMoveIds } from "./common";
+import { useIsOwnerOfCharacter } from "../../hooks/useIsOwnerOfCharacter";
+import { TrackCompletionMoveButton } from "./TrackCompletionMoveButton";
 
 export interface TrackProgressTrackProps {
   trackId: string;
@@ -34,6 +37,9 @@ const difficultySteps: Record<Difficulty, number> = {
 
 export function TrackProgressTrack(props: TrackProgressTrackProps) {
   const { trackId, track, canEdit, gameId } = props;
+
+  const isCharacterOwner = useIsOwnerOfCharacter();
+
   const { t } = useTranslation();
   const announce = useSetAnnouncement();
   const confirm = useConfirm();
@@ -143,6 +149,7 @@ export function TrackProgressTrack(props: TrackProgressTrackProps) {
       />
       <Box display="flex" flexDirection="column" alignItems="flex-start">
         <ProgressTrack
+          trackType={getTrackTypeLabel(track.type, t)}
           difficulty={track.difficulty}
           step={difficultySteps[track.difficulty]}
           label={track.label}
@@ -161,9 +168,25 @@ export function TrackProgressTrack(props: TrackProgressTrackProps) {
             onFilledSegmentsChange={
               canEdit ? handleSceneChallengeClockChange : undefined
             }
+            sx={{ mt: 1 }}
           />
         )}
         <Box>
+          {canEdit &&
+            isCharacterOwner &&
+            track.status === TrackStatus.Active && (
+              <Box>
+                {trackCompletionMoveIds[track.type]?.map((moveId) => (
+                  <TrackCompletionMoveButton
+                    key={moveId}
+                    moveId={moveId}
+                    trackType={track.type}
+                    trackLabel={track.label}
+                    trackProgress={Math.min(track.value / 4)}
+                  />
+                ))}
+              </Box>
+            )}
           {canEdit && track.status === TrackStatus.Active && (
             <Button
               variant={"outlined"}
