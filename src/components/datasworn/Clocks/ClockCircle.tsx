@@ -6,7 +6,7 @@ export type ClockSize = "small" | "medium";
 
 const sizes: Record<ClockSize, number> = {
   small: 60,
-  medium: 100,
+  medium: 80,
 };
 
 export interface ClockCircleProps {
@@ -44,12 +44,17 @@ export function ClockCircle(props: ClockCircleProps) {
   };
 
   return (
-    <Wrapper sx={{ borderRadius: 999 }} onClick={onClick}>
+    <Wrapper
+      sx={{
+        borderRadius: 999,
+      }}
+      onClick={onClick}
+    >
       <svg
         width={sizes[size]}
         height={sizes[size]}
         viewBox="-2 -2 104 104"
-        stroke={theme.palette.grey[theme.palette.mode === "light" ? 700 : 600]}
+        stroke={theme.palette.grey[theme.palette.mode === "light" ? 700 : 500]}
       >
         {Array.from({ length: segments }).map((_, index) => (
           <ClockSegment

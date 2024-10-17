@@ -5,6 +5,7 @@ import {
   currentCampaignAtom,
   defaultCurrentCampaignAtom,
   useSetCurrentCampaignAtom,
+  useSyncProgressTracks,
 } from "../atoms/campaign.atom";
 import { Unsubscribe } from "firebase/firestore";
 import { listenToCampaign } from "api-calls/campaign/listenToCampaign";
@@ -209,4 +210,5 @@ export function useSyncCampaign() {
   }, [campaignId, setCurrentCampaignCharacters]);
 
   useListenToLogs();
+  useSyncProgressTracks();
 }

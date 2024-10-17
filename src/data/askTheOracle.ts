@@ -1,4 +1,5 @@
 import { Datasworn } from "@datasworn/core";
+import { AskTheOracle } from "types/Track.type";
 
 export const source = {
   title: "Ironsworn: Starforged Rulebook",
@@ -202,6 +203,17 @@ export const askTheOracleLabels: Record<string, string> = {};
 Object.values(askTheOracleCollection.contents).forEach((oracle) => {
   askTheOracleLabels[oracle._id] = oracle.name;
 });
+
+export const askTheOracleEnumMap: Record<
+  AskTheOracle,
+  Datasworn.OracleRollable
+> = {
+  [AskTheOracle.AlmostCertain]: askTheOracleCollection.contents.almost_certain,
+  [AskTheOracle.Likely]: askTheOracleCollection.contents.likely,
+  [AskTheOracle.FiftyFifty]: askTheOracleCollection.contents.fifty_fifty,
+  [AskTheOracle.Unlikely]: askTheOracleCollection.contents.unlikely,
+  [AskTheOracle.SmallChance]: askTheOracleCollection.contents.small_chance,
+};
 
 export const ironLinkAskTheOracleRulesPackage: Datasworn.Ruleset = {
   _id: "ironlink",
