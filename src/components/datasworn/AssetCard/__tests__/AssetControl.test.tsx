@@ -84,7 +84,7 @@ describe("AssetControl", () => {
         max: 10,
       } as Datasworn.AssetControlField,
     });
-    expect(screen.getByRole("button", { name: /Roll/i })).toBeInTheDocument();
+    expect(screen.getByTestId("roll-button")).toBeInTheDocument();
   });
 
   it("should render AssetTextField for text type", () => {
