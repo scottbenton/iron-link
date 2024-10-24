@@ -12,10 +12,10 @@ import {
   MenuItem,
 } from "@mui/material";
 
-import { CharacterDetailsDialog } from "pages/games/characterSheet/components/CharacterSettingsMenu/CharacterDetailsDialog";
-import { CharacterStatsDialog } from "pages/games/characterSheet/components/CharacterSettingsMenu/CharacterStatsDialog";
-import { ColorSchemeDialog } from "pages/games/characterSheet/components/CharacterSettingsMenu/ColorSchemeDialog";
-import { DeleteCharacterButton } from "pages/games/characterSheet/components/CharacterSettingsMenu/DeleteCharacterButton";
+import { CharacterDetailsDialog } from "./CharacterDetailsDialog";
+import { CharacterStatsDialog } from "./CharacterStatsDialog";
+import { ColorSchemeDialog } from "./ColorSchemeDialog";
+import { DeleteCharacterButton } from "./DeleteCharacterButton";
 import {
   CharacterPermissionType,
   useCampaignPermissions,

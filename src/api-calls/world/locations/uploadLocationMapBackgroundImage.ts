@@ -1,10 +1,7 @@
 import { updateDoc } from "firebase/firestore";
 
+import { constructLocationImagesPath, getLocationDoc } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
-import {
-  constructLocationImagesPath,
-  getLocationDoc,
-} from "api-calls/world/locations/_getRef";
 import { replaceImage } from "lib/storage.lib";
 
 export const uploadLocationMapBackgroundImage = createApiFunction<

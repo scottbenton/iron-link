@@ -1,6 +1,6 @@
 import { Meta, StoryObj } from "@storybook/react";
 
-import { Move } from "components/datasworn/Move";
+import { Move } from "../Move";
 
 const meta = {
   title: "Datasworn/MoveRenderer",

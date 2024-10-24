@@ -1,10 +1,7 @@
 import { updateDoc } from "firebase/firestore";
 
+import { constructLoreImagesPath, getLoreDoc } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
-import {
-  constructLoreImagesPath,
-  getLoreDoc,
-} from "api-calls/world/lore/_getRef";
 import { replaceImage } from "lib/storage.lib";
 
 export const uploadLoreImage = createApiFunction<

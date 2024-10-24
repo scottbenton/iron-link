@@ -1,7 +1,7 @@
 import { setDoc } from "firebase/firestore";
 
+import { getPrivateDetailsNPCDoc } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
-import { getPrivateDetailsNPCDoc } from "api-calls/world/npcs/_getRef";
 import { GMNPC } from "types/NPCs.type";
 
 interface Params {

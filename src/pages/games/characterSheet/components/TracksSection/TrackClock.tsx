@@ -3,7 +3,6 @@ import { useTranslation } from "react-i18next";
 import DieIcon from "@mui/icons-material/Casino";
 import CheckIcon from "@mui/icons-material/Check";
 import {
-  Box,
   Button,
   Card,
   Chip,
@@ -12,14 +11,15 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { Box } from "@mui/material";
 import { useConfirm } from "material-ui-confirm";
 
+import { EditOrCreateClockDialog } from "./EditOrCreateClockDialog";
 import { removeProgressTrack } from "api-calls/tracks/removeProgressTrack";
 import { updateProgressTrack } from "api-calls/tracks/updateProgressTrack";
 import { useSetAnnouncement } from "atoms/announcement.atom";
 import { ClockCircle } from "components/datasworn/Clocks/ClockCircle";
 import { askTheOracleEnumMap } from "data/askTheOracle";
-import { EditOrCreateClockDialog } from "pages/games/characterSheet/components/TracksSection/EditOrCreateClockDialog";
 import { useRollOracleAndAddToLog } from "pages/games/hooks/useRollOracleAndAddToLog";
 import { AskTheOracle, Clock, TrackStatus } from "types/Track.type";
 

@@ -3,11 +3,11 @@ import { Unsubscribe } from "firebase/firestore";
 import { t } from "i18next";
 import { atom, useAtom, useAtomValue } from "jotai";
 
+import { useCurrentUserUID } from "./auth.atom";
 import { CampaignDocument } from "api-calls/campaign/_campaign.type";
 import { listenToUsersCampaigns } from "api-calls/campaign/listenToUsersCampaigns";
 import { CharacterDocument } from "api-calls/character/_character.type";
 import { getCharacter } from "api-calls/character/getCharacter";
-import { useCurrentUserUID } from "atoms/auth.atom";
 import { getErrorMessage } from "lib/getErrorMessage";
 
 interface CampaignCharacterPortraitSettingsEntry {

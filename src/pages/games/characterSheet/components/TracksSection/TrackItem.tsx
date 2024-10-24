@@ -1,5 +1,5 @@
-import { TrackClock } from "pages/games/characterSheet/components/TracksSection/TrackClock";
-import { TrackProgressTrack } from "pages/games/characterSheet/components/TracksSection/TrackProgressTrack";
+import { TrackClock } from "./TrackClock";
+import { TrackProgressTrack } from "./TrackProgressTrack";
 import { useDerivedCampaignState } from "pages/games/gamePageLayout/hooks/useDerivedCampaignState";
 import { TrackTypes } from "types/Track.type";
 

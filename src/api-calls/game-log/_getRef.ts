@@ -7,7 +7,7 @@ import {
   Timestamp,
 } from "firebase/firestore";
 
-import { GameLogDocument } from "api-calls/game-log/_game-log.type";
+import { GameLogDocument } from "./_game-log.type";
 import { Roll } from "types/DieRolls.type";
 
 export function constructCampaignGameLogCollectionPath(campaignId: string) {

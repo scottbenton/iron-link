@@ -1,9 +1,9 @@
 import { useCallback } from "react";
 import { Datasworn } from "@datasworn/core";
 
+import { getOracleCollection } from "./datasworn/useOracleCollection";
+import { getOracleRollable } from "./datasworn/useOracleRollable";
 import { useDataswornTree } from "atoms/dataswornTree.atom";
-import { getOracleCollection } from "hooks/datasworn/useOracleCollection";
-import { getOracleRollable } from "hooks/datasworn/useOracleRollable";
 import { rollDie } from "lib/rollDie";
 import { OracleTableRoll, RollType } from "types/DieRolls.type";
 

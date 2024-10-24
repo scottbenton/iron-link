@@ -12,7 +12,7 @@ import {
   GMLocationDocument,
   LocationDocument,
   LocationNotesDocument,
-} from "api-calls/world/locations/_locations.type";
+} from "./_locations.type";
 import { Location } from "types/Locations.type";
 
 export function constructLocationsPath(worldId: string) {

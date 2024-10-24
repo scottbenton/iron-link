@@ -1,13 +1,13 @@
 import { addDoc } from "firebase/firestore";
 
+import { getCharacterAssetCollection } from "../assets/_getRef";
+import { getCharacterCollection } from "./_getRef";
+import { updateCharacterPortrait } from "./updateCharacterPortrait";
 import { AssetDocument } from "api-calls/assets/_asset.type";
-import { getCharacterAssetCollection } from "api-calls/assets/_getRef";
 import {
   CharacterDocument,
   StatsMap,
 } from "api-calls/character/_character.type";
-import { getCharacterCollection } from "api-calls/character/_getRef";
-import { updateCharacterPortrait } from "api-calls/character/updateCharacterPortrait";
 import { createApiFunction } from "api-calls/createApiFunction";
 import { momentumTrack } from "data/defaultTracks";
 

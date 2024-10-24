@@ -3,15 +3,15 @@ import { useTranslation } from "react-i18next";
 import SearchIcon from "@mui/icons-material/Search";
 import { Box, Input, InputAdornment, List, ListSubheader } from "@mui/material";
 
-import { useOracles } from "atoms/dataswornRules/useOracles";
-import { AskTheOracleButtons } from "components/datasworn/OracleTree/AskTheOracleButtons";
+import { AskTheOracleButtons } from "./AskTheOracleButtons";
 import {
   CollectionVisibilityState,
   getOracleCollectionVisibility,
   OracleVisibilityState,
   VisibilitySettings,
-} from "components/datasworn/OracleTree/getOracleCollectionVisiblity";
-import { OracleCollectionListItem } from "components/datasworn/OracleTree/OracleCollectionListItem";
+} from "./getOracleCollectionVisiblity";
+import { OracleCollectionListItem } from "./OracleCollectionListItem";
+import { useOracles } from "atoms/dataswornRules/useOracles";
 
 export function OracleTree() {
   const { t } = useTranslation();

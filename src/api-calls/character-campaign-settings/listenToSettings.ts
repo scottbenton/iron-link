@@ -1,10 +1,7 @@
 import { onSnapshot } from "firebase/firestore";
 
+import { getCampaignSettingsDoc, getCharacterSettingsDoc } from "./_getRef";
 import { SettingsDocument } from "api-calls/character-campaign-settings/_character-campaign-settings.type";
-import {
-  getCampaignSettingsDoc,
-  getCharacterSettingsDoc,
-} from "api-calls/character-campaign-settings/_getRef";
 
 export function listenToSettings(
   campaignId: string | undefined,

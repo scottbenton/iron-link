@@ -7,7 +7,7 @@ import {
   Timestamp,
 } from "firebase/firestore";
 
-import { TrackDocument } from "api-calls/tracks/_track.type";
+import { TrackDocument } from "./_track.type";
 import { Track } from "types/Track.type";
 
 export function constructCampaignTracksCollection(campaignId: string) {

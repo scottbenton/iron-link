@@ -2,7 +2,7 @@ import { CollectionId, Datasworn, IdParser } from "@datasworn/core";
 import { Primary } from "@datasworn/core/dist/StringId";
 import { atom, useAtomValue } from "jotai";
 
-import { getRulesetFromId } from "atoms/dataswornRules/getRulesetFromId";
+import { getRulesetFromId } from "./getRulesetFromId";
 import { dataswornTreeAtom } from "atoms/dataswornTree.atom";
 import { useActiveAssetOracleCollections } from "components/datasworn/hooks/useActiveAssetOracleCollections";
 

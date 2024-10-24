@@ -2,13 +2,13 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Box, Dialog, DialogContent } from "@mui/material";
 
+import { AssetCollectionSidebar } from "./AssetCollectionSidebar";
+import { AssetList } from "./AssetList";
 import { AssetDocument } from "api-calls/assets/_asset.type";
 import {
   RootAssetCollections,
   useAssets,
 } from "atoms/dataswornRules/useAssets";
-import { AssetCollectionSidebar } from "components/datasworn/AssetCardDialog/AssetCollectionSidebar";
-import { AssetList } from "components/datasworn/AssetCardDialog/AssetList";
 import { DialogTitleWithCloseButton } from "components/DialogTitleWithCloseButton";
 
 export interface AssetCardDialogProps {

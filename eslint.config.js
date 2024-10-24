@@ -4,7 +4,6 @@ import globals from "globals";
 import reactHooks from "eslint-plugin-react-hooks";
 import reactRefresh from "eslint-plugin-react-refresh";
 import eslintPluginSimpleImportSort from "eslint-plugin-simple-import-sort";
-import noRelativeImportPaths from "eslint-plugin-no-relative-import-paths";
 import tseslint from "typescript-eslint";
 
 const require = createRequire(import.meta.url);
@@ -13,7 +12,7 @@ const packageRegex =
   "^" + Object.keys(packageConfig.dependencies).join("|") + "$";
 
 export default tseslint.config(
-  { ignores: ["dist"] },
+  { ignores: ["dist", "storybook-static"] },
   {
     extends: [js.configs.recommended, ...tseslint.configs.recommended],
     files: ["**/*.{ts,tsx}"],
@@ -25,7 +24,6 @@ export default tseslint.config(
       "react-hooks": reactHooks,
       "react-refresh": reactRefresh,
       "simple-import-sort": eslintPluginSimpleImportSort,
-      "no-relative-import-paths": noRelativeImportPaths,
     },
     rules: {
       ...reactHooks.configs.recommended.rules,
@@ -39,7 +37,6 @@ export default tseslint.config(
           groups: [["^react", packageRegex]],
         },
       ],
-      "no-relative-import-paths/no-relative-import-paths": "warn",
     },
   },
 );

@@ -6,16 +6,16 @@ import {
   List,
   ListItem,
   ListItemButton,
-  ListItemIcon,
   ListItemText,
 } from "@mui/material";
+import { ListItemIcon } from "@mui/material";
 
 import {
   CollectionVisibilityState,
   VisibilitySettings,
-} from "components/datasworn/OracleTree/getOracleCollectionVisiblity";
-import { OracleListItem } from "components/datasworn/OracleTree/OracleListItem";
-import { OracleTableSharedTextListItem } from "components/datasworn/OracleTree/OracleTableSharedTextListItem";
+} from "./getOracleCollectionVisiblity";
+import { OracleListItem } from "./OracleListItem";
+import { OracleTableSharedTextListItem } from "./OracleTableSharedTextListItem";
 
 export interface OracleCollectionListItemProps {
   oracleCollectionId: string;

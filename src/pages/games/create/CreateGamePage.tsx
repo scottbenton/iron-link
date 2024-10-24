@@ -5,6 +5,18 @@ import { Alert, Box, Button, Step, StepLabel, Stepper } from "@mui/material";
 import { TFunction } from "i18next";
 import { useAtomValue } from "jotai";
 
+import { useCreateCharacterAtom } from "./atoms/createCharacter.atom";
+import {
+  createGameAtom,
+  defaultState,
+  ICreateGameAtom,
+  useSetCreateGameAtom,
+} from "./atoms/createGame.atom";
+import { ChooseGameType } from "./components/ChooseGameType";
+import { CreateCharacter } from "./components/CreateCharacter";
+import { GameDetails } from "./components/GameDetails";
+import { RulesetExpansionSection } from "./components/RulesetExpansionSection";
+import { useSyncActiveRulesPackages } from "./hooks/useSyncActiveRulesPackages";
 import { addAsset } from "api-calls/assets/addAsset";
 import { CampaignType } from "api-calls/campaign/_campaign.type";
 import { addCharacterToCampaign } from "api-calls/campaign/addCharacterToCampaign";
@@ -14,18 +26,6 @@ import { useAuthAtom } from "atoms/auth.atom";
 import { derivedAtomWithEquality } from "atoms/derivedAtomWithEquality";
 import { GradientButton } from "components/GradientButton";
 import { PageContent, PageHeader } from "components/Layout";
-import { useCreateCharacterAtom } from "pages/games/create/atoms/createCharacter.atom";
-import {
-  createGameAtom,
-  defaultState,
-  ICreateGameAtom,
-  useSetCreateGameAtom,
-} from "pages/games/create/atoms/createGame.atom";
-import { ChooseGameType } from "pages/games/create/components/ChooseGameType";
-import { CreateCharacter } from "pages/games/create/components/CreateCharacter";
-import { GameDetails } from "pages/games/create/components/GameDetails";
-import { RulesetExpansionSection } from "pages/games/create/components/RulesetExpansionSection";
-import { useSyncActiveRulesPackages } from "pages/games/create/hooks/useSyncActiveRulesPackages";
 import { pathConfig } from "pages/pathConfig";
 
 interface StepConfig {

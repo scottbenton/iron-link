@@ -1,9 +1,6 @@
 import { arrayRemove, arrayUnion, setDoc } from "firebase/firestore";
 
-import {
-  getCampaignSettingsDoc,
-  getCharacterSettingsDoc,
-} from "api-calls/character-campaign-settings/_getRef";
+import { getCampaignSettingsDoc, getCharacterSettingsDoc } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
 
 export const showOrHideCustomOracle = createApiFunction<

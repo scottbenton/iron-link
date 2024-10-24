@@ -1,13 +1,10 @@
 import { useTranslation } from "react-i18next";
 import { useAtomValue } from "jotai";
 
+import { createGameAtom, useSetCreateGameAtom } from "../atoms/createGame.atom";
 import { derivedAtomWithEquality } from "atoms/derivedAtomWithEquality";
 import { RulesPackageSelector } from "components/datasworn/RulesPackageSelector";
 import { SectionHeading } from "components/SectionHeading";
-import {
-  createGameAtom,
-  useSetCreateGameAtom,
-} from "pages/games/create/atoms/createGame.atom";
 
 const rulesPackages = derivedAtomWithEquality(createGameAtom, (atom) => ({
   rulesets: atom.rulesets,

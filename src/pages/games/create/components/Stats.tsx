@@ -1,9 +1,9 @@
 import { useTranslation } from "react-i18next";
 import { Box, Typography } from "@mui/material";
 
+import { useCreateCharacterAtom } from "../atoms/createCharacter.atom";
 import { useStatRules } from "atoms/dataswornRules/useStatRules";
 import { ConditionMeter } from "components/datasworn/ConditonMeter";
-import { useCreateCharacterAtom } from "pages/games/create/atoms/createCharacter.atom";
 
 export function Stats() {
   const [character, setCharacter] = useCreateCharacterAtom();

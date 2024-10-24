@@ -7,11 +7,7 @@ import {
   Timestamp,
 } from "firebase/firestore";
 
-import {
-  GMLoreDocument,
-  LoreDocument,
-  LoreNotesDocument,
-} from "api-calls/world/lore/_lore.type";
+import { GMLoreDocument, LoreDocument, LoreNotesDocument } from "./_lore.type";
 import { Lore } from "types/Lore.type";
 
 export function constructLoresPath(worldId: string) {

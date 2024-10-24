@@ -1,9 +1,6 @@
 import { onSnapshot, query, Unsubscribe, where } from "firebase/firestore";
 
-import {
-  convertFromDatabase,
-  getCampaignTracksCollection,
-} from "api-calls/tracks/_getRef";
+import { convertFromDatabase, getCampaignTracksCollection } from "./_getRef";
 import { Track } from "types/Track.type";
 
 export function listenToProgressTracks(

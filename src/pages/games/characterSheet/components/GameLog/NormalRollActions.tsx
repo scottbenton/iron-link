@@ -12,16 +12,16 @@ import {
   MenuItem,
 } from "@mui/material";
 
+import { useCharacterIdOptional } from "../../hooks/useCharacterId";
+import { useDerivedCharacterState } from "../../hooks/useDerivedCharacterState";
+import { useMomentumParameters } from "../../hooks/useMomentumResetValue";
+import { convertRollToClipboard } from "./clipboardFormatter";
+import { DieRerollDialog } from "./DieRerollDialog";
 import { updateCharacter } from "api-calls/character/updateCharacter";
 import { removeLog } from "api-calls/game-log/removeLog";
 import { updateLog } from "api-calls/game-log/updateLog";
 import { useUID } from "atoms/auth.atom";
 import { useDataswornTree } from "atoms/dataswornTree.atom";
-import { convertRollToClipboard } from "pages/games/characterSheet/components/GameLog/clipboardFormatter";
-import { DieRerollDialog } from "pages/games/characterSheet/components/GameLog/DieRerollDialog";
-import { useCharacterIdOptional } from "pages/games/characterSheet/hooks/useCharacterId";
-import { useDerivedCharacterState } from "pages/games/characterSheet/hooks/useDerivedCharacterState";
-import { useMomentumParameters } from "pages/games/characterSheet/hooks/useMomentumResetValue";
 import { useCampaignId } from "pages/games/gamePageLayout/hooks/useCampaignId";
 import {
   CampaignPermissionType,

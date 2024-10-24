@@ -1,7 +1,7 @@
 import { getDoc } from "firebase/firestore";
 
+import { getUsersDoc } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
-import { getUsersDoc } from "api-calls/user/_getRef";
 import { UserDocument } from "api-calls/user/_user.type";
 
 export const getUserDoc = createApiFunction<{ uid: string }, UserDocument>(

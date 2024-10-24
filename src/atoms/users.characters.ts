@@ -3,9 +3,9 @@ import { Unsubscribe } from "firebase/firestore";
 import { t } from "i18next";
 import { atom, useAtom, useAtomValue } from "jotai";
 
+import { useCurrentUserUID } from "./auth.atom";
 import { CharacterDocument } from "api-calls/character/_character.type";
 import { listenToUsersCharacters } from "api-calls/character/listenToUsersCharacters";
-import { useCurrentUserUID } from "atoms/auth.atom";
 import { getErrorMessage } from "lib/getErrorMessage";
 
 const usersCharactersAtom = atom<{

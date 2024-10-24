@@ -1,7 +1,7 @@
 import { updateDoc } from "firebase/firestore";
 
+import { convertToDatabase, getNPCDoc } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
-import { convertToDatabase, getNPCDoc } from "api-calls/world/npcs/_getRef";
 import { NPC } from "types/NPCs.type";
 
 interface NPCParams {

@@ -1,11 +1,11 @@
 import { Box, Typography } from "@mui/material";
 
+import { useCharacterId } from "../../hooks/useCharacterId";
+import { useDerivedCharacterState } from "../../hooks/useDerivedCharacterState";
 import { InitiativeStatus } from "api-calls/character/_character.type";
 import { updateCharacter } from "api-calls/character/updateCharacter";
 import { PortraitAvatar } from "components/characters/PortraitAvatar";
 import { InitiativeStatusChip } from "components/datasworn/InitiativeStatusChip";
-import { useCharacterId } from "pages/games/characterSheet/hooks/useCharacterId";
-import { useDerivedCharacterState } from "pages/games/characterSheet/hooks/useDerivedCharacterState";
 import {
   CharacterPermissionType,
   useCampaignPermissions,

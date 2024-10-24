@@ -1,6 +1,6 @@
 import { onSnapshot } from "firebase/firestore";
 
-import { getHomebrewCollectionDoc } from "api-calls/homebrew/_getRef";
+import { getHomebrewCollectionDoc } from "./_getRef";
 import { HomebrewCollectionDocument } from "api-calls/homebrew/_homebrewCollection.type";
 
 export function listenToHomebrewCollection(

@@ -1,7 +1,7 @@
 import { getDoc } from "firebase/firestore";
 
-import { CharacterDocument } from "api-calls/character/_character.type";
-import { getCharacterDoc } from "api-calls/character/_getRef";
+import { CharacterDocument } from "./_character.type";
+import { getCharacterDoc } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
 
 export const getCharacter = createApiFunction<string, CharacterDocument>(

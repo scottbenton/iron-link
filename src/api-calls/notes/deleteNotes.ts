@@ -1,11 +1,11 @@
 import { getDocs } from "firebase/firestore";
 
-import { createApiFunction } from "api-calls/createApiFunction";
 import {
   getCampaignNoteCollection,
   getCharacterNoteCollection,
-} from "api-calls/notes/_getRef";
-import { removeNote } from "api-calls/notes/removeNote";
+} from "./_getRef";
+import { removeNote } from "./removeNote";
+import { createApiFunction } from "api-calls/createApiFunction";
 
 function getAllNotes(
   campaignId: string | undefined,

@@ -1,8 +1,8 @@
 import { Datasworn } from "@datasworn/core";
 import { fireEvent, render, screen } from "@testing-library/react";
 
+import { AssetAbilities } from "../AssetAbilities";
 import { AssetDocument } from "api-calls/assets/_asset.type";
-import { AssetAbilities } from "components/datasworn/AssetCard/AssetAbilities";
 import { describe, expect, it, vi } from "vitest";
 
 describe("AssetAbilities", () => {

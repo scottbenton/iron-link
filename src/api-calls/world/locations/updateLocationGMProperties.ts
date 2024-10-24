@@ -1,7 +1,7 @@
 import { setDoc } from "firebase/firestore";
 
+import { getPrivateDetailsLocationDoc } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
-import { getPrivateDetailsLocationDoc } from "api-calls/world/locations/_getRef";
 import { GMLocation } from "types/Locations.type";
 
 interface Params {

@@ -3,12 +3,12 @@ import { TransitionGroup } from "react-transition-group";
 import ClearIcon from "@mui/icons-material/Close";
 import { Box, Fab, Slide } from "@mui/material";
 
+import { RollSnackbar } from "./RollSnackbar";
 import {
   useClearAllRollSnackbars,
   useClearRollSnackbar,
   useVisibleRolls,
 } from "atoms/rollDisplay.atom";
-import { RollSnackbar } from "components/characters/rolls/RollSnackbar";
 import { NormalRollActions } from "pages/games/characterSheet/components/GameLog/NormalRollActions";
 
 export function RollSnackbarSection() {

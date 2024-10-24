@@ -1,9 +1,6 @@
 import { useCallback } from "react";
 
-import {
-  ProgressTrack,
-  ProgressTrackProps,
-} from "components/datasworn/ProgressTrack/ProgressTrack";
+import { ProgressTrack, ProgressTrackProps } from "./ProgressTrack";
 import { useDebouncedSync } from "hooks/useDebouncedSync";
 
 export interface DebouncedProgressTrackProps

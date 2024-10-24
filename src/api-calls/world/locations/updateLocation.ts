@@ -1,10 +1,7 @@
 import { UpdateData, updateDoc } from "firebase/firestore";
 
+import { convertUpdateDataToDatabase, getLocationDoc } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
-import {
-  convertUpdateDataToDatabase,
-  getLocationDoc,
-} from "api-calls/world/locations/_getRef";
 import { Location } from "types/Locations.type";
 
 interface LocationParams {

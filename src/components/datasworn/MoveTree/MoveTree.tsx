@@ -3,14 +3,14 @@ import { useTranslation } from "react-i18next";
 import SearchIcon from "@mui/icons-material/Search";
 import { Box, Input, InputAdornment, List, ListSubheader } from "@mui/material";
 
-import { useMoves } from "atoms/dataswornRules/useMoves";
 import {
   CategoryVisibilityState,
   getMoveCategoryVisibility,
   MoveVisibilityState,
   VisibilitySettings,
-} from "components/datasworn/MoveTree/getMoveCategoryVisibility";
-import { MoveCategoryListItem } from "components/datasworn/MoveTree/MoveCategoryListItem";
+} from "./getMoveCategoryVisibility";
+import { MoveCategoryListItem } from "./MoveCategoryListItem";
+import { useMoves } from "atoms/dataswornRules/useMoves";
 
 export function MoveTree() {
   const { t } = useTranslation();

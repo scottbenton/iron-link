@@ -2,8 +2,8 @@ import { useCallback, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Box, LinearProgress } from "@mui/material";
 
+import { GameLogEntry } from "./GameLogEntry";
 import { EmptyState } from "components/Layout/EmptyState";
-import { GameLogEntry } from "pages/games/characterSheet/components/GameLog/GameLogEntry";
 import {
   useGameLogs,
   useLoadMoreLogs,

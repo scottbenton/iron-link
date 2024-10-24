@@ -1,11 +1,11 @@
 import { projectId } from "config/firebase.config";
 import { Bytes, setDoc } from "firebase/firestore";
 
-import { createApiFunction } from "api-calls/createApiFunction";
 import {
   constructPublicNotesLoreDocPath,
   getPublicNotesLoreDoc,
-} from "api-calls/world/lore/_getRef";
+} from "./_getRef";
+import { createApiFunction } from "api-calls/createApiFunction";
 
 interface Params {
   worldId: string;

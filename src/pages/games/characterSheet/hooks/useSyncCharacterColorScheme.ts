@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 
+import { useCharacterId } from "./useCharacterId";
+import { useDerivedCharacterState } from "./useDerivedCharacterState";
 import { ColorScheme, useSetColorScheme } from "atoms/theme.atom";
-import { useCharacterId } from "pages/games/characterSheet/hooks/useCharacterId";
-import { useDerivedCharacterState } from "pages/games/characterSheet/hooks/useDerivedCharacterState";
 
 export function useSyncCharacterColorScheme() {
   const characterId = useCharacterId();

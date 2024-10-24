@@ -1,7 +1,7 @@
 import { getDoc } from "firebase/firestore";
 
+import { getCampaignDoc } from "./_getRef";
 import { CampaignDocument } from "api-calls/campaign/_campaign.type";
-import { getCampaignDoc } from "api-calls/campaign/_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
 
 export const getCampaign = createApiFunction<string, CampaignDocument>(

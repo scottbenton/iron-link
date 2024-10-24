@@ -1,6 +1,6 @@
 import { Meta, StoryObj } from "@storybook/react";
 
-import { DebouncedOracleTextField } from "components/datasworn/OracleTextField";
+import { DebouncedOracleTextField } from "../OracleTextField";
 
 const meta = {
   title: "Datasworn/Debounced Oracle Text Field",

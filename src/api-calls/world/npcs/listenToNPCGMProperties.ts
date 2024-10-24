@@ -1,7 +1,7 @@
 import { Unsubscribe } from "firebase/auth";
 import { onSnapshot } from "firebase/firestore";
 
-import { getPrivateDetailsNPCDoc } from "api-calls/world/npcs/_getRef";
+import { getPrivateDetailsNPCDoc } from "./_getRef";
 import { getErrorMessage } from "lib/getErrorMessage";
 import { GMNPC } from "types/NPCs.type";
 

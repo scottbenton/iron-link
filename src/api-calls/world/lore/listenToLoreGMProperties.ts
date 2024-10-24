@@ -1,7 +1,7 @@
 import { Unsubscribe } from "firebase/auth";
 import { onSnapshot } from "firebase/firestore";
 
-import { getPrivateDetailsLoreDoc } from "api-calls/world/lore/_getRef";
+import { getPrivateDetailsLoreDoc } from "./_getRef";
 import { getErrorMessage } from "lib/getErrorMessage";
 import { GMLore } from "types/Lore.type";
 

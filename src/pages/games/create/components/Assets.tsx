@@ -3,11 +3,11 @@ import { useTranslation } from "react-i18next";
 import RemoveAssetIcon from "@mui/icons-material/Close";
 import { Button, IconButton } from "@mui/material";
 
+import { useCreateCharacterAtom } from "../atoms/createCharacter.atom";
 import { AssetDocument } from "api-calls/assets/_asset.type";
 import { AssetCard } from "components/datasworn/AssetCard";
 import { AssetCardDialog } from "components/datasworn/AssetCardDialog/AssetCardDialog";
 import { GridLayout } from "components/Layout";
-import { useCreateCharacterAtom } from "pages/games/create/atoms/createCharacter.atom";
 
 export function Assets() {
   const [character, setCharacter] = useCreateCharacterAtom();

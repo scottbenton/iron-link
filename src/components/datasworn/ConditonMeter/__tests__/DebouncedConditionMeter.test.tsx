@@ -1,10 +1,10 @@
 import { render, screen } from "@testing-library/react";
 
-import userEvent from "@testing-library/user-event";
 import {
   DebouncedConditionMeter,
   DebouncedConditionMeterProps,
-} from "components/datasworn/ConditonMeter/DebouncedConditionMeter";
+} from "../DebouncedConditionMeter";
+import userEvent from "@testing-library/user-event";
 import { TestWrapper } from "tests/TestWrapper";
 import { describe, expect, it, vi } from "vitest";
 

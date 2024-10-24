@@ -10,9 +10,9 @@ import {
   MenuItem,
 } from "@mui/material";
 
-import { getTrackTypeLabel } from "pages/games/characterSheet/components/TracksSection/common";
-import { EditOrCreateClockDialog } from "pages/games/characterSheet/components/TracksSection/EditOrCreateClockDialog";
-import { EditOrCreateTrackDialog } from "pages/games/characterSheet/components/TracksSection/EditOrCreateTrackDialog";
+import { getTrackTypeLabel } from "./common";
+import { EditOrCreateClockDialog } from "./EditOrCreateClockDialog";
+import { EditOrCreateTrackDialog } from "./EditOrCreateTrackDialog";
 import { useSetCurrentCampaignAtom } from "pages/games/gamePageLayout/atoms/campaign.atom";
 import {
   CampaignPermissionType,

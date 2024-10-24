@@ -1,7 +1,7 @@
 import { updateDoc } from "firebase/firestore";
 
+import { getHomebrewImpactsDoc } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
-import { getHomebrewImpactsDoc } from "api-calls/homebrew/rules/impacts/_getRef";
 import { HomebrewImpact } from "api-calls/homebrew/rules/impacts/_homebrewImpacts.type";
 
 export const updateHomebrewImpact = createApiFunction<

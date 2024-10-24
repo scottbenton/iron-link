@@ -2,10 +2,10 @@ import { useState } from "react";
 import HamburgerMenuIcon from "@mui/icons-material/Menu";
 import { AppBar, Box, Drawer, IconButton, List, Toolbar } from "@mui/material";
 
-import { AppSettingsMenu } from "components/Layout/AppSettingsMenu";
-import { IronLinkLogo } from "components/Layout/IronLinkLogo";
-import { NavBarListItem } from "components/Layout/NavBarListItem";
-import { NavRouteConfig } from "components/Layout/navRoutes";
+import { AppSettingsMenu } from "./AppSettingsMenu";
+import { IronLinkLogo } from "./IronLinkLogo";
+import { NavBarListItem } from "./NavBarListItem";
+import { NavRouteConfig } from "./navRoutes";
 
 export interface NavBarProps {
   routes: NavRouteConfig[];

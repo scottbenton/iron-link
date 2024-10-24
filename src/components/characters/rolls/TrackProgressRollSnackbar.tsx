@@ -1,11 +1,6 @@
 import { useTranslation } from "react-i18next";
 
-import {
-  RollContainer,
-  RollResult,
-  RollTitle,
-  RollValues,
-} from "components/characters/rolls/common";
+import { RollContainer, RollResult, RollTitle, RollValues } from "./common";
 import { getRollResultLabel } from "data/rollResultLabel";
 import { useMove } from "hooks/datasworn/useMove";
 import { TrackProgressRoll } from "types/DieRolls.type";

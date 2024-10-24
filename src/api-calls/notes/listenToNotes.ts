@@ -10,8 +10,8 @@ import {
 import {
   getCampaignNoteCollection,
   getCharacterNoteCollection,
-} from "api-calls/notes/_getRef";
-import { NoteDocument } from "api-calls/notes/_notes.type";
+} from "./_getRef";
+import { NoteDocument } from "./_notes.type";
 import { Note, NoteSource } from "types/Notes.type";
 
 export function listenToNotes(

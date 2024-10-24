@@ -1,7 +1,7 @@
 import { PartialWithFieldValue, updateDoc } from "firebase/firestore";
 
+import { getHomebrewAssetCollectionDoc } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
-import { getHomebrewAssetCollectionDoc } from "api-calls/homebrew/assets/collections/_getRef";
 import { HomebrewAssetCollectionDocument } from "api-calls/homebrew/assets/collections/_homebrewAssetCollection.type";
 
 export const updateHomebrewAssetCollection = createApiFunction<

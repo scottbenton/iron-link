@@ -1,12 +1,12 @@
 import { deleteDoc } from "firebase/firestore";
 
-import { createApiFunction } from "api-calls/createApiFunction";
 import {
   getCampaignNoteContentDocument,
   getCampaignNoteDocument,
   getCharacterNoteContentDocument,
   getCharacterNoteDocument,
-} from "api-calls/notes/_getRef";
+} from "./_getRef";
+import { createApiFunction } from "api-calls/createApiFunction";
 
 export const removeNote = createApiFunction<
   {

@@ -1,10 +1,10 @@
 import { onSnapshot } from "firebase/firestore";
 
-import { AssetDocument } from "api-calls/assets/_asset.type";
 import {
   getCampaignAssetCollection,
   getCharacterAssetCollection,
-} from "api-calls/assets/_getRef";
+} from "./_getRef";
+import { AssetDocument } from "api-calls/assets/_asset.type";
 
 export function listenToAssets(
   characterId: string | undefined,

@@ -1,9 +1,9 @@
 import { SvgIconProps } from "@mui/material";
 
+import { CoopIcon } from "./CoopIcon";
+import { GuidedIcon } from "./GuidedIcon";
+import { SoloIcon } from "./SoloIcon";
 import { CampaignType } from "api-calls/campaign/_campaign.type";
-import { CoopIcon } from "assets/CampaignTypeIcon/CoopIcon";
-import { GuidedIcon } from "assets/CampaignTypeIcon/GuidedIcon";
-import { SoloIcon } from "assets/CampaignTypeIcon/SoloIcon";
 
 export interface CampaignTypeIconProps extends SvgIconProps {
   campaignType: CampaignType;

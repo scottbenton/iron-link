@@ -1,12 +1,12 @@
 import { deleteDoc, getDocs } from "firebase/firestore";
 
-import { createApiFunction } from "api-calls/createApiFunction";
 import {
   getLocationCollection,
   getLocationDoc,
   getPrivateDetailsLocationDoc,
   getPublicNotesLocationDoc,
-} from "api-calls/world/locations/_getRef";
+} from "./_getRef";
+import { createApiFunction } from "api-calls/createApiFunction";
 
 interface Params {
   worldId: string;

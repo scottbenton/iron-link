@@ -1,7 +1,7 @@
 import { PartialWithFieldValue, updateDoc } from "firebase/firestore";
 
+import { getHomebrewStatsDoc } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
-import { getHomebrewStatsDoc } from "api-calls/homebrew/rules/stats/_getRef";
 import { HomebrewStatDocument } from "api-calls/homebrew/rules/stats/_homebrewStat.type";
 
 export const updateHomebrewStat = createApiFunction<

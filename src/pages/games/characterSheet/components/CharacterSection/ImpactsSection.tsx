@@ -3,7 +3,6 @@ import { useTranslation } from "react-i18next";
 import EditIcon from "@mui/icons-material/Edit";
 import {
   Box,
-  Button,
   capitalize,
   Card,
   Checkbox,
@@ -14,14 +13,15 @@ import {
   IconButton,
   Typography,
 } from "@mui/material";
+import { Button } from "@mui/material";
 
+import { useCharacterId } from "../../hooks/useCharacterId";
+import { useDerivedCharacterState } from "../../hooks/useDerivedCharacterState";
+import { useIsOwnerOfCharacter } from "../../hooks/useIsOwnerOfCharacter";
 import { updateCharacter } from "api-calls/character/updateCharacter";
 import { useImpactRules } from "atoms/dataswornRules/useImpactRules";
 import { DialogTitleWithCloseButton } from "components/DialogTitleWithCloseButton";
 import { GridLayout } from "components/Layout";
-import { useCharacterId } from "pages/games/characterSheet/hooks/useCharacterId";
-import { useDerivedCharacterState } from "pages/games/characterSheet/hooks/useDerivedCharacterState";
-import { useIsOwnerOfCharacter } from "pages/games/characterSheet/hooks/useIsOwnerOfCharacter";
 
 export function ImpactsSection() {
   const characterId = useCharacterId();

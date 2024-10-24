@@ -3,12 +3,12 @@ import { Outlet, useLocation } from "react-router-dom";
 import { LinearProgress } from "@mui/material";
 import { useAtomValue } from "jotai";
 
+import { currentCampaignAtom } from "./atoms/campaign.atom";
+import { CampaignTabs } from "./components/CampaignTabs";
+import { useSyncCampaign } from "./hooks/useSyncCampaign";
 import { derivedAtomWithEquality } from "atoms/derivedAtomWithEquality";
 import { PageContent, PageHeader } from "components/Layout";
 import { EmptyState } from "components/Layout/EmptyState";
-import { currentCampaignAtom } from "pages/games/gamePageLayout/atoms/campaign.atom";
-import { CampaignTabs } from "pages/games/gamePageLayout/components/CampaignTabs";
-import { useSyncCampaign } from "pages/games/gamePageLayout/hooks/useSyncCampaign";
 
 const campaignState = derivedAtomWithEquality(currentCampaignAtom, (atom) => ({
   hasCampaign: !!atom.campaign,

@@ -9,14 +9,14 @@ import {
   withRouter,
 } from "storybook-addon-remix-react-router";
 
-import "src/App.css";
-import { PreviewHeader } from ".storybook/PreviewHeader";
-import { useSetDataswornTree } from "atoms/dataswornTree.atom";
-import { RollSnackbarSection } from "components/characters/rolls/RollSnackbarSection";
-import { allDefaultPackages } from "data/datasworn.packages";
-import { i18n } from "i18n/config";
-import { SnackbarProvider } from "providers/SnackbarProvider";
-import { ThemeProvider } from "providers/ThemeProvider";
+import "../src/App.css";
+import { useSetDataswornTree } from "../src/atoms/dataswornTree.atom";
+import { RollSnackbarSection } from "../src/components/characters/rolls/RollSnackbarSection";
+import { allDefaultPackages } from "../src/data/datasworn.packages";
+import { i18n } from "../src/i18n/config";
+import { SnackbarProvider } from "../src/providers/SnackbarProvider";
+import { ThemeProvider } from "../src/providers/ThemeProvider";
+import { PreviewHeader } from "./PreviewHeader";
 
 const preview: Preview = {
   parameters: {

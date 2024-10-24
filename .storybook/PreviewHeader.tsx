@@ -8,7 +8,7 @@ import {
   useColorScheme as useThemeMode,
 } from "@mui/material";
 
-import { ColorScheme, useColorScheme } from "atoms/theme.atom";
+import { ColorScheme, useColorScheme } from "../src/atoms/theme.atom";
 
 export function PreviewHeader() {
   const { colorScheme: mode, setColorScheme: setMode } = useThemeMode();

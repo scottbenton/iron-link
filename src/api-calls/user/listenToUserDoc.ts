@@ -1,6 +1,6 @@
 import { onSnapshot } from "firebase/firestore";
 
-import { getUsersDoc } from "api-calls/user/_getRef";
+import { getUsersDoc } from "./_getRef";
 import { UserDocument } from "api-calls/user/_user.type";
 
 export const listenToUserDoc = (

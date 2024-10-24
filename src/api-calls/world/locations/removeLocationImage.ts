@@ -1,6 +1,6 @@
+import { constructLocationImagesPath } from "./_getRef";
+import { updateLocation } from "./updateLocation";
 import { createApiFunction } from "api-calls/createApiFunction";
-import { constructLocationImagesPath } from "api-calls/world/locations/_getRef";
-import { updateLocation } from "api-calls/world/locations/updateLocation";
 import { deleteImage } from "lib/storage.lib";
 
 export const removeLocationImage = createApiFunction<
