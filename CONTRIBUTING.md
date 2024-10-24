@@ -12,7 +12,7 @@ See [SETUP.md](./SETUP.md) for instructions on how to get everything running.
 
 My todo list for this application can be found [here](https://github.com/users/scottbenton/projects/5).
 If you would like to work on something that is not on that list, please open up an issue or reach out on discord so that we can discuss your proposed changes!
-I don't want you to waste any time on something that might not end up getting merged.
+I don't want you to waste any time on something that might not end up getting merged (for example, anything adding generative AI integration will **not** be merged).
 If you are new to the project, I would recommend looking for issues that are tagged with `good first issue`.
 The tickets I've created might not be well fleshed out, so feel free to ask any clarifying questions you have before you begin - either on the ticket, or reach out to me directly on discord!
 
