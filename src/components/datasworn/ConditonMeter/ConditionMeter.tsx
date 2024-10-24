@@ -86,6 +86,9 @@ export function ConditionMeter(props: ConditionMeterProps) {
         <Box
           id={id}
           component={onActionClick && !disabled ? ButtonBase : "div"}
+          data-testid={
+            onActionClick && !disabled ? "roll-button" : undefined
+          }
           onClick={onActionClick}
           {...(onActionClick && !disabled ? { focusRipple: true } : {})}
           display="block"

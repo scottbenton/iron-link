@@ -14,6 +14,7 @@ import { useDerivedCampaignDocumentState } from "pages/games/gamePageLayout/hook
 import { updateCampaign } from "api-calls/campaign/updateCampaign";
 import { useCampaignId } from "pages/games/gamePageLayout/hooks/useCampaignId";
 import { useIsOwnerOfCharacter } from "../../hooks/useIsOwnerOfCharacter";
+import { DEFAULT_MOMENTUM } from "../../../../../data/constants.ts";
 
 export function ConditionMeters() {
   const campaignId = useCampaignId();
@@ -28,7 +29,7 @@ export function ConditionMeters() {
     (character) => ({
       conditionMeterValues:
         character?.characterDocument.data?.conditionMeters ?? {},
-      momentum: character?.characterDocument.data?.momentum ?? 2,
+      momentum: character?.characterDocument.data?.momentum ?? DEFAULT_MOMENTUM,
       adds: character?.characterDocument.data?.adds ?? 0,
     })
   );
