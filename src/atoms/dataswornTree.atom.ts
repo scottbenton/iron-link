@@ -1,6 +1,6 @@
+import { useCallback, useEffect } from "react";
 import { Datasworn } from "@datasworn/core";
 import { atom, useAtomValue, useSetAtom } from "jotai";
-import { useCallback, useEffect } from "react";
 
 import { ironLinkAskTheOracleRulesPackage } from "data/askTheOracle";
 

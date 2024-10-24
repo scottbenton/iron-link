@@ -1,7 +1,7 @@
-import RollIcon from "@mui/icons-material/Casino";
-import { Box, Typography } from "@mui/material";
 import { useCallback } from "react";
 import { useTranslation } from "react-i18next";
+import RollIcon from "@mui/icons-material/Casino";
+import { Box, Typography } from "@mui/material";
 
 import { updateCharacter } from "api-calls/character/updateCharacter";
 import { useStatRules } from "atoms/dataswornRules/useStatRules";

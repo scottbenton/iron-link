@@ -1,6 +1,6 @@
+import { useMemo } from "react";
 import { Datasworn, IdParser } from "@datasworn/core";
 import { Primary } from "@datasworn/core/dist/StringId";
-import { useMemo } from "react";
 
 import { useDataswornTree } from "atoms/dataswornTree.atom";
 import { useActiveAssets } from "components/datasworn/hooks/useActiveAssets";

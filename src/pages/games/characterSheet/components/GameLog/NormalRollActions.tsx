@@ -1,3 +1,4 @@
+import { useRef, useState } from "react";
 import BackspaceIcon from "@mui/icons-material/Backspace";
 import RerollIcon from "@mui/icons-material/Casino";
 import CopyIcon from "@mui/icons-material/CopyAll";
@@ -10,7 +11,6 @@ import {
   Menu,
   MenuItem,
 } from "@mui/material";
-import { useRef, useState } from "react";
 
 import { updateCharacter } from "api-calls/character/updateCharacter";
 import { removeLog } from "api-calls/game-log/removeLog";

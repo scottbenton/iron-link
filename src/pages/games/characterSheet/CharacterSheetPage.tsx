@@ -1,5 +1,5 @@
-import { Box, Card, LinearProgress } from "@mui/material";
 import { useTranslation } from "react-i18next";
+import { Box, Card, LinearProgress } from "@mui/material";
 
 import { EmptyState } from "components/Layout/EmptyState";
 import { CharacterSidebarContents } from "pages/games/characterSheet/components/CharacterSidebarContents";

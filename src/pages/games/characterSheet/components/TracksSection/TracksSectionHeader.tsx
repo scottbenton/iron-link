@@ -1,3 +1,5 @@
+import { useCallback, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Box,
   Button,
@@ -7,8 +9,6 @@ import {
   Menu,
   MenuItem,
 } from "@mui/material";
-import { useCallback, useRef, useState } from "react";
-import { useTranslation } from "react-i18next";
 
 import { getTrackTypeLabel } from "pages/games/characterSheet/components/TracksSection/common";
 import { EditOrCreateClockDialog } from "pages/games/characterSheet/components/TracksSection/EditOrCreateClockDialog";

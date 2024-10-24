@@ -1,6 +1,6 @@
-import { Box, Typography } from "@mui/material";
 import { useCallback } from "react";
 import { useTranslation } from "react-i18next";
+import { Box, Typography } from "@mui/material";
 
 import { updateCharacter } from "api-calls/character/updateCharacter";
 import { DebouncedConditionMeter } from "components/datasworn/ConditonMeter";

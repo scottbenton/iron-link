@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Datasworn } from "@datasworn/core";
 import ChevronIcon from "@mui/icons-material/ChevronRight";
 import {
@@ -8,7 +9,6 @@ import {
   ListItemIcon,
   ListItemText,
 } from "@mui/material";
-import { useState } from "react";
 
 import {
   CollectionVisibilityState,

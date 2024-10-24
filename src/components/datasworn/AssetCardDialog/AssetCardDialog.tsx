@@ -1,6 +1,6 @@
-import { Box, Dialog, DialogContent } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { Box, Dialog, DialogContent } from "@mui/material";
 
 import { AssetDocument } from "api-calls/assets/_asset.type";
 import {

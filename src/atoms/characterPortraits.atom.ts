@@ -1,5 +1,5 @@
-import { atom, useAtom } from "jotai";
 import { useEffect, useMemo } from "react";
+import { atom, useAtom } from "jotai";
 
 import { getCharacterPortraitUrl } from "api-calls/character/getCharacterPortrait";
 

@@ -1,5 +1,5 @@
-import { Box, Typography } from "@mui/material";
 import { useCallback } from "react";
+import { Box, Typography } from "@mui/material";
 
 import { updateCharacter } from "api-calls/character/updateCharacter";
 import { useSpecialTrackRules } from "atoms/dataswornRules/useSpecialTrackRules";

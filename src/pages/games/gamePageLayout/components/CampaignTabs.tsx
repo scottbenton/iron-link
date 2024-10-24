@@ -1,7 +1,7 @@
-import { Tab, Tabs } from "@mui/material";
-import { useAtomValue } from "jotai";
 import { useTranslation } from "react-i18next";
 import { useLocation, useParams } from "react-router-dom";
+import { Tab, Tabs } from "@mui/material";
+import { useAtomValue } from "jotai";
 
 import { useAuthAtom } from "atoms/auth.atom";
 import { derivedAtomWithEquality } from "atoms/derivedAtomWithEquality";

@@ -1,5 +1,5 @@
-import { Box, Card, CardActionArea, Typography } from "@mui/material";
 import { useMemo } from "react";
+import { Box, Card, CardActionArea, Typography } from "@mui/material";
 
 import { CampaignDocument } from "api-calls/campaign/_campaign.type";
 import { LinkComponent } from "components/LinkComponent";

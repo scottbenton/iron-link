@@ -1,3 +1,5 @@
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Datasworn } from "@datasworn/core";
 import OracleTableIcon from "@mui/icons-material/List";
 import {
@@ -8,8 +10,6 @@ import {
   TextField,
   Tooltip,
 } from "@mui/material";
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
 
 import { useOpenDataswornDialog } from "atoms/dataswornDialog.atom";
 import { ListItemButtonWithSecondaryAction } from "components/datasworn/OracleTree/ListItemButtonWithSecondaryAction";

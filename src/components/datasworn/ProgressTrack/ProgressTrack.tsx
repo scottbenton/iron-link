@@ -1,3 +1,5 @@
+import { useEffect, useId, useState } from "react";
+import { useTranslation } from "react-i18next";
 import AddIcon from "@mui/icons-material/Add";
 import MinusIcon from "@mui/icons-material/Remove";
 import {
@@ -9,8 +11,6 @@ import {
   Typography,
 } from "@mui/material";
 import { TFunction } from "i18next";
-import { useEffect, useId, useState } from "react";
-import { useTranslation } from "react-i18next";
 
 import { useSetAnnouncement } from "atoms/announcement.atom";
 import { ProgressTrackTick } from "components/datasworn/ProgressTrack/ProgressTrackTick";

@@ -1,5 +1,5 @@
-import { useAtomValue } from "jotai";
 import { useTranslation } from "react-i18next";
+import { useAtomValue } from "jotai";
 
 import { derivedAtomWithEquality } from "atoms/derivedAtomWithEquality";
 import { RulesPackageSelector } from "components/datasworn/RulesPackageSelector";

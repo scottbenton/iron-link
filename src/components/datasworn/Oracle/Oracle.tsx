@@ -1,5 +1,5 @@
-import { Box, SxProps, Theme, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
+import { Box, SxProps, Theme, Typography } from "@mui/material";
 
 import { OracleButton } from "components/datasworn/Oracle/OracleButton";
 import { OracleTable } from "components/datasworn/Oracle/OracleTable";

@@ -1,3 +1,6 @@
+import { ChangeEventHandler, useCallback, useEffect, useState } from "react";
+import AvatarEditor from "react-avatar-editor";
+import { useTranslation } from "react-i18next";
 import ZoomInIcon from "@mui/icons-material/ZoomIn";
 import ZoomOutIcon from "@mui/icons-material/ZoomOut";
 import {
@@ -9,9 +12,6 @@ import {
   DialogContent,
   TextField,
 } from "@mui/material";
-import { ChangeEventHandler, useCallback, useEffect, useState } from "react";
-import AvatarEditor from "react-avatar-editor";
-import { useTranslation } from "react-i18next";
 
 import { removeCharacterPortrait } from "api-calls/character/removeCharacterPortrait";
 import { updateCharacter } from "api-calls/character/updateCharacter";

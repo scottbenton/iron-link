@@ -1,5 +1,5 @@
-import { SnackbarProvider as NotistackSnackbarProvider } from "notistack";
 import { PropsWithChildren } from "react";
+import { SnackbarProvider as NotistackSnackbarProvider } from "notistack";
 
 import { Snackbar } from "providers/SnackbarProvider/Snackbar";
 

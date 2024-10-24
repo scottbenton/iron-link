@@ -1,5 +1,5 @@
-import { atom, useAtomValue } from "jotai";
 import { useMemo } from "react";
+import { atom, useAtomValue } from "jotai";
 
 import { usersCampaignsAtom } from "atoms/users.campaigns";
 import { PortraitAvatar } from "components/characters/PortraitAvatar";

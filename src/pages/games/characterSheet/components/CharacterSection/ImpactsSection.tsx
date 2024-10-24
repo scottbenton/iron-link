@@ -1,3 +1,5 @@
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import EditIcon from "@mui/icons-material/Edit";
 import {
   Box,
@@ -12,8 +14,6 @@ import {
   IconButton,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
 
 import { updateCharacter } from "api-calls/character/updateCharacter";
 import { useImpactRules } from "atoms/dataswornRules/useImpactRules";

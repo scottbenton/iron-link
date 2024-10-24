@@ -1,7 +1,7 @@
-import { Box, Typography } from "@mui/material";
-import { useAtomValue } from "jotai";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
+import { Box, Typography } from "@mui/material";
+import { useAtomValue } from "jotai";
 
 import { useUID } from "atoms/auth.atom";
 import { derivedAtomWithEquality } from "atoms/derivedAtomWithEquality";

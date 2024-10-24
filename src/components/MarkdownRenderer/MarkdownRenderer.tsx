@@ -1,3 +1,4 @@
+import ReactMarkdown from "react-markdown";
 import { Datasworn, IdParser } from "@datasworn/core";
 import {
   Box,
@@ -9,7 +10,6 @@ import {
   TypographyProps,
   useTheme,
 } from "@mui/material";
-import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 import { useOpenDataswornDialog } from "atoms/dataswornDialog.atom";

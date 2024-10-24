@@ -1,5 +1,5 @@
-import { atom, useAtom } from "jotai";
 import { useCallback } from "react";
+import { atom, useAtom } from "jotai";
 
 import { AssetDocument } from "api-calls/assets/_asset.type";
 

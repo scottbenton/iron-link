@@ -1,6 +1,6 @@
-import { atom, useAtomValue } from "jotai";
 import { useMemo } from "react";
 import { useParams } from "react-router-dom";
+import { atom, useAtomValue } from "jotai";
 
 import { CampaignType } from "api-calls/campaign/_campaign.type";
 import { authAtom } from "atoms/auth.atom";

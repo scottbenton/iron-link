@@ -1,6 +1,6 @@
+import { useEffect } from "react";
 import { Unsubscribe } from "firebase/firestore";
 import { atom, useAtom, useAtomValue, useSetAtom } from "jotai";
-import { useEffect } from "react";
 
 import { CharacterDocument } from "api-calls/character/_character.type";
 import { listenToCharacter } from "api-calls/character/listenToCharacter";

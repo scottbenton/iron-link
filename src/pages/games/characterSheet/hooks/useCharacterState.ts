@@ -1,5 +1,5 @@
-import { useAtomValue } from "jotai";
 import { useMemo } from "react";
+import { useAtomValue } from "jotai";
 
 import { derivedAtomWithEquality } from "atoms/derivedAtomWithEquality";
 import { useCharacterId } from "pages/games/characterSheet/hooks/useCharacterId";

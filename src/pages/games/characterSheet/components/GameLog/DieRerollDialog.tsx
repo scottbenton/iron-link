@@ -1,3 +1,5 @@
+import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Box,
   Button,
@@ -7,8 +9,6 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
-import { useTranslation } from "react-i18next";
 
 import { updateLog } from "api-calls/game-log/updateLog";
 import { D6Icon } from "assets/D6Icon";

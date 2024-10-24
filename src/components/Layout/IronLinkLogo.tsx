@@ -1,6 +1,6 @@
-import { Box, SxProps, Theme, useTheme } from "@mui/material";
 import { useId } from "react";
 import { useTranslation } from "react-i18next";
+import { Box, SxProps, Theme, useTheme } from "@mui/material";
 
 export interface IronLinkLogoProps {
   sx?: SxProps<Theme>;

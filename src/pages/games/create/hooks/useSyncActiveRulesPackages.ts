@@ -1,5 +1,5 @@
-import { Datasworn } from "@datasworn/core";
 import { useMemo } from "react";
+import { Datasworn } from "@datasworn/core";
 
 import { useSetDataswornTree } from "atoms/dataswornTree.atom";
 import {

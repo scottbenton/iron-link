@@ -1,3 +1,5 @@
+import { useState } from "react";
+import { Link } from "react-router-dom";
 import AccountIcon from "@mui/icons-material/Person";
 import {
   Alert,
@@ -10,8 +12,6 @@ import {
   Typography,
 } from "@mui/material";
 import { FirebaseError } from "firebase/app";
-import { useState } from "react";
-import { Link } from "react-router-dom";
 
 import { GoogleIcon } from "assets/GoogleIcon";
 import { PageContent, PageHeader } from "components/Layout";

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import ChevronIcon from "@mui/icons-material/ChevronRight";
 import {
   Collapse,
@@ -7,7 +8,6 @@ import {
   ListItemIcon,
   ListItemText,
 } from "@mui/material";
-import { useState } from "react";
 
 import { MoveCategoryMap, MoveMap } from "atoms/dataswornRules/useMoves";
 import {

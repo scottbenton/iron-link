@@ -1,3 +1,5 @@
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import DieIcon from "@mui/icons-material/Casino";
 import CheckIcon from "@mui/icons-material/Check";
 import {
@@ -11,8 +13,6 @@ import {
   Typography,
 } from "@mui/material";
 import { useConfirm } from "material-ui-confirm";
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
 
 import { removeProgressTrack } from "api-calls/tracks/removeProgressTrack";
 import { updateProgressTrack } from "api-calls/tracks/updateProgressTrack";

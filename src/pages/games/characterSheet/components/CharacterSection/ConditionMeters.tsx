@@ -1,7 +1,7 @@
-import ResetIcon from "@mui/icons-material/RestartAlt";
-import { Box, Typography } from "@mui/material";
 import { useCallback } from "react";
 import { useTranslation } from "react-i18next";
+import ResetIcon from "@mui/icons-material/RestartAlt";
+import { Box, Typography } from "@mui/material";
 
 import { updateCampaign } from "api-calls/campaign/updateCampaign";
 import { updateCharacter } from "api-calls/character/updateCharacter";

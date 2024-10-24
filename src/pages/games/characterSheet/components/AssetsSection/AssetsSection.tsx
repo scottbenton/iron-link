@@ -1,5 +1,5 @@
-import { Box } from "@mui/material";
 import { useMemo, useState } from "react";
+import { Box } from "@mui/material";
 
 import { AssetSectionHeader } from "pages/games/characterSheet/components/AssetsSection/AssetSectionHeader";
 import { AssetsSectionCard } from "pages/games/characterSheet/components/AssetsSection/AssetsSectionCard";

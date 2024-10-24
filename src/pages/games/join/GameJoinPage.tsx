@@ -1,7 +1,7 @@
-import { LinearProgress } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
+import { LinearProgress } from "@mui/material";
 
 import { CampaignDocument } from "api-calls/campaign/_campaign.type";
 import { addUserToCampaign } from "api-calls/campaign/addUserToCampaign";

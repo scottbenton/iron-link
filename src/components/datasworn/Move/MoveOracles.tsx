@@ -1,6 +1,6 @@
+import { useTranslation } from "react-i18next";
 import { Datasworn } from "@datasworn/core";
 import { Box, Button } from "@mui/material";
-import { useTranslation } from "react-i18next";
 
 import { OracleTable } from "components/datasworn/Oracle/OracleTable";
 import { useRollOracleAndAddToLog } from "pages/games/hooks/useRollOracleAndAddToLog";

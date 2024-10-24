@@ -1,8 +1,8 @@
+import React, { useCallback } from "react";
+import { useTranslation } from "react-i18next";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { IconButton, Tooltip } from "@mui/material";
 import { useConfirm } from "material-ui-confirm";
-import React, { useCallback } from "react";
-import { useTranslation } from "react-i18next";
 
 import { AssetDocument } from "api-calls/assets/_asset.type";
 import { removeAsset } from "api-calls/assets/removeAsset";

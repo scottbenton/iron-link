@@ -1,5 +1,5 @@
-import { CssBaseline, ThemeProvider as MuiThemeProvider } from "@mui/material";
 import { PropsWithChildren } from "react";
+import { CssBaseline, ThemeProvider as MuiThemeProvider } from "@mui/material";
 
 import { useColorScheme } from "atoms/theme.atom";
 import { getTheme } from "providers/ThemeProvider/themes/themeConfig";
