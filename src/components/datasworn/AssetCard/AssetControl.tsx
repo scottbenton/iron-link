@@ -1,6 +1,5 @@
 import { Datasworn } from "@datasworn/core";
 import { Box } from "@mui/material";
-// import { Track } from "components/features/Track";
 import { AssetControls } from "./AssetControls";
 import { AssetDocument } from "api-calls/assets/_asset.type";
 import { AssetCounterField } from "./fields/AssetCounterField";
@@ -9,7 +8,31 @@ import { ConditionMeter } from "../ConditonMeter";
 import { AssetSelectEnhancementField } from "./fields/AssetSelectEnhancementField";
 import { AssetCheckboxField } from "./fields/AssetCheckboxField";
 import { AssetTextField } from "./fields/AssetTextField";
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
+import { useRollStatAndAddToLog } from "../../../pages/games/hooks/useRollStatAndAddToLog.ts";
+import RollIcon from "@mui/icons-material/Casino";
+import { t } from "i18next";
+import { useUID } from "../../../atoms/auth.atom.ts";
+import { useParams } from "react-router-dom";
+import { useAtomValue } from "jotai/index";
+import { derivedAtomWithEquality } from "../../../atoms/derivedAtomWithEquality.ts";
+import { campaignCharactersAtom } from "../../../pages/games/gamePageLayout/atoms/campaign.characters.atom.ts";
+
+const derivedCampaignCharacterMomentum = (
+  uid: string,
+  currentCharacterId?: string
+) =>
+  derivedAtomWithEquality(campaignCharactersAtom, (state) => {
+    Object.entries(state).forEach(([characterId, characterState]) => {
+      if (
+        uid === characterState.characterDocument.data?.uid &&
+        (!currentCharacterId || characterId === currentCharacterId)
+      ) {
+        return characterState.characterDocument.data?.momentum;
+      }
+    });
+    return undefined;
+  });
 
 export interface AssetControlProps {
   controlId: string;
@@ -32,6 +55,29 @@ export function AssetControl(props: AssetControlProps) {
     },
     [onControlChange, controlId]
   );
+
+  const uid = useUID();
+  const { characterId } = useParams<{
+    characterId?: string;
+    campaignId?: string;
+  }>();
+  const momentum = useAtomValue(
+    useMemo(
+      () => derivedCampaignCharacterMomentum(uid, characterId),
+      [uid, characterId]
+    )
+  );
+
+  const rollConditionMeter = useRollStatAndAddToLog();
+  const handleRoll = useCallback(() => {
+    rollConditionMeter({
+      statId: controlId,
+      statLabel: control.label,
+      statModifier: typeof value === "number" ? (value as number) : 0,
+      momentum: momentum || 0,
+      moveId: undefined,
+    });
+  }, [rollConditionMeter, value, control, controlId, momentum]);
 
   switch (control.field_type) {
     case "select_enhancement":
@@ -70,6 +116,11 @@ export function AssetControl(props: AssetControlProps) {
             value={typeof value === "number" ? (value as number) : undefined}
             disabled={!onControlChange}
             onChange={onControlChange ? handleControlChange : undefined}
+            onActionClick={handleRoll}
+            action={{
+              ActionIcon: RollIcon,
+              actionLabel: t("datasworn.roll", "Roll"),
+            }}
           />
           {subControls && (
             <Box mt={-1}>

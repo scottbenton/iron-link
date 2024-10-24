@@ -86,6 +86,9 @@ export function ConditionMeter(props: ConditionMeterProps) {
         <Box
           id={id}
           component={onActionClick && !disabled ? ButtonBase : "div"}
+          aria-label={
+            onActionClick && !disabled ? t("datasworn.roll", "Roll") : undefined
+          }
           onClick={onActionClick}
           {...(onActionClick && !disabled ? { focusRipple: true } : {})}
           display="block"

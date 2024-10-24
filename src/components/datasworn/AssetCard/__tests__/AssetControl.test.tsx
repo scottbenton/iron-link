@@ -74,6 +74,19 @@ describe("AssetControl", () => {
     expect(screen.getByText("Condition Meter")).toBeInTheDocument();
   });
 
+  it("should render ConditionMeter roll for condition_meter type", () => {
+    setup({
+      control: {
+        field_type: "condition_meter",
+        label: "Condition Meter",
+        value: 5,
+        min: 0,
+        max: 10,
+      } as Datasworn.AssetControlField,
+    });
+    expect(screen.getByRole("button", { name: /Roll/i })).toBeInTheDocument();
+  });
+
   it("should render AssetTextField for text type", () => {
     setup({
       control: {
