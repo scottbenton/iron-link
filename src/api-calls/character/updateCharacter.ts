@@ -1,6 +1,7 @@
 import { UpdateData, updateDoc } from "firebase/firestore";
-import { CharacterDocument } from "./_character.type";
-import { getCharacterDoc } from "./_getRef";
+
+import { CharacterDocument } from "api-calls/character/_character.type";
+import { getCharacterDoc } from "api-calls/character/_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
 
 interface Params {

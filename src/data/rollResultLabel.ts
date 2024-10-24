@@ -1,4 +1,5 @@
 import i18next from "i18next";
+
 import { RollResult } from "types/DieRolls.type";
 
 export function getRollResultLabel(result: RollResult) {

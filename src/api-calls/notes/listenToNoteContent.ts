@@ -1,8 +1,9 @@
 import { onSnapshot, Unsubscribe } from "firebase/firestore";
+
 import {
   getCampaignNoteContentDocument,
   getCharacterNoteContentDocument,
-} from "./_getRef";
+} from "api-calls/notes/_getRef";
 
 export function listenToNoteContent(
   campaignId: string | undefined,
@@ -10,7 +11,7 @@ export function listenToNoteContent(
   noteId: string,
   onContent: (content?: Uint8Array) => void,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  onError: (error: any) => void
+  onError: (error: any) => void,
 ): Unsubscribe {
   if (!characterId && !campaignId) {
     onError("Either campaign or character ID is required.");
@@ -28,6 +29,6 @@ export function listenToNoteContent(
         onContent(undefined);
       }
     },
-    (error) => onError(error)
+    (error) => onError(error),
   );
 }

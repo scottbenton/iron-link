@@ -1,8 +1,12 @@
-import { describe, expect, it, vi } from "vitest";
-import { fireEvent, render, screen, within } from "@testing-library/react";
-import { AssetControl, AssetControlProps } from "../AssetControl";
 import { Datasworn } from "@datasworn/core";
+import { fireEvent, render, screen, within } from "@testing-library/react";
+
+import {
+  AssetControl,
+  AssetControlProps,
+} from "components/datasworn/AssetCard/AssetControl";
 import { TestWrapper } from "tests/TestWrapper";
+import { describe, expect, it, vi } from "vitest";
 
 describe("AssetControl", () => {
   const setup = (props?: Partial<AssetControlProps>) => {
@@ -181,7 +185,7 @@ describe("AssetControl", () => {
     fireEvent.change(textField, { target: { value: "New Value" } });
     expect(onControlChange).toHaveBeenCalledWith(
       "test-control-id",
-      "New Value"
+      "New Value",
     );
   });
 

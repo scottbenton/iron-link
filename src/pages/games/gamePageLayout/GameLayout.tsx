@@ -1,13 +1,14 @@
 import { LinearProgress } from "@mui/material";
-import { derivedAtomWithEquality } from "atoms/derivedAtomWithEquality";
-import { PageContent, PageHeader } from "components/Layout";
+import { useAtomValue } from "jotai";
 import { useTranslation } from "react-i18next";
 import { Outlet, useLocation } from "react-router-dom";
-import { currentCampaignAtom } from "./atoms/campaign.atom";
-import { useAtomValue } from "jotai";
+
+import { derivedAtomWithEquality } from "atoms/derivedAtomWithEquality";
+import { PageContent, PageHeader } from "components/Layout";
 import { EmptyState } from "components/Layout/EmptyState";
-import { useSyncCampaign } from "./hooks/useSyncCampaign";
-import { CampaignTabs } from "./components/CampaignTabs";
+import { currentCampaignAtom } from "pages/games/gamePageLayout/atoms/campaign.atom";
+import { CampaignTabs } from "pages/games/gamePageLayout/components/CampaignTabs";
+import { useSyncCampaign } from "pages/games/gamePageLayout/hooks/useSyncCampaign";
 
 const campaignState = derivedAtomWithEquality(currentCampaignAtom, (atom) => ({
   hasCampaign: !!atom.campaign,
@@ -23,7 +24,7 @@ export function GameLayout() {
   const { hasCampaign, error } = useAtomValue(campaignState);
   const { pathname } = useLocation();
   const isOnCharacterCreatePage = pathname.match(
-    /\/games\/[^/]*\/create[/]?$/i
+    /\/games\/[^/]*\/create[/]?$/i,
   );
 
   if (!hasCampaign && !error) {

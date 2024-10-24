@@ -5,6 +5,7 @@ import {
   doc,
   DocumentReference,
 } from "firebase/firestore";
+
 import { CampaignDocument } from "api-calls/campaign/_campaign.type";
 
 export function constructCampaignCollectionPath() {
@@ -17,13 +18,13 @@ export function constructCampaignDocPath(campaignId: string) {
 export function getCampaignCollection() {
   return collection(
     firestore,
-    constructCampaignCollectionPath()
+    constructCampaignCollectionPath(),
   ) as CollectionReference<CampaignDocument>;
 }
 
 export function getCampaignDoc(campaignId: string) {
   return doc(
     firestore,
-    constructCampaignDocPath(campaignId)
+    constructCampaignDocPath(campaignId),
   ) as DocumentReference<CampaignDocument>;
 }

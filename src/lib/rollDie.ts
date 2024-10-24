@@ -1,4 +1,4 @@
-import { parseDiceExpression } from "./diceExpressionParser";
+import { parseDiceExpression } from "lib/diceExpressionParser";
 
 export function rollDie(diceExpression: string): number | undefined {
   const parsedExpression = parseDiceExpression(diceExpression);

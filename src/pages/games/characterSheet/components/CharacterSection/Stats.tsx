@@ -1,14 +1,15 @@
+import RollIcon from "@mui/icons-material/Casino";
 import { Box, Typography } from "@mui/material";
+import { useCallback } from "react";
+import { useTranslation } from "react-i18next";
+
 import { updateCharacter } from "api-calls/character/updateCharacter";
 import { useStatRules } from "atoms/dataswornRules/useStatRules";
 import { DebouncedConditionMeter } from "components/datasworn/ConditonMeter";
 import { Stat } from "components/datasworn/Stat";
-import { useTranslation } from "react-i18next";
-import { useCharacterId } from "../../hooks/useCharacterId";
-import { useDerivedCharacterState } from "../../hooks/useDerivedCharacterState";
-import { useCallback } from "react";
-import { useIsOwnerOfCharacter } from "../../hooks/useIsOwnerOfCharacter";
-import RollIcon from "@mui/icons-material/Casino";
+import { useCharacterId } from "pages/games/characterSheet/hooks/useCharacterId";
+import { useDerivedCharacterState } from "pages/games/characterSheet/hooks/useDerivedCharacterState";
+import { useIsOwnerOfCharacter } from "pages/games/characterSheet/hooks/useIsOwnerOfCharacter";
 import { useRollStatAndAddToLog } from "pages/games/hooks/useRollStatAndAddToLog";
 
 export function Stats() {
@@ -19,7 +20,7 @@ export function Stats() {
       stats: character?.characterDocument.data?.stats ?? {},
       adds: character?.characterDocument.data?.adds ?? 0,
       momentum: character?.characterDocument.data?.momentum ?? 2,
-    })
+    }),
   );
   const isCharacterOwner = useIsOwnerOfCharacter();
 
@@ -36,7 +37,7 @@ export function Stats() {
         }).catch(() => {});
       }
     },
-    [characterId]
+    [characterId],
   );
 
   const rollStat = useRollStatAndAddToLog();

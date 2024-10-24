@@ -1,3 +1,6 @@
+import { useEffect, useRef } from "react";
+import { matchPath, useLocation } from "react-router-dom";
+
 import { AuthState, useAuthStatus } from "atoms/auth.atom";
 import { useContinueUrl } from "hooks/useContinueUrl";
 // import { sendPageViewEvent } from "lib/analytics.lib";
@@ -8,8 +11,6 @@ import {
   pathConfig,
 } from "pages/pathConfig";
 import { useSnackbar } from "providers/SnackbarProvider";
-import { useEffect, useRef } from "react";
-import { matchPath, useLocation } from "react-router-dom";
 
 export function LayoutPathListener() {
   const { pathname } = useLocation();

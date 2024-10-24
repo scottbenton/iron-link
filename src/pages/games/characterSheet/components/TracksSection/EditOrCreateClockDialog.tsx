@@ -12,14 +12,15 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { DialogTitleWithCloseButton } from "components/DialogTitleWithCloseButton";
 import { useEffect, useState } from "react";
-import { Clock, TrackStatus, TrackTypes } from "types/Track.type";
-import { ClockCircle } from "components/datasworn/Clocks/ClockCircle";
 import { useTranslation } from "react-i18next";
+
 import { addProgressTrack } from "api-calls/tracks/addProgressTrack";
-import { useCampaignId } from "pages/games/gamePageLayout/hooks/useCampaignId";
 import { updateProgressTrack } from "api-calls/tracks/updateProgressTrack";
+import { ClockCircle } from "components/datasworn/Clocks/ClockCircle";
+import { DialogTitleWithCloseButton } from "components/DialogTitleWithCloseButton";
+import { useCampaignId } from "pages/games/gamePageLayout/hooks/useCampaignId";
+import { Clock, TrackStatus, TrackTypes } from "types/Track.type";
 
 const segmentOptions = [4, 6, 8, 10];
 
@@ -40,10 +41,10 @@ export function EditOrCreateClockDialog(props: EditOrCreateClockDialogProps) {
 
   const [title, setTitle] = useState(initialClock?.clock.label ?? "");
   const [description, setDescription] = useState(
-    initialClock?.clock.description ?? ""
+    initialClock?.clock.description ?? "",
   );
   const [segments, setSegments] = useState<number | undefined>(
-    initialClock?.clock.segments
+    initialClock?.clock.segments,
   );
 
   useEffect(() => {
@@ -66,16 +67,16 @@ export function EditOrCreateClockDialog(props: EditOrCreateClockDialogProps) {
       setError(
         t(
           "character.character-sidebar.clock-dialog-title-is-required-error",
-          "Title is required"
-        )
+          "Title is required",
+        ),
       );
       return;
     } else if (!segments) {
       setError(
         t(
           "character.character-sidebar.clock-dialog-segments-is-required-error",
-          "Please select the number of clock segments you want."
-        )
+          "Please select the number of clock segments you want.",
+        ),
       );
       return;
     }
@@ -107,8 +108,8 @@ export function EditOrCreateClockDialog(props: EditOrCreateClockDialogProps) {
           setError(
             t(
               "character.character-sidebar.clock-dialog-error-updating-clock",
-              "Error updating clock"
-            )
+              "Error updating clock",
+            ),
           );
         });
     } else {
@@ -121,8 +122,8 @@ export function EditOrCreateClockDialog(props: EditOrCreateClockDialogProps) {
           setError(
             t(
               "character.character-sidebar.clock-dialog-error-creating-clock",
-              "Error creating clock"
-            )
+              "Error creating clock",
+            ),
           );
         });
     }
@@ -134,11 +135,11 @@ export function EditOrCreateClockDialog(props: EditOrCreateClockDialogProps) {
         {initialClock
           ? t(
               "character.character-sidebar.clock-dialog-edit-clock-title",
-              "Edit Clock"
+              "Edit Clock",
             )
           : t(
               "character.character-sidebar.clock-dialog-add-clock-title",
-              "Add Clock"
+              "Add Clock",
             )}
       </DialogTitleWithCloseButton>
       <DialogContent>
@@ -152,7 +153,7 @@ export function EditOrCreateClockDialog(props: EditOrCreateClockDialogProps) {
           <TextField
             label={t(
               "character.character-sidebar.clock-dialog-title-input",
-              "Title"
+              "Title",
             )}
             required
             value={title}
@@ -161,7 +162,7 @@ export function EditOrCreateClockDialog(props: EditOrCreateClockDialogProps) {
           <TextField
             label={t(
               "character.character-sidebar.clock-dialog-description-input",
-              "Description"
+              "Description",
             )}
             value={description}
             onChange={(evt) => setDescription(evt.target.value)}
@@ -171,7 +172,7 @@ export function EditOrCreateClockDialog(props: EditOrCreateClockDialogProps) {
           <Typography>
             {t(
               "character.character-sidebar.clock-dialog-segments-input",
-              "Segments"
+              "Segments",
             )}
           </Typography>
           <Box display={"flex"} flexWrap={"wrap"}>
@@ -197,7 +198,7 @@ export function EditOrCreateClockDialog(props: EditOrCreateClockDialogProps) {
                     <Typography variant={"subtitle1"} ml={1}>
                       {t(
                         "character.character-sidebar.clock-dialog-segment-count",
-                        "segments"
+                        "segments",
                       )}
                     </Typography>
                   </Box>
@@ -220,11 +221,11 @@ export function EditOrCreateClockDialog(props: EditOrCreateClockDialogProps) {
           {initialClock
             ? t(
                 "character.character-sidebar.clock-dialog-save-clock-button",
-                "Save Clock"
+                "Save Clock",
               )
             : t(
                 "character.character-sidebar.clock-dialog-add-clock-button",
-                "Add Clock"
+                "Add Clock",
               )}
         </Button>
       </DialogActions>

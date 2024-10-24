@@ -1,12 +1,16 @@
 import { Datasworn } from "@datasworn/core";
-import { CampaignState, CharacterState } from "./common.types";
 import { Box, SxProps, Theme } from "@mui/material";
-import { MoveActionRollChip } from "./MoveActionRollChip";
-import { MoveActionRollButton } from "./MoveActionRollButton";
 import React, { useCallback } from "react";
-import { DebouncedConditionMeter } from "components/datasworn/ConditonMeter";
-import { updateCharacter } from "api-calls/character/updateCharacter";
 import { useTranslation } from "react-i18next";
+
+import { updateCharacter } from "api-calls/character/updateCharacter";
+import { DebouncedConditionMeter } from "components/datasworn/ConditonMeter";
+import {
+  CampaignState,
+  CharacterState,
+} from "components/datasworn/Move/RollOptions/common.types";
+import { MoveActionRollButton } from "components/datasworn/Move/RollOptions/MoveActionRollButton";
+import { MoveActionRollChip } from "components/datasworn/Move/RollOptions/MoveActionRollChip";
 
 export interface ActionRollsProps {
   moveId: string;
@@ -31,7 +35,7 @@ export function ActionRolls(props: ActionRollsProps) {
         }).catch(() => {});
       }
     },
-    [characterId]
+    [characterId],
   );
 
   return (

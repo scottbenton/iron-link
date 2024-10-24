@@ -1,5 +1,9 @@
 import { onSnapshot, query, Unsubscribe, where } from "firebase/firestore";
-import { convertFromDatabase, getCampaignTracksCollection } from "./_getRef";
+
+import {
+  convertFromDatabase,
+  getCampaignTracksCollection,
+} from "api-calls/tracks/_getRef";
 import { Track } from "types/Track.type";
 
 export function listenToProgressTracks(
@@ -8,11 +12,11 @@ export function listenToProgressTracks(
   addOrUpdateTracks: (tracks: Record<string, Track>) => void,
   removeTrack: (trackId: string) => void,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  onError: (error: any) => void
+  onError: (error: any) => void,
 ): Unsubscribe | undefined {
   const q = query(
     getCampaignTracksCollection(gameId),
-    where("status", "==", status)
+    where("status", "==", status),
   );
 
   return onSnapshot(
@@ -25,12 +29,12 @@ export function listenToProgressTracks(
           removeTrack(change.doc.id);
         } else {
           addOrUpdateChanges[change.doc.id] = convertFromDatabase(
-            change.doc.data()
+            change.doc.data(),
           );
         }
       });
       addOrUpdateTracks(addOrUpdateChanges);
     },
-    (error) => onError(error)
+    (error) => onError(error),
   );
 }

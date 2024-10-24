@@ -1,14 +1,18 @@
 import {
-  QueryConstraint,
-  Unsubscribe,
   limit,
   onSnapshot,
   orderBy,
   query,
+  QueryConstraint,
+  Unsubscribe,
   where,
 } from "firebase/firestore";
+
+import {
+  convertFromDatabase,
+  getCampaignGameLogCollection,
+} from "api-calls/game-log/_getRef";
 import { Roll } from "types/DieRolls.type";
-import { convertFromDatabase, getCampaignGameLogCollection } from "./_getRef";
 
 export function listenToMostRecentCharacterLog(params: {
   isGM: boolean;
@@ -44,6 +48,6 @@ export function listenToMostRecentCharacterLog(params: {
     (error) => {
       console.error(error);
       onError("Error getting new logs.");
-    }
+    },
   );
 }

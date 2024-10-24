@@ -1,6 +1,6 @@
 import { createApiFunction } from "api-calls/createApiFunction";
-import { updateLocation } from "./updateLocation";
-import { constructLocationImagesPath } from "./_getRef";
+import { constructLocationImagesPath } from "api-calls/world/locations/_getRef";
+import { updateLocation } from "api-calls/world/locations/updateLocation";
 import { deleteImage } from "lib/storage.lib";
 
 export const removeLocationImage = createApiFunction<
@@ -22,7 +22,7 @@ export const removeLocationImage = createApiFunction<
       .then(() => {
         deleteImage(
           constructLocationImagesPath(worldId, locationId),
-          filename
+          filename,
         ).catch(() => console.error("Failed to remove image from storage."));
         resolve();
       })

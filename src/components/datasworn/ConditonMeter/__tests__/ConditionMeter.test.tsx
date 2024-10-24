@@ -1,8 +1,12 @@
-import { describe, expect, it, vi } from "vitest";
-import { ConditionMeter, ConditionMeterProps } from "../ConditionMeter";
-import { TestWrapper } from "tests/TestWrapper";
-import { render, screen } from "@testing-library/react";
 import ExampleIcon from "@mui/icons-material/Casino";
+import { render, screen } from "@testing-library/react";
+
+import {
+  ConditionMeter,
+  ConditionMeterProps,
+} from "components/datasworn/ConditonMeter/ConditionMeter";
+import { TestWrapper } from "tests/TestWrapper";
+import { describe, expect, it, vi } from "vitest";
 
 describe("ConditionMeter", () => {
   const setup = (props?: Partial<ConditionMeterProps>) => {
@@ -31,7 +35,7 @@ describe("ConditionMeter", () => {
   it("should render the increment and decrement buttons when onChange is provided", () => {
     setup({ onChange: () => {} });
     expect(
-      screen.getByRole("button", { name: /subtract/i })
+      screen.getByRole("button", { name: /subtract/i }),
     ).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /add/i })).toBeInTheDocument();
   });

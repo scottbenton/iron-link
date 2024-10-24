@@ -1,16 +1,17 @@
+import SearchIcon from "@mui/icons-material/Search";
 import { Box, Input, InputAdornment, List, ListSubheader } from "@mui/material";
 import { useDeferredValue, useMemo, useState } from "react";
-import SearchIcon from "@mui/icons-material/Search";
 import { useTranslation } from "react-i18next";
+
 import { useOracles } from "atoms/dataswornRules/useOracles";
-import { OracleCollectionListItem } from "./OracleCollectionListItem";
+import { AskTheOracleButtons } from "components/datasworn/OracleTree/AskTheOracleButtons";
 import {
   CollectionVisibilityState,
   getOracleCollectionVisibility,
   OracleVisibilityState,
   VisibilitySettings,
-} from "./getOracleCollectionVisiblity";
-import { AskTheOracleButtons } from "./AskTheOracleButtons";
+} from "components/datasworn/OracleTree/getOracleCollectionVisiblity";
+import { OracleCollectionListItem } from "components/datasworn/OracleTree/OracleCollectionListItem";
 
 export function OracleTree() {
   const { t } = useTranslation();
@@ -33,7 +34,7 @@ export function OracleTree() {
           oracleCollectionMap,
           oracleRollableMap,
           visibleCollections,
-          visibleOracles
+          visibleOracles,
         );
       });
     });
@@ -100,7 +101,7 @@ export function OracleTree() {
               />
             ))}
           </List>
-        )
+        ),
       )}
     </Box>
   );

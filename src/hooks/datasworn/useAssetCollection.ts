@@ -1,7 +1,7 @@
 import { Datasworn, IdParser } from "@datasworn/core";
 
 export function useAssetCollection(
-  assetCollectionId: string
+  assetCollectionId: string,
 ): Datasworn.AssetCollection | undefined {
   let assetCollection: Datasworn.AssetCollection | undefined = undefined;
   try {

@@ -1,7 +1,8 @@
 import { setDoc } from "firebase/firestore";
-import { GMLocation } from "types/Locations.type";
-import { getPrivateDetailsLocationDoc } from "./_getRef";
+
 import { createApiFunction } from "api-calls/createApiFunction";
+import { getPrivateDetailsLocationDoc } from "api-calls/world/locations/_getRef";
+import { GMLocation } from "types/Locations.type";
 
 interface Params {
   worldId: string;
@@ -17,7 +18,7 @@ export const updateLocationGMProperties = createApiFunction<Params, void>(
       setDoc(
         getPrivateDetailsLocationDoc(worldId, locationId),
         locationGMProperties,
-        { merge: true }
+        { merge: true },
       )
         .then(() => {
           resolve();
@@ -27,5 +28,5 @@ export const updateLocationGMProperties = createApiFunction<Params, void>(
         });
     });
   },
-  "Failed to update location."
+  "Failed to update location.",
 );

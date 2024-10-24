@@ -1,16 +1,17 @@
 import { onSnapshot } from "firebase/firestore";
+
+import { AssetDocument } from "api-calls/assets/_asset.type";
 import {
   getCampaignAssetCollection,
   getCharacterAssetCollection,
-} from "./_getRef";
-import { AssetDocument } from "api-calls/assets/_asset.type";
+} from "api-calls/assets/_getRef";
 
 export function listenToAssets(
   characterId: string | undefined,
   campaignId: string | undefined,
   onAssets: (assets: { [assetId: string]: AssetDocument }) => void,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  onError: (error: any) => void
+  onError: (error: any) => void,
 ) {
   if (!characterId && !campaignId) {
     onError(new Error("Either character or campaign id must be defined."));
@@ -26,6 +27,6 @@ export function listenToAssets(
       snapshot.docs.forEach((doc) => (assetMap[doc.id] = doc.data()));
       onAssets(assetMap);
     },
-    (error) => onError(error)
+    (error) => onError(error),
   );
 }

@@ -1,10 +1,11 @@
+import { projectId } from "config/firebase.config";
 import { Bytes, setDoc } from "firebase/firestore";
+
+import { createApiFunction } from "api-calls/createApiFunction";
 import {
   constructPrivateDetailsLocationDocPath,
   getPrivateDetailsLocationDoc,
-} from "./_getRef";
-import { projectId } from "config/firebase.config";
-import { createApiFunction } from "api-calls/createApiFunction";
+} from "api-calls/world/locations/_getRef";
 
 interface Params {
   worldId: string;
@@ -21,7 +22,7 @@ export const updateLocationGMNotes = createApiFunction<Params, void>(
       if (isBeacon) {
         const contentPath = `projects/${projectId}/databases/(default)/documents${constructPrivateDetailsLocationDocPath(
           worldId,
-          locationId
+          locationId,
         )}`;
 
         const token = window.sessionStorage.getItem("id-token") ?? "";
@@ -43,7 +44,7 @@ export const updateLocationGMNotes = createApiFunction<Params, void>(
                 },
               }),
               keepalive: true,
-            }
+            },
           ).catch((e) => console.error(e));
         }
 
@@ -52,7 +53,7 @@ export const updateLocationGMNotes = createApiFunction<Params, void>(
         setDoc(
           getPrivateDetailsLocationDoc(worldId, locationId),
           { gmNotes: Bytes.fromUint8Array(notes) },
-          { merge: true }
+          { merge: true },
         )
           .then(() => {
             resolve();
@@ -63,5 +64,5 @@ export const updateLocationGMNotes = createApiFunction<Params, void>(
       }
     });
   },
-  "Failed to update notes."
+  "Failed to update notes.",
 );

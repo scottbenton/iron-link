@@ -1,6 +1,6 @@
 import {
-  OracleRollableMap,
   OracleCollectionMap,
+  OracleRollableMap,
 } from "atoms/dataswornRules/useOracles";
 
 export enum CollectionVisibilityState {
@@ -24,7 +24,7 @@ export function getOracleCollectionVisibility(
   oracleCollectionMap: OracleCollectionMap,
   oracleRollableMap: OracleRollableMap,
   collectionVisibilityMap: Record<string, CollectionVisibilityState>,
-  visibleOracles: Record<string, OracleVisibilityState>
+  visibleOracles: Record<string, OracleVisibilityState>,
 ): boolean {
   if (!searchValue.trim()) {
     collectionVisibilityMap[collectionId] = CollectionVisibilityState.All;
@@ -73,7 +73,7 @@ export function getOracleCollectionVisibility(
         oracleCollectionMap,
         oracleRollableMap,
         collectionVisibilityMap,
-        visibleOracles
+        visibleOracles,
       );
       if (areSubCollectionsVisible) {
         collectionVisibility = CollectionVisibilityState.Some;

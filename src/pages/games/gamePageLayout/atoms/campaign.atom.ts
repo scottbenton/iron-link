@@ -1,11 +1,12 @@
+import { atom, useSetAtom } from "jotai";
+import { useCallback, useEffect } from "react";
+
 import { AssetDocument } from "api-calls/assets/_asset.type";
 import { CampaignDocument } from "api-calls/campaign/_campaign.type";
-import { atom, useSetAtom } from "jotai";
-import { Track, TrackStatus } from "types/Track.type";
-import { useCampaignId } from "../hooks/useCampaignId";
-import { useCallback, useEffect } from "react";
 import { listenToProgressTracks } from "api-calls/tracks/listenToProgressTracks";
-import { useDerivedCampaignState } from "../hooks/useDerivedCampaignState";
+import { useCampaignId } from "pages/games/gamePageLayout/hooks/useCampaignId";
+import { useDerivedCampaignState } from "pages/games/gamePageLayout/hooks/useDerivedCampaignState";
+import { Track, TrackStatus } from "types/Track.type";
 
 export interface ICurrentCampaignAtom {
   campaignId: string;
@@ -41,7 +42,7 @@ export const defaultCurrentCampaignAtom: ICurrentCampaignAtom = {
 };
 
 export const currentCampaignAtom = atom<ICurrentCampaignAtom>(
-  defaultCurrentCampaignAtom
+  defaultCurrentCampaignAtom,
 );
 
 export function useSetCurrentCampaignAtom() {
@@ -51,7 +52,7 @@ export function useSetCurrentCampaignAtom() {
 export function useSyncProgressTracks() {
   const campaignId = useCampaignId();
   const showCompletedTracks = useDerivedCampaignState(
-    (state) => state.tracks.showCompletedTracks
+    (state) => state.tracks.showCompletedTracks,
   );
   const setCurrentCampaign = useSetCurrentCampaignAtom();
 
@@ -105,10 +106,10 @@ export function useSyncProgressTracks() {
               tracks: {},
             },
           }));
-        }
+        },
       );
     },
-    [campaignId, setCurrentCampaign]
+    [campaignId, setCurrentCampaign],
   );
 
   useEffect(() => {

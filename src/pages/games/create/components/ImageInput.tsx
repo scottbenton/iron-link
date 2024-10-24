@@ -1,11 +1,12 @@
 import { ButtonBase } from "@mui/material";
 import { useEffect, useState } from "react";
+
 import { PortraitAvatarDisplay } from "components/characters/PortraitAvatar";
 import { PortraitUploaderDialog } from "components/PortraitUploaderDialog";
 import {
   ICreateCharacterAtom,
   useCreateCharacterAtom,
-} from "../atoms/createCharacter.atom";
+} from "pages/games/create/atoms/createCharacter.atom";
 
 export interface ImageInputProps {
   value: ICreateCharacterAtom["portrait"];

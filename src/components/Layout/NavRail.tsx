@@ -1,8 +1,9 @@
 import { Box, Stack } from "@mui/material";
-import { IronLinkLogo } from "./IronLinkLogo";
-import { NavRailItem } from "./NavRailItem";
-import { NavRouteConfig } from "./navRoutes";
-import { AppSettingsMenu } from "./AppSettingsMenu";
+
+import { AppSettingsMenu } from "components/Layout/AppSettingsMenu";
+import { IronLinkLogo } from "components/Layout/IronLinkLogo";
+import { NavRailItem } from "components/Layout/NavRailItem";
+import { NavRouteConfig } from "components/Layout/navRoutes";
 
 export interface NavRailProps {
   routes: NavRouteConfig[];

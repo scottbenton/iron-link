@@ -1,8 +1,9 @@
-import { SectionHeading } from "components/SectionHeading";
 import { useTranslation } from "react-i18next";
-import { CharacterDetails } from "./CharacterDetails";
-import { Stats } from "./Stats";
-import { Assets } from "./Assets";
+
+import { SectionHeading } from "components/SectionHeading";
+import { Assets } from "pages/games/create/components/Assets";
+import { CharacterDetails } from "pages/games/create/components/CharacterDetails";
+import { Stats } from "pages/games/create/components/Stats";
 
 export function CreateCharacter() {
   const { t } = useTranslation();

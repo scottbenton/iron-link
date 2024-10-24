@@ -1,3 +1,6 @@
+import DarkModeIcon from "@mui/icons-material/DarkMode";
+import LightModeIcon from "@mui/icons-material/LightMode";
+import LogoutIcon from "@mui/icons-material/Logout";
 import SettingsIcon from "@mui/icons-material/Settings";
 import {
   IconButton,
@@ -7,14 +10,12 @@ import {
   MenuItem,
   useColorScheme,
 } from "@mui/material";
+import { firebaseAuth } from "config/firebase.config";
+import { signOut } from "firebase/auth";
 import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import LightModeIcon from "@mui/icons-material/LightMode";
-import DarkModeIcon from "@mui/icons-material/DarkMode";
-import LogoutIcon from "@mui/icons-material/Logout";
+
 import { AuthState, useAuthStatus } from "atoms/auth.atom";
-import { signOut } from "firebase/auth";
-import { firebaseAuth } from "config/firebase.config";
 
 export function AppSettingsMenu() {
   const { t } = useTranslation();

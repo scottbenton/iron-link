@@ -5,7 +5,8 @@ import {
   doc,
   DocumentReference,
 } from "firebase/firestore";
-import { NoteContentDocument, NoteDocument } from "./_notes.type";
+
+import { NoteContentDocument, NoteDocument } from "api-calls/notes/_notes.type";
 
 export function constructCampaignNoteCollectionPath(campaignId: string) {
   return `/campaigns/${campaignId}/notes`;
@@ -13,14 +14,14 @@ export function constructCampaignNoteCollectionPath(campaignId: string) {
 
 export function constructCampaignNoteDocPath(
   campaignId: string,
-  noteId: string
+  noteId: string,
 ) {
   return `/campaigns/${campaignId}/notes/${noteId}`;
 }
 
 export function constructCampaignNoteContentPath(
   campaignId: string,
-  noteId: string
+  noteId: string,
 ) {
   return `/campaigns/${campaignId}/notes/${noteId}/content/content`;
 }
@@ -28,24 +29,24 @@ export function constructCampaignNoteContentPath(
 export function getCampaignNoteCollection(campaignId: string) {
   return collection(
     firestore,
-    constructCampaignNoteCollectionPath(campaignId)
+    constructCampaignNoteCollectionPath(campaignId),
   ) as CollectionReference<NoteDocument>;
 }
 
 export function getCampaignNoteDocument(campaignId: string, noteId: string) {
   return doc(
     firestore,
-    constructCampaignNoteDocPath(campaignId, noteId)
+    constructCampaignNoteDocPath(campaignId, noteId),
   ) as DocumentReference<NoteDocument>;
 }
 
 export function getCampaignNoteContentDocument(
   campaignId: string,
-  noteId: string
+  noteId: string,
 ) {
   return doc(
     firestore,
-    constructCampaignNoteContentPath(campaignId, noteId)
+    constructCampaignNoteContentPath(campaignId, noteId),
   ) as DocumentReference<NoteContentDocument>;
 }
 
@@ -55,14 +56,14 @@ export function constructCharacterNoteCollectionPath(characterId: string) {
 
 export function constructCharacterNoteDocPath(
   characterId: string,
-  noteId: string
+  noteId: string,
 ) {
   return `/characters/${characterId}/notes/${noteId}`;
 }
 
 export function constructCharacterNoteContentPath(
   characterId: string,
-  noteId: string
+  noteId: string,
 ) {
   return `/characters/${characterId}/notes/${noteId}/content/content`;
 }
@@ -70,23 +71,23 @@ export function constructCharacterNoteContentPath(
 export function getCharacterNoteCollection(characterId: string) {
   return collection(
     firestore,
-    constructCharacterNoteCollectionPath(characterId)
+    constructCharacterNoteCollectionPath(characterId),
   ) as CollectionReference<NoteDocument>;
 }
 
 export function getCharacterNoteDocument(characterId: string, noteId: string) {
   return doc(
     firestore,
-    constructCharacterNoteDocPath(characterId, noteId)
+    constructCharacterNoteDocPath(characterId, noteId),
   ) as DocumentReference<NoteDocument>;
 }
 
 export function getCharacterNoteContentDocument(
   characterId: string,
-  noteId: string
+  noteId: string,
 ) {
   return doc(
     firestore,
-    constructCharacterNoteContentPath(characterId, noteId)
+    constructCharacterNoteContentPath(characterId, noteId),
   ) as DocumentReference<NoteContentDocument>;
 }

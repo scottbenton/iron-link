@@ -1,6 +1,5 @@
 import { Datasworn } from "@datasworn/core";
-import { capitalize } from "@mui/material";
-import { TextField } from "@mui/material";
+import { capitalize, TextField } from "@mui/material";
 
 export interface AssetTextFieldProps {
   field: Datasworn.TextField;

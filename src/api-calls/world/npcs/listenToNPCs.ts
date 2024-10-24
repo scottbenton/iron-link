@@ -1,12 +1,13 @@
 import { Unsubscribe } from "firebase/auth";
 import { onSnapshot, query, where } from "firebase/firestore";
-import { NPC } from "types/NPCs.type";
+
 import {
   constructNPCImagePath,
   convertFromDatabase,
   getNPCCollection,
-} from "./_getRef";
+} from "api-calls/world/npcs/_getRef";
 import { getImageUrl } from "lib/storage.lib";
+import { NPC } from "types/NPCs.type";
 
 export function listenToNPCs(
   worldId: string,
@@ -14,7 +15,7 @@ export function listenToNPCs(
   updateNPC: (npcId: string, npc: NPC) => void,
   updateNPCImage: (npcId: string, imageUrl: string) => void,
   removeNPC: (npcId: string) => void,
-  onError: (error: string) => void
+  onError: (error: string) => void,
 ): Unsubscribe {
   const npcCollectionRef = getNPCCollection(worldId);
 
@@ -37,8 +38,8 @@ export function listenToNPCs(
               constructNPCImagePath(
                 worldId,
                 change.doc.id,
-                convertedDoc.imageFilenames[0]
-              )
+                convertedDoc.imageFilenames[0],
+              ),
             ).then((url) => {
               updateNPCImage(change.doc.id, url);
             });
@@ -49,6 +50,6 @@ export function listenToNPCs(
     (error) => {
       console.error(error);
       onError("Failed to get npcs");
-    }
+    },
   );
 }

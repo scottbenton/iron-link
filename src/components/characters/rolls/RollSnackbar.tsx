@@ -1,9 +1,10 @@
-import { Roll, RollType } from "types/DieRolls.type";
-import { StatRollSnackbar } from "./StatRollSnackbar";
-import { RollCard } from "./common";
-import { OracleRollSnackbar } from "./OracleRollSnackbar";
 import { ReactNode } from "react";
-import { TrackProgressRollSnackbar } from "./TrackProgressRollSnackbar";
+
+import { RollCard } from "components/characters/rolls/common";
+import { OracleRollSnackbar } from "components/characters/rolls/OracleRollSnackbar";
+import { StatRollSnackbar } from "components/characters/rolls/StatRollSnackbar";
+import { TrackProgressRollSnackbar } from "components/characters/rolls/TrackProgressRollSnackbar";
+import { Roll, RollType } from "types/DieRolls.type";
 
 export interface RollSnackbarProps {
   rollId: string | undefined;

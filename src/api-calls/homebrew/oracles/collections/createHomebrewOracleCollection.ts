@@ -1,7 +1,8 @@
-import { createApiFunction } from "api-calls/createApiFunction";
 import { addDoc } from "firebase/firestore";
+
+import { createApiFunction } from "api-calls/createApiFunction";
+import { getHomebrewOracleCollectionCollection } from "api-calls/homebrew/oracles/collections/_getRef";
 import { HomebrewOracleCollectionDocument } from "api-calls/homebrew/oracles/collections/_homebrewOracleCollection.type";
-import { getHomebrewOracleCollectionCollection } from "./_getRef";
 
 export const createHomebrewOracleCollection = createApiFunction<
   { oracleCollection: HomebrewOracleCollectionDocument },

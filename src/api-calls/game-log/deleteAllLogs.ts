@@ -1,9 +1,10 @@
 import { deleteDoc, getDocs } from "firebase/firestore";
+
+import { createApiFunction } from "api-calls/createApiFunction";
 import {
   getCampaignGameLogCollection,
   getCampaignGameLogDocument,
-} from "./_getRef";
-import { createApiFunction } from "api-calls/createApiFunction";
+} from "api-calls/game-log/_getRef";
 
 function getAllLogs(campaignId: string): Promise<string[]> {
   return new Promise<string[]>((resolve, reject) => {
@@ -23,7 +24,7 @@ export const deleteAllLogs = createApiFunction<string, void>((campaignId) => {
     getAllLogs(campaignId)
       .then((logIds) => {
         const promises = logIds.map((logId) =>
-          deleteDoc(getCampaignGameLogDocument(campaignId, logId))
+          deleteDoc(getCampaignGameLogDocument(campaignId, logId)),
         );
         Promise.all(promises)
           .then(() => {

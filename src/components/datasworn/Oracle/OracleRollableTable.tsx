@@ -1,6 +1,10 @@
 import { Datasworn } from "@datasworn/core";
+
+import {
+  SimpleTable,
+  SimpleTableColumnDefinition,
+} from "components/datasworn/Oracle/SimpleTable";
 import { MarkdownRenderer } from "components/MarkdownRenderer";
-import { SimpleTable, SimpleTableColumnDefinition } from "./SimpleTable";
 
 export interface OracleRollableTableProps {
   oracle:

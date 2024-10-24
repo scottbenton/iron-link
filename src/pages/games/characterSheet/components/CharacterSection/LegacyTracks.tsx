@@ -1,11 +1,12 @@
 import { Box, Typography } from "@mui/material";
+import { useCallback } from "react";
+
 import { updateCharacter } from "api-calls/character/updateCharacter";
 import { useSpecialTrackRules } from "atoms/dataswornRules/useSpecialTrackRules";
 import { DebouncedProgressTrack } from "components/datasworn/ProgressTrack";
-import { useCharacterId } from "../../hooks/useCharacterId";
-import { useDerivedCharacterState } from "../../hooks/useDerivedCharacterState";
-import { useCallback } from "react";
-import { useIsOwnerOfCharacter } from "../../hooks/useIsOwnerOfCharacter";
+import { useCharacterId } from "pages/games/characterSheet/hooks/useCharacterId";
+import { useDerivedCharacterState } from "pages/games/characterSheet/hooks/useDerivedCharacterState";
+import { useIsOwnerOfCharacter } from "pages/games/characterSheet/hooks/useIsOwnerOfCharacter";
 
 export function LegacyTracks() {
   const characterId = useCharacterId();
@@ -13,7 +14,7 @@ export function LegacyTracks() {
 
   const legacyTracks = useDerivedCharacterState(
     characterId,
-    (character) => character?.characterDocument.data?.specialTracks ?? {}
+    (character) => character?.characterDocument.data?.specialTracks ?? {},
   );
   const specialTrackRules = useSpecialTrackRules();
 
@@ -26,7 +27,7 @@ export function LegacyTracks() {
         }).catch(() => {});
       }
     },
-    [characterId]
+    [characterId],
   );
 
   return (

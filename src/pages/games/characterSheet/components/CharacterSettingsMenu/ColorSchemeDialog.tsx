@@ -1,12 +1,13 @@
 import { Button, Dialog, DialogActions, DialogContent } from "@mui/material";
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+
 import { updateCharacter } from "api-calls/character/updateCharacter";
 import { ColorScheme } from "atoms/theme.atom";
 import { ColorSchemeSelector } from "components/ColorSchemeSelector";
 import { DialogTitleWithCloseButton } from "components/DialogTitleWithCloseButton";
-import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { useCharacterId } from "../../hooks/useCharacterId";
-import { useDerivedCharacterState } from "../../hooks/useDerivedCharacterState";
+import { useCharacterId } from "pages/games/characterSheet/hooks/useCharacterId";
+import { useDerivedCharacterState } from "pages/games/characterSheet/hooks/useDerivedCharacterState";
 
 export interface ColorSchemeDialogProps {
   open: boolean;
@@ -20,7 +21,7 @@ export function ColorSchemeDialog(props: ColorSchemeDialogProps) {
   const characterId = useCharacterId();
   const colorScheme = useDerivedCharacterState(
     characterId,
-    (character) => character?.characterDocument.data?.colorScheme
+    (character) => character?.characterDocument.data?.colorScheme,
   );
 
   const [localColorScheme, setLocalColorScheme] = useState(colorScheme);
@@ -45,7 +46,7 @@ export function ColorSchemeDialog(props: ColorSchemeDialogProps) {
       <DialogTitleWithCloseButton onClose={onClose}>
         {t(
           "character.character-sidebar.change-color-scheme",
-          "Change Color Scheme"
+          "Change Color Scheme",
         )}
       </DialogTitleWithCloseButton>
       <DialogContent>

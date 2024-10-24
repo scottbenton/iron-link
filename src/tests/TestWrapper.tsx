@@ -1,7 +1,8 @@
+import { PropsWithChildren } from "react";
+
 import { HeadProvider } from "providers/HeadProvider";
 import { SnackbarProvider } from "providers/SnackbarProvider";
 import { ThemeProvider } from "providers/ThemeProvider";
-import { PropsWithChildren } from "react";
 
 export function TestWrapper(props: PropsWithChildren) {
   const { children } = props;

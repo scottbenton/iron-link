@@ -1,11 +1,12 @@
 import { deleteDoc, getDocs } from "firebase/firestore";
+
+import { createApiFunction } from "api-calls/createApiFunction";
 import {
   getNPCCollection,
   getNPCDoc,
   getPrivateDetailsNPCDoc,
   getPublicNotesNPCDoc,
-} from "./_getRef";
-import { createApiFunction } from "api-calls/createApiFunction";
+} from "api-calls/world/npcs/_getRef";
 
 interface Params {
   worldId: string;

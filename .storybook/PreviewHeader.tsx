@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Box,
   FormControlLabel,
@@ -7,7 +6,9 @@ import {
   TextField,
   useColorScheme as useThemeMode,
 } from "@mui/material";
-import { ColorScheme, useColorScheme } from "../src/atoms/theme.atom";
+import React from "react";
+
+import { ColorScheme, useColorScheme } from "atoms/theme.atom";
 
 export function PreviewHeader() {
   const { colorScheme: mode, setColorScheme: setMode } = useThemeMode();

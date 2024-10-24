@@ -1,15 +1,16 @@
 import { Datasworn } from "@datasworn/core";
+import { TFunction } from "i18next";
+import { useCallback } from "react";
+import { useTranslation } from "react-i18next";
+import { useParams } from "react-router-dom";
+
 import { addRoll } from "api-calls/game-log/addRoll";
 import { useSetAnnouncement } from "atoms/announcement.atom";
 import { useAuthAtom } from "atoms/auth.atom";
 import { useDataswornTree } from "atoms/dataswornTree.atom";
 import { useAddRollSnackbar } from "atoms/rollDisplay.atom";
 import { getMove } from "hooks/datasworn/useMove";
-import { TFunction } from "i18next";
 import { createId } from "lib/id.lib";
-import { useCallback } from "react";
-import { useTranslation } from "react-i18next";
-import { useParams } from "react-router-dom";
 import { RollResult, RollType, StatRoll } from "types/DieRolls.type";
 
 interface StatRollConfig {
@@ -41,7 +42,7 @@ export function useRollStatAndAddToLog() {
       const result = getStatRollResult(
         config,
         uid,
-        config.characterId ?? characterId
+        config.characterId ?? characterId,
       );
 
       const rollId = uploadRoll(result, campaignId);
@@ -54,7 +55,7 @@ export function useRollStatAndAddToLog() {
 
       return result;
     },
-    [dataswornTree, uid, characterId, campaignId, t, announce, addRollSnackbar]
+    [dataswornTree, uid, characterId, campaignId, t, announce, addRollSnackbar],
   );
 
   return rollStat;
@@ -67,7 +68,7 @@ export const getRoll = (dieMax: number) => {
 function getStatRollResult(
   config: StatRollConfig,
   uid: string,
-  characterId?: string
+  characterId?: string,
 ): StatRoll {
   const { momentum, statModifier, adds, statLabel, moveId, statId } = config;
 
@@ -78,7 +79,7 @@ function getStatRollResult(
   const matchedNegativeMomentum = momentum < 0 && Math.abs(momentum) === action;
   const actionTotal = Math.min(
     10,
-    (matchedNegativeMomentum ? 0 : action) + statModifier + (adds ?? 0)
+    (matchedNegativeMomentum ? 0 : action) + statModifier + (adds ?? 0),
   );
 
   let result: RollResult = RollResult.WeakHit;
@@ -128,7 +129,7 @@ function announceRoll(
   rollConfig: StatRollConfig,
   dataswornTree: Record<string, Datasworn.RulesPackage>,
   t: TFunction,
-  announce: (announcement: string) => void
+  announce: (announcement: string) => void,
 ) {
   let move: Datasworn.Move | undefined = undefined;
 
@@ -145,7 +146,7 @@ function announceRoll(
       {
         moveName: move.name,
         statLabel: roll.rollLabel,
-      }
+      },
     );
   } else {
     announcement = t(
@@ -153,7 +154,7 @@ function announceRoll(
       "Rolled plus {{statLabel}}.",
       {
         statLabel: roll.rollLabel,
-      }
+      },
     );
   }
 
@@ -167,7 +168,7 @@ function announceRoll(
         statModifier: rollConfig.statModifier,
         adds: roll.adds,
         actionTotal: roll.actionTotal,
-      }
+      },
     );
   } else {
     announcement += t(
@@ -178,7 +179,7 @@ function announceRoll(
         statModifier: rollConfig.statModifier,
         adds: roll.adds,
         actionTotal: roll.actionTotal,
-      }
+      },
     );
   }
   const resultLabel = t("datasworn.weak-hit", "Weak Hit");
@@ -194,7 +195,7 @@ function announceRoll(
       challenge1: roll.challenge1,
       challenge2: roll.challenge2,
       resultLabel,
-    }
+    },
   );
   // verboseScreenReaderRolls
   //             ? announcement

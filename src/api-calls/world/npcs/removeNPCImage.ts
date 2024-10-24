@@ -1,7 +1,7 @@
 import { createApiFunction } from "api-calls/createApiFunction";
-import { constructNPCImagesPath } from "./_getRef";
+import { constructNPCImagesPath } from "api-calls/world/npcs/_getRef";
+import { updateNPC } from "api-calls/world/npcs/updateNPC";
 import { deleteImage } from "lib/storage.lib";
-import { updateNPC } from "./updateNPC";
 
 export const removeNPCImage = createApiFunction<
   {
@@ -21,7 +21,7 @@ export const removeNPCImage = createApiFunction<
     })
       .then(() => {
         deleteImage(constructNPCImagesPath(worldId, npcId), filename).catch(
-          () => console.error("Failed to remove image from storage.")
+          () => console.error("Failed to remove image from storage."),
         );
         resolve();
       })

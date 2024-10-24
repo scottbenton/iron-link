@@ -1,7 +1,11 @@
 import { setDoc, updateDoc } from "firebase/firestore";
-import { getCampaignSettingsDoc, getCharacterSettingsDoc } from "./_getRef";
-import { createApiFunction } from "api-calls/createApiFunction";
+
 import { SettingsDocument } from "api-calls/character-campaign-settings/_character-campaign-settings.type";
+import {
+  getCampaignSettingsDoc,
+  getCharacterSettingsDoc,
+} from "api-calls/character-campaign-settings/_getRef";
+import { createApiFunction } from "api-calls/createApiFunction";
 
 export const updateSettings = createApiFunction<
   {
@@ -25,14 +29,14 @@ export const updateSettings = createApiFunction<
           campaignId
             ? getCampaignSettingsDoc(campaignId)
             : getCharacterSettingsDoc(characterId as string),
-          settings
+          settings,
         )
       : setDoc(
           campaignId
             ? getCampaignSettingsDoc(campaignId)
             : getCharacterSettingsDoc(characterId as string),
           settings,
-          { merge: true }
+          { merge: true },
         )
     )
       .then(() => resolve())

@@ -1,8 +1,14 @@
-import { TrackProgressRoll } from "types/DieRolls.type";
-import { RollContainer, RollResult, RollTitle, RollValues } from "./common";
-import { useMove } from "hooks/datasworn/useMove";
 import { useTranslation } from "react-i18next";
+
+import {
+  RollContainer,
+  RollResult,
+  RollTitle,
+  RollValues,
+} from "components/characters/rolls/common";
 import { getRollResultLabel } from "data/rollResultLabel";
+import { useMove } from "hooks/datasworn/useMove";
+import { TrackProgressRoll } from "types/DieRolls.type";
 
 export interface TrackProgressRollSnackbarProps {
   rollId: string | undefined;
@@ -11,7 +17,7 @@ export interface TrackProgressRollSnackbarProps {
 }
 
 export function TrackProgressRollSnackbar(
-  props: TrackProgressRollSnackbarProps
+  props: TrackProgressRollSnackbarProps,
 ) {
   const { roll, isExpanded } = props;
   const { t } = useTranslation();

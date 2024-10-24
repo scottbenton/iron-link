@@ -1,7 +1,8 @@
 import { Datasworn } from "@datasworn/core";
 import { Box, Checkbox, Stack, Typography } from "@mui/material";
-import { MarkdownRenderer } from "components/MarkdownRenderer";
+
 import { AssetDocument } from "api-calls/assets/_asset.type";
+import { MarkdownRenderer } from "components/MarkdownRenderer";
 
 export interface AssetAbilitiesProps {
   abilities: Datasworn.AssetAbility[];
@@ -21,7 +22,7 @@ export function AssetAbilities(props: AssetAbilitiesProps) {
   const filteredAbilities = hideUnavailableAbilities
     ? abilities.filter(
         (ability, index) =>
-          (ability.enabled || assetDocument?.enabledAbilities[index]) ?? false
+          (ability.enabled || assetDocument?.enabledAbilities[index]) ?? false,
       )
     : abilities;
 

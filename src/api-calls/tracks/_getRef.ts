@@ -6,7 +6,8 @@ import {
   DocumentReference,
   Timestamp,
 } from "firebase/firestore";
-import { TrackDocument } from "./_track.type";
+
+import { TrackDocument } from "api-calls/tracks/_track.type";
 import { Track } from "types/Track.type";
 
 export function constructCampaignTracksCollection(campaignId: string) {
@@ -14,7 +15,7 @@ export function constructCampaignTracksCollection(campaignId: string) {
 }
 export function constructCampaignTracksDocPath(
   campaignId: string,
-  trackId: string
+  trackId: string,
 ) {
   return `/campaigns/${campaignId}/tracks/${trackId}`;
 }
@@ -22,13 +23,13 @@ export function constructCampaignTracksDocPath(
 export function getCampaignTracksCollection(campaignId: string) {
   return collection(
     firestore,
-    constructCampaignTracksCollection(campaignId)
+    constructCampaignTracksCollection(campaignId),
   ) as CollectionReference<TrackDocument>;
 }
 export function getCampaignTracksDoc(campaignId: string, trackId: string) {
   return doc(
     firestore,
-    constructCampaignTracksDocPath(campaignId, trackId)
+    constructCampaignTracksDocPath(campaignId, trackId),
   ) as DocumentReference<TrackDocument>;
 }
 

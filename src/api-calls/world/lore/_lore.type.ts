@@ -1,4 +1,5 @@
 import { Bytes, Timestamp } from "firebase/firestore";
+
 import { Lore } from "types/Lore.type";
 
 export interface LoreDocument

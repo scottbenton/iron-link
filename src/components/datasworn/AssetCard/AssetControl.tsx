@@ -1,15 +1,16 @@
 import { Datasworn } from "@datasworn/core";
 import { Box } from "@mui/material";
-// import { Track } from "components/features/Track";
-import { AssetControls } from "./AssetControls";
-import { AssetDocument } from "api-calls/assets/_asset.type";
-import { AssetCounterField } from "./fields/AssetCounterField";
-import { AssetClockField } from "./fields/AssetClockField";
-import { ConditionMeter } from "../ConditonMeter";
-import { AssetSelectEnhancementField } from "./fields/AssetSelectEnhancementField";
-import { AssetCheckboxField } from "./fields/AssetCheckboxField";
-import { AssetTextField } from "./fields/AssetTextField";
 import { useCallback } from "react";
+
+import { AssetDocument } from "api-calls/assets/_asset.type";
+// import { Track } from "components/features/Track";
+import { AssetControls } from "components/datasworn/AssetCard/AssetControls";
+import { AssetCheckboxField } from "components/datasworn/AssetCard/fields/AssetCheckboxField";
+import { AssetClockField } from "components/datasworn/AssetCard/fields/AssetClockField";
+import { AssetCounterField } from "components/datasworn/AssetCard/fields/AssetCounterField";
+import { AssetSelectEnhancementField } from "components/datasworn/AssetCard/fields/AssetSelectEnhancementField";
+import { AssetTextField } from "components/datasworn/AssetCard/fields/AssetTextField";
+import { ConditionMeter } from "components/datasworn/ConditonMeter";
 
 export interface AssetControlProps {
   controlId: string;
@@ -18,7 +19,7 @@ export interface AssetControlProps {
   value?: boolean | string | number;
   onControlChange?: (
     controlKey: string,
-    value: boolean | string | number
+    value: boolean | string | number,
   ) => void;
 }
 export function AssetControl(props: AssetControlProps) {
@@ -30,7 +31,7 @@ export function AssetControl(props: AssetControlProps) {
         onControlChange(controlId, value);
       }
     },
-    [onControlChange, controlId]
+    [onControlChange, controlId],
   );
 
   switch (control.field_type) {

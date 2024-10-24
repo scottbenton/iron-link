@@ -1,5 +1,9 @@
 import { arrayRemove, arrayUnion, setDoc } from "firebase/firestore";
-import { getCampaignSettingsDoc, getCharacterSettingsDoc } from "./_getRef";
+
+import {
+  getCampaignSettingsDoc,
+  getCharacterSettingsDoc,
+} from "api-calls/character-campaign-settings/_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
 
 export const showOrHideCustomOracle = createApiFunction<
@@ -28,7 +32,7 @@ export const showOrHideCustomOracle = createApiFunction<
           ? arrayUnion(oracleId)
           : arrayRemove(oracleId),
       },
-      { merge: true }
+      { merge: true },
     )
       .then(() => resolve())
       .catch((e) => {

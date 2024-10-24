@@ -1,10 +1,11 @@
 import { onSnapshot } from "firebase/firestore";
-import { getUsersDoc } from "./_getRef";
+
+import { getUsersDoc } from "api-calls/user/_getRef";
 import { UserDocument } from "api-calls/user/_user.type";
 
 export const listenToUserDoc = (
   uid: string,
-  onUser: (user: UserDocument) => void
+  onUser: (user: UserDocument) => void,
 ) => {
   return onSnapshot(
     getUsersDoc(uid),
@@ -16,6 +17,6 @@ export const listenToUserDoc = (
         }
       }
     },
-    (error) => console.error(error)
+    (error) => console.error(error),
   );
 };

@@ -1,11 +1,12 @@
 import { deleteDoc, getDocs } from "firebase/firestore";
+
+import { createApiFunction } from "api-calls/createApiFunction";
 import {
   getLoreCollection,
   getLoreDoc,
   getPrivateDetailsLoreDoc,
   getPublicNotesLoreDoc,
-} from "./_getRef";
-import { createApiFunction } from "api-calls/createApiFunction";
+} from "api-calls/world/lore/_getRef";
 
 interface Params {
   worldId: string;
@@ -36,5 +37,5 @@ export const deleteAllLoreDocuments = createApiFunction<Params, void>(
         });
     });
   },
-  "Failed to delete Lore Documents."
+  "Failed to delete Lore Documents.",
 );

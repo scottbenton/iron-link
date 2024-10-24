@@ -1,12 +1,12 @@
 import { onSnapshot } from "firebase/firestore";
 
-import { getCampaignDoc } from "./_getRef";
-import { CampaignDocument } from "./_campaign.type";
+import { CampaignDocument } from "api-calls/campaign/_campaign.type";
+import { getCampaignDoc } from "api-calls/campaign/_getRef";
 
 export function listenToCampaign(
   campaignId: string,
   onCampaign: (campaign: CampaignDocument) => void,
-  onError: (error: unknown) => void
+  onError: (error: unknown) => void,
 ) {
   return onSnapshot(
     getCampaignDoc(campaignId),
@@ -18,6 +18,6 @@ export function listenToCampaign(
         onError("No campaign found");
       }
     },
-    (error) => onError(error)
+    (error) => onError(error),
   );
 }

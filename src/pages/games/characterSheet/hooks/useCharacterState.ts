@@ -1,7 +1,8 @@
 import { useAtomValue } from "jotai";
 import { useMemo } from "react";
-import { useCharacterId } from "./useCharacterId";
+
 import { derivedAtomWithEquality } from "atoms/derivedAtomWithEquality";
+import { useCharacterId } from "pages/games/characterSheet/hooks/useCharacterId";
 import { campaignCharactersAtom } from "pages/games/gamePageLayout/atoms/campaign.characters.atom";
 
 export function useCharacterState() {
@@ -13,7 +14,7 @@ export function useCharacterState() {
           hasCharacter: !!atom[characterId]?.characterDocument,
           error: atom.error,
         })),
-      [characterId]
-    )
+      [characterId],
+    ),
   );
 }

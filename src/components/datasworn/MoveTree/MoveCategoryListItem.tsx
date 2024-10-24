@@ -1,19 +1,20 @@
+import ChevronIcon from "@mui/icons-material/ChevronRight";
 import {
   Collapse,
   List,
   ListItem,
   ListItemButton,
+  ListItemIcon,
   ListItemText,
 } from "@mui/material";
-import ChevronIcon from "@mui/icons-material/ChevronRight";
 import { useState } from "react";
-import { ListItemIcon } from "@mui/material";
-import { MoveListItem } from "./MoveListItem";
+
+import { MoveCategoryMap, MoveMap } from "atoms/dataswornRules/useMoves";
 import {
   CategoryVisibilityState,
   VisibilitySettings,
-} from "./getMoveCategoryVisibility";
-import { MoveCategoryMap, MoveMap } from "atoms/dataswornRules/useMoves";
+} from "components/datasworn/MoveTree/getMoveCategoryVisibility";
+import { MoveListItem } from "components/datasworn/MoveTree/MoveListItem";
 
 export interface MoveCategoryListItemProps {
   moveCategoryId: string;

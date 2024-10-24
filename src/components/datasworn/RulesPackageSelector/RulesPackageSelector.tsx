@@ -1,4 +1,5 @@
 import { Box, Checkbox, FormControlLabel, SxProps, Theme } from "@mui/material";
+
 import {
   defaultBaseRulesets,
   defaultExpansions,
@@ -11,7 +12,7 @@ export interface RulesPackageSelectorProps {
   onExpansionChange: (
     rulesetKey: string,
     expansionKey: string,
-    isActive: boolean
+    isActive: boolean,
   ) => void;
   sx?: SxProps<Theme>;
 }
@@ -49,8 +50,9 @@ export function RulesPackageSelector(props: RulesPackageSelectorProps) {
                     <Checkbox
                       checked={
                         activeRulesetConfig[rulesetKey]
-                          ? activeExpansionConfig[rulesetKey]?.[expansionKey] ??
-                            false
+                          ? (activeExpansionConfig[rulesetKey]?.[
+                              expansionKey
+                            ] ?? false)
                           : false
                       }
                     />
@@ -60,7 +62,7 @@ export function RulesPackageSelector(props: RulesPackageSelectorProps) {
                   }
                   disabled={!activeRulesetConfig[rulesetKey]} // Disable if the ruleset is not active
                 />
-              )
+              ),
             )}
           </Box>
         </Box>

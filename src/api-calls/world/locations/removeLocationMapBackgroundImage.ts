@@ -1,8 +1,9 @@
-import { createApiFunction } from "api-calls/createApiFunction";
-import { updateLocation } from "./updateLocation";
-import { constructLocationImagesPath } from "./_getRef";
-import { deleteImage } from "lib/storage.lib";
 import { deleteField } from "firebase/firestore";
+
+import { createApiFunction } from "api-calls/createApiFunction";
+import { constructLocationImagesPath } from "api-calls/world/locations/_getRef";
+import { updateLocation } from "api-calls/world/locations/updateLocation";
+import { deleteImage } from "lib/storage.lib";
 
 export const removeLocationMapBackgroundImage = createApiFunction<
   {
@@ -23,7 +24,7 @@ export const removeLocationMapBackgroundImage = createApiFunction<
       .then(() => {
         deleteImage(
           constructLocationImagesPath(worldId, locationId),
-          filename
+          filename,
         ).catch(() => console.error("Failed to remove image from storage."));
         resolve();
       })

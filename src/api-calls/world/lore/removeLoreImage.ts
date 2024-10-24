@@ -1,7 +1,7 @@
 import { createApiFunction } from "api-calls/createApiFunction";
-import { constructLoreImagesPath } from "./_getRef";
+import { constructLoreImagesPath } from "api-calls/world/lore/_getRef";
+import { updateLore } from "api-calls/world/lore/updateLore";
 import { deleteImage } from "lib/storage.lib";
-import { updateLore } from "./updateLore";
 
 export const removeLoreImage = createApiFunction<
   {
@@ -21,7 +21,7 @@ export const removeLoreImage = createApiFunction<
     })
       .then(() => {
         deleteImage(constructLoreImagesPath(worldId, loreId), filename).catch(
-          () => console.error("Failed to remove image from storage.")
+          () => console.error("Failed to remove image from storage."),
         );
         resolve();
       })

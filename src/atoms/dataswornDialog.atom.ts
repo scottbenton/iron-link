@@ -37,7 +37,7 @@ export function useOpenDataswornDialog() {
         }
       });
     },
-    [setDataswornDialogState]
+    [setDataswornDialogState],
   );
 }
 

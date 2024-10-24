@@ -1,10 +1,11 @@
 import { firestore } from "config/firebase.config";
 import {
-  CollectionReference,
-  DocumentReference,
   collection,
+  CollectionReference,
   doc,
+  DocumentReference,
 } from "firebase/firestore";
+
 import { HomebrewCollectionDocument } from "api-calls/homebrew/_homebrewCollection.type";
 
 export function constructHomebrewCollectionPath() {
@@ -12,7 +13,7 @@ export function constructHomebrewCollectionPath() {
 }
 
 export function constructHomebrewCollectionDocPath(
-  homebrewCollectionId: string
+  homebrewCollectionId: string,
 ) {
   return `${constructHomebrewCollectionPath()}/${homebrewCollectionId}`;
 }
@@ -20,13 +21,13 @@ export function constructHomebrewCollectionDocPath(
 export function getHomebrewCollection() {
   return collection(
     firestore,
-    constructHomebrewCollectionPath()
+    constructHomebrewCollectionPath(),
   ) as CollectionReference<HomebrewCollectionDocument>;
 }
 
 export function getHomebrewCollectionDoc(homebrewCollectionId: string) {
   return doc(
     firestore,
-    constructHomebrewCollectionDocPath(homebrewCollectionId)
+    constructHomebrewCollectionDocPath(homebrewCollectionId),
   ) as DocumentReference<HomebrewCollectionDocument>;
 }

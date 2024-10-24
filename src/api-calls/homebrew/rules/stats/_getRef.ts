@@ -1,10 +1,11 @@
-import {
-  CollectionReference,
-  DocumentReference,
-  collection,
-  doc,
-} from "firebase/firestore";
 import { firestore } from "config/firebase.config";
+import {
+  collection,
+  CollectionReference,
+  doc,
+  DocumentReference,
+} from "firebase/firestore";
+
 import { HomebrewStatDocument } from "api-calls/homebrew/rules/stats/_homebrewStat.type";
 
 export function constructHomebrewStatsCollectionPath() {
@@ -18,13 +19,13 @@ export function constructHomebrewStatsDocPath(statId: string) {
 export function getHomebrewStatsCollection() {
   return collection(
     firestore,
-    constructHomebrewStatsCollectionPath()
+    constructHomebrewStatsCollectionPath(),
   ) as CollectionReference<HomebrewStatDocument>;
 }
 
 export function getHomebrewStatsDoc(statId: string) {
   return doc(
     firestore,
-    constructHomebrewStatsDocPath(statId)
+    constructHomebrewStatsDocPath(statId),
   ) as DocumentReference<HomebrewStatDocument>;
 }

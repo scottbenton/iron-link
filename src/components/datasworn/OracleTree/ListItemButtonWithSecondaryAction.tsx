@@ -14,7 +14,7 @@ export interface ListItemButtonWithSecondaryActionProps extends ListItemProps {
 }
 
 export function ListItemButtonWithSecondaryAction(
-  props: ListItemButtonWithSecondaryActionProps
+  props: ListItemButtonWithSecondaryActionProps,
 ) {
   const {
     onClick,

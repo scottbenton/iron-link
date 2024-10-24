@@ -1,6 +1,7 @@
 import { Box, ButtonBase, SxProps, Theme, Typography } from "@mui/material";
-import { GradientBox } from "./GradientBox";
-import { LinkComponent } from "./LinkComponent";
+
+import { GradientBox } from "components/GradientBox";
+import { LinkComponent } from "components/LinkComponent";
 
 export interface GradientButtonProps {
   href?: string;

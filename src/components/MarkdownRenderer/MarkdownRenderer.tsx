@@ -1,3 +1,4 @@
+import { Datasworn, IdParser } from "@datasworn/core";
 import {
   Box,
   Link,
@@ -10,10 +11,10 @@ import {
 } from "@mui/material";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { OracleTableRenderer } from "./OracleTableRenderer";
-import { idMap } from "data/idMap";
-import { Datasworn, IdParser } from "@datasworn/core";
+
 import { useOpenDataswornDialog } from "atoms/dataswornDialog.atom";
+import { OracleTableRenderer } from "components/MarkdownRenderer/OracleTableRenderer";
+import { idMap } from "data/idMap";
 
 export interface MarkdownRendererProps {
   inlineParagraph?: boolean;
@@ -54,7 +55,7 @@ export function MarkdownRenderer(props: MarkdownRendererProps) {
               typeof children === "string" ? children : (children[0] as string);
             if (
               content.match(
-                /^{{table:[^/]+(\/collections)?\/oracles\/[^}]+}}$/
+                /^{{table:[^/]+(\/collections)?\/oracles\/[^}]+}}$/,
               ) ||
               content.match(/^{{table>[^}]+}}$/)
             ) {
@@ -86,8 +87,8 @@ export function MarkdownRenderer(props: MarkdownRendererProps) {
                 inheritColor
                   ? "inherit"
                   : inlineParagraph
-                  ? "textSecondary"
-                  : "textPrimary"
+                    ? "textSecondary"
+                    : "textPrimary"
               }
               py={inlineParagraph ? 0 : 1}
               textAlign={"left"}
@@ -106,8 +107,8 @@ export function MarkdownRenderer(props: MarkdownRendererProps) {
               inheritColor
                 ? "inherit"
                 : inlineParagraph
-                ? "textSecondary"
-                : "textPrimary"
+                  ? "textSecondary"
+                  : "textPrimary"
             }
             sx={sx}
           >

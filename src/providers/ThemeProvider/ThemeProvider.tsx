@@ -1,7 +1,8 @@
+import { CssBaseline, ThemeProvider as MuiThemeProvider } from "@mui/material";
 import { PropsWithChildren } from "react";
-import { ThemeProvider as MuiThemeProvider, CssBaseline } from "@mui/material";
+
 import { useColorScheme } from "atoms/theme.atom";
-import { getTheme } from "./themes/themeConfig";
+import { getTheme } from "providers/ThemeProvider/themes/themeConfig";
 
 export function ThemeProvider(props: PropsWithChildren) {
   const { children } = props;

@@ -1,5 +1,6 @@
-import { CampaignType } from "api-calls/campaign/_campaign.type";
 import { atom, useSetAtom } from "jotai";
+
+import { CampaignType } from "api-calls/campaign/_campaign.type";
 
 export interface ICreateGameAtom {
   gameName: string;

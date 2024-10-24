@@ -1,6 +1,7 @@
-import { createApiFunction } from "api-calls/createApiFunction";
 import { PartialWithFieldValue, updateDoc } from "firebase/firestore";
-import { getHomebrewMoveCategoryDoc } from "./_getRef";
+
+import { createApiFunction } from "api-calls/createApiFunction";
+import { getHomebrewMoveCategoryDoc } from "api-calls/homebrew/moves/categories/_getRef";
 import { HomebrewMoveCategoryDocument } from "api-calls/homebrew/moves/categories/_homebrewMoveCategory.type";
 
 export const updateHomebrewMoveCategory = createApiFunction<

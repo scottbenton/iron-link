@@ -1,6 +1,7 @@
-import { Box, Tooltip, Typography } from "@mui/material";
-import { getIsLocalEnvironment } from "config/environment.config";
 import LinkIcon from "@mui/icons-material/Link";
+import { Box, Tooltip, Typography } from "@mui/material";
+
+import { getIsLocalEnvironment } from "config/environment.config";
 
 export interface AssetHeaderProps {
   category: string;

@@ -1,5 +1,9 @@
 import { deleteDoc } from "firebase/firestore";
-import { getCampaignAssetDoc, getCharacterAssetDoc } from "./_getRef";
+
+import {
+  getCampaignAssetDoc,
+  getCharacterAssetDoc,
+} from "api-calls/assets/_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
 
 export const removeAsset = createApiFunction<
@@ -20,7 +24,7 @@ export const removeAsset = createApiFunction<
     deleteDoc(
       characterId
         ? getCharacterAssetDoc(characterId, assetId)
-        : getCampaignAssetDoc(campaignId as string, assetId)
+        : getCampaignAssetDoc(campaignId as string, assetId),
     )
       .then(() => {
         resolve();

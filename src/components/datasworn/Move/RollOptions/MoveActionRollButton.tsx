@@ -1,12 +1,16 @@
 import { Datasworn } from "@datasworn/core";
-import { Stat } from "../../Stat";
-import { useStatRules } from "atoms/dataswornRules/useStatRules";
-import { useTranslation } from "react-i18next";
 import RollIcon from "@mui/icons-material/Casino";
-import { useRollStatAndAddToLog } from "pages/games/hooks/useRollStatAndAddToLog";
+import { useTranslation } from "react-i18next";
+
 import { useConditionMeterRules } from "atoms/dataswornRules/useConditionMeterRules";
-import { CampaignState, CharacterState } from "./common.types";
-import { MoveActionAssetControl } from "./MoveActionAssetControl";
+import { useStatRules } from "atoms/dataswornRules/useStatRules";
+import {
+  CampaignState,
+  CharacterState,
+} from "components/datasworn/Move/RollOptions/common.types";
+import { MoveActionAssetControl } from "components/datasworn/Move/RollOptions/MoveActionAssetControl";
+import { Stat } from "components/datasworn/Stat";
+import { useRollStatAndAddToLog } from "pages/games/hooks/useRollStatAndAddToLog";
 
 export interface MoveActionRollButtonProps {
   moveId: string;

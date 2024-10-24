@@ -9,7 +9,7 @@ export interface AssetSelectEnhancementFieldProps {
 }
 
 export function AssetSelectEnhancementField(
-  props: AssetSelectEnhancementFieldProps
+  props: AssetSelectEnhancementFieldProps,
 ) {
   const { field, value, onChange } = props;
   const { label, value: defaultValue, choices } = field;
@@ -18,20 +18,20 @@ export function AssetSelectEnhancementField(
   Object.entries(choices).forEach(([choiceKey, choice]) => {
     if (choice.choice_type === "choice_group") {
       children.push(
-        <ListSubheader key={choiceKey}>{choice.name}</ListSubheader>
+        <ListSubheader key={choiceKey}>{choice.name}</ListSubheader>,
       );
       Object.entries(choice.choices).forEach(([subChoiceKey, subChoice]) => {
         children.push(
           <MenuItem key={subChoiceKey} value={subChoiceKey}>
             {capitalize(subChoice.label)}
-          </MenuItem>
+          </MenuItem>,
         );
       });
     } else {
       children.push(
         <MenuItem key={choiceKey} value={choiceKey}>
           {capitalize(choice.label)}
-        </MenuItem>
+        </MenuItem>,
       );
     }
   });

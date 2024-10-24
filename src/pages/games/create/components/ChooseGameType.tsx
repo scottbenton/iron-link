@@ -1,16 +1,20 @@
-import { useTranslation } from "react-i18next";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { Box, Card, CardActionArea, Typography } from "@mui/material";
-import { SectionHeading } from "components/SectionHeading";
+import { useAtomValue } from "jotai";
+import { useTranslation } from "react-i18next";
+
 import { CampaignType } from "api-calls/campaign/_campaign.type";
 import { CampaignTypeIcon } from "assets/CampaignTypeIcon/CampaignTypeIcon";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { derivedAtomWithEquality } from "atoms/derivedAtomWithEquality";
-import { createGameAtom, useSetCreateGameAtom } from "../atoms/createGame.atom";
-import { useAtomValue } from "jotai";
+import { SectionHeading } from "components/SectionHeading";
+import {
+  createGameAtom,
+  useSetCreateGameAtom,
+} from "pages/games/create/atoms/createGame.atom";
 
 const gameTypeAtom = derivedAtomWithEquality(
   createGameAtom,
-  (state) => state.gameType
+  (state) => state.gameType,
 );
 
 export function ChooseGameType() {
@@ -27,15 +31,15 @@ export function ChooseGameType() {
   const descriptions: Record<CampaignType, string> = {
     [CampaignType.Solo]: t(
       "game.type.solo-description",
-      "One player, playing one or more characters."
+      "One player, playing one or more characters.",
     ),
     [CampaignType.Coop]: t(
       "game.type.coop-description",
-      "Two or more players, all playing characters."
+      "Two or more players, all playing characters.",
     ),
     [CampaignType.Guided]: t(
       "game.type.guided-desciption",
-      "One player takes the role of guide, with the rest playing characters."
+      "One player takes the role of guide, with the rest playing characters.",
     ),
   };
 
@@ -48,7 +52,7 @@ export function ChooseGameType() {
       <Typography mt={1} color="text.secondary">
         {t(
           "game.type.guided-description",
-          "How will you be playing your game? Game types help to streamline your experience."
+          "How will you be playing your game? Game types help to streamline your experience.",
         )}
       </Typography>
       <Box

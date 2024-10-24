@@ -1,5 +1,6 @@
 import { arrayUnion, updateDoc } from "firebase/firestore";
-import { getCampaignDoc } from "./_getRef";
+
+import { getCampaignDoc } from "api-calls/campaign/_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
 
 export const addUserToCampaign = createApiFunction<

@@ -1,6 +1,7 @@
-import { AssetDocument } from "api-calls/assets/_asset.type";
 import { atom, useAtom } from "jotai";
 import { useCallback } from "react";
+
+import { AssetDocument } from "api-calls/assets/_asset.type";
 
 export interface ICreateCharacterAtom {
   name: string;
