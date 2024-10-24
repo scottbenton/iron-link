@@ -41,12 +41,9 @@ export function AssetControl(props: AssetControlProps) {
   const { t } = useTranslation();
 
   const characterId = useCharacterIdOptional();
-  const { momentum } = useDerivedCharacterState(
-    characterId,
-    (character) => ({
-      momentum: character?.characterDocument.data?.momentum ?? DEFAULT_MOMENTUM,
-    })
-  );
+  const { momentum } = useDerivedCharacterState(characterId, (character) => ({
+    momentum: character?.characterDocument.data?.momentum ?? DEFAULT_MOMENTUM,
+  }));
 
   const rollConditionMeter = useRollStatAndAddToLog();
   const handleRoll = useCallback(() => {
@@ -54,7 +51,8 @@ export function AssetControl(props: AssetControlProps) {
       rollConditionMeter({
         statId: controlId,
         statLabel: control.label,
-        statModifier: typeof value === "number" ? (value as number) : control.max,
+        statModifier:
+          typeof value === "number" ? (value as number) : control.max,
         momentum,
       });
     }
@@ -98,10 +96,14 @@ export function AssetControl(props: AssetControlProps) {
             disabled={!onControlChange}
             onChange={onControlChange ? handleControlChange : undefined}
             onActionClick={onControlChange ? handleRoll : undefined}
-            action={onControlChange ? {
-              ActionIcon: RollIcon,
-              actionLabel: t("datasworn.roll", "Roll"),
-            } : undefined}
+            action={
+              onControlChange && control.rollable
+                ? {
+                    ActionIcon: RollIcon,
+                    actionLabel: t("datasworn.roll", "Roll"),
+                  }
+                : undefined
+            }
           />
           {subControls && (
             <Box mt={-1}>
