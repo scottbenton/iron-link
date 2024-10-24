@@ -1,4 +1,7 @@
+import DieIcon from "@mui/icons-material/Casino";
+import CheckIcon from "@mui/icons-material/Check";
 import {
+  Box,
   Button,
   Card,
   Chip,
@@ -7,20 +10,18 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { Box } from "@mui/material";
-import { askTheOracleEnumMap } from "data/askTheOracle";
-import { useTranslation } from "react-i18next";
-import { AskTheOracle, Clock, TrackStatus } from "types/Track.type";
-import DieIcon from "@mui/icons-material/Casino";
-import { ClockCircle } from "components/datasworn/Clocks/ClockCircle";
-import CheckIcon from "@mui/icons-material/Check";
-import { useState } from "react";
-import { EditOrCreateClockDialog } from "./EditOrCreateClockDialog";
-import { updateProgressTrack } from "api-calls/tracks/updateProgressTrack";
-import { useRollOracleAndAddToLog } from "pages/games/hooks/useRollOracleAndAddToLog";
 import { useConfirm } from "material-ui-confirm";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
+
 import { removeProgressTrack } from "api-calls/tracks/removeProgressTrack";
+import { updateProgressTrack } from "api-calls/tracks/updateProgressTrack";
 import { useSetAnnouncement } from "atoms/announcement.atom";
+import { ClockCircle } from "components/datasworn/Clocks/ClockCircle";
+import { askTheOracleEnumMap } from "data/askTheOracle";
+import { EditOrCreateClockDialog } from "pages/games/characterSheet/components/TracksSection/EditOrCreateClockDialog";
+import { useRollOracleAndAddToLog } from "pages/games/hooks/useRollOracleAndAddToLog";
+import { AskTheOracle, Clock, TrackStatus } from "types/Track.type";
 
 export interface TrackClockProps {
   clockId: string;
@@ -74,16 +75,16 @@ export function TrackClock(props: TrackClockProps) {
             add,
             value: Math.min(clock.value + add, clock.segments),
             total: clock.segments,
-          }
-        )
+          },
+        ),
       );
     } else {
       announce(
         t(
           "character.character-sidebar.tracks-clock-roll-progress-announcement-no",
           "Clock {{clockLabel}} did not progress",
-          { clockLabel: clock.label }
-        )
+          { clockLabel: clock.label },
+        ),
       );
     }
   };
@@ -92,8 +93,8 @@ export function TrackClock(props: TrackClockProps) {
       t(
         "character.character-sidebar.tracks-clock-roll-progress-announcement-manual",
         "Manually incremented clock {{clockLabel}} to {{value}} of {{total}} segments",
-        { clockLabel: clock.label, value: newSegments, total: clock.segments }
-      )
+        { clockLabel: clock.label, value: newSegments, total: clock.segments },
+      ),
     );
     updateProgressTrack({
       gameId,
@@ -120,7 +121,7 @@ export function TrackClock(props: TrackClockProps) {
     confirm({
       description: t(
         "character.character-sidebar.tracks-delete-confirmation",
-        "Are you sure you want to delete this clock? This action cannot be undone."
+        "Are you sure you want to delete this clock? This action cannot be undone.",
       ),
       confirmationText: t("common.delete", "Delete"),
     })
@@ -200,7 +201,7 @@ export function TrackClock(props: TrackClockProps) {
             <TextField
               label={t(
                 "character.character-sidebar.tracks-clock-oracle-table",
-                "Oracle Table"
+                "Oracle Table",
               )}
               select
               disabled={!canEdit || clock.status === TrackStatus.Completed}
@@ -239,7 +240,7 @@ export function TrackClock(props: TrackClockProps) {
               >
                 {t(
                   "character.character-sidebar.tracks-clock-roll-progress",
-                  "Roll Progress"
+                  "Roll Progress",
                 )}
               </Button>
             )}
@@ -251,7 +252,7 @@ export function TrackClock(props: TrackClockProps) {
               canEdit && clock.status !== TrackStatus.Completed
                 ? () => {
                     onValueChange(
-                      clock.value >= clock.segments ? 0 : clock.value + 1
+                      clock.value >= clock.segments ? 0 : clock.value + 1,
                     );
                   }
                 : undefined
@@ -269,7 +270,7 @@ export function TrackClock(props: TrackClockProps) {
             >
               {t(
                 "character.character-sidebar.tracks-clock-complete-button",
-                "Complete Clock"
+                "Complete Clock",
               )}
             </Button>
           )}
@@ -282,7 +283,7 @@ export function TrackClock(props: TrackClockProps) {
             >
               {t(
                 "character.character-sidebar.tracks-clock-reopen-button",
-                "Reopen Clock"
+                "Reopen Clock",
               )}
             </Button>
           )}
@@ -290,7 +291,7 @@ export function TrackClock(props: TrackClockProps) {
             <Button color={"error"} sx={{ mt: 1 }} onClick={handleDeleteClick}>
               {t(
                 "character.character-sidebar.tracks-clock-delete-button",
-                "Delete Permanently"
+                "Delete Permanently",
               )}
             </Button>
           )}

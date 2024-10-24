@@ -1,10 +1,11 @@
+import { projectId } from "config/firebase.config";
 import { Bytes, setDoc } from "firebase/firestore";
+
+import { createApiFunction } from "api-calls/createApiFunction";
 import {
   constructPrivateDetailsLoreDocPath,
   getPrivateDetailsLoreDoc,
-} from "./_getRef";
-import { projectId } from "config/firebase.config";
-import { createApiFunction } from "api-calls/createApiFunction";
+} from "api-calls/world/lore/_getRef";
 
 interface Params {
   worldId: string;
@@ -20,7 +21,7 @@ export const updateLoreGMNotes = createApiFunction<Params, void>((params) => {
     if (isBeacon) {
       const contentPath = `projects/${projectId}/databases/(default)/documents${constructPrivateDetailsLoreDocPath(
         worldId,
-        loreId
+        loreId,
       )}`;
 
       const token = window.sessionStorage.getItem("id-token") ?? "";
@@ -42,7 +43,7 @@ export const updateLoreGMNotes = createApiFunction<Params, void>((params) => {
               },
             }),
             keepalive: true,
-          }
+          },
         ).catch((e) => console.error(e));
       }
 
@@ -51,7 +52,7 @@ export const updateLoreGMNotes = createApiFunction<Params, void>((params) => {
       setDoc(
         getPrivateDetailsLoreDoc(worldId, loreId),
         { gmNotes: Bytes.fromUint8Array(notes) },
-        { merge: true }
+        { merge: true },
       )
         .then(() => {
           resolve();

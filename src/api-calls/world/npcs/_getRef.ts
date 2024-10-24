@@ -6,8 +6,13 @@ import {
   DocumentReference,
   Timestamp,
 } from "firebase/firestore";
+
+import {
+  GMNPCDocument,
+  NPCDocument,
+  NPCNotesDocument,
+} from "api-calls/world/npcs/_npcs.type";
 import { NPC } from "types/NPCs.type";
-import { GMNPCDocument, NPCNotesDocument, NPCDocument } from "./_npcs.type";
 
 export function constructNPCsPath(worldId: string) {
   return `/worlds/${worldId}/npcs`;
@@ -19,7 +24,7 @@ export function constructNPCDocPath(worldId: string, npcId: string) {
 
 export function constructPrivateDetailsNPCDocPath(
   worldId: string,
-  npcId: string
+  npcId: string,
 ) {
   return constructNPCDocPath(worldId, npcId) + `/private/details`;
 }
@@ -35,7 +40,7 @@ export function constructNPCImagesPath(worldId: string, npcId: string) {
 export function constructNPCImagePath(
   worldId: string,
   npcId: string,
-  filename: string
+  filename: string,
 ) {
   return `/worlds/${worldId}/npcs/${npcId}/${filename}`;
 }
@@ -43,28 +48,28 @@ export function constructNPCImagePath(
 export function getNPCCollection(worldId: string) {
   return collection(
     firestore,
-    constructNPCsPath(worldId)
+    constructNPCsPath(worldId),
   ) as CollectionReference<NPCDocument>;
 }
 
 export function getNPCDoc(worldId: string, npcId: string) {
   return doc(
     firestore,
-    constructNPCDocPath(worldId, npcId)
+    constructNPCDocPath(worldId, npcId),
   ) as DocumentReference<NPCDocument>;
 }
 
 export function getPrivateDetailsNPCDoc(worldId: string, npcId: string) {
   return doc(
     firestore,
-    constructPrivateDetailsNPCDocPath(worldId, npcId)
+    constructPrivateDetailsNPCDocPath(worldId, npcId),
   ) as DocumentReference<GMNPCDocument>;
 }
 
 export function getPublicNotesNPCDoc(worldId: string, npcId: string) {
   return doc(
     firestore,
-    constructPublicNotesNPCDocPath(worldId, npcId)
+    constructPublicNotesNPCDocPath(worldId, npcId),
   ) as DocumentReference<NPCNotesDocument>;
 }
 

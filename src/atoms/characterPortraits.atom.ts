@@ -1,6 +1,7 @@
-import { getCharacterPortraitUrl } from "api-calls/character/getCharacterPortrait";
 import { atom, useAtom } from "jotai";
 import { useEffect, useMemo } from "react";
+
+import { getCharacterPortraitUrl } from "api-calls/character/getCharacterPortrait";
 
 const characterPortraitsAtom = atom<{
   [key: string]: {
@@ -18,15 +19,15 @@ export function useCharacterPortrait(characterId: string) {
   const [portrait] = useAtom(
     useMemo(
       () => atom((get) => get(characterPortraitsAtom)[characterId]),
-      [characterId]
-    )
+      [characterId],
+    ),
   );
   return portrait ?? { url: undefined, filename: "", loading: false };
 }
 
 export function useLoadCharacterPortrait(
   characterId: string,
-  filename?: string
+  filename?: string,
 ) {
   const [portraits, setPortraits] = useCharacterPortraitsAtom();
 

@@ -1,5 +1,9 @@
 import { useCallback } from "react";
-import { ProgressTrack, ProgressTrackProps } from "./ProgressTrack";
+
+import {
+  ProgressTrack,
+  ProgressTrackProps,
+} from "components/datasworn/ProgressTrack/ProgressTrack";
 import { useDebouncedSync } from "hooks/useDebouncedSync";
 
 export interface DebouncedProgressTrackProps
@@ -15,12 +19,12 @@ export function DebouncedProgressTrack(props: DebouncedProgressTrackProps) {
     (value: number) => {
       onChange?.(progressTrackKey, value);
     },
-    [onChange, progressTrackKey]
+    [onChange, progressTrackKey],
   );
 
   const [value, setValue] = useDebouncedSync(
     handleProgressTrackChange,
-    props.value
+    props.value,
   );
 
   return (

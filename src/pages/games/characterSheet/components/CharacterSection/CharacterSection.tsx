@@ -1,10 +1,11 @@
 import { Box } from "@mui/material";
-import { CharacterDetails } from "./CharacterDetails";
-import { Stats } from "./Stats";
-import { ConditionMeters } from "./ConditionMeters";
-import { ImpactsSection } from "./ImpactsSection";
-import { LegacyTracks } from "./LegacyTracks";
-import { ExperienceSection } from "./ExperienceSection";
+
+import { CharacterDetails } from "pages/games/characterSheet/components/CharacterSection/CharacterDetails";
+import { ConditionMeters } from "pages/games/characterSheet/components/CharacterSection/ConditionMeters";
+import { ExperienceSection } from "pages/games/characterSheet/components/CharacterSection/ExperienceSection";
+import { ImpactsSection } from "pages/games/characterSheet/components/CharacterSection/ImpactsSection";
+import { LegacyTracks } from "pages/games/characterSheet/components/CharacterSection/LegacyTracks";
+import { Stats } from "pages/games/characterSheet/components/CharacterSection/Stats";
 
 export function CharacterSection() {
   return (

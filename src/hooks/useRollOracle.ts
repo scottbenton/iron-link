@@ -1,17 +1,18 @@
 import { Datasworn } from "@datasworn/core";
-import { OracleTableRoll, RollType } from "types/DieRolls.type";
-import { rollDie } from "lib/rollDie";
-import { getOracleRollable } from "./datasworn/useOracleRollable";
-import { getOracleCollection } from "./datasworn/useOracleCollection";
-import { useDataswornTree } from "atoms/dataswornTree.atom";
 import { useCallback } from "react";
+
+import { useDataswornTree } from "atoms/dataswornTree.atom";
+import { getOracleCollection } from "hooks/datasworn/useOracleCollection";
+import { getOracleRollable } from "hooks/datasworn/useOracleRollable";
+import { rollDie } from "lib/rollDie";
+import { OracleTableRoll, RollType } from "types/DieRolls.type";
 
 export function useRollOracle() {
   const tree = useDataswornTree();
 
   const handleRollOracle = useCallback(
     (oracleId: string) => rollOracle(oracleId, tree, null, "uid", false),
-    [tree]
+    [tree],
   );
 
   return handleRollOracle;
@@ -22,7 +23,7 @@ export function rollOracle(
   tree: Record<string, Datasworn.RulesPackage>,
   characterId: string | null,
   uid: string,
-  gmsOnly: boolean
+  gmsOnly: boolean,
 ): OracleTableRoll | undefined {
   const oracle =
     getOracleRollable(oracleId, tree) ?? getOracleCollection(oracleId, tree);
@@ -40,7 +41,7 @@ export function rollOracle(
     oracle.oracle_type === "table_shared_text3"
   ) {
     console.error(
-      "Shared Results tables cannot be rolled - please specify a contents table to roll instead."
+      "Shared Results tables cannot be rolled - please specify a contents table to roll instead.",
     );
     return undefined;
   }
@@ -82,7 +83,7 @@ export function rollOracle(
                 tree,
                 characterId,
                 uid,
-                gmsOnly
+                gmsOnly,
               );
               if (subResult) {
                 results.push(subResult.result);
@@ -130,7 +131,7 @@ function rollOracleColumn(column: Datasworn.OracleRollable):
     return undefined;
   }
   const result = column.rows.find(
-    (row) => row.roll && row.roll.min <= roll && row.roll.max >= roll
+    (row) => row.roll && row.roll.min <= roll && row.roll.max >= roll,
   );
   if (!result) {
     console.error("Could not find result for roll", roll);

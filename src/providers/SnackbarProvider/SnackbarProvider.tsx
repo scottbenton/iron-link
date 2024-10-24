@@ -1,6 +1,7 @@
-import { PropsWithChildren } from "react";
 import { SnackbarProvider as NotistackSnackbarProvider } from "notistack";
-import { Snackbar } from "./Snackbar";
+import { PropsWithChildren } from "react";
+
+import { Snackbar } from "providers/SnackbarProvider/Snackbar";
 
 export function SnackbarProvider(props: PropsWithChildren) {
   const { children } = props;

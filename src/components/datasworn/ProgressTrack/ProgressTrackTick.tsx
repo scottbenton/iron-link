@@ -1,5 +1,11 @@
 import { Box } from "@mui/material";
-import { Tick1, Tick2, Tick3, Tick4 } from "./assets";
+
+import {
+  Tick1,
+  Tick2,
+  Tick3,
+  Tick4,
+} from "components/datasworn/ProgressTrack/assets";
 export interface ProgressTrackTickProps {
   value: number;
   size?: number;

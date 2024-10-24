@@ -1,31 +1,32 @@
-import { PageContent, PageHeader } from "components/Layout";
+import { Alert, Box, Button, Step, StepLabel, Stepper } from "@mui/material";
+import { TFunction } from "i18next";
+import { useAtomValue } from "jotai";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { ChooseGameType } from "./components/ChooseGameType";
+import { useNavigate } from "react-router-dom";
+
+import { addAsset } from "api-calls/assets/addAsset";
+import { CampaignType } from "api-calls/campaign/_campaign.type";
+import { addCharacterToCampaign } from "api-calls/campaign/addCharacterToCampaign";
+import { createCampaign } from "api-calls/campaign/createCampaign";
+import { createCharacterAndUploadPortrait } from "api-calls/character/createCharacter";
+import { useAuthAtom } from "atoms/auth.atom";
+import { derivedAtomWithEquality } from "atoms/derivedAtomWithEquality";
+import { GradientButton } from "components/GradientButton";
+import { PageContent, PageHeader } from "components/Layout";
+import { useCreateCharacterAtom } from "pages/games/create/atoms/createCharacter.atom";
 import {
   createGameAtom,
   defaultState,
   ICreateGameAtom,
   useSetCreateGameAtom,
-} from "./atoms/createGame.atom";
-import { Alert, Box, Button, Step, StepLabel, Stepper } from "@mui/material";
-import { derivedAtomWithEquality } from "atoms/derivedAtomWithEquality";
-import { CampaignType } from "api-calls/campaign/_campaign.type";
-import { useAtomValue } from "jotai";
-import { GradientButton } from "components/GradientButton";
-import { RulesetExpansionSection } from "./components/RulesetExpansionSection";
-import { CreateCharacter } from "./components/CreateCharacter";
-import { useSyncActiveRulesPackages } from "./hooks/useSyncActiveRulesPackages";
-import { useCreateCharacterAtom } from "./atoms/createCharacter.atom";
-import { createCampaign } from "api-calls/campaign/createCampaign";
-import { useAuthAtom } from "atoms/auth.atom";
-import { createCharacterAndUploadPortrait } from "api-calls/character/createCharacter";
-import { addCharacterToCampaign } from "api-calls/campaign/addCharacterToCampaign";
-import { useNavigate } from "react-router-dom";
+} from "pages/games/create/atoms/createGame.atom";
+import { ChooseGameType } from "pages/games/create/components/ChooseGameType";
+import { CreateCharacter } from "pages/games/create/components/CreateCharacter";
+import { GameDetails } from "pages/games/create/components/GameDetails";
+import { RulesetExpansionSection } from "pages/games/create/components/RulesetExpansionSection";
+import { useSyncActiveRulesPackages } from "pages/games/create/hooks/useSyncActiveRulesPackages";
 import { pathConfig } from "pages/pathConfig";
-import { GameDetails } from "./components/GameDetails";
-import { TFunction } from "i18next";
-import { addAsset } from "api-calls/assets/addAsset";
 
 interface StepConfig {
   label: string;
@@ -47,7 +48,7 @@ const chooseRulesetStep = (t: TFunction): StepConfig => ({
     ) {
       return t(
         "game.create.rulesets-required-error",
-        "Please select at least one ruleset"
+        "Please select at least one ruleset",
       );
     }
   },
@@ -88,7 +89,7 @@ const derivedSteps = (t: TFunction) =>
           gameSettingsStep(t),
         ];
       }
-    }
+    },
   );
 
 export function CreateGamePage() {
@@ -147,7 +148,7 @@ export function CreateGamePage() {
             stats,
             characterAssets,
             portrait,
-            campaignId
+            campaignId,
           );
 
           const gameAssetPromises = gameAssets.map((asset) => {
@@ -171,8 +172,8 @@ export function CreateGamePage() {
                   setError(
                     t(
                       "game.create.error-adding-character-to-game",
-                      "Error adding character to game"
-                    )
+                      "Error adding character to game",
+                    ),
                   );
                 });
             })
@@ -181,8 +182,8 @@ export function CreateGamePage() {
               setError(
                 t(
                   "game.create.error-creating-character",
-                  "Error creating character"
-                )
+                  "Error creating character",
+                ),
               );
             });
         } else {
@@ -199,7 +200,7 @@ export function CreateGamePage() {
 
   useSyncActiveRulesPackages(
     createGameValue.rulesets,
-    createGameValue.expansions
+    createGameValue.expansions,
   );
 
   return (

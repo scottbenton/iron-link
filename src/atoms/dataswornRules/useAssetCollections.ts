@@ -1,9 +1,10 @@
 import { CollectionId, Datasworn, IdParser } from "@datasworn/core";
 import { Primary } from "@datasworn/core/dist/StringId";
-import { dataswornTreeAtom } from "atoms/dataswornTree.atom";
 import { atom, useAtomValue } from "jotai";
-import { getRulesetFromId } from "./getRulesetFromId";
-import { CollectionMap } from "./collectionMap.type";
+
+import { CollectionMap } from "atoms/dataswornRules/collectionMap.type";
+import { getRulesetFromId } from "atoms/dataswornRules/getRulesetFromId";
+import { dataswornTreeAtom } from "atoms/dataswornTree.atom";
 
 export type AssetCollectionMap = CollectionMap<Datasworn.AssetCollection>;
 
@@ -13,7 +14,7 @@ const assetCollectionsAtom = atom((get) => {
   IdParser.tree = trees;
   const rootAssetCollections = CollectionId.getMatches(
     "asset_collection:*/*",
-    trees
+    trees,
   );
 
   const assetCollectionMap: AssetCollectionMap = {};
@@ -39,7 +40,7 @@ const assetCollectionsAtom = atom((get) => {
             collection.replaces.forEach((replacedKey) => {
               const collections = CollectionId.getMatches(
                 replacedKey as Primary,
-                trees
+                trees,
               );
               collections.forEach((replacedCollection) => {
                 if (replacedCollection.type === "asset_collection") {
@@ -54,7 +55,7 @@ const assetCollectionsAtom = atom((get) => {
             collection.enhances.forEach((enhancedKey) => {
               const collections = CollectionId.getMatches(
                 enhancedKey as Primary,
-                trees
+                trees,
               );
               collections.forEach((enhancedCollection) => {
                 if (enhancedCollection.type === "asset_collection") {
@@ -70,9 +71,9 @@ const assetCollectionsAtom = atom((get) => {
             });
             delete assetCollectionMap[rulesetKey].collections[collectionKey];
           }
-        }
+        },
       );
-    }
+    },
   );
 
   return assetCollectionMap;

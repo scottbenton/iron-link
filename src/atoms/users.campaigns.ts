@@ -1,13 +1,14 @@
-import { atom, useAtom, useAtomValue } from "jotai";
-import { useCurrentUserUID } from "./auth.atom";
-import { useEffect } from "react";
 import { Unsubscribe } from "firebase/firestore";
-import { getErrorMessage } from "lib/getErrorMessage";
 import { t } from "i18next";
+import { atom, useAtom, useAtomValue } from "jotai";
+import { useEffect } from "react";
+
 import { CampaignDocument } from "api-calls/campaign/_campaign.type";
 import { listenToUsersCampaigns } from "api-calls/campaign/listenToUsersCampaigns";
 import { CharacterDocument } from "api-calls/character/_character.type";
 import { getCharacter } from "api-calls/character/getCharacter";
+import { useCurrentUserUID } from "atoms/auth.atom";
+import { getErrorMessage } from "lib/getErrorMessage";
 
 interface CampaignCharacterPortraitSettingsEntry {
   shouldLoad: boolean;
@@ -92,14 +93,14 @@ export function useSyncUsersCampaigns() {
         (error) => {
           const errorMessage = getErrorMessage(
             error,
-            t("game.list.load-failure", "Failed to load games")
+            t("game.list.load-failure", "Failed to load games"),
           );
           setUsersCampaigns((prev) => ({
             ...prev,
             loading: false,
             error: errorMessage,
           }));
-        }
+        },
       );
     }
 
@@ -138,7 +139,7 @@ export function useSyncUsersCampaigns() {
             }));
           });
         }
-      }
+      },
     );
   }, [setUsersCampaigns, campaignCharacterPortraitSettings]);
 }

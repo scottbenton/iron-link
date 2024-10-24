@@ -1,14 +1,15 @@
 import { getDocs } from "firebase/firestore";
-import { removeNote } from "./removeNote";
+
+import { createApiFunction } from "api-calls/createApiFunction";
 import {
   getCampaignNoteCollection,
   getCharacterNoteCollection,
-} from "./_getRef";
-import { createApiFunction } from "api-calls/createApiFunction";
+} from "api-calls/notes/_getRef";
+import { removeNote } from "api-calls/notes/removeNote";
 
 function getAllNotes(
   campaignId: string | undefined,
-  characterId: string | undefined
+  characterId: string | undefined,
 ): Promise<string[]> {
   return new Promise<string[]>((resolve, reject) => {
     if (!characterId && !campaignId) {
@@ -18,7 +19,7 @@ function getAllNotes(
     getDocs(
       characterId
         ? getCharacterNoteCollection(characterId)
-        : getCampaignNoteCollection(campaignId as string)
+        : getCampaignNoteCollection(campaignId as string),
     )
       .then((snapshot) => {
         const ids = snapshot.docs.map((doc) => doc.id);
@@ -42,7 +43,7 @@ export const deleteNotes = createApiFunction<
     getAllNotes(campaignId, characterId)
       .then((noteIds) => {
         const promises = noteIds.map((noteId) =>
-          removeNote({ campaignId, characterId, noteId })
+          removeNote({ campaignId, characterId, noteId }),
         );
         Promise.all(promises)
           .then(() => {

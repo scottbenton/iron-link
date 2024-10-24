@@ -1,6 +1,7 @@
 import { onSnapshot, query, where } from "firebase/firestore";
+
 import { CampaignDocument } from "api-calls/campaign/_campaign.type";
-import { getCampaignCollection } from "./_getRef";
+import { getCampaignCollection } from "api-calls/campaign/_getRef";
 
 export function listenToUsersCampaigns(
   uid: string,
@@ -10,11 +11,11 @@ export function listenToUsersCampaigns(
     onLoaded: () => void;
   },
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  onError: (error: any) => void
+  onError: (error: any) => void,
 ) {
   const campaignsQuery = query(
     getCampaignCollection(),
-    where("users", "array-contains", uid)
+    where("users", "array-contains", uid),
   );
   return onSnapshot(
     campaignsQuery,
@@ -30,6 +31,6 @@ export function listenToUsersCampaigns(
         dataHandler.onLoaded();
       }
     },
-    (error) => onError(error)
+    (error) => onError(error),
   );
 }

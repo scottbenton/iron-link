@@ -1,7 +1,8 @@
-import { createApiFunction } from "api-calls/createApiFunction";
 import { PartialWithFieldValue, updateDoc } from "firebase/firestore";
+
+import { createApiFunction } from "api-calls/createApiFunction";
+import { getHomebrewOracleTableDoc } from "api-calls/homebrew/oracles/tables/_getRef";
 import { HomebrewOracleTableDocument } from "api-calls/homebrew/oracles/tables/_homebrewOracleTable.type";
-import { getHomebrewOracleTableDoc } from "./_getRef";
 
 export const updateHomebrewOracleTable = createApiFunction<
   {

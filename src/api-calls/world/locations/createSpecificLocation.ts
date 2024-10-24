@@ -1,6 +1,10 @@
 import { addDoc } from "firebase/firestore";
-import { convertToDatabase, getLocationCollection } from "./_getRef";
+
 import { createApiFunction } from "api-calls/createApiFunction";
+import {
+  convertToDatabase,
+  getLocationCollection,
+} from "api-calls/world/locations/_getRef";
 import { Location } from "types/Locations.type";
 
 export const createSpecificLocation = createApiFunction<

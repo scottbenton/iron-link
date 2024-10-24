@@ -1,6 +1,7 @@
 import { addDoc, Timestamp } from "firebase/firestore";
-import { getLoreCollection } from "./_getRef";
+
 import { createApiFunction } from "api-calls/createApiFunction";
+import { getLoreCollection } from "api-calls/world/lore/_getRef";
 
 export const createLore = createApiFunction<
   { worldId: string; shared?: boolean },

@@ -1,8 +1,9 @@
+import { TextField } from "@mui/material";
 import { useAtom } from "jotai";
 import { useTranslation } from "react-i18next";
-import { createGameAtom } from "../atoms/createGame.atom";
+
 import { SectionHeading } from "components/SectionHeading";
-import { TextField } from "@mui/material";
+import { createGameAtom } from "pages/games/create/atoms/createGame.atom";
 
 export function GameDetails() {
   const { t } = useTranslation();

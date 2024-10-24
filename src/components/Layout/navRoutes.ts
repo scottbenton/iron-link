@@ -1,11 +1,12 @@
-import CharacterIcon from "@mui/icons-material/Person";
-import GamesIcon from "@mui/icons-material/Group";
-import WorldsIcon from "@mui/icons-material/TravelExplore";
 import HomebrewIcon from "@mui/icons-material/Edit";
+import GamesIcon from "@mui/icons-material/Group";
+import CharacterIcon from "@mui/icons-material/Person";
 import SignInIcon from "@mui/icons-material/Person";
 import SignUpIcon from "@mui/icons-material/PersonAddAlt1";
-import { pathConfig } from "pages/pathConfig";
+import WorldsIcon from "@mui/icons-material/TravelExplore";
+
 import { i18n } from "i18n/config";
+import { pathConfig } from "pages/pathConfig";
 
 export interface NavRouteConfig {
   Logo: typeof CharacterIcon;

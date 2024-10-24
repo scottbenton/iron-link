@@ -1,11 +1,12 @@
 import { deleteDoc } from "firebase/firestore";
+
+import { createApiFunction } from "api-calls/createApiFunction";
 import {
   getCampaignNoteContentDocument,
   getCampaignNoteDocument,
   getCharacterNoteContentDocument,
   getCharacterNoteDocument,
-} from "./_getRef";
-import { createApiFunction } from "api-calls/createApiFunction";
+} from "api-calls/notes/_getRef";
 
 export const removeNote = createApiFunction<
   {
@@ -24,13 +25,13 @@ export const removeNote = createApiFunction<
     const deleteNotePromise = deleteDoc(
       characterId
         ? getCharacterNoteDocument(characterId, noteId)
-        : getCampaignNoteDocument(campaignId as string, noteId)
+        : getCampaignNoteDocument(campaignId as string, noteId),
     );
 
     const deleteContentPromise = deleteDoc(
       characterId
         ? getCharacterNoteContentDocument(characterId, noteId)
-        : getCampaignNoteContentDocument(campaignId as string, noteId)
+        : getCampaignNoteContentDocument(campaignId as string, noteId),
     );
 
     Promise.all([deleteNotePromise, deleteContentPromise])

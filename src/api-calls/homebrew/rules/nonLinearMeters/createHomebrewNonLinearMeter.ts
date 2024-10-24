@@ -1,6 +1,7 @@
-import { createApiFunction } from "api-calls/createApiFunction";
 import { addDoc } from "firebase/firestore";
-import { getHomebrewNonLinearMeterCollection } from "./_getRef";
+
+import { createApiFunction } from "api-calls/createApiFunction";
+import { getHomebrewNonLinearMeterCollection } from "api-calls/homebrew/rules/nonLinearMeters/_getRef";
 import { HomebrewNonLinearMeterDocument } from "api-calls/homebrew/rules/nonLinearMeters/_homebrewNonLinearMeter.type";
 
 export const createHomebrewNonLinearMeter = createApiFunction<

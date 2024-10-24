@@ -1,3 +1,4 @@
+import CloseIcon from "@mui/icons-material/Close";
 import { Box, DialogTitle, IconButton, Typography } from "@mui/material";
 import {
   PropsWithChildren,
@@ -6,17 +7,17 @@ import {
   useRef,
   useState,
 } from "react";
-import CloseIcon from "@mui/icons-material/Close";
-import { ScreenReaderOnly } from "./ScreenReaderOnly";
-import { useAnnouncement } from "atoms/announcement.atom";
 import { useTranslation } from "react-i18next";
+
+import { useAnnouncement } from "atoms/announcement.atom";
+import { ScreenReaderOnly } from "components/ScreenReaderOnly";
 
 export interface DialogTitleWithCloseButtonProps extends PropsWithChildren {
   onClose: () => void;
   actions?: ReactNode;
 }
 export function DialogTitleWithCloseButton(
-  props: DialogTitleWithCloseButtonProps
+  props: DialogTitleWithCloseButtonProps,
 ) {
   const { children, actions, onClose } = props;
 

@@ -1,6 +1,7 @@
-import { createApiFunction } from "api-calls/createApiFunction";
 import { deleteDoc } from "firebase/firestore";
-import { getHomebrewImpactsDoc } from "./_getRef";
+
+import { createApiFunction } from "api-calls/createApiFunction";
+import { getHomebrewImpactsDoc } from "api-calls/homebrew/rules/impacts/_getRef";
 
 export const deleteHomebrewImpactCategory = createApiFunction<
   {

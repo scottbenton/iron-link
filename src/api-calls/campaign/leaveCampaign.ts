@@ -1,8 +1,9 @@
 import { arrayRemove, updateDoc } from "firebase/firestore";
+
 import { CampaignDocument } from "api-calls/campaign/_campaign.type";
-import { getCampaignDoc } from "./_getRef";
-import { updateCampaignGM } from "./updateCampaignGM";
-import { removeCharacterFromCampaign } from "./removeCharacterFromCampaign";
+import { getCampaignDoc } from "api-calls/campaign/_getRef";
+import { removeCharacterFromCampaign } from "api-calls/campaign/removeCharacterFromCampaign";
+import { updateCampaignGM } from "api-calls/campaign/updateCampaignGM";
 import { createApiFunction } from "api-calls/createApiFunction";
 
 export const leaveCampaign = createApiFunction<
@@ -15,7 +16,7 @@ export const leaveCampaign = createApiFunction<
 
     if (campaign.gmIds?.includes(uid)) {
       allPromises.push(
-        updateCampaignGM({ campaignId, gmId: uid, shouldRemove: true })
+        updateCampaignGM({ campaignId, gmId: uid, shouldRemove: true }),
       );
     }
     Object.values(campaign.characters).forEach((character) => {
@@ -25,7 +26,7 @@ export const leaveCampaign = createApiFunction<
             uid,
             campaignId,
             characterId: character.characterId,
-          })
+          }),
         );
       }
     });
@@ -33,7 +34,7 @@ export const leaveCampaign = createApiFunction<
     allPromises.push(
       updateDoc(getCampaignDoc(campaignId), {
         users: arrayRemove(uid),
-      })
+      }),
     );
 
     Promise.all(allPromises)

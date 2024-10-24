@@ -1,5 +1,6 @@
 import { Box, LinearProgress, SxProps, Theme } from "@mui/material";
-import { EmptyState } from "./EmptyState";
+
+import { EmptyState } from "components/Layout/EmptyState";
 
 export interface GridLayoutProps<T> {
   items: T[];

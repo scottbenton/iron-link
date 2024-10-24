@@ -1,7 +1,8 @@
 import { getDocs } from "firebase/firestore";
-import { removeProgressTrack } from "./removeProgressTrack";
-import { getCampaignTracksCollection } from "./_getRef";
+
 import { createApiFunction } from "api-calls/createApiFunction";
+import { getCampaignTracksCollection } from "api-calls/tracks/_getRef";
+import { removeProgressTrack } from "api-calls/tracks/removeProgressTrack";
 
 function getAllProgressTracks(gameId: string): Promise<string[]> {
   return new Promise<string[]>((resolve, reject) => {
@@ -24,7 +25,7 @@ export const deleteAllProgressTracks = createApiFunction<
     getAllProgressTracks(gameId)
       .then((trackIds) => {
         const promises = trackIds.map((trackId) =>
-          removeProgressTrack({ gameId, id: trackId })
+          removeProgressTrack({ gameId, id: trackId }),
         );
         Promise.all(promises)
           .then(() => {

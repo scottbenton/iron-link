@@ -1,14 +1,15 @@
-import { useRollOracle } from "hooks/useRollOracle";
 import { useCallback } from "react";
-import { useUID } from "atoms/auth.atom";
-import { useParams } from "react-router-dom";
-import { addRoll } from "api-calls/game-log/addRoll";
-import { createId } from "lib/id.lib";
-import { OracleTableRoll } from "types/DieRolls.type";
-import { useSnackbar } from "providers/SnackbarProvider";
 import { useTranslation } from "react-i18next";
+import { useParams } from "react-router-dom";
+
+import { addRoll } from "api-calls/game-log/addRoll";
+import { useUID } from "atoms/auth.atom";
 import { useAddRollSnackbar } from "atoms/rollDisplay.atom";
-import { useDerivedCharacterState } from "../characterSheet/hooks/useDerivedCharacterState";
+import { useRollOracle } from "hooks/useRollOracle";
+import { createId } from "lib/id.lib";
+import { useDerivedCharacterState } from "pages/games/characterSheet/hooks/useDerivedCharacterState";
+import { useSnackbar } from "providers/SnackbarProvider";
+import { OracleTableRoll } from "types/DieRolls.type";
 
 export function useRollOracleAndAddToLog() {
   const uid = useUID();
@@ -19,7 +20,7 @@ export function useRollOracleAndAddToLog() {
 
   const characterOwner = useDerivedCharacterState(
     characterId,
-    (character) => character?.characterDocument.data?.uid
+    (character) => character?.characterDocument.data?.uid,
   );
 
   const addRollSnackbar = useAddRollSnackbar();
@@ -33,7 +34,7 @@ export function useRollOracleAndAddToLog() {
   const handleRollOracle = useCallback(
     (
       oracleId: string,
-      gmOnly: boolean = false
+      gmOnly: boolean = false,
     ): { id: string | undefined; result: OracleTableRoll | undefined } => {
       const result = rollOracle(oracleId);
       if (result) {
@@ -47,7 +48,7 @@ export function useRollOracleAndAddToLog() {
         if (campaignId) {
           const rollId = createId();
           addRoll({ campaignId, rollId, roll: resultWithAdditions }).catch(
-            () => {}
+            () => {},
           );
           addRollSnackbar(rollId, resultWithAdditions);
           return {
@@ -62,7 +63,7 @@ export function useRollOracleAndAddToLog() {
         };
       } else {
         error(
-          t("datasworn.roll-oracle.oracle-not-found", "Could not find oracle")
+          t("datasworn.roll-oracle.oracle-not-found", "Could not find oracle"),
         );
       }
       return {
@@ -79,7 +80,7 @@ export function useRollOracleAndAddToLog() {
       t,
       addRollSnackbar,
       characterOwner,
-    ]
+    ],
   );
 
   return handleRollOracle;

@@ -6,6 +6,7 @@ import {
   ListItemText,
   ListSubheader,
 } from "@mui/material";
+
 import {
   AssetCollectionMap,
   RootAssetCollections,
@@ -55,8 +56,8 @@ export function AssetCollectionSidebar(props: AssetCollectionSidebarProps) {
                         ? "grey.100"
                         : "grey.200"
                       : index % 2 === 0
-                      ? "grey.900"
-                      : "grey.800",
+                        ? "grey.900"
+                        : "grey.800",
                 })}
               >
                 <ListItemButton
@@ -72,7 +73,7 @@ export function AssetCollectionSidebar(props: AssetCollectionSidebarProps) {
               </ListItem>
             ))}
           </List>
-        )
+        ),
       )}
     </Card>
   );

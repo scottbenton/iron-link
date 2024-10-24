@@ -1,10 +1,11 @@
-import {
-  CollectionReference,
-  DocumentReference,
-  collection,
-  doc,
-} from "firebase/firestore";
 import { firestore } from "config/firebase.config";
+import {
+  collection,
+  CollectionReference,
+  doc,
+  DocumentReference,
+} from "firebase/firestore";
+
 import { HomebrewOracleTableDocument } from "api-calls/homebrew/oracles/tables/_homebrewOracleTable.type";
 
 export function constructHomebrewOracleTableCollectionPath() {
@@ -18,13 +19,13 @@ export function constructHomebrewOracleTableDocPath(tableId: string) {
 export function getHomebrewOracleTableCollection() {
   return collection(
     firestore,
-    constructHomebrewOracleTableCollectionPath()
+    constructHomebrewOracleTableCollectionPath(),
   ) as CollectionReference<HomebrewOracleTableDocument>;
 }
 
 export function getHomebrewOracleTableDoc(tableId: string) {
   return doc(
     firestore,
-    constructHomebrewOracleTableDocPath(tableId)
+    constructHomebrewOracleTableDocPath(tableId),
   ) as DocumentReference<HomebrewOracleTableDocument>;
 }

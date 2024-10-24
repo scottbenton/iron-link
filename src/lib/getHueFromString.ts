@@ -9,7 +9,7 @@ export function getHueFromString(str: string = "") {
 export function getHSLFromString(
   str: string = "",
   saturation: number,
-  lightness: number
+  lightness: number,
 ) {
   const hue = getHueFromString(str);
   return `hsl(${hue}, ${saturation}%, ${lightness}%)`;

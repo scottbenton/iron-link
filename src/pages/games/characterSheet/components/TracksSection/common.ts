@@ -1,4 +1,5 @@
 import { TFunction } from "i18next";
+
 import { TrackTypes } from "types/Track.type";
 
 export function getTrackTypeLabel(type: TrackTypes, t: TFunction): string {

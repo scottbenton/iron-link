@@ -1,9 +1,10 @@
 import { addDoc } from "firebase/firestore";
+
+import { AssetDocument } from "api-calls/assets/_asset.type";
 import {
   getCampaignAssetCollection,
   getCharacterAssetCollection,
-} from "./_getRef";
-import { AssetDocument } from "api-calls/assets/_asset.type";
+} from "api-calls/assets/_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
 
 interface AddAssetParams {
@@ -24,7 +25,7 @@ export const addAsset = createApiFunction<AddAssetParams, void>((params) => {
       characterId
         ? getCharacterAssetCollection(characterId)
         : getCampaignAssetCollection(campaignId as string),
-      asset
+      asset,
     )
       .then(() => {
         resolve();

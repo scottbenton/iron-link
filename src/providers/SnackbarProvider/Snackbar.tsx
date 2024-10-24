@@ -1,11 +1,10 @@
-import { ForwardedRef, forwardRef } from "react";
-import { CustomContentProps } from "notistack";
 import { Alert } from "@mui/material";
-import { closeSnackbar } from "notistack";
+import { closeSnackbar, CustomContentProps } from "notistack";
+import { ForwardedRef, forwardRef } from "react";
 
 const SnackbarComponent = (
   props: CustomContentProps,
-  ref: ForwardedRef<HTMLDivElement>
+  ref: ForwardedRef<HTMLDivElement>,
 ) => {
   const { message, variant, action, id, style } = props;
   return (
@@ -24,5 +23,5 @@ const SnackbarComponent = (
 };
 
 export const Snackbar = forwardRef<HTMLDivElement, CustomContentProps>(
-  SnackbarComponent
+  SnackbarComponent,
 );

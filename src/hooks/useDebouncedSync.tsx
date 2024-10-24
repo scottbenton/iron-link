@@ -9,7 +9,7 @@ import {
 export function useDebouncedSync<State>(
   persistChanges: ((state: State) => void) | undefined,
   initialState: State,
-  delay = 2000
+  delay = 2000,
 ): [State, (value: SetStateAction<State>) => void] {
   const [state, setState] = useState<State>(initialState);
   const stateRef = useRef<State>(state);
@@ -52,7 +52,7 @@ export function useDebouncedSync<State>(
     if (typeof newState === "function") {
       setState((prevState) => {
         const newStateValue = (newState as (prevState: State) => State)(
-          prevState
+          prevState,
         );
         stateRef.current = newStateValue;
         return newStateValue;

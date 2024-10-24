@@ -1,6 +1,10 @@
 import { Meta, StoryObj } from "@storybook/react";
-import { NavBar } from "../NavBar";
-import { authenticatedNavRoutes, unauthenticatedNavRoutes } from "../navRoutes";
+
+import { NavBar } from "components/Layout/NavBar";
+import {
+  authenticatedNavRoutes,
+  unauthenticatedNavRoutes,
+} from "components/Layout/navRoutes";
 
 const meta = {
   title: "Layout/NavBar",

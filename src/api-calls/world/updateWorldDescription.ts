@@ -1,7 +1,8 @@
-import { Bytes, updateDoc } from "firebase/firestore";
-import { constructWorldDocPath, getWorldDoc } from "./_getRef";
 import { projectId } from "config/firebase.config";
+import { Bytes, updateDoc } from "firebase/firestore";
+
 import { createApiFunction } from "api-calls/createApiFunction";
+import { constructWorldDocPath, getWorldDoc } from "api-calls/world/_getRef";
 
 export const updateWorldDescription = createApiFunction<
   {
@@ -17,7 +18,7 @@ export const updateWorldDescription = createApiFunction<
     // If we are making this call when closing the page, we want to use a fetch call with keepalive
     if (isBeaconRequest) {
       const worldDocPath = `projects/${projectId}/databases/(default)/documents${constructWorldDocPath(
-        worldId
+        worldId,
       )}`;
 
       const token = window.sessionStorage.getItem("id-token") ?? "";
@@ -39,7 +40,7 @@ export const updateWorldDescription = createApiFunction<
               },
             }),
             keepalive: true,
-          }
+          },
         ).catch((e) => reject(e));
       }
 

@@ -7,7 +7,7 @@ export interface ScreenReaderOnlyProps {
 }
 
 export function ScreenReaderOnly(
-  props: PropsWithChildren<ScreenReaderOnlyProps>
+  props: PropsWithChildren<ScreenReaderOnlyProps>,
 ) {
   const { id, live, children } = props;
 

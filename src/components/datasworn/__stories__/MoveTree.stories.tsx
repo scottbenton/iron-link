@@ -1,5 +1,6 @@
 import { Meta, StoryObj } from "@storybook/react";
-import { MoveTree } from "../MoveTree";
+
+import { MoveTree } from "components/datasworn/MoveTree";
 
 const meta = {
   title: "Datasworn/MoveTree",

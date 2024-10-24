@@ -1,10 +1,11 @@
 import { Box, SxProps, Theme, Typography } from "@mui/material";
+import { useTranslation } from "react-i18next";
+
+import { OracleButton } from "components/datasworn/Oracle/OracleButton";
+import { OracleTable } from "components/datasworn/Oracle/OracleTable";
 import { EmptyState } from "components/Layout/EmptyState";
 import { MarkdownRenderer } from "components/MarkdownRenderer";
 import { useOracleRollable } from "hooks/datasworn/useOracleRollable";
-import { useTranslation } from "react-i18next";
-import { OracleTable } from "./OracleTable";
-import { OracleButton } from "./OracleButton";
 
 export interface OracleProps {
   oracleId: string;
@@ -24,7 +25,7 @@ export function Oracle(props: OracleProps) {
         message={t(
           "datasworn.oracles.not-found",
           "Could not find oracle with id {{oracleId}}",
-          { oracleId }
+          { oracleId },
         )}
       />
     );

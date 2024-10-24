@@ -1,5 +1,21 @@
-import { ProgressTrack } from "components/datasworn/ProgressTrack";
+import CheckIcon from "@mui/icons-material/Check";
+import { Box, Button } from "@mui/material";
+import { useConfirm } from "material-ui-confirm";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
+
+import { removeProgressTrack } from "api-calls/tracks/removeProgressTrack";
+import { updateProgressTrack } from "api-calls/tracks/updateProgressTrack";
+import { useSetAnnouncement } from "atoms/announcement.atom";
+import { DebouncedClockCircle } from "components/datasworn/Clocks/DebouncedClockCircle";
+import { ProgressTrack } from "components/datasworn/ProgressTrack";
+import {
+  getTrackTypeLabel,
+  trackCompletionMoveIds,
+} from "pages/games/characterSheet/components/TracksSection/common";
+import { EditOrCreateTrackDialog } from "pages/games/characterSheet/components/TracksSection/EditOrCreateTrackDialog";
+import { TrackCompletionMoveButton } from "pages/games/characterSheet/components/TracksSection/TrackCompletionMoveButton";
+import { useIsOwnerOfCharacter } from "pages/games/characterSheet/hooks/useIsOwnerOfCharacter";
 import {
   Difficulty,
   ProgressTrack as IProgressTrack,
@@ -7,18 +23,6 @@ import {
   TrackStatus,
   TrackTypes,
 } from "types/Track.type";
-import { EditOrCreateTrackDialog } from "./EditOrCreateTrackDialog";
-import { Box, Button } from "@mui/material";
-import CheckIcon from "@mui/icons-material/Check";
-import { useTranslation } from "react-i18next";
-import { useSetAnnouncement } from "atoms/announcement.atom";
-import { useConfirm } from "material-ui-confirm";
-import { updateProgressTrack } from "api-calls/tracks/updateProgressTrack";
-import { removeProgressTrack } from "api-calls/tracks/removeProgressTrack";
-import { DebouncedClockCircle } from "components/datasworn/Clocks/DebouncedClockCircle";
-import { getTrackTypeLabel, trackCompletionMoveIds } from "./common";
-import { useIsOwnerOfCharacter } from "../../hooks/useIsOwnerOfCharacter";
-import { TrackCompletionMoveButton } from "./TrackCompletionMoveButton";
 
 export interface TrackProgressTrackProps {
   trackId: string;
@@ -63,8 +67,8 @@ export function TrackProgressTrack(props: TrackProgressTrackProps) {
             {
               label: track.label,
               status,
-            }
-          )
+            },
+          ),
         );
       })
       .catch(() => {});
@@ -76,7 +80,7 @@ export function TrackProgressTrack(props: TrackProgressTrackProps) {
         "Are you sure you want to delete {{label}}? This action cannot be undone.",
         {
           label: track.label,
-        }
+        },
       ),
       confirmationText: t("common.delete", "Delete"),
     })
@@ -92,8 +96,8 @@ export function TrackProgressTrack(props: TrackProgressTrackProps) {
                 "{{label}} has been deleted",
                 {
                   label: track.label,
-                }
-              )
+                },
+              ),
             );
           })
           .catch(() => {});
@@ -128,8 +132,8 @@ export function TrackProgressTrack(props: TrackProgressTrackProps) {
               {
                 label: track.label,
                 status,
-              }
-            )
+              },
+            ),
           );
         })
         .catch(() => {});
@@ -197,7 +201,7 @@ export function TrackProgressTrack(props: TrackProgressTrackProps) {
             >
               {t(
                 "character.character-sidebar.tracks-progress-track-complete-button",
-                "Complete Track"
+                "Complete Track",
               )}
             </Button>
           )}
@@ -210,7 +214,7 @@ export function TrackProgressTrack(props: TrackProgressTrackProps) {
             >
               {t(
                 "character.character-sidebar.tracks-progress-track-reopen-button",
-                "Reopen Track"
+                "Reopen Track",
               )}
             </Button>
           )}
@@ -218,7 +222,7 @@ export function TrackProgressTrack(props: TrackProgressTrackProps) {
             <Button color={"error"} sx={{ mt: 1 }} onClick={handleDeleteClick}>
               {t(
                 "character.character-sidebar.tracks-progress-track-delete-button",
-                "Delete Permanently"
+                "Delete Permanently",
               )}
             </Button>
           )}

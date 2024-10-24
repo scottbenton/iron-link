@@ -1,11 +1,12 @@
 import { deleteDoc } from "firebase/firestore";
+
+import { createApiFunction } from "api-calls/createApiFunction";
 import {
   constructLoreImagesPath,
   getLoreDoc,
   getPrivateDetailsLoreDoc,
   getPublicNotesLoreDoc,
-} from "./_getRef";
-import { createApiFunction } from "api-calls/createApiFunction";
+} from "api-calls/world/lore/_getRef";
 import { deleteImage } from "lib/storage.lib";
 
 interface Params {
@@ -24,7 +25,7 @@ export const deleteLore = createApiFunction<Params, void>((params) => {
     promises.push(deleteDoc(getPublicNotesLoreDoc(worldId, loreId)));
     if (imageFilename) {
       promises.push(
-        deleteImage(constructLoreImagesPath(worldId, loreId), imageFilename)
+        deleteImage(constructLoreImagesPath(worldId, loreId), imageFilename),
       );
     }
 

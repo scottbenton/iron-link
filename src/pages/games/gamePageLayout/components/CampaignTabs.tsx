@@ -1,17 +1,18 @@
-import { derivedAtomWithEquality } from "atoms/derivedAtomWithEquality";
-import { currentCampaignAtom } from "../atoms/campaign.atom";
-import { campaignCharactersAtom } from "../atoms/campaign.characters.atom";
-import { useAtomValue } from "jotai";
-import { useAuthAtom } from "atoms/auth.atom";
-import { useLocation, useParams } from "react-router-dom";
 import { Tab, Tabs } from "@mui/material";
+import { useAtomValue } from "jotai";
 import { useTranslation } from "react-i18next";
+import { useLocation, useParams } from "react-router-dom";
+
+import { useAuthAtom } from "atoms/auth.atom";
+import { derivedAtomWithEquality } from "atoms/derivedAtomWithEquality";
 import { LinkComponent } from "components/LinkComponent";
+import { currentCampaignAtom } from "pages/games/gamePageLayout/atoms/campaign.atom";
+import { campaignCharactersAtom } from "pages/games/gamePageLayout/atoms/campaign.characters.atom";
 import { pathConfig } from "pages/pathConfig";
 
 const campaignCharacterList = derivedAtomWithEquality(
   currentCampaignAtom,
-  (atom) => atom.campaign?.characters ?? []
+  (atom) => atom.campaign?.characters ?? [],
 );
 const characterNames = derivedAtomWithEquality(
   campaignCharactersAtom,
@@ -21,7 +22,7 @@ const characterNames = derivedAtomWithEquality(
       names[characterId] = characterState.characterDocument.data?.name;
     });
     return names;
-  }
+  },
 );
 
 export function CampaignTabs() {
@@ -32,7 +33,7 @@ export function CampaignTabs() {
   const { t } = useTranslation();
   const { pathname } = useLocation();
   const isOnCharacterCreatePage = pathname.match(
-    /\/games\/[^/]*\/create[/]?$/i
+    /\/games\/[^/]*\/create[/]?$/i,
   );
 
   const characterList = useAtomValue(campaignCharacterList);

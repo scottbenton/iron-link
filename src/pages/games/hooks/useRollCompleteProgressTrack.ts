@@ -1,18 +1,19 @@
 import { useCallback } from "react";
-import { TrackTypes } from "types/Track.type";
-import { getRoll } from "./useRollStatAndAddToLog";
-import { RollResult, RollType, TrackProgressRoll } from "types/DieRolls.type";
-import { useCharacterIdOptional } from "../characterSheet/hooks/useCharacterId";
-import { useIsOwnerOfCharacter } from "../characterSheet/hooks/useIsOwnerOfCharacter";
-import { useCampaignId } from "../gamePageLayout/hooks/useCampaignId";
-import { useUID } from "atoms/auth.atom";
-import { addRoll } from "api-calls/game-log/addRoll";
-import { createId } from "lib/id.lib";
-import { useAddRollSnackbar } from "atoms/rollDisplay.atom";
-import { useSetAnnouncement } from "atoms/announcement.atom";
 import { useTranslation } from "react-i18next";
+
+import { addRoll } from "api-calls/game-log/addRoll";
+import { useSetAnnouncement } from "atoms/announcement.atom";
+import { useUID } from "atoms/auth.atom";
+import { useAddRollSnackbar } from "atoms/rollDisplay.atom";
 import { getRollResultLabel } from "data/rollResultLabel";
-import { getTrackTypeLabel } from "../characterSheet/components/TracksSection/common";
+import { createId } from "lib/id.lib";
+import { getTrackTypeLabel } from "pages/games/characterSheet/components/TracksSection/common";
+import { useCharacterIdOptional } from "pages/games/characterSheet/hooks/useCharacterId";
+import { useIsOwnerOfCharacter } from "pages/games/characterSheet/hooks/useIsOwnerOfCharacter";
+import { useCampaignId } from "pages/games/gamePageLayout/hooks/useCampaignId";
+import { getRoll } from "pages/games/hooks/useRollStatAndAddToLog";
+import { RollResult, RollType, TrackProgressRoll } from "types/DieRolls.type";
+import { TrackTypes } from "types/Track.type";
 
 export function useRollCompleteProgressTrack() {
   const { t } = useTranslation();
@@ -31,7 +32,7 @@ export function useRollCompleteProgressTrack() {
       trackType: TrackTypes,
       trackLabel: string,
       trackProgress: number,
-      moveId: string
+      moveId: string,
     ) => {
       const challenge1 = getRoll(10);
       const challenge2 = getRoll(10);
@@ -53,7 +54,7 @@ export function useRollCompleteProgressTrack() {
         trackProgress,
         trackType,
         result,
-        characterId: isCharacterOwner ? characterId ?? null : null,
+        characterId: isCharacterOwner ? (characterId ?? null) : null,
         uid,
         gmsOnly: false,
         moveId,
@@ -78,8 +79,8 @@ export function useRollCompleteProgressTrack() {
             challenge1,
             challenge2,
             rollResult: getRollResultLabel(result),
-          }
-        )
+          },
+        ),
       );
 
       return result;
@@ -92,7 +93,7 @@ export function useRollCompleteProgressTrack() {
       uid,
       isCharacterOwner,
       t,
-    ]
+    ],
   );
 
   return rollProgressTrack;

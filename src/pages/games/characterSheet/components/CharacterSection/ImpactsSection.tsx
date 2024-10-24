@@ -1,5 +1,7 @@
+import EditIcon from "@mui/icons-material/Edit";
 import {
   Box,
+  Button,
   capitalize,
   Card,
   Checkbox,
@@ -10,17 +12,16 @@ import {
   IconButton,
   Typography,
 } from "@mui/material";
-import { useImpactRules } from "atoms/dataswornRules/useImpactRules";
-import { useTranslation } from "react-i18next";
-import EditIcon from "@mui/icons-material/Edit";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
+
+import { updateCharacter } from "api-calls/character/updateCharacter";
+import { useImpactRules } from "atoms/dataswornRules/useImpactRules";
 import { DialogTitleWithCloseButton } from "components/DialogTitleWithCloseButton";
 import { GridLayout } from "components/Layout";
-import { updateCharacter } from "api-calls/character/updateCharacter";
-import { Button } from "@mui/material";
-import { useCharacterId } from "../../hooks/useCharacterId";
-import { useDerivedCharacterState } from "../../hooks/useDerivedCharacterState";
-import { useIsOwnerOfCharacter } from "../../hooks/useIsOwnerOfCharacter";
+import { useCharacterId } from "pages/games/characterSheet/hooks/useCharacterId";
+import { useDerivedCharacterState } from "pages/games/characterSheet/hooks/useDerivedCharacterState";
+import { useIsOwnerOfCharacter } from "pages/games/characterSheet/hooks/useIsOwnerOfCharacter";
 
 export function ImpactsSection() {
   const characterId = useCharacterId();
@@ -28,7 +29,7 @@ export function ImpactsSection() {
 
   const impacts = useDerivedCharacterState(
     characterId,
-    (character) => character?.characterDocument.data?.debilities ?? {}
+    (character) => character?.characterDocument.data?.debilities ?? {},
   );
   const { impactCategories, impacts: impactRules } = useImpactRules();
 
@@ -37,7 +38,7 @@ export function ImpactsSection() {
   const activeImpactString: string =
     Object.entries(impacts)
       .filter(
-        ([impactKey, impactValue]) => impactValue && impactRules[impactKey]
+        ([impactKey, impactValue]) => impactValue && impactRules[impactKey],
       )
       .map(([impactKey]) => impactRules[impactKey].label)
       .join(", ") || t("character.character-sidebar.no-impacts", "None");
@@ -67,7 +68,7 @@ export function ImpactsSection() {
             <IconButton
               aria-label={t(
                 "character.character-sidebar.edit-impacts",
-                "Edit Impacts"
+                "Edit Impacts",
               )}
               onClick={() => setIsImpactDialogOpen(true)}
             >
@@ -120,14 +121,14 @@ export function ImpactsSection() {
                         }
                         label={capitalize(impactRule.label)}
                       />
-                    )
+                    ),
                   )}
                 </Box>
               </Box>
             )}
             emptyStateMessage={t(
               "character.character-sidebar.no-impacts-found",
-              "No impacts found"
+              "No impacts found",
             )}
             minWidth={150}
           />

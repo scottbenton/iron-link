@@ -1,6 +1,7 @@
-import { createApiFunction } from "api-calls/createApiFunction";
 import { deleteDoc } from "firebase/firestore";
-import { getHomebrewLegacyTrackDoc } from "./_getRef";
+
+import { createApiFunction } from "api-calls/createApiFunction";
+import { getHomebrewLegacyTrackDoc } from "api-calls/homebrew/rules/legacyTracks/_getRef";
 
 export const deleteHomebrewLegacyTrack = createApiFunction<
   {

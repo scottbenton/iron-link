@@ -1,11 +1,12 @@
-import { CharacterDocument } from "api-calls/character/_character.type";
-import { atom, useAtom, useAtomValue } from "jotai";
-import { useCurrentUserUID } from "./auth.atom";
-import { useEffect } from "react";
 import { Unsubscribe } from "firebase/firestore";
-import { listenToUsersCharacters } from "api-calls/character/listenToUsersCharacters";
-import { getErrorMessage } from "lib/getErrorMessage";
 import { t } from "i18next";
+import { atom, useAtom, useAtomValue } from "jotai";
+import { useEffect } from "react";
+
+import { CharacterDocument } from "api-calls/character/_character.type";
+import { listenToUsersCharacters } from "api-calls/character/listenToUsersCharacters";
+import { useCurrentUserUID } from "atoms/auth.atom";
+import { getErrorMessage } from "lib/getErrorMessage";
 
 const usersCharactersAtom = atom<{
   characters: Record<string, CharacterDocument>;
@@ -64,14 +65,14 @@ export function useSyncUsersCharacters() {
         (error) => {
           const errorMessage = getErrorMessage(
             error,
-            t("character.load-failure", "Failed to load characters")
+            t("character.load-failure", "Failed to load characters"),
           );
           setUsersCharacters((prev) => ({
             ...prev,
             loading: false,
             error: errorMessage,
           }));
-        }
+        },
       );
     }
 

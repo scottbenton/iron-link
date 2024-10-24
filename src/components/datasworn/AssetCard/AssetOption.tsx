@@ -1,7 +1,8 @@
 import { Datasworn } from "@datasworn/core";
-import { AssetTextField } from "./fields/AssetTextField";
-import { AssetSelectEnhancementField } from "./fields/AssetSelectEnhancementField";
-import { AssetSelectValueField } from "./fields/AssetSelectValueField";
+
+import { AssetSelectEnhancementField } from "components/datasworn/AssetCard/fields/AssetSelectEnhancementField";
+import { AssetSelectValueField } from "components/datasworn/AssetCard/fields/AssetSelectValueField";
+import { AssetTextField } from "components/datasworn/AssetCard/fields/AssetTextField";
 
 export interface AssetOptionProps {
   assetOptionKey: string;

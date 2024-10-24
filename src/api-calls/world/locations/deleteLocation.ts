@@ -1,11 +1,12 @@
 import { deleteDoc } from "firebase/firestore";
+
+import { createApiFunction } from "api-calls/createApiFunction";
 import {
   constructLocationImagesPath,
   getLocationDoc,
   getPrivateDetailsLocationDoc,
   getPublicNotesLocationDoc,
-} from "./_getRef";
-import { createApiFunction } from "api-calls/createApiFunction";
+} from "api-calls/world/locations/_getRef";
 import { deleteImage } from "lib/storage.lib";
 
 interface Params {
@@ -26,8 +27,8 @@ export const deleteLocation = createApiFunction<Params, void>((params) => {
       promises.push(
         deleteImage(
           constructLocationImagesPath(worldId, locationId),
-          imageFilename
-        )
+          imageFilename,
+        ),
       );
     }
     Promise.all(promises)

@@ -1,13 +1,14 @@
 import { onSnapshot, setDoc } from "firebase/firestore";
-import { decodeDataswornId } from "lib/dataswornIdEncoder";
+
+import { getUserOracleSettingsDoc } from "api-calls/user/settings/_getRef";
 import { OracleSettingsDocument } from "api-calls/user/settings/_settings.type";
-import { getUserOracleSettingsDoc } from "./_getRef";
+import { decodeDataswornId } from "lib/dataswornIdEncoder";
 
 export function listenToOracleSettings(
   uid: string,
   onOracleSettings: (settings: OracleSettingsDocument) => void,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  onError: (error: any) => void
+  onError: (error: any) => void,
 ) {
   return onSnapshot(
     getUserOracleSettingsDoc(uid),
@@ -37,6 +38,6 @@ export function listenToOracleSettings(
     (error) => {
       console.error(error);
       onError(error);
-    }
+    },
   );
 }

@@ -1,18 +1,19 @@
 import { Datasworn } from "@datasworn/core";
+import OracleTableIcon from "@mui/icons-material/List";
 import { IconButton, ListItemText, Tooltip } from "@mui/material";
+import { useTranslation } from "react-i18next";
+
+import { useOpenDataswornDialog } from "atoms/dataswornDialog.atom";
 import {
   OracleVisibilityState,
   VisibilitySettings,
-} from "./getOracleCollectionVisiblity";
-import { useRollOracleAndAddToLog } from "pages/games/hooks/useRollOracleAndAddToLog";
+} from "components/datasworn/OracleTree/getOracleCollectionVisiblity";
+import { ListItemButtonWithSecondaryAction } from "components/datasworn/OracleTree/ListItemButtonWithSecondaryAction";
 import {
   CampaignPermissionType,
   useCampaignPermissions,
 } from "pages/games/gamePageLayout/hooks/usePermissions";
-import OracleTableIcon from "@mui/icons-material/List";
-import { ListItemButtonWithSecondaryAction } from "./ListItemButtonWithSecondaryAction";
-import { useTranslation } from "react-i18next";
-import { useOpenDataswornDialog } from "atoms/dataswornDialog.atom";
+import { useRollOracleAndAddToLog } from "pages/games/hooks/useRollOracleAndAddToLog";
 
 export interface OracleListItemProps {
   oracle: Datasworn.OracleRollable;
@@ -56,7 +57,7 @@ export function OracleListItem(props: OracleListItemProps) {
         <Tooltip
           title={t(
             "datasworn.oracle.view-full-table-button",
-            "View full table"
+            "View full table",
           )}
         >
           <span>

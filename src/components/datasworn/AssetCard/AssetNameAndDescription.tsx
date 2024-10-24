@@ -1,6 +1,7 @@
-import { Box, Tooltip, Typography } from "@mui/material";
-import { MarkdownRenderer } from "components/MarkdownRenderer";
 import GroupIcon from "@mui/icons-material/Group";
+import { Box, Tooltip, Typography } from "@mui/material";
+
+import { MarkdownRenderer } from "components/MarkdownRenderer";
 
 export interface AssetNameAndDescriptionProps {
   name: string;

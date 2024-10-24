@@ -3,20 +3,20 @@ import {
   DocumentData,
   onSnapshot,
   query,
-  where,
   Unsubscribe,
+  where,
 } from "firebase/firestore";
 
 export type HomebrewListenerFunction<T> = (
   homebrewId: string,
   updateData: (data: Record<string, T>) => void,
-  onError: (error: unknown) => void
+  onError: (error: unknown) => void,
 ) => Unsubscribe;
 
 export function createHomebrewListenerFunction<
-  T extends { collectionId: string }
+  T extends { collectionId: string },
 >(
-  collectionRef: CollectionReference<T, DocumentData>
+  collectionRef: CollectionReference<T, DocumentData>,
 ): HomebrewListenerFunction<T> {
   return (homebrewId, updateData, onError) => {
     return onSnapshot(
@@ -31,7 +31,7 @@ export function createHomebrewListenerFunction<
       (error) => {
         console.error(error);
         onError(error);
-      }
+      },
     );
   };
 }

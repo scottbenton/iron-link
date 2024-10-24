@@ -1,16 +1,17 @@
+import DeleteIcon from "@mui/icons-material/Delete";
 import { ListItemIcon, ListItemText, MenuItem } from "@mui/material";
-import { useCampaignId } from "pages/games/gamePageLayout/hooks/useCampaignId";
-import { pathConfig } from "pages/pathConfig";
-import { useNavigate } from "react-router-dom";
-import { useCharacterId } from "../../hooks/useCharacterId";
-import { useDerivedCharacterState } from "../../hooks/useDerivedCharacterState";
-import { useDerivedCampaignDocumentState } from "pages/games/gamePageLayout/hooks/useDerivedCampaignState";
+import { useConfirm } from "material-ui-confirm";
 import { useCallback } from "react";
 import { useTranslation } from "react-i18next";
-import DeleteIcon from "@mui/icons-material/Delete";
-import { deleteCharacter } from "api-calls/character/deleteCharacter";
+import { useNavigate } from "react-router-dom";
+
 import { deleteCampaign } from "api-calls/campaign/deleteCampaign";
-import { useConfirm } from "material-ui-confirm";
+import { deleteCharacter } from "api-calls/character/deleteCharacter";
+import { useCharacterId } from "pages/games/characterSheet/hooks/useCharacterId";
+import { useDerivedCharacterState } from "pages/games/characterSheet/hooks/useDerivedCharacterState";
+import { useCampaignId } from "pages/games/gamePageLayout/hooks/useCampaignId";
+import { useDerivedCampaignDocumentState } from "pages/games/gamePageLayout/hooks/useDerivedCampaignState";
+import { pathConfig } from "pages/pathConfig";
 
 export interface DeleteCharacterButtonProps {
   closeMenu: () => void;
@@ -26,10 +27,10 @@ export function DeleteCharacterButton(props: DeleteCharacterButtonProps) {
   const characterId = useCharacterId();
   const portraitFilename = useDerivedCharacterState(
     characterId,
-    (store) => store?.characterDocument.data?.profileImage?.filename
+    (store) => store?.characterDocument.data?.profileImage?.filename,
   );
   const campaignCharacters = useDerivedCampaignDocumentState(
-    (state) => state?.characters
+    (state) => state?.characters,
   );
 
   const confirm = useConfirm();
@@ -37,11 +38,11 @@ export function DeleteCharacterButton(props: DeleteCharacterButtonProps) {
     confirm({
       title: t(
         "character.character-sidebar.delete-character",
-        "Delete Character"
+        "Delete Character",
       ),
       description: t(
         "character.character-sidebar.delete-character-confirmation",
-        "Are you sure you want to delete this character? This action cannot be undone."
+        "Are you sure you want to delete this character? This action cannot be undone.",
       ),
       confirmationText: t("common.delete", "Delete"),
     })
@@ -52,7 +53,7 @@ export function DeleteCharacterButton(props: DeleteCharacterButtonProps) {
           navigate(
             alsoDeleteCampaign
               ? pathConfig.gameSelect
-              : pathConfig.game(campaignId)
+              : pathConfig.game(campaignId),
           );
           deleteCharacter({
             characterId,
@@ -90,7 +91,7 @@ export function DeleteCharacterButton(props: DeleteCharacterButtonProps) {
       <ListItemText
         primary={t(
           "character.character-sidebar.delete-character",
-          "Delete Character"
+          "Delete Character",
         )}
       />
     </MenuItem>

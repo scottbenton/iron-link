@@ -1,19 +1,20 @@
-import { App } from "App";
-import { Layout } from "components/Layout";
 import {
   createBrowserRouter,
   createRoutesFromElements,
   Route,
 } from "react-router-dom";
-import { LoginPage } from "./auth/LoginPage";
-import { SignUpPage } from "./auth/SignUpPage";
-import { GameSelectPage } from "./games/selectPage/GameSelectPage";
-import { CreateGamePage } from "./games/create/CreateGamePage";
-import { GameLayout } from "./games/gamePageLayout/GameLayout";
-import { AddCharacter } from "./games/addCharacter/AddCharacter";
-import { CharacterSheetPage } from "./games/characterSheet/CharacterSheetPage";
-import { GameOverviewSheet } from "./games/overviewSheet/GameOverviewSheet";
-import { GameJoinPage } from "./games/join/GameJoinPage";
+
+import { App } from "App";
+import { Layout } from "components/Layout";
+import { LoginPage } from "pages/auth/LoginPage";
+import { SignUpPage } from "pages/auth/SignUpPage";
+import { AddCharacter } from "pages/games/addCharacter/AddCharacter";
+import { CharacterSheetPage } from "pages/games/characterSheet/CharacterSheetPage";
+import { CreateGamePage } from "pages/games/create/CreateGamePage";
+import { GameLayout } from "pages/games/gamePageLayout/GameLayout";
+import { GameJoinPage } from "pages/games/join/GameJoinPage";
+import { GameOverviewSheet } from "pages/games/overviewSheet/GameOverviewSheet";
+import { GameSelectPage } from "pages/games/selectPage/GameSelectPage";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -39,6 +40,6 @@ export const router = createBrowserRouter(
           <Route index element={<div>Homebrew</div>} />
         </Route>
       </Route>
-    </Route>
-  )
+    </Route>,
+  ),
 );

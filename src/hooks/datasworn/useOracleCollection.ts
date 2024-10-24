@@ -1,10 +1,11 @@
 import { Datasworn, IdParser } from "@datasworn/core";
-import { useDataswornTree } from "atoms/dataswornTree.atom";
 import { useEffect, useState } from "react";
+
+import { useDataswornTree } from "atoms/dataswornTree.atom";
 
 export function getOracleCollection(
   oracleCollectionId: string,
-  tree: Record<string, Datasworn.RulesPackage>
+  tree: Record<string, Datasworn.RulesPackage>,
 ): Datasworn.OracleCollection | undefined {
   try {
     IdParser.tree = tree;
@@ -22,7 +23,7 @@ export function getOracleCollection(
 }
 
 export function useOracleCollection(
-  oracleCollectionId: string
+  oracleCollectionId: string,
 ): Datasworn.OracleCollection | undefined {
   const tree = useDataswornTree();
   const [oracleCollection, setOracleCollection] = useState<

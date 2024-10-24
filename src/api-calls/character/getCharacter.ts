@@ -1,7 +1,8 @@
 import { getDoc } from "firebase/firestore";
-import { getCharacterDoc } from "./_getRef";
+
+import { CharacterDocument } from "api-calls/character/_character.type";
+import { getCharacterDoc } from "api-calls/character/_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
-import { CharacterDocument } from "./_character.type";
 
 export const getCharacter = createApiFunction<string, CharacterDocument>(
   (characterId) => {
@@ -20,5 +21,5 @@ export const getCharacter = createApiFunction<string, CharacterDocument>(
         });
     });
   },
-  "Failed to load character."
+  "Failed to load character.",
 );

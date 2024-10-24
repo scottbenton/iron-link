@@ -1,13 +1,14 @@
 import { firestore } from "config/firebase.config";
 import {
+  collection,
   CollectionReference,
+  doc,
   DocumentReference,
   Timestamp,
-  collection,
-  doc,
 } from "firebase/firestore";
+
+import { GameLogDocument } from "api-calls/game-log/_game-log.type";
 import { Roll } from "types/DieRolls.type";
-import { GameLogDocument } from "./_game-log.type";
 
 export function constructCampaignGameLogCollectionPath(campaignId: string) {
   return `/campaigns/${campaignId}/game-log`;
@@ -15,7 +16,7 @@ export function constructCampaignGameLogCollectionPath(campaignId: string) {
 
 export function constructCampaignGameLogDocPath(
   campaignId: string,
-  logId: string
+  logId: string,
 ) {
   return `/campaigns/${campaignId}/game-log/${logId}`;
 }
@@ -23,14 +24,14 @@ export function constructCampaignGameLogDocPath(
 export function getCampaignGameLogCollection(campaignId: string) {
   return collection(
     firestore,
-    constructCampaignGameLogCollectionPath(campaignId)
+    constructCampaignGameLogCollectionPath(campaignId),
   ) as CollectionReference<GameLogDocument>;
 }
 
 export function getCampaignGameLogDocument(campaignId: string, logId: string) {
   return doc(
     firestore,
-    constructCampaignGameLogDocPath(campaignId, logId)
+    constructCampaignGameLogDocPath(campaignId, logId),
   ) as DocumentReference<GameLogDocument>;
 }
 

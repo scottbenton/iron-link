@@ -1,7 +1,11 @@
 import { PartialWithFieldValue, updateDoc } from "firebase/firestore";
-import { getCampaignAssetDoc, getCharacterAssetDoc } from "./_getRef";
-import { createApiFunction } from "api-calls/createApiFunction";
+
 import { AssetDocument } from "api-calls/assets/_asset.type";
+import {
+  getCampaignAssetDoc,
+  getCharacterAssetDoc,
+} from "api-calls/assets/_getRef";
+import { createApiFunction } from "api-calls/createApiFunction";
 
 export const updateAsset = createApiFunction<
   {
@@ -22,7 +26,7 @@ export const updateAsset = createApiFunction<
       characterId
         ? getCharacterAssetDoc(characterId, assetId)
         : getCampaignAssetDoc(campaignId as string, assetId),
-      asset
+      asset,
     )
       .then(() => {
         resolve();

@@ -1,7 +1,8 @@
 import { Datasworn } from "@datasworn/core";
-import { AssetDocument } from "api-calls/assets/_asset.type";
-import { AssetControl } from "./AssetControl";
 import { Stack } from "@mui/material";
+
+import { AssetDocument } from "api-calls/assets/_asset.type";
+import { AssetControl } from "components/datasworn/AssetCard/AssetControl";
 
 export interface AssetControlsProps {
   controls:
@@ -14,7 +15,7 @@ export interface AssetControlsProps {
   spacing?: number;
   onControlChange?: (
     controlKey: string,
-    value: boolean | string | number
+    value: boolean | string | number,
   ) => void;
 }
 export function AssetControls(props: AssetControlsProps) {

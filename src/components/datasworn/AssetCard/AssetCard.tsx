@@ -1,12 +1,13 @@
-import { Box, Card, Stack, SxProps, Theme, Typography } from "@mui/material";
-import { useAsset } from "hooks/datasworn/useAsset";
-import { AssetNameAndDescription } from "./AssetNameAndDescription";
-import { AssetOptions } from "./AssetOptions";
-import { AssetDocument } from "api-calls/assets/_asset.type";
-import { AssetAbilities } from "./AssetAbilities";
-import { AssetHeader } from "./AssetHeader";
-import { AssetControls } from "./AssetControls";
 import { Datasworn } from "@datasworn/core";
+import { Box, Card, Stack, SxProps, Theme, Typography } from "@mui/material";
+
+import { AssetDocument } from "api-calls/assets/_asset.type";
+import { AssetAbilities } from "components/datasworn/AssetCard/AssetAbilities";
+import { AssetControls } from "components/datasworn/AssetCard/AssetControls";
+import { AssetHeader } from "components/datasworn/AssetCard/AssetHeader";
+import { AssetNameAndDescription } from "components/datasworn/AssetCard/AssetNameAndDescription";
+import { AssetOptions } from "components/datasworn/AssetCard/AssetOptions";
+import { useAsset } from "hooks/datasworn/useAsset";
 
 export interface AssetCardProps {
   assetId: string;
@@ -18,7 +19,7 @@ export interface AssetCardProps {
   onAssetOptionChange?: (assetOptionKey: string, value: string) => void;
   onAssetControlChange?: (
     controlKey: string,
-    value: boolean | string | number
+    value: boolean | string | number,
   ) => void;
 
   hideUnavailableAbilities?: boolean;

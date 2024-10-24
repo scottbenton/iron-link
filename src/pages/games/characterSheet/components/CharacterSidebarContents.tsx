@@ -1,11 +1,12 @@
-import { StyledTab, StyledTabs } from "components/StyledTabs";
-import { useTranslation } from "react-i18next";
-import { CharacterSection } from "./CharacterSection";
 import { Box, Typography } from "@mui/material";
 import { useState } from "react";
-import { CharacterSettingsMenu } from "./CharacterSettingsMenu";
-import { AssetsSection } from "./AssetsSection";
-import { TracksSection } from "./TracksSection";
+import { useTranslation } from "react-i18next";
+
+import { StyledTab, StyledTabs } from "components/StyledTabs";
+import { AssetsSection } from "pages/games/characterSheet/components/AssetsSection";
+import { CharacterSection } from "pages/games/characterSheet/components/CharacterSection";
+import { CharacterSettingsMenu } from "pages/games/characterSheet/components/CharacterSettingsMenu";
+import { TracksSection } from "pages/games/characterSheet/components/TracksSection";
 
 enum Tabs {
   Overview = "overview",

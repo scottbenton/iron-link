@@ -1,5 +1,6 @@
 import { firestore } from "config/firebase.config";
 import { doc, DocumentReference } from "firebase/firestore";
+
 import { UserDocument } from "api-calls/user/_user.type";
 
 export function constructUserDocPath(userId: string) {
@@ -9,6 +10,6 @@ export function constructUserDocPath(userId: string) {
 export function getUsersDoc(userId: string) {
   return doc(
     firestore,
-    constructUserDocPath(userId)
+    constructUserDocPath(userId),
   ) as DocumentReference<UserDocument>;
 }

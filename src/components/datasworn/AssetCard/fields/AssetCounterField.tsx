@@ -1,5 +1,6 @@
 import { Datasworn } from "@datasworn/core";
-import { ConditionMeter } from "../../ConditonMeter";
+
+import { ConditionMeter } from "components/datasworn/ConditonMeter";
 
 export interface AssetCounterFieldProps {
   value?: number;

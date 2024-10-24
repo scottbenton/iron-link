@@ -1,5 +1,9 @@
 import { arrayRemove, arrayUnion, setDoc } from "firebase/firestore";
-import { getCampaignSettingsDoc, getCharacterSettingsDoc } from "./_getRef";
+
+import {
+  getCampaignSettingsDoc,
+  getCharacterSettingsDoc,
+} from "api-calls/character-campaign-settings/_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
 
 export const showOrHideCustomMove = createApiFunction<
@@ -26,7 +30,7 @@ export const showOrHideCustomMove = createApiFunction<
       {
         hiddenCustomMoveIds: hidden ? arrayUnion(moveId) : arrayRemove(moveId),
       },
-      { merge: true }
+      { merge: true },
     )
       .then(() => {
         resolve();

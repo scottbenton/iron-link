@@ -1,5 +1,6 @@
 import { Meta, StoryObj } from "@storybook/react";
-import { AssetCard } from "../AssetCard";
+
+import { AssetCard } from "components/datasworn/AssetCard";
 
 const meta = {
   title: "Datasworn/AssetCard",

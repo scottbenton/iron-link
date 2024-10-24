@@ -1,14 +1,15 @@
 import { Unsubscribe } from "firebase/auth";
 import { onSnapshot } from "firebase/firestore";
-import { GMNPC } from "types/NPCs.type";
-import { getPrivateDetailsNPCDoc } from "./_getRef";
+
+import { getPrivateDetailsNPCDoc } from "api-calls/world/npcs/_getRef";
 import { getErrorMessage } from "lib/getErrorMessage";
+import { GMNPC } from "types/NPCs.type";
 
 export function listenToNPCGMProperties(
   worldId: string,
   npcId: string,
   updateGMProperties: (properties: GMNPC | undefined) => void,
-  onError: (error: string) => void
+  onError: (error: string) => void,
 ): Unsubscribe {
   return onSnapshot(
     getPrivateDetailsNPCDoc(worldId, npcId),
@@ -22,6 +23,6 @@ export function listenToNPCGMProperties(
     },
     (error) => {
       onError(getErrorMessage(error, "Failed to get npc gm notes"));
-    }
+    },
   );
 }

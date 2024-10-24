@@ -1,15 +1,16 @@
 import { deleteDoc, getDocs } from "firebase/firestore";
+
 import {
   getCampaignAssetCollection,
   getCampaignAssetDoc,
   getCharacterAssetCollection,
   getCharacterAssetDoc,
-} from "./_getRef";
+} from "api-calls/assets/_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
 
 function getAllAssets(
   campaignId: string | undefined,
-  characterId: string | undefined
+  characterId: string | undefined,
 ): Promise<string[]> {
   return new Promise<string[]>((resolve, reject) => {
     if (!characterId && !campaignId) {
@@ -19,7 +20,7 @@ function getAllAssets(
     getDocs(
       characterId
         ? getCharacterAssetCollection(characterId)
-        : getCampaignAssetCollection(campaignId as string)
+        : getCampaignAssetCollection(campaignId as string),
     )
       .then((snapshot) => {
         const ids = snapshot.docs.map((doc) => doc.id);
@@ -46,8 +47,8 @@ export const deleteAllAssets = createApiFunction<
           deleteDoc(
             characterId
               ? getCharacterAssetDoc(characterId, assetId)
-              : getCampaignAssetDoc(campaignId as string, assetId)
-          )
+              : getCampaignAssetDoc(campaignId as string, assetId),
+          ),
         );
         Promise.all(promises)
           .then(() => {

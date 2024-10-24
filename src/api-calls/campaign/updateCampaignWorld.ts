@@ -1,5 +1,6 @@
 import { arrayUnion, deleteField, updateDoc } from "firebase/firestore";
-import { getCampaignDoc } from "./_getRef";
+
+import { getCampaignDoc } from "api-calls/campaign/_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
 import { getWorldDoc } from "api-calls/world/_getRef";
 

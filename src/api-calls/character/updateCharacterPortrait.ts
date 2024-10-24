@@ -1,10 +1,11 @@
 import { updateDoc } from "firebase/firestore";
-import { replaceImage } from "lib/storage.lib";
+
 import {
   constructCharacterPortraitFolderPath,
   getCharacterDoc,
-} from "./_getRef";
+} from "api-calls/character/_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
+import { replaceImage } from "lib/storage.lib";
 
 export const updateCharacterPortrait = createApiFunction<
   {
@@ -26,7 +27,7 @@ export const updateCharacterPortrait = createApiFunction<
       replaceImagePromise = replaceImage(
         constructCharacterPortraitFolderPath(characterId),
         oldPortraitFilename,
-        portrait
+        portrait,
       );
     } else {
       replaceImagePromise = Promise.resolve();
@@ -47,7 +48,7 @@ export const updateCharacterPortrait = createApiFunction<
             : {
                 "profileImage.position": position,
                 "profileImage.scale": scale,
-              }
+              },
         )
           .then(() => {
             resolve();

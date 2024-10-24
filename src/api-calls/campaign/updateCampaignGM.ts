@@ -1,5 +1,6 @@
-import { arrayUnion, arrayRemove, updateDoc } from "firebase/firestore";
-import { getCampaignDoc } from "./_getRef";
+import { arrayRemove, arrayUnion, updateDoc } from "firebase/firestore";
+
+import { getCampaignDoc } from "api-calls/campaign/_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
 import { getWorldDoc } from "api-calls/world/_getRef";
 
@@ -27,7 +28,7 @@ export const updateCampaignGM = createApiFunction<
                 }
               : {
                   gmIds: arrayRemove(gmId),
-                }
+                },
           )
             .then(() => {
               resolve();
@@ -51,7 +52,7 @@ export const updateCampaignGM = createApiFunction<
           }
         : {
             gmIds: arrayRemove(gmId),
-          }
+          },
     )
       .then(() => {
         resolve();

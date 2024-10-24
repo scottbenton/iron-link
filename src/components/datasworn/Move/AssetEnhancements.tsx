@@ -1,13 +1,18 @@
-import { AssetDocument } from "api-calls/assets/_asset.type";
-import { ActionRolls, CampaignState, CharacterState } from "./RollOptions";
-import { useDataswornTree } from "atoms/dataswornTree.atom";
 import { Datasworn, IdParser } from "@datasworn/core";
-import { getAsset } from "hooks/datasworn/useAsset";
-import { useMemo } from "react";
 import { Primary } from "@datasworn/core/dist/StringId";
 import { Box, Typography } from "@mui/material";
+import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
+
+import { AssetDocument } from "api-calls/assets/_asset.type";
+import { useDataswornTree } from "atoms/dataswornTree.atom";
+import {
+  ActionRolls,
+  CampaignState,
+  CharacterState,
+} from "components/datasworn/Move/RollOptions";
 import { MarkdownRenderer } from "components/MarkdownRenderer";
+import { getAsset } from "hooks/datasworn/useAsset";
 
 export interface AssetEnhancementsProps {
   moveId: string;
@@ -27,7 +32,7 @@ export function AssetEnhancements(props: AssetEnhancementsProps) {
 
   const activeAssetMoveEnhancements = useMemo(() => {
     return Object.values(
-      getEnhancementsFromAssets(moveId, assetDocuments, tree)
+      getEnhancementsFromAssets(moveId, assetDocuments, tree),
     );
   }, [moveId, assetDocuments, tree]);
 
@@ -45,7 +50,7 @@ export function AssetEnhancements(props: AssetEnhancementsProps) {
       {activeAssetMoveEnhancements.map(
         (
           { assetName, assetInputName, assetAbilityText, actionRolls },
-          index
+          index,
         ) => (
           <Box key={index} p={1} bgcolor="background.default" borderRadius={1}>
             <Typography textTransform="uppercase" fontFamily="fontFamilyTitle">
@@ -53,12 +58,12 @@ export function AssetEnhancements(props: AssetEnhancementsProps) {
                 ? t(
                     "datasworn.move.asset-enhancement-asset-input-name",
                     "{{assetName}} Asset: {{assetInputName}}",
-                    { assetName, assetInputName }
+                    { assetName, assetInputName },
                   )
                 : t(
                     "datasworn.move.asset-enhancement-asset-name",
                     "{{assetName}} Asset",
-                    { assetName }
+                    { assetName },
                   )}
             </Typography>
             <MarkdownRenderer
@@ -76,7 +81,7 @@ export function AssetEnhancements(props: AssetEnhancementsProps) {
               />
             )}
           </Box>
-        )
+        ),
       )}
     </Box>
   );
@@ -96,7 +101,7 @@ type ReturnType = Record<
 function getEnhancementsFromAssets(
   moveId: string,
   assetDocuments: Record<string, AssetDocument>,
-  tree: Record<string, Datasworn.RulesPackage>
+  tree: Record<string, Datasworn.RulesPackage>,
 ): ReturnType {
   const activeAssetMoveEnhancements: Record<
     string,
@@ -126,7 +131,7 @@ function getEnhancementsFromAssets(
               moveEnhancement.enhances.some((wildcardId) => {
                 const matches = IdParser.getMatches(
                   wildcardId as Primary,
-                  tree
+                  tree,
                 );
                 return matches.has(moveId);
               })
@@ -142,7 +147,7 @@ function getEnhancementsFromAssets(
                 };
               }
               activeAssetMoveEnhancements[ability._id].enhancements.push(
-                moveEnhancement
+                moveEnhancement,
               );
             }
           }
@@ -162,7 +167,7 @@ function getEnhancementsFromAssets(
           actionRolls,
         },
       ];
-    })
+    }),
   );
 }
 
@@ -171,7 +176,7 @@ function extractActionRollOptions(
     | Datasworn.MoveActionRollEnhancement
     | Datasworn.MoveProgressRollEnhancement
     | Datasworn.MoveSpecialTrackEnhancement
-  )[]
+  )[],
 ): Datasworn.RollableValue[] {
   const conditionMap: Record<
     string,
@@ -202,6 +207,6 @@ function extractActionRollOptions(
   });
 
   return Object.values(conditionMap).flatMap((conditions) =>
-    Object.values(conditions)
+    Object.values(conditions),
   );
 }

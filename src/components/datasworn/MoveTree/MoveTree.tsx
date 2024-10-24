@@ -1,15 +1,16 @@
+import SearchIcon from "@mui/icons-material/Search";
 import { Box, Input, InputAdornment, List, ListSubheader } from "@mui/material";
 import { useDeferredValue, useMemo, useState } from "react";
-import SearchIcon from "@mui/icons-material/Search";
 import { useTranslation } from "react-i18next";
-import { MoveCategoryListItem } from "./MoveCategoryListItem";
+
+import { useMoves } from "atoms/dataswornRules/useMoves";
 import {
   CategoryVisibilityState,
   getMoveCategoryVisibility,
   MoveVisibilityState,
   VisibilitySettings,
-} from "./getMoveCategoryVisibility";
-import { useMoves } from "atoms/dataswornRules/useMoves";
+} from "components/datasworn/MoveTree/getMoveCategoryVisibility";
+import { MoveCategoryListItem } from "components/datasworn/MoveTree/MoveCategoryListItem";
 
 export function MoveTree() {
   const { t } = useTranslation();
@@ -31,7 +32,7 @@ export function MoveTree() {
           moveCategoryMap,
           moveMap,
           visibleCollections,
-          visibleOracles
+          visibleOracles,
         );
       });
     });
@@ -92,7 +93,7 @@ export function MoveTree() {
               />
             ))}
           </List>
-        )
+        ),
       )}
     </Box>
   );
