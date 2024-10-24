@@ -9,6 +9,7 @@ import { useMemo } from "react";
 import { currentCampaignAtom } from "pages/games/gamePageLayout/atoms/campaign.atom";
 import { ActionRolls, CharacterState } from "./RollOptions";
 import { AssetEnhancements } from "./AssetEnhancements";
+// import { ProgressRolls } from "./RollOptions/ProgressRolls";
 
 const derivedCampaignState = derivedAtomWithEquality(
   currentCampaignAtom,
@@ -63,9 +64,15 @@ export function MoveRollOptions(props: MoveRollOptions) {
   const campaignData = useAtomValue(derivedCampaignState);
   const actionRollOptions = extractActionRollOptions(move);
 
-  const hasRollOptions = actionRollOptions.length > 0;
+  const hasRollOptions =
+    actionRollOptions.length > 0 || move.roll_type === "progress_roll";
+  const hasCharacterRollOptions =
+    actionRollOptions.length > 0 && move.roll_type === "action_roll";
   return (
     <Box mt={hasRollOptions ? 1 : 0}>
+      {/* {move.roll_type === "progress_roll" && (
+        <ProgressRolls moveId={move._id} />
+      )} */}
       {Object.keys(characterData).length === 0 && (
         <Box display="flex" flexWrap="wrap" gap={1}>
           {move.roll_type === "action_roll" && (
@@ -77,35 +84,36 @@ export function MoveRollOptions(props: MoveRollOptions) {
           )}
         </Box>
       )}
-      {Object.entries(characterData).map(
-        ([characterId, character], idx, arr) => (
-          <Box
-            key={characterId}
-            display="flex"
-            flexDirection="column"
-            mt={idx === 0 ? 0 : 1}
-          >
-            {arr.length > 1 && (
-              <Typography variant="overline">{character.name}</Typography>
-            )}
-            {move.roll_type === "action_roll" && (
-              <ActionRolls
+      {hasCharacterRollOptions &&
+        Object.entries(characterData).map(
+          ([characterId, character], idx, arr) => (
+            <Box
+              key={characterId}
+              display="flex"
+              flexDirection="column"
+              mt={idx === 0 ? 0 : 1}
+            >
+              {arr.length > 1 && (
+                <Typography variant="overline">{character.name}</Typography>
+              )}
+              {move.roll_type === "action_roll" && (
+                <ActionRolls
+                  moveId={move._id}
+                  actionRolls={actionRollOptions}
+                  character={{ id: characterId, data: character }}
+                  campaignData={campaignData}
+                  includeAdds
+                />
+              )}
+              <AssetEnhancements
                 moveId={move._id}
-                actionRolls={actionRollOptions}
+                campaign={campaignData}
+                assetDocuments={character.assets}
                 character={{ id: characterId, data: character }}
-                campaignData={campaignData}
-                includeAdds
               />
-            )}
-            <AssetEnhancements
-              moveId={move._id}
-              campaign={campaignData}
-              assetDocuments={character.assets}
-              character={{ id: characterId, data: character }}
-            />
-          </Box>
-        )
-      )}
+            </Box>
+          )
+        )}
       <AssetEnhancements
         moveId={move._id}
         campaign={campaignData}

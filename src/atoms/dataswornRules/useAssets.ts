@@ -92,23 +92,21 @@ const assetsAtom = atom((get) => {
   const assetMap: AssetMap = {};
 
   rootAssetCollectionsMap.forEach((collection) => {
-    if (!collection.replaces && !collection.enhances) {
-      const ruleset = getRulesetFromId(collection._id, trees);
-      if (!ruleset) return;
+    const ruleset = getRulesetFromId(collection._id, trees);
+    if (!ruleset) return;
 
-      if (!rootAssetCollections[ruleset.id]) {
-        rootAssetCollections[ruleset.id] = {
-          title: ruleset.title,
-          rootAssets: [],
-        };
-      }
-      rootAssetCollections[ruleset.id].rootAssets.push(collection._id);
+    if (!rootAssetCollections[ruleset.id]) {
+      rootAssetCollections[ruleset.id] = {
+        title: ruleset.title,
+        rootAssets: [],
+      };
     }
+    rootAssetCollections[ruleset.id].rootAssets.push(collection._id);
   });
 
-  Object.values(rootAssetCollections).forEach(({ rootAssets: rootOracles }) => {
-    rootOracles.forEach((rootOracleId) => {
-      const collection = rootAssetCollectionsMap.get(rootOracleId);
+  Object.values(rootAssetCollections).forEach(({ rootAssets }) => {
+    rootAssets.forEach((rootAssetId) => {
+      const collection = rootAssetCollectionsMap.get(rootAssetId);
       if (collection) {
         assetCollectionMap[collection._id] = collection;
         parseAssetCollection(
