@@ -11,9 +11,10 @@ import { AssetTextField } from "./fields/AssetTextField";
 import { useCallback } from "react";
 import { useRollStatAndAddToLog } from "../../../pages/games/hooks/useRollStatAndAddToLog.ts";
 import RollIcon from "@mui/icons-material/Casino";
-import { t } from "i18next";
 import { useCharacterId } from "../../../pages/games/characterSheet/hooks/useCharacterId.ts";
 import { useDerivedCharacterState } from "../../../pages/games/characterSheet/hooks/useDerivedCharacterState.ts";
+import { useTranslation } from "react-i18next";
+import { DEFAULT_MOMENTUM } from "../../../data/constants.ts";
 
 export interface AssetControlProps {
   controlId: string;
@@ -37,11 +38,13 @@ export function AssetControl(props: AssetControlProps) {
     [onControlChange, controlId]
   );
 
+  const { t } = useTranslation();
+
   const characterId = useCharacterId();
   const { momentum } = useDerivedCharacterState(
     characterId,
     (character) => ({
-      momentum: character?.characterDocument.data?.momentum ?? 2,
+      momentum: character?.characterDocument.data?.momentum ?? DEFAULT_MOMENTUM,
     })
   );
 

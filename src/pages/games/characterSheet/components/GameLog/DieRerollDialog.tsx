@@ -21,6 +21,7 @@ import { DialogTitleWithCloseButton } from "components/DialogTitleWithCloseButto
 import { useMove } from "hooks/datasworn/useMove";
 import { useTranslation } from "react-i18next";
 import { RollSnackbar } from "components/characters/rolls/RollSnackbar";
+import { DEFAULT_MOMENTUM } from "../../../../../data/constants.ts";
 
 export interface DieRerollDialogProps {
   open: boolean;
@@ -37,7 +38,7 @@ export function DieRerollDialog(props: DieRerollDialogProps) {
   const characterId = useCharacterIdOptional();
   const momentum = useDerivedCharacterState(
     characterId,
-    (state) => state?.characterDocument.data?.momentum ?? 0
+    (state) => state?.characterDocument.data?.momentum ?? DEFAULT_MOMENTUM
   );
 
   const { info } = useSnackbar();

@@ -10,6 +10,7 @@ import { useCallback } from "react";
 import { useIsOwnerOfCharacter } from "../../hooks/useIsOwnerOfCharacter";
 import RollIcon from "@mui/icons-material/Casino";
 import { useRollStatAndAddToLog } from "pages/games/hooks/useRollStatAndAddToLog";
+import { DEFAULT_MOMENTUM } from "../../../../../data/constants.ts";
 
 export function Stats() {
   const characterId = useCharacterId();
@@ -18,7 +19,7 @@ export function Stats() {
     (character) => ({
       stats: character?.characterDocument.data?.stats ?? {},
       adds: character?.characterDocument.data?.adds ?? 0,
-      momentum: character?.characterDocument.data?.momentum ?? 2,
+      momentum: character?.characterDocument.data?.momentum ?? DEFAULT_MOMENTUM,
     })
   );
   const isCharacterOwner = useIsOwnerOfCharacter();
