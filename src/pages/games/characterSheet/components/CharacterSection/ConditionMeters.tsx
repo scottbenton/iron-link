@@ -3,16 +3,16 @@ import { useTranslation } from "react-i18next";
 import ResetIcon from "@mui/icons-material/RestartAlt";
 import { Box, Typography } from "@mui/material";
 
+import { useCharacterId } from "../../hooks/useCharacterId";
+import { useDerivedCharacterState } from "../../hooks/useDerivedCharacterState";
+import { useIsOwnerOfCharacter } from "../../hooks/useIsOwnerOfCharacter";
+import { useMomentumParameters } from "../../hooks/useMomentumResetValue";
+import { SingleConditionMeter } from "./SingleConditionMeter";
 import { updateCampaign } from "api-calls/campaign/updateCampaign";
 import { updateCharacter } from "api-calls/character/updateCharacter";
 import { useConditionMeterRules } from "atoms/dataswornRules/useConditionMeterRules";
 import { DebouncedConditionMeter } from "components/datasworn/ConditonMeter";
 import { momentumTrack } from "data/defaultTracks";
-import { SingleConditionMeter } from "pages/games/characterSheet/components/CharacterSection/SingleConditionMeter";
-import { useCharacterId } from "pages/games/characterSheet/hooks/useCharacterId";
-import { useDerivedCharacterState } from "pages/games/characterSheet/hooks/useDerivedCharacterState";
-import { useIsOwnerOfCharacter } from "pages/games/characterSheet/hooks/useIsOwnerOfCharacter";
-import { useMomentumParameters } from "pages/games/characterSheet/hooks/useMomentumResetValue";
 import { useCampaignId } from "pages/games/gamePageLayout/hooks/useCampaignId";
 import { useDerivedCampaignDocumentState } from "pages/games/gamePageLayout/hooks/useDerivedCampaignState";
 

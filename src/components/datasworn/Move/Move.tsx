@@ -1,8 +1,8 @@
 import { useTranslation } from "react-i18next";
 import { Box, SxProps, Theme, Typography } from "@mui/material";
 
-import { MoveOracles } from "components/datasworn/Move/MoveOracles";
-import { MoveRollOptions } from "components/datasworn/Move/MoveRollOptions";
+import { MoveOracles } from "./MoveOracles";
+import { MoveRollOptions } from "./MoveRollOptions";
 import { EmptyState } from "components/Layout/EmptyState";
 import { MarkdownRenderer } from "components/MarkdownRenderer";
 import { useMove } from "hooks/datasworn/useMove";

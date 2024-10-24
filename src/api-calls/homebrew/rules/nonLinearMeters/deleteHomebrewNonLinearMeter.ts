@@ -1,7 +1,7 @@
 import { deleteDoc } from "firebase/firestore";
 
+import { getHomebrewNonLinearMeterDoc } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
-import { getHomebrewNonLinearMeterDoc } from "api-calls/homebrew/rules/nonLinearMeters/_getRef";
 
 export const deleteHomebrewNonLinearMeter = createApiFunction<
   {

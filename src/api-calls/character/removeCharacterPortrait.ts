@@ -1,5 +1,5 @@
-import { constructCharacterPortraitFolderPath } from "api-calls/character/_getRef";
-import { updateCharacter } from "api-calls/character/updateCharacter";
+import { constructCharacterPortraitFolderPath } from "./_getRef";
+import { updateCharacter } from "./updateCharacter";
 import { createApiFunction } from "api-calls/createApiFunction";
 import { deleteImage } from "lib/storage.lib";
 

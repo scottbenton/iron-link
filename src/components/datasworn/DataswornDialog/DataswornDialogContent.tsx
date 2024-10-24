@@ -1,12 +1,12 @@
 import { useTranslation } from "react-i18next";
 import { Box, Button, DialogActions, DialogContent } from "@mui/material";
 
-import { AssetCard } from "components/datasworn/AssetCard";
-import { DataswornDialogTitle } from "components/datasworn/DataswornDialog/DataswornDialogTitle";
-import { useGetDataswornItem } from "components/datasworn/DataswornDialog/useGetDataswornItem";
-import { Move } from "components/datasworn/Move";
-import { Oracle } from "components/datasworn/Oracle";
-import { OracleTableSharedText } from "components/datasworn/Oracle/OracleTableSharedText";
+import { AssetCard } from "../AssetCard";
+import { Move } from "../Move";
+import { Oracle } from "../Oracle";
+import { OracleTableSharedText } from "../Oracle/OracleTableSharedText";
+import { DataswornDialogTitle } from "./DataswornDialogTitle";
+import { useGetDataswornItem } from "./useGetDataswornItem";
 import { EmptyState } from "components/Layout/EmptyState";
 
 export interface DataswornDialogContentProps {

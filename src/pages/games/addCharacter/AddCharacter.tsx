@@ -3,13 +3,13 @@ import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
 import { Alert, Box } from "@mui/material";
 
+import { useCreateCharacterAtom } from "../create/atoms/createCharacter.atom";
+import { CreateCharacter } from "../create/components/CreateCharacter";
 import { addAsset } from "api-calls/assets/addAsset";
 import { addCharacterToCampaign } from "api-calls/campaign/addCharacterToCampaign";
 import { createCharacterAndUploadPortrait } from "api-calls/character/createCharacter";
 import { useAuthAtom } from "atoms/auth.atom";
 import { GradientButton } from "components/GradientButton";
-import { useCreateCharacterAtom } from "pages/games/create/atoms/createCharacter.atom";
-import { CreateCharacter } from "pages/games/create/components/CreateCharacter";
 import { pathConfig } from "pages/pathConfig";
 
 export function AddCharacter() {

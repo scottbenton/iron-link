@@ -1,9 +1,6 @@
 import { render } from "@testing-library/react";
 
-import {
-  AssetHeader,
-  AssetHeaderProps,
-} from "components/datasworn/AssetCard/AssetHeader";
+import { AssetHeader, AssetHeaderProps } from "../AssetHeader";
 import { getIsLocalEnvironment } from "config/environment.config";
 import { describe, expect, it, Mock, vi } from "vitest";
 

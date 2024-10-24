@@ -8,10 +8,7 @@ import {
   where,
 } from "firebase/firestore";
 
-import {
-  convertFromDatabase,
-  getCampaignGameLogCollection,
-} from "api-calls/game-log/_getRef";
+import { convertFromDatabase, getCampaignGameLogCollection } from "./_getRef";
 import { Roll } from "types/DieRolls.type";
 
 export function listenToMostRecentCharacterLog(params: {

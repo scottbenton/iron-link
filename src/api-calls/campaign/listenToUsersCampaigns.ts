@@ -1,7 +1,7 @@
 import { onSnapshot, query, where } from "firebase/firestore";
 
+import { getCampaignCollection } from "./_getRef";
 import { CampaignDocument } from "api-calls/campaign/_campaign.type";
-import { getCampaignCollection } from "api-calls/campaign/_getRef";
 
 export function listenToUsersCampaigns(
   uid: string,

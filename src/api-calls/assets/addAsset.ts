@@ -1,10 +1,10 @@
 import { addDoc } from "firebase/firestore";
 
-import { AssetDocument } from "api-calls/assets/_asset.type";
 import {
   getCampaignAssetCollection,
   getCharacterAssetCollection,
-} from "api-calls/assets/_getRef";
+} from "./_getRef";
+import { AssetDocument } from "api-calls/assets/_asset.type";
 import { createApiFunction } from "api-calls/createApiFunction";
 
 interface AddAssetParams {

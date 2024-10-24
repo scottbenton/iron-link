@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
-import { Box, Button, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
+import { Box, Button } from "@mui/material";
 
 import { askTheOracleIds, askTheOracleLabels } from "data/askTheOracle";
 import { useRollOracleAndAddToLog } from "pages/games/hooks/useRollOracleAndAddToLog";

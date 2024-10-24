@@ -1,8 +1,8 @@
 import { useMemo } from "react";
 import { useAtomValue } from "jotai";
 
+import { useCharacterId } from "./useCharacterId";
 import { derivedAtomWithEquality } from "atoms/derivedAtomWithEquality";
-import { useCharacterId } from "pages/games/characterSheet/hooks/useCharacterId";
 import { campaignCharactersAtom } from "pages/games/gamePageLayout/atoms/campaign.characters.atom";
 
 export function useCharacterState() {

@@ -1,12 +1,12 @@
 import { useMemo } from "react";
 import { useAtomValue } from "jotai";
 
-import { CampaignDocument } from "api-calls/campaign/_campaign.type";
-import { derivedAtomWithEquality } from "atoms/derivedAtomWithEquality";
 import {
   currentCampaignAtom,
   ICurrentCampaignAtom,
-} from "pages/games/gamePageLayout/atoms/campaign.atom";
+} from "../atoms/campaign.atom";
+import { CampaignDocument } from "api-calls/campaign/_campaign.type";
+import { derivedAtomWithEquality } from "atoms/derivedAtomWithEquality";
 
 export function useDerivedCampaignDocumentState<T>(
   select: (campaign: CampaignDocument | undefined) => T,

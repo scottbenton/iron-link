@@ -11,8 +11,8 @@ import {
   Tooltip,
 } from "@mui/material";
 
+import { ListItemButtonWithSecondaryAction } from "./ListItemButtonWithSecondaryAction";
 import { useOpenDataswornDialog } from "atoms/dataswornDialog.atom";
-import { ListItemButtonWithSecondaryAction } from "components/datasworn/OracleTree/ListItemButtonWithSecondaryAction";
 import { useRollOracleAndAddToLog } from "pages/games/hooks/useRollOracleAndAddToLog";
 
 export interface OracleTableSharedTextListItemProps {

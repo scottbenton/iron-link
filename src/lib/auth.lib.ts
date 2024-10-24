@@ -1,4 +1,4 @@
-import { firebaseAuth } from "config/firebase.config";
+import { firebaseAuth } from "../config/firebase.config";
 import {
   GoogleAuthProvider,
   isSignInWithEmailLink,
@@ -12,9 +12,9 @@ import {
   User,
 } from "firebase/auth";
 
+import { getErrorMessage } from "./getErrorMessage";
 import { UserDocument } from "api-calls/user/_user.type";
 import { updateUserDoc } from "api-calls/user/updateUserDoc";
-import { getErrorMessage } from "lib/getErrorMessage";
 import { pathConfig } from "pages/pathConfig";
 
 const googleAuthProvider = new GoogleAuthProvider();

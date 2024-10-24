@@ -1,9 +1,4 @@
-import {
-  RollContainer,
-  RollResult,
-  RollTitle,
-  RollValues,
-} from "components/characters/rolls/common";
+import { RollContainer, RollResult, RollTitle, RollValues } from "./common";
 import { useOracleRollable } from "hooks/datasworn/useOracleRollable";
 import { OracleTableRoll } from "types/DieRolls.type";
 

@@ -12,8 +12,8 @@ import {
 } from "@mui/material";
 import { TFunction } from "i18next";
 
+import { ProgressTrackTick } from "./ProgressTrackTick";
 import { useSetAnnouncement } from "atoms/announcement.atom";
-import { ProgressTrackTick } from "components/datasworn/ProgressTrack/ProgressTrackTick";
 import { Difficulty, TrackStatus } from "types/Track.type";
 
 export interface ProgressTrackProps {

@@ -1,7 +1,7 @@
 import { updateDoc } from "firebase/firestore";
 
+import { getUserOracleSettingsDoc } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
-import { getUserOracleSettingsDoc } from "api-calls/user/settings/_getRef";
 import { encodeDataswornId } from "lib/dataswornIdEncoder";
 
 export const updatePinnedOracle = createApiFunction<

@@ -1,7 +1,7 @@
 import { onSnapshot } from "firebase/firestore";
 
-import { CampaignDocument } from "api-calls/campaign/_campaign.type";
-import { getCampaignDoc } from "api-calls/campaign/_getRef";
+import { CampaignDocument } from "./_campaign.type";
+import { getCampaignDoc } from "./_getRef";
 
 export function listenToCampaign(
   campaignId: string,

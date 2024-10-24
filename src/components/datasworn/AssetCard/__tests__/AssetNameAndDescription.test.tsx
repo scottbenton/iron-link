@@ -3,7 +3,7 @@ import { render } from "@testing-library/react";
 import {
   AssetNameAndDescription,
   AssetNameAndDescriptionProps,
-} from "components/datasworn/AssetCard/AssetNameAndDescription";
+} from "../AssetNameAndDescription";
 import { describe, expect, it } from "vitest";
 
 describe("AssetNameAndDescription", () => {

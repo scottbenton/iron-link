@@ -1,6 +1,6 @@
 import { Meta, StoryObj } from "@storybook/react";
 
-import { OracleTree } from "components/datasworn/OracleTree";
+import { OracleTree } from "../OracleTree";
 
 const meta = {
   title: "Datasworn/OracleTree",

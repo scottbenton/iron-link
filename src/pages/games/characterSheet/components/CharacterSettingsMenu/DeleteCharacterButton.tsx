@@ -5,10 +5,10 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { ListItemIcon, ListItemText, MenuItem } from "@mui/material";
 import { useConfirm } from "material-ui-confirm";
 
+import { useCharacterId } from "../../hooks/useCharacterId";
+import { useDerivedCharacterState } from "../../hooks/useDerivedCharacterState";
 import { deleteCampaign } from "api-calls/campaign/deleteCampaign";
 import { deleteCharacter } from "api-calls/character/deleteCharacter";
-import { useCharacterId } from "pages/games/characterSheet/hooks/useCharacterId";
-import { useDerivedCharacterState } from "pages/games/characterSheet/hooks/useDerivedCharacterState";
 import { useCampaignId } from "pages/games/gamePageLayout/hooks/useCampaignId";
 import { useDerivedCampaignDocumentState } from "pages/games/gamePageLayout/hooks/useDerivedCampaignState";
 import { pathConfig } from "pages/pathConfig";

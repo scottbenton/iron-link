@@ -2,10 +2,10 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Box, Typography } from "@mui/material";
 
+import { GameLog } from "./GameLog";
 import { MoveTree } from "components/datasworn/MoveTree";
 import { OracleTree } from "components/datasworn/OracleTree";
 import { StyledTab, StyledTabs } from "components/StyledTabs";
-import { GameLog } from "pages/games/characterSheet/components/GameLog";
 
 enum Tabs {
   Moves = "moves",

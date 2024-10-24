@@ -5,7 +5,7 @@ import {
   ListItemText,
 } from "@mui/material";
 
-import { NavRouteConfig } from "components/Layout/navRoutes";
+import { NavRouteConfig } from "./navRoutes";
 import { LinkComponent } from "components/LinkComponent";
 
 export function NavBarListItem(props: NavRouteConfig) {

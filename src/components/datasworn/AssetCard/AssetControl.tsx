@@ -2,15 +2,15 @@ import { useCallback } from "react";
 import { Datasworn } from "@datasworn/core";
 import { Box } from "@mui/material";
 
-import { AssetDocument } from "api-calls/assets/_asset.type";
+import { ConditionMeter } from "../ConditonMeter";
 // import { Track } from "components/features/Track";
-import { AssetControls } from "components/datasworn/AssetCard/AssetControls";
-import { AssetCheckboxField } from "components/datasworn/AssetCard/fields/AssetCheckboxField";
-import { AssetClockField } from "components/datasworn/AssetCard/fields/AssetClockField";
-import { AssetCounterField } from "components/datasworn/AssetCard/fields/AssetCounterField";
-import { AssetSelectEnhancementField } from "components/datasworn/AssetCard/fields/AssetSelectEnhancementField";
-import { AssetTextField } from "components/datasworn/AssetCard/fields/AssetTextField";
-import { ConditionMeter } from "components/datasworn/ConditonMeter";
+import { AssetControls } from "./AssetControls";
+import { AssetCheckboxField } from "./fields/AssetCheckboxField";
+import { AssetClockField } from "./fields/AssetClockField";
+import { AssetCounterField } from "./fields/AssetCounterField";
+import { AssetSelectEnhancementField } from "./fields/AssetSelectEnhancementField";
+import { AssetTextField } from "./fields/AssetTextField";
+import { AssetDocument } from "api-calls/assets/_asset.type";
 
 export interface AssetControlProps {
   controlId: string;

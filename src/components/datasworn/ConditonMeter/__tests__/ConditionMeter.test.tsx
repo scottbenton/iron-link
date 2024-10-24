@@ -1,10 +1,7 @@
 import ExampleIcon from "@mui/icons-material/Casino";
 import { render, screen } from "@testing-library/react";
 
-import {
-  ConditionMeter,
-  ConditionMeterProps,
-} from "components/datasworn/ConditonMeter/ConditionMeter";
+import { ConditionMeter, ConditionMeterProps } from "../ConditionMeter";
 import { TestWrapper } from "tests/TestWrapper";
 import { describe, expect, it, vi } from "vitest";
 

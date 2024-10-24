@@ -3,11 +3,11 @@ import { useTranslation } from "react-i18next";
 import { Box, Typography } from "@mui/material";
 import { useAtomValue } from "jotai";
 
+import { NormalRollActions } from "./NormalRollActions";
 import { useUID } from "atoms/auth.atom";
 import { derivedAtomWithEquality } from "atoms/derivedAtomWithEquality";
 import { useUserName } from "atoms/userDetails.atom";
 import { RollSnackbar } from "components/characters/rolls/RollSnackbar";
-import { NormalRollActions } from "pages/games/characterSheet/components/GameLog/NormalRollActions";
 import { campaignCharactersAtom } from "pages/games/gamePageLayout/atoms/campaign.characters.atom";
 import { Roll } from "types/DieRolls.type";
 

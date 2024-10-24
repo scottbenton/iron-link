@@ -1,6 +1,6 @@
 import { onSnapshot, setDoc } from "firebase/firestore";
 
-import { getUserOracleSettingsDoc } from "api-calls/user/settings/_getRef";
+import { getUserOracleSettingsDoc } from "./_getRef";
 import { OracleSettingsDocument } from "api-calls/user/settings/_settings.type";
 import { decodeDataswornId } from "lib/dataswornIdEncoder";
 

@@ -1,7 +1,7 @@
 import { addDoc } from "firebase/firestore";
 
+import { encodeWorld, getWorldCollection } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
-import { encodeWorld, getWorldCollection } from "api-calls/world/_getRef";
 import { World } from "api-calls/world/_world.type";
 
 export const createWorld = createApiFunction<World, string>((world) => {

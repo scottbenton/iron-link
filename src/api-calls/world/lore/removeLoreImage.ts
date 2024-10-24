@@ -1,6 +1,6 @@
+import { constructLoreImagesPath } from "./_getRef";
+import { updateLore } from "./updateLore";
 import { createApiFunction } from "api-calls/createApiFunction";
-import { constructLoreImagesPath } from "api-calls/world/lore/_getRef";
-import { updateLore } from "api-calls/world/lore/updateLore";
 import { deleteImage } from "lib/storage.lib";
 
 export const removeLoreImage = createApiFunction<

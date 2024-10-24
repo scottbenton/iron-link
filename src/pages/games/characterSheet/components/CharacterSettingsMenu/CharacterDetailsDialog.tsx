@@ -13,14 +13,14 @@ import {
   TextField,
 } from "@mui/material";
 
+import { useCharacterId } from "../../hooks/useCharacterId";
+import { useDerivedCharacterState } from "../../hooks/useDerivedCharacterState";
 import { removeCharacterPortrait } from "api-calls/character/removeCharacterPortrait";
 import { updateCharacter } from "api-calls/character/updateCharacter";
 import { updateCharacterPortrait } from "api-calls/character/updateCharacterPortrait";
 import { useCharacterPortrait } from "atoms/characterPortraits.atom";
 import { DialogTitleWithCloseButton } from "components/DialogTitleWithCloseButton";
 import { MAX_FILE_SIZE, MAX_FILE_SIZE_LABEL } from "lib/storage.lib";
-import { useCharacterId } from "pages/games/characterSheet/hooks/useCharacterId";
-import { useDerivedCharacterState } from "pages/games/characterSheet/hooks/useDerivedCharacterState";
 import { useSnackbar } from "providers/SnackbarProvider";
 
 export interface CharacterDetailsDialogProps {

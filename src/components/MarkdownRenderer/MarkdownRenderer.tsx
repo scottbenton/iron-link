@@ -12,8 +12,8 @@ import {
 } from "@mui/material";
 import remarkGfm from "remark-gfm";
 
+import { OracleTableRenderer } from "./OracleTableRenderer";
 import { useOpenDataswornDialog } from "atoms/dataswornDialog.atom";
-import { OracleTableRenderer } from "components/MarkdownRenderer/OracleTableRenderer";
 import { idMap } from "data/idMap";
 
 export interface MarkdownRendererProps {

@@ -1,7 +1,6 @@
 import { projectId } from "config/firebase.config";
 import { Bytes, setDoc, updateDoc } from "firebase/firestore";
 
-import { createApiFunction } from "api-calls/createApiFunction";
 import {
   constructCampaignNoteContentPath,
   constructCampaignNoteDocPath,
@@ -11,7 +10,8 @@ import {
   getCampaignNoteDocument,
   getCharacterNoteContentDocument,
   getCharacterNoteDocument,
-} from "api-calls/notes/_getRef";
+} from "./_getRef";
+import { createApiFunction } from "api-calls/createApiFunction";
 
 export const updateNote = createApiFunction<
   {

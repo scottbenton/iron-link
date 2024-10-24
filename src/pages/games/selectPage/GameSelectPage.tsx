@@ -1,10 +1,10 @@
 import { useTranslation } from "react-i18next";
 
+import { CampaignCard } from "./CampaignCard";
 import { useUsersCampaigns } from "atoms/users.campaigns";
 import { GradientButton } from "components/GradientButton";
 import { PageContent, PageHeader } from "components/Layout";
 import { GridLayout } from "components/Layout/GridLayout";
-import { CampaignCard } from "pages/games/selectPage/CampaignCard";
 import { pathConfig } from "pages/pathConfig";
 
 export function GameSelectPage() {

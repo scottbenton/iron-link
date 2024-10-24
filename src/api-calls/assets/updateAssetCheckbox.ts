@@ -1,9 +1,6 @@
 import { updateDoc } from "firebase/firestore";
 
-import {
-  getCampaignAssetDoc,
-  getCharacterAssetDoc,
-} from "api-calls/assets/_getRef";
+import { getCampaignAssetDoc, getCharacterAssetDoc } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
 
 export const updateAssetCheckbox = createApiFunction<

@@ -1,8 +1,8 @@
 import { Datasworn } from "@datasworn/core";
 import { Stack } from "@mui/material";
 
+import { AssetOption } from "./AssetOption";
 import { AssetDocument } from "api-calls/assets/_asset.type";
-import { AssetOption } from "components/datasworn/AssetCard/AssetOption";
 
 export interface AssetOptionsProps {
   assetDocument?: AssetDocument;

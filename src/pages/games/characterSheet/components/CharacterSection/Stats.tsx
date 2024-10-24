@@ -3,13 +3,13 @@ import { useTranslation } from "react-i18next";
 import RollIcon from "@mui/icons-material/Casino";
 import { Box, Typography } from "@mui/material";
 
+import { useCharacterId } from "../../hooks/useCharacterId";
+import { useDerivedCharacterState } from "../../hooks/useDerivedCharacterState";
+import { useIsOwnerOfCharacter } from "../../hooks/useIsOwnerOfCharacter";
 import { updateCharacter } from "api-calls/character/updateCharacter";
 import { useStatRules } from "atoms/dataswornRules/useStatRules";
 import { DebouncedConditionMeter } from "components/datasworn/ConditonMeter";
 import { Stat } from "components/datasworn/Stat";
-import { useCharacterId } from "pages/games/characterSheet/hooks/useCharacterId";
-import { useDerivedCharacterState } from "pages/games/characterSheet/hooks/useDerivedCharacterState";
-import { useIsOwnerOfCharacter } from "pages/games/characterSheet/hooks/useIsOwnerOfCharacter";
 import { useRollStatAndAddToLog } from "pages/games/hooks/useRollStatAndAddToLog";
 
 export function Stats() {

@@ -2,12 +2,12 @@ import { useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 
+import { useDerivedCharacterState } from "../characterSheet/hooks/useDerivedCharacterState";
 import { addRoll } from "api-calls/game-log/addRoll";
 import { useUID } from "atoms/auth.atom";
 import { useAddRollSnackbar } from "atoms/rollDisplay.atom";
 import { useRollOracle } from "hooks/useRollOracle";
 import { createId } from "lib/id.lib";
-import { useDerivedCharacterState } from "pages/games/characterSheet/hooks/useDerivedCharacterState";
 import { useSnackbar } from "providers/SnackbarProvider";
 import { OracleTableRoll } from "types/DieRolls.type";
 

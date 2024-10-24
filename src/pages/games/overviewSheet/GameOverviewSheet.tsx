@@ -1,9 +1,9 @@
 import { useTranslation } from "react-i18next";
 import { Box, Button, Typography } from "@mui/material";
 
-import { ReferenceSidebarContents } from "pages/games/characterSheet/components/ReferenceSidebarContents";
-import { useCampaignId } from "pages/games/gamePageLayout/hooks/useCampaignId";
-import { useCampaignPermissions } from "pages/games/gamePageLayout/hooks/usePermissions";
+import { ReferenceSidebarContents } from "../characterSheet/components/ReferenceSidebarContents";
+import { useCampaignId } from "../gamePageLayout/hooks/useCampaignId";
+import { useCampaignPermissions } from "../gamePageLayout/hooks/usePermissions";
 import { pathConfig } from "pages/pathConfig";
 import { useSnackbar } from "providers/SnackbarProvider";
 

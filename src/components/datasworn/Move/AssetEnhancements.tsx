@@ -4,13 +4,9 @@ import { Datasworn, IdParser } from "@datasworn/core";
 import { Primary } from "@datasworn/core/dist/StringId";
 import { Box, Typography } from "@mui/material";
 
+import { ActionRolls, CampaignState, CharacterState } from "./RollOptions";
 import { AssetDocument } from "api-calls/assets/_asset.type";
 import { useDataswornTree } from "atoms/dataswornTree.atom";
-import {
-  ActionRolls,
-  CampaignState,
-  CharacterState,
-} from "components/datasworn/Move/RollOptions";
 import { MarkdownRenderer } from "components/MarkdownRenderer";
 import { getAsset } from "hooks/datasworn/useAsset";
 

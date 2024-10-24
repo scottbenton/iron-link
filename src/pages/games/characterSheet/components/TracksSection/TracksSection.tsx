@@ -1,7 +1,7 @@
 import { Box, LinearProgress } from "@mui/material";
 
-import { TrackItem } from "pages/games/characterSheet/components/TracksSection/TrackItem";
-import { TracksSectionHeader } from "pages/games/characterSheet/components/TracksSection/TracksSectionHeader";
+import { TrackItem } from "./TrackItem";
+import { TracksSectionHeader } from "./TracksSectionHeader";
 import { useCampaignId } from "pages/games/gamePageLayout/hooks/useCampaignId";
 import { useDerivedCampaignState } from "pages/games/gamePageLayout/hooks/useDerivedCampaignState";
 import {

@@ -1,7 +1,7 @@
 import { setDoc } from "firebase/firestore";
 
+import { getPrivateDetailsLoreDoc } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
-import { getPrivateDetailsLoreDoc } from "api-calls/world/lore/_getRef";
 import { GMLore } from "types/Lore.type";
 
 interface Params {

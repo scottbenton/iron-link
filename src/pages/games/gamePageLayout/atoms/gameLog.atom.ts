@@ -1,14 +1,14 @@
 import { useCallback, useEffect } from "react";
 import { atom, useAtomValue, useSetAtom } from "jotai";
 
-import { listenToLogs } from "api-calls/game-log/listenToLogs";
-import { rollDisplayAtom } from "atoms/rollDisplay.atom";
-import { useDerivedAtomState } from "atoms/useDerivedAtomState";
-import { useCampaignId } from "pages/games/gamePageLayout/hooks/useCampaignId";
+import { useCampaignId } from "../hooks/useCampaignId";
 import {
   CampaignPermissionType,
   useCampaignPermissions,
-} from "pages/games/gamePageLayout/hooks/usePermissions";
+} from "../hooks/usePermissions";
+import { listenToLogs } from "api-calls/game-log/listenToLogs";
+import { rollDisplayAtom } from "atoms/rollDisplay.atom";
+import { useDerivedAtomState } from "atoms/useDerivedAtomState";
 import { Roll } from "types/DieRolls.type";
 
 const DEFAULT_AMOUNT_TO_LOAD = 20;

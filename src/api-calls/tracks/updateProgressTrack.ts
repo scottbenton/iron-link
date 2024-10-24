@@ -1,7 +1,7 @@
 import { updateDoc } from "firebase/firestore";
 
+import { getCampaignTracksDoc } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
-import { getCampaignTracksDoc } from "api-calls/tracks/_getRef";
 import { Track } from "types/Track.type";
 
 export const updateProgressTrack = createApiFunction<

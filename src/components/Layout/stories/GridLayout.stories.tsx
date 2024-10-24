@@ -2,7 +2,7 @@ import EmptyImage from "@mui/icons-material/AccountCircle";
 import { Box, Card, Typography } from "@mui/material";
 import { Meta, StoryObj } from "@storybook/react";
 
-import { GridLayout } from "components/Layout/GridLayout";
+import { GridLayout } from "../GridLayout";
 
 const meta = {
   title: "Layout/GridLayout",

@@ -7,11 +7,7 @@ import {
   Timestamp,
 } from "firebase/firestore";
 
-import {
-  GMNPCDocument,
-  NPCDocument,
-  NPCNotesDocument,
-} from "api-calls/world/npcs/_npcs.type";
+import { GMNPCDocument, NPCDocument, NPCNotesDocument } from "./_npcs.type";
 import { NPC } from "types/NPCs.type";
 
 export function constructNPCsPath(worldId: string) {

@@ -1,7 +1,7 @@
 import { deleteDoc } from "firebase/firestore";
 
+import { getHomebrewOracleTableDoc } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
-import { getHomebrewOracleTableDoc } from "api-calls/homebrew/oracles/tables/_getRef";
 
 export const deleteHomebrewOracleTable = createApiFunction<
   {

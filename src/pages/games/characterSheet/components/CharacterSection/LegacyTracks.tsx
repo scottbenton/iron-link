@@ -1,12 +1,12 @@
 import { useCallback } from "react";
 import { Box, Typography } from "@mui/material";
 
+import { useCharacterId } from "../../hooks/useCharacterId";
+import { useDerivedCharacterState } from "../../hooks/useDerivedCharacterState";
+import { useIsOwnerOfCharacter } from "../../hooks/useIsOwnerOfCharacter";
 import { updateCharacter } from "api-calls/character/updateCharacter";
 import { useSpecialTrackRules } from "atoms/dataswornRules/useSpecialTrackRules";
 import { DebouncedProgressTrack } from "components/datasworn/ProgressTrack";
-import { useCharacterId } from "pages/games/characterSheet/hooks/useCharacterId";
-import { useDerivedCharacterState } from "pages/games/characterSheet/hooks/useDerivedCharacterState";
-import { useIsOwnerOfCharacter } from "pages/games/characterSheet/hooks/useIsOwnerOfCharacter";
 
 export function LegacyTracks() {
   const characterId = useCharacterId();

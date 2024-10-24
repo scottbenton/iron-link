@@ -1,4 +1,4 @@
-import { LegacyTrackTypes } from "types/LegacyTrack.type";
+import { LegacyTrackTypes } from "./LegacyTrack.type";
 import { TrackTypes } from "types/Track.type";
 
 export enum RollResult {

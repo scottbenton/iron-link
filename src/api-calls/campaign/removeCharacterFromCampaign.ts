@@ -1,7 +1,7 @@
 import { arrayRemove, updateDoc } from "firebase/firestore";
 
-import { getCampaignDoc } from "api-calls/campaign/_getRef";
-import { getCharacterDoc } from "api-calls/character/_getRef";
+import { getCharacterDoc } from "../character/_getRef";
+import { getCampaignDoc } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
 
 export const removeCharacterFromCampaign = createApiFunction<

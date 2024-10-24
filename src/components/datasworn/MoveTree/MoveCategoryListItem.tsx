@@ -5,16 +5,16 @@ import {
   List,
   ListItem,
   ListItemButton,
-  ListItemIcon,
   ListItemText,
 } from "@mui/material";
+import { ListItemIcon } from "@mui/material";
 
-import { MoveCategoryMap, MoveMap } from "atoms/dataswornRules/useMoves";
 import {
   CategoryVisibilityState,
   VisibilitySettings,
-} from "components/datasworn/MoveTree/getMoveCategoryVisibility";
-import { MoveListItem } from "components/datasworn/MoveTree/MoveListItem";
+} from "./getMoveCategoryVisibility";
+import { MoveListItem } from "./MoveListItem";
+import { MoveCategoryMap, MoveMap } from "atoms/dataswornRules/useMoves";
 
 export interface MoveCategoryListItemProps {
   moveCategoryId: string;

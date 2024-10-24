@@ -1,7 +1,7 @@
 import { Unsubscribe } from "firebase/auth";
 import { onSnapshot } from "firebase/firestore";
 
-import { getPublicNotesNPCDoc } from "api-calls/world/npcs/_getRef";
+import { getPublicNotesNPCDoc } from "./_getRef";
 import { getErrorMessage } from "lib/getErrorMessage";
 
 export function listenToNPCNotes(

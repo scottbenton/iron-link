@@ -7,7 +7,7 @@ import {
   DocumentReference,
 } from "firebase/firestore";
 
-import { World, WorldDocument } from "api-calls/world/_world.type";
+import { World, WorldDocument } from "./_world.type";
 
 export function constructWorldsPath() {
   return `/worlds`;

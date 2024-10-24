@@ -1,7 +1,7 @@
 import { Unsubscribe } from "firebase/auth";
 import { onSnapshot } from "firebase/firestore";
 
-import { getPrivateDetailsLocationDoc } from "api-calls/world/locations/_getRef";
+import { getPrivateDetailsLocationDoc } from "./_getRef";
 import { getErrorMessage } from "lib/getErrorMessage";
 import { GMLocation } from "types/Locations.type";
 

@@ -1,7 +1,7 @@
 import { Datasworn } from "@datasworn/core";
 import { fireEvent, render, screen, within } from "@testing-library/react";
 
-import { AssetOption } from "components/datasworn/AssetCard/AssetOption";
+import { AssetOption } from "../AssetOption";
 import { describe, expect, it, vi } from "vitest";
 
 const textAssetOptionWithDefault: Datasworn.TextField = {

@@ -1,12 +1,12 @@
 import { deleteDoc } from "firebase/firestore";
 
-import { createApiFunction } from "api-calls/createApiFunction";
 import {
   constructLoreImagesPath,
   getLoreDoc,
   getPrivateDetailsLoreDoc,
   getPublicNotesLoreDoc,
-} from "api-calls/world/lore/_getRef";
+} from "./_getRef";
+import { createApiFunction } from "api-calls/createApiFunction";
 import { deleteImage } from "lib/storage.lib";
 
 interface Params {

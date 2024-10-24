@@ -1,11 +1,11 @@
 import { useTranslation } from "react-i18next";
 import { Box, Card, LinearProgress } from "@mui/material";
 
+import { CharacterSidebarContents } from "./components/CharacterSidebarContents";
+import { ReferenceSidebarContents } from "./components/ReferenceSidebarContents";
+import { useCharacterState } from "./hooks/useCharacterState";
+import { useSyncCharacterColorScheme } from "./hooks/useSyncCharacterColorScheme";
 import { EmptyState } from "components/Layout/EmptyState";
-import { CharacterSidebarContents } from "pages/games/characterSheet/components/CharacterSidebarContents";
-import { ReferenceSidebarContents } from "pages/games/characterSheet/components/ReferenceSidebarContents";
-import { useCharacterState } from "pages/games/characterSheet/hooks/useCharacterState";
-import { useSyncCharacterColorScheme } from "pages/games/characterSheet/hooks/useSyncCharacterColorScheme";
 
 export function CharacterSheetPage() {
   const { error, hasCharacter } = useCharacterState();

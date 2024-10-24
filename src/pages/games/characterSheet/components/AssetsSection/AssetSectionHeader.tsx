@@ -1,6 +1,7 @@
 import { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Box, Button, Checkbox, FormControlLabel } from "@mui/material";
+import { Button, Checkbox, FormControlLabel } from "@mui/material";
+import { Box } from "@mui/material";
 
 import { AssetDocument } from "api-calls/assets/_asset.type";
 import { addAsset } from "api-calls/assets/addAsset";

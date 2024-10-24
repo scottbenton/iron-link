@@ -4,11 +4,8 @@ import { Datasworn, IdParser } from "@datasworn/core";
 import { Primary } from "@datasworn/core/dist/StringId";
 import RollIcon from "@mui/icons-material/Casino";
 
+import { CampaignState, CharacterState } from "./common.types";
 import { useDataswornTree } from "atoms/dataswornTree.atom";
-import {
-  CampaignState,
-  CharacterState,
-} from "components/datasworn/Move/RollOptions/common.types";
 import { Stat } from "components/datasworn/Stat";
 import { useRollStatAndAddToLog } from "pages/games/hooks/useRollStatAndAddToLog";
 

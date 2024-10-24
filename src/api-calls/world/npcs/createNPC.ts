@@ -1,7 +1,7 @@
 import { addDoc, Timestamp } from "firebase/firestore";
 
+import { getNPCCollection } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
-import { getNPCCollection } from "api-calls/world/npcs/_getRef";
 import { NPC } from "types/NPCs.type";
 
 export const createNPC = createApiFunction<

@@ -3,12 +3,12 @@ import { Datasworn } from "@datasworn/core";
 import OracleTableIcon from "@mui/icons-material/List";
 import { IconButton, ListItemText, Tooltip } from "@mui/material";
 
-import { useOpenDataswornDialog } from "atoms/dataswornDialog.atom";
 import {
   OracleVisibilityState,
   VisibilitySettings,
-} from "components/datasworn/OracleTree/getOracleCollectionVisiblity";
-import { ListItemButtonWithSecondaryAction } from "components/datasworn/OracleTree/ListItemButtonWithSecondaryAction";
+} from "./getOracleCollectionVisiblity";
+import { ListItemButtonWithSecondaryAction } from "./ListItemButtonWithSecondaryAction";
+import { useOpenDataswornDialog } from "atoms/dataswornDialog.atom";
 import {
   CampaignPermissionType,
   useCampaignPermissions,

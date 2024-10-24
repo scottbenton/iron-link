@@ -1,10 +1,7 @@
 import { Datasworn } from "@datasworn/core";
 import { fireEvent, render, screen, within } from "@testing-library/react";
 
-import {
-  AssetControl,
-  AssetControlProps,
-} from "components/datasworn/AssetCard/AssetControl";
+import { AssetControl, AssetControlProps } from "../AssetControl";
 import { TestWrapper } from "tests/TestWrapper";
 import { describe, expect, it, vi } from "vitest";
 

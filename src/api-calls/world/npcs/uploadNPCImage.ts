@@ -1,10 +1,7 @@
 import { updateDoc } from "firebase/firestore";
 
+import { constructNPCImagesPath, getNPCDoc } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
-import {
-  constructNPCImagesPath,
-  getNPCDoc,
-} from "api-calls/world/npcs/_getRef";
 import { replaceImage } from "lib/storage.lib";
 
 export const uploadNPCImage = createApiFunction<

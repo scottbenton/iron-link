@@ -1,6 +1,6 @@
 import { Meta, StoryObj } from "@storybook/react";
 
-import { Oracle } from "components/datasworn/Oracle";
+import { Oracle } from "../Oracle";
 
 const meta = {
   title: "Datasworn/OracleRenderer",
