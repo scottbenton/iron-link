@@ -36,7 +36,7 @@ export default tseslint.config(
       "simple-import-sort/imports": [
         "warn",
         {
-          groups: [[packageRegex]],
+          groups: [["^react", packageRegex]],
         },
       ],
       "no-relative-import-paths/no-relative-import-paths": "warn",

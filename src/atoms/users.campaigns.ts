@@ -1,7 +1,7 @@
+import { useEffect } from "react";
 import { Unsubscribe } from "firebase/firestore";
 import { t } from "i18next";
 import { atom, useAtom, useAtomValue } from "jotai";
-import { useEffect } from "react";
 
 import { CampaignDocument } from "api-calls/campaign/_campaign.type";
 import { listenToUsersCampaigns } from "api-calls/campaign/listenToUsersCampaigns";

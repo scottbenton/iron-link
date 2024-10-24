@@ -1,5 +1,5 @@
-import { Box, Button, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
+import { Box, Button, Typography } from "@mui/material";
 
 import { ReferenceSidebarContents } from "pages/games/characterSheet/components/ReferenceSidebarContents";
 import { useCampaignId } from "pages/games/gamePageLayout/hooks/useCampaignId";

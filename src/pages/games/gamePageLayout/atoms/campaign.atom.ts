@@ -1,5 +1,5 @@
-import { atom, useSetAtom } from "jotai";
 import { useCallback, useEffect } from "react";
+import { atom, useSetAtom } from "jotai";
 
 import { AssetDocument } from "api-calls/assets/_asset.type";
 import { CampaignDocument } from "api-calls/campaign/_campaign.type";

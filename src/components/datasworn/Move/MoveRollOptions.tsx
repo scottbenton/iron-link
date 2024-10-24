@@ -1,8 +1,8 @@
+import { useMemo } from "react";
+import { useParams } from "react-router-dom";
 import { Datasworn } from "@datasworn/core";
 import { Box, Typography } from "@mui/material";
 import { useAtomValue } from "jotai";
-import { useMemo } from "react";
-import { useParams } from "react-router-dom";
 
 import { useUID } from "atoms/auth.atom";
 import { derivedAtomWithEquality } from "atoms/derivedAtomWithEquality";

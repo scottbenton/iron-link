@@ -1,8 +1,8 @@
+import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { Datasworn, IdParser } from "@datasworn/core";
 import { Primary } from "@datasworn/core/dist/StringId";
 import { Box, Typography } from "@mui/material";
-import { useMemo } from "react";
-import { useTranslation } from "react-i18next";
 
 import { AssetDocument } from "api-calls/assets/_asset.type";
 import { useDataswornTree } from "atoms/dataswornTree.atom";

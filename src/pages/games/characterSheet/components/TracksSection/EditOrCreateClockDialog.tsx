@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Alert,
   AlertTitle,
@@ -12,8 +14,6 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
 
 import { addProgressTrack } from "api-calls/tracks/addProgressTrack";
 import { updateProgressTrack } from "api-calls/tracks/updateProgressTrack";

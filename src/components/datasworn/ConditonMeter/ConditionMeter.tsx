@@ -1,9 +1,9 @@
+import { useId } from "react";
+import { useTranslation } from "react-i18next";
 import IncrementIcon from "@mui/icons-material/Add";
 import ExampleIcon from "@mui/icons-material/Casino";
 import DecrementIcon from "@mui/icons-material/Remove";
 import { Box, ButtonBase, Card, IconButton, Typography } from "@mui/material";
-import { useId } from "react";
-import { useTranslation } from "react-i18next";
 
 import { GradientBox } from "components/GradientBox";
 

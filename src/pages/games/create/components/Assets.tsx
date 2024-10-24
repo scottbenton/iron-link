@@ -1,7 +1,7 @@
-import RemoveAssetIcon from "@mui/icons-material/Close";
-import { Button, IconButton } from "@mui/material";
 import { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
+import RemoveAssetIcon from "@mui/icons-material/Close";
+import { Button, IconButton } from "@mui/material";
 
 import { AssetDocument } from "api-calls/assets/_asset.type";
 import { AssetCard } from "components/datasworn/AssetCard";

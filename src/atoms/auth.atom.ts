@@ -1,7 +1,7 @@
+import { useEffect } from "react";
 import { firebaseAuth } from "config/firebase.config";
 import { onAuthStateChanged, User } from "firebase/auth";
 import { atom, useAtom, useAtomValue } from "jotai";
-import { useEffect } from "react";
 
 import { UserDocument } from "api-calls/user/_user.type";
 import { updateUserDoc } from "api-calls/user/updateUserDoc";

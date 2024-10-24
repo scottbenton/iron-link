@@ -1,6 +1,6 @@
+import { PropsWithChildren } from "react";
 import PreviousIcon from "@mui/icons-material/ChevronLeft";
 import { IconButton } from "@mui/material";
-import { PropsWithChildren } from "react";
 
 import {
   useCloseDataswornDialog,

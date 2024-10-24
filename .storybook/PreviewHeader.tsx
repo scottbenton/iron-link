@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Box,
   FormControlLabel,
@@ -6,7 +7,6 @@ import {
   TextField,
   useColorScheme as useThemeMode,
 } from "@mui/material";
-import React from "react";
 
 import { ColorScheme, useColorScheme } from "atoms/theme.atom";
 

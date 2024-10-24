@@ -1,5 +1,5 @@
-import { Box, Button, DialogActions, DialogContent } from "@mui/material";
 import { useTranslation } from "react-i18next";
+import { Box, Button, DialogActions, DialogContent } from "@mui/material";
 
 import { AssetCard } from "components/datasworn/AssetCard";
 import { DataswornDialogTitle } from "components/datasworn/DataswornDialog/DataswornDialogTitle";

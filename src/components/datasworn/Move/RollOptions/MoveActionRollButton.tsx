@@ -1,6 +1,6 @@
+import { useTranslation } from "react-i18next";
 import { Datasworn } from "@datasworn/core";
 import RollIcon from "@mui/icons-material/Casino";
-import { useTranslation } from "react-i18next";
 
 import { useConditionMeterRules } from "atoms/dataswornRules/useConditionMeterRules";
 import { useStatRules } from "atoms/dataswornRules/useStatRules";

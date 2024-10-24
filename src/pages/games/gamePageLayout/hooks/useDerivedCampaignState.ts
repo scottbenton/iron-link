@@ -1,5 +1,5 @@
-import { useAtomValue } from "jotai";
 import { useMemo } from "react";
+import { useAtomValue } from "jotai";
 
 import { CampaignDocument } from "api-calls/campaign/_campaign.type";
 import { derivedAtomWithEquality } from "atoms/derivedAtomWithEquality";

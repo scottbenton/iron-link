@@ -1,8 +1,8 @@
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import CheckIcon from "@mui/icons-material/Check";
 import { Box, Button } from "@mui/material";
 import { useConfirm } from "material-ui-confirm";
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
 
 import { removeProgressTrack } from "api-calls/tracks/removeProgressTrack";
 import { updateProgressTrack } from "api-calls/tracks/updateProgressTrack";

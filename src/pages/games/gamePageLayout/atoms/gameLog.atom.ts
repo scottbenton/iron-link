@@ -1,5 +1,5 @@
-import { atom, useAtomValue, useSetAtom } from "jotai";
 import { useCallback, useEffect } from "react";
+import { atom, useAtomValue, useSetAtom } from "jotai";
 
 import { listenToLogs } from "api-calls/game-log/listenToLogs";
 import { rollDisplayAtom } from "atoms/rollDisplay.atom";

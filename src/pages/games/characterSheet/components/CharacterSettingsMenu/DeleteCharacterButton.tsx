@@ -1,9 +1,9 @@
-import DeleteIcon from "@mui/icons-material/Delete";
-import { ListItemIcon, ListItemText, MenuItem } from "@mui/material";
-import { useConfirm } from "material-ui-confirm";
 import { useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { ListItemIcon, ListItemText, MenuItem } from "@mui/material";
+import { useConfirm } from "material-ui-confirm";
 
 import { deleteCampaign } from "api-calls/campaign/deleteCampaign";
 import { deleteCharacter } from "api-calls/character/deleteCharacter";

@@ -1,6 +1,6 @@
+import { useTranslation } from "react-i18next";
 import { Datasworn } from "@datasworn/core";
 import { Box, Button } from "@mui/material";
-import { useTranslation } from "react-i18next";
 
 import { AssetDocument } from "api-calls/assets/_asset.type";
 import { AssetMap } from "atoms/dataswornRules/useAssets";

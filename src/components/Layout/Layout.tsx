@@ -1,5 +1,5 @@
-import { Box, LinearProgress } from "@mui/material";
 import { Outlet } from "react-router-dom";
+import { Box, LinearProgress } from "@mui/material";
 
 import { AuthState, useAuthAtom } from "atoms/auth.atom";
 import { RollSnackbarSection } from "components/characters/rolls/RollSnackbarSection";

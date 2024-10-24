@@ -1,6 +1,6 @@
-import { Box, Typography } from "@mui/material";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { Box, Typography } from "@mui/material";
 
 import { MoveTree } from "components/datasworn/MoveTree";
 import { OracleTree } from "components/datasworn/OracleTree";

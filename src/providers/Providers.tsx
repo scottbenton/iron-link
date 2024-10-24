@@ -1,6 +1,6 @@
-import { ConfirmProvider } from "material-ui-confirm";
 import { useTranslation } from "react-i18next";
 import { RouterProvider } from "react-router-dom";
+import { ConfirmProvider } from "material-ui-confirm";
 
 import { router } from "pages/routes";
 import { HeadProvider } from "providers/HeadProvider";

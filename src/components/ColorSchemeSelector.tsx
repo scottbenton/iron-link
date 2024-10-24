@@ -1,6 +1,6 @@
+import { useTranslation } from "react-i18next";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { Box, ButtonBase, ThemeProvider, Typography } from "@mui/material";
-import { useTranslation } from "react-i18next";
 
 import { ColorScheme } from "atoms/theme.atom";
 import { IronLinkLogo } from "components/Layout/IronLinkLogo";

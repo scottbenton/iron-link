@@ -1,6 +1,6 @@
-import { Button, Dialog, DialogActions, DialogContent } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { Button, Dialog, DialogActions, DialogContent } from "@mui/material";
 
 import { updateCharacter } from "api-calls/character/updateCharacter";
 import { useStatRules } from "atoms/dataswornRules/useStatRules";

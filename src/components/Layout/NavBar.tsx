@@ -1,6 +1,6 @@
+import { useState } from "react";
 import HamburgerMenuIcon from "@mui/icons-material/Menu";
 import { AppBar, Box, Drawer, IconButton, List, Toolbar } from "@mui/material";
-import { useState } from "react";
 
 import { AppSettingsMenu } from "components/Layout/AppSettingsMenu";
 import { IronLinkLogo } from "components/Layout/IronLinkLogo";

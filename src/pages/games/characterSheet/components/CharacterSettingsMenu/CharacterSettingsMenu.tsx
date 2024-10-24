@@ -1,3 +1,5 @@
+import { useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import CharacterIcon from "@mui/icons-material/AccountBox";
 import CharacterSettingsIcon from "@mui/icons-material/ManageAccounts";
 import StatsIcon from "@mui/icons-material/Numbers";
@@ -9,8 +11,6 @@ import {
   Menu,
   MenuItem,
 } from "@mui/material";
-import { useRef, useState } from "react";
-import { useTranslation } from "react-i18next";
 
 import { CharacterDetailsDialog } from "pages/games/characterSheet/components/CharacterSettingsMenu/CharacterDetailsDialog";
 import { CharacterStatsDialog } from "pages/games/characterSheet/components/CharacterSettingsMenu/CharacterStatsDialog";

@@ -1,5 +1,5 @@
-import { useAtomValue } from "jotai";
 import { useMemo } from "react";
+import { useAtomValue } from "jotai";
 
 import { currentCharacterAtom } from "atoms/currentCharacter/currentCharacter.atom";
 import { useImpactRules } from "atoms/dataswornRules/useImpactRules";
