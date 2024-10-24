@@ -12,6 +12,7 @@ const mockUseRollStat = useRollStatAndAddToLog as MockedFunction<
 mockUseRollStat.mockImplementation(() => mockRollStat);
 
 vi.mock("pages/games/hooks/useRollStatAndAddToLog");
+vi.mock("atoms/auth.atom.ts");
 describe("AssetControl", () => {
   const setup = (props?: Partial<AssetControlProps>) => {
     const defaultProps: AssetControlProps = {
