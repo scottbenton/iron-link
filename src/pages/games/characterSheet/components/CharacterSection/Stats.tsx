@@ -1,16 +1,17 @@
+import { useCallback } from "react";
+import { useTranslation } from "react-i18next";
+import RollIcon from "@mui/icons-material/Casino";
 import { Box, Typography } from "@mui/material";
+
+import { DEFAULT_MOMENTUM } from "../../../../../data/constants.ts";
+import { useCharacterId } from "../../hooks/useCharacterId";
+import { useDerivedCharacterState } from "../../hooks/useDerivedCharacterState";
+import { useIsOwnerOfCharacter } from "../../hooks/useIsOwnerOfCharacter";
 import { updateCharacter } from "api-calls/character/updateCharacter";
 import { useStatRules } from "atoms/dataswornRules/useStatRules";
 import { DebouncedConditionMeter } from "components/datasworn/ConditonMeter";
 import { Stat } from "components/datasworn/Stat";
-import { useTranslation } from "react-i18next";
-import { useCharacterId } from "../../hooks/useCharacterId";
-import { useDerivedCharacterState } from "../../hooks/useDerivedCharacterState";
-import { useCallback } from "react";
-import { useIsOwnerOfCharacter } from "../../hooks/useIsOwnerOfCharacter";
-import RollIcon from "@mui/icons-material/Casino";
 import { useRollStatAndAddToLog } from "pages/games/hooks/useRollStatAndAddToLog";
-import { DEFAULT_MOMENTUM } from "../../../../../data/constants.ts";
 
 export function Stats() {
   const characterId = useCharacterId();
@@ -20,7 +21,7 @@ export function Stats() {
       stats: character?.characterDocument.data?.stats ?? {},
       adds: character?.characterDocument.data?.adds ?? 0,
       momentum: character?.characterDocument.data?.momentum ?? DEFAULT_MOMENTUM,
-    })
+    }),
   );
   const isCharacterOwner = useIsOwnerOfCharacter();
 
@@ -37,7 +38,7 @@ export function Stats() {
         }).catch(() => {});
       }
     },
-    [characterId]
+    [characterId],
   );
 
   const rollStat = useRollStatAndAddToLog();

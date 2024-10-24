@@ -1,20 +1,21 @@
-import { Datasworn } from "@datasworn/core";
-import { Box } from "@mui/material";
-import { AssetControls } from "./AssetControls";
-import { AssetDocument } from "api-calls/assets/_asset.type";
-import { AssetCounterField } from "./fields/AssetCounterField";
-import { AssetClockField } from "./fields/AssetClockField";
-import { ConditionMeter } from "../ConditonMeter";
-import { AssetSelectEnhancementField } from "./fields/AssetSelectEnhancementField";
-import { AssetCheckboxField } from "./fields/AssetCheckboxField";
-import { AssetTextField } from "./fields/AssetTextField";
 import { useCallback } from "react";
-import { useRollStatAndAddToLog } from "../../../pages/games/hooks/useRollStatAndAddToLog.ts";
+import { useTranslation } from "react-i18next";
+import { Datasworn } from "@datasworn/core";
 import RollIcon from "@mui/icons-material/Casino";
+import { Box } from "@mui/material";
+
+import { DEFAULT_MOMENTUM } from "../../../data/constants.ts";
 import { useCharacterIdOptional } from "../../../pages/games/characterSheet/hooks/useCharacterId.ts";
 import { useDerivedCharacterState } from "../../../pages/games/characterSheet/hooks/useDerivedCharacterState.ts";
-import { useTranslation } from "react-i18next";
-import { DEFAULT_MOMENTUM } from "../../../data/constants.ts";
+import { useRollStatAndAddToLog } from "../../../pages/games/hooks/useRollStatAndAddToLog.ts";
+import { ConditionMeter } from "../ConditonMeter";
+import { AssetControls } from "./AssetControls";
+import { AssetCheckboxField } from "./fields/AssetCheckboxField";
+import { AssetClockField } from "./fields/AssetClockField";
+import { AssetCounterField } from "./fields/AssetCounterField";
+import { AssetSelectEnhancementField } from "./fields/AssetSelectEnhancementField";
+import { AssetTextField } from "./fields/AssetTextField";
+import { AssetDocument } from "api-calls/assets/_asset.type";
 
 export interface AssetControlProps {
   controlId: string;
@@ -23,7 +24,7 @@ export interface AssetControlProps {
   value?: boolean | string | number;
   onControlChange?: (
     controlKey: string,
-    value: boolean | string | number
+    value: boolean | string | number,
   ) => void;
 }
 export function AssetControl(props: AssetControlProps) {
@@ -35,7 +36,7 @@ export function AssetControl(props: AssetControlProps) {
         onControlChange(controlId, value);
       }
     },
-    [onControlChange, controlId]
+    [onControlChange, controlId],
   );
 
   const { t } = useTranslation();
