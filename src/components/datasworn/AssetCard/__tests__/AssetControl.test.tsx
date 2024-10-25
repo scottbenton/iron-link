@@ -1,9 +1,10 @@
-import { describe, expect, it, vi, MockedFunction, beforeEach } from "vitest";
-import { fireEvent, render, screen, within } from "@testing-library/react";
-import { AssetControl, AssetControlProps } from "../AssetControl";
 import { Datasworn } from "@datasworn/core";
-import { TestWrapper } from "tests/TestWrapper";
+import { fireEvent, render, screen, within } from "@testing-library/react";
+
+import { AssetControl, AssetControlProps } from "../AssetControl";
 import { useRollStatAndAddToLog } from "pages/games/hooks/useRollStatAndAddToLog";
+import { TestWrapper } from "tests/TestWrapper";
+import { beforeEach, describe, expect, it, MockedFunction, vi } from "vitest";
 
 const mockRollStat = vi.fn();
 const mockUseRollStat = useRollStatAndAddToLog as MockedFunction<
@@ -214,7 +215,7 @@ describe("AssetControl", () => {
     fireEvent.change(textField, { target: { value: "New Value" } });
     expect(onControlChange).toHaveBeenCalledWith(
       "test-control-id",
-      "New Value"
+      "New Value",
     );
   });
 

@@ -1,3 +1,9 @@
+import { useRef, useState } from "react";
+import BackspaceIcon from "@mui/icons-material/Backspace";
+import RerollIcon from "@mui/icons-material/Casino";
+import CopyIcon from "@mui/icons-material/CopyAll";
+import MoreIcon from "@mui/icons-material/MoreHoriz";
+import MomentumIcon from "@mui/icons-material/Whatshot";
 import {
   IconButton,
   ListItemIcon,
@@ -5,29 +11,24 @@ import {
   Menu,
   MenuItem,
 } from "@mui/material";
-import { useRef, useState } from "react";
-import MoreIcon from "@mui/icons-material/MoreHoriz";
-import CopyIcon from "@mui/icons-material/CopyAll";
-import RerollIcon from "@mui/icons-material/Casino";
-import BackspaceIcon from "@mui/icons-material/Backspace";
-import MomentumIcon from "@mui/icons-material/Whatshot";
-import { useSnackbar } from "providers/SnackbarProvider";
-import { convertRollToClipboard } from "./clipboardFormatter";
-import { DieRerollDialog } from "./DieRerollDialog";
-import { RollResult, RollType, Roll } from "types/DieRolls.type";
-import { useUID } from "atoms/auth.atom";
+
 import { useCharacterIdOptional } from "../../hooks/useCharacterId";
 import { useDerivedCharacterState } from "../../hooks/useDerivedCharacterState";
 import { useMomentumParameters } from "../../hooks/useMomentumResetValue";
-import { updateLog } from "api-calls/game-log/updateLog";
-import { useCampaignId } from "pages/games/gamePageLayout/hooks/useCampaignId";
+import { convertRollToClipboard } from "./clipboardFormatter";
+import { DieRerollDialog } from "./DieRerollDialog";
 import { updateCharacter } from "api-calls/character/updateCharacter";
 import { removeLog } from "api-calls/game-log/removeLog";
+import { updateLog } from "api-calls/game-log/updateLog";
+import { useUID } from "atoms/auth.atom";
+import { useDataswornTree } from "atoms/dataswornTree.atom";
+import { useCampaignId } from "pages/games/gamePageLayout/hooks/useCampaignId";
 import {
   CampaignPermissionType,
   useCampaignPermissions,
 } from "pages/games/gamePageLayout/hooks/usePermissions";
-import { useDataswornTree } from "atoms/dataswornTree.atom";
+import { useSnackbar } from "providers/SnackbarProvider";
+import { Roll, RollResult, RollType } from "types/DieRolls.type";
 
 export interface NormalRollActionsProps {
   rollId: string;
@@ -64,7 +65,7 @@ export function NormalRollActions(props: NormalRollActionsProps) {
   const currentCharacterId = useCharacterIdOptional();
   const momentum = useDerivedCharacterState(
     currentCharacterId,
-    (character) => character?.characterDocument.data?.momentum ?? 0
+    (character) => character?.characterDocument.data?.momentum ?? 0,
   );
   const momentumResetValue = useMomentumParameters().resetValue;
 
@@ -135,13 +136,13 @@ export function NormalRollActions(props: NormalRollActionsProps) {
             momentumBurned: momentum,
             result: newRollResult,
           },
-        })
+        }),
       );
       promises.push(
         updateCharacter({
           characterId: currentCharacterId,
           character: { momentum: momentumResetValue },
-        })
+        }),
       );
 
       Promise.all(promises)

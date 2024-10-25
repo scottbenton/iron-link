@@ -1,10 +1,11 @@
-import { derivedAtomWithEquality } from "atoms/derivedAtomWithEquality";
+import { useMemo } from "react";
+import { useParams } from "react-router-dom";
+import { atom, useAtomValue } from "jotai";
+
 import { currentCampaignAtom } from "../atoms/campaign.atom";
 import { CampaignType } from "api-calls/campaign/_campaign.type";
-import { atom, useAtomValue } from "jotai";
-import { useMemo } from "react";
 import { authAtom } from "atoms/auth.atom";
-import { useParams } from "react-router-dom";
+import { derivedAtomWithEquality } from "atoms/derivedAtomWithEquality";
 
 const campaignPermissions = derivedAtomWithEquality(
   currentCampaignAtom,
@@ -13,7 +14,7 @@ const campaignPermissions = derivedAtomWithEquality(
     gmIds: atom.campaign?.gmIds ?? [],
     campaignType: atom.campaign?.type ?? CampaignType.Solo,
     characters: atom.campaign?.characters ?? [],
-  })
+  }),
 );
 
 // Decreasing levels of ownership
@@ -65,13 +66,13 @@ export function useCampaignPermissions() {
               campaignPermission: isUserGuide
                 ? CampaignPermissionType.Guide
                 : isUserPlayer
-                ? CampaignPermissionType.Player
-                : CampaignPermissionType.Viewer,
+                  ? CampaignPermissionType.Player
+                  : CampaignPermissionType.Viewer,
               permissionsByCharacter: characterPermissions,
             };
           }),
-        []
-      )
+        [],
+      ),
     );
 
   return {
@@ -79,7 +80,7 @@ export function useCampaignPermissions() {
     campaignPermission,
     permissionsByCharacter,
     characterPermission: characterId
-      ? permissionsByCharacter[characterId] ?? CharacterPermissionType.Viewer
+      ? (permissionsByCharacter[characterId] ?? CharacterPermissionType.Viewer)
       : CharacterPermissionType.Viewer,
   };
 }

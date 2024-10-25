@@ -1,4 +1,5 @@
 import { deleteDoc } from "firebase/firestore";
+
 import {
   constructLoreImagesPath,
   getLoreDoc,
@@ -24,7 +25,7 @@ export const deleteLore = createApiFunction<Params, void>((params) => {
     promises.push(deleteDoc(getPublicNotesLoreDoc(worldId, loreId)));
     if (imageFilename) {
       promises.push(
-        deleteImage(constructLoreImagesPath(worldId, loreId), imageFilename)
+        deleteImage(constructLoreImagesPath(worldId, loreId), imageFilename),
       );
     }
 

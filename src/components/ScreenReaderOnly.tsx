@@ -1,5 +1,5 @@
-import { Box } from "@mui/material";
 import { PropsWithChildren } from "react";
+import { Box } from "@mui/material";
 
 export interface ScreenReaderOnlyProps {
   id?: string;
@@ -7,7 +7,7 @@ export interface ScreenReaderOnlyProps {
 }
 
 export function ScreenReaderOnly(
-  props: PropsWithChildren<ScreenReaderOnlyProps>
+  props: PropsWithChildren<ScreenReaderOnlyProps>,
 ) {
   const { id, live, children } = props;
 

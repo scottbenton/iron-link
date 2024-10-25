@@ -1,10 +1,11 @@
-import { Box, ButtonBase, Card, IconButton, Typography } from "@mui/material";
-import IncrementIcon from "@mui/icons-material/Add";
-import DecrementIcon from "@mui/icons-material/Remove";
-import { GradientBox } from "components/GradientBox";
-import ExampleIcon from "@mui/icons-material/Casino";
 import { useId } from "react";
 import { useTranslation } from "react-i18next";
+import IncrementIcon from "@mui/icons-material/Add";
+import ExampleIcon from "@mui/icons-material/Casino";
+import DecrementIcon from "@mui/icons-material/Remove";
+import { Box, ButtonBase, Card, IconButton, Typography } from "@mui/material";
+
+import { GradientBox } from "components/GradientBox";
 
 export interface ConditionMeterProps {
   label: string;
@@ -75,7 +76,7 @@ export function ConditionMeter(props: ConditionMeterProps) {
           aria-label={t(
             "datasworn.meter-subtract-1",
             "subtract 1 from {{label}}",
-            { label }
+            { label },
           )}
           size={"small"}
           disabled={!onChange || currentValue <= min || disabled}
@@ -86,9 +87,7 @@ export function ConditionMeter(props: ConditionMeterProps) {
         <Box
           id={id}
           component={onActionClick && !disabled ? ButtonBase : "div"}
-          data-testid={
-            onActionClick && !disabled ? "roll-button" : undefined
-          }
+          data-testid={onActionClick && !disabled ? "roll-button" : undefined}
           onClick={onActionClick}
           {...(onActionClick && !disabled ? { focusRipple: true } : {})}
           display="block"

@@ -1,3 +1,5 @@
+import { useCallback, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Box,
   Button,
@@ -7,17 +9,16 @@ import {
   Menu,
   MenuItem,
 } from "@mui/material";
+
+import { getTrackTypeLabel } from "./common";
+import { EditOrCreateClockDialog } from "./EditOrCreateClockDialog";
+import { EditOrCreateTrackDialog } from "./EditOrCreateTrackDialog";
 import { useSetCurrentCampaignAtom } from "pages/games/gamePageLayout/atoms/campaign.atom";
 import {
   CampaignPermissionType,
   useCampaignPermissions,
 } from "pages/games/gamePageLayout/hooks/usePermissions";
-import { useCallback, useRef, useState } from "react";
-import { useTranslation } from "react-i18next";
 import { TrackSectionProgressTracks, TrackTypes } from "types/Track.type";
-import { EditOrCreateTrackDialog } from "./EditOrCreateTrackDialog";
-import { EditOrCreateClockDialog } from "./EditOrCreateClockDialog";
-import { getTrackTypeLabel } from "./common";
 
 export interface TracksSectionHeaderProps {
   showCompletedTracks: boolean;
@@ -39,7 +40,7 @@ export function TracksSectionHeader(props: TracksSectionHeaderProps) {
         },
       }));
     },
-    [setCurrentCampaign]
+    [setCurrentCampaign],
   );
 
   const [isAddMenuOpen, setIsAddMenuOpen] = useState(false);
@@ -54,7 +55,7 @@ export function TracksSectionHeader(props: TracksSectionHeaderProps) {
     trackType: TrackTypes.Vow,
   });
   const handleOpenTrack = (
-    trackType: TrackSectionProgressTracks | TrackTypes.SceneChallenge
+    trackType: TrackSectionProgressTracks | TrackTypes.SceneChallenge,
   ) => {
     setIsAddTrackDialogOpen({
       open: true,
@@ -83,7 +84,7 @@ export function TracksSectionHeader(props: TracksSectionHeaderProps) {
       <FormControlLabel
         label={t(
           "character.character-sidebar.show-completed-tracks",
-          "Show Completed"
+          "Show Completed",
         )}
         control={
           <Checkbox

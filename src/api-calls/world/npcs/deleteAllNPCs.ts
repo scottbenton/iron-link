@@ -1,4 +1,5 @@
 import { deleteDoc, getDocs } from "firebase/firestore";
+
 import {
   getNPCCollection,
   getNPCDoc,

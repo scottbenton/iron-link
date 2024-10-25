@@ -1,14 +1,15 @@
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Box, Dialog, DialogContent } from "@mui/material";
+
+import { AssetCollectionSidebar } from "./AssetCollectionSidebar";
+import { AssetList } from "./AssetList";
 import { AssetDocument } from "api-calls/assets/_asset.type";
-import { DialogTitleWithCloseButton } from "components/DialogTitleWithCloseButton";
 import {
   RootAssetCollections,
   useAssets,
 } from "atoms/dataswornRules/useAssets";
-import { useTranslation } from "react-i18next";
-import { AssetCollectionSidebar } from "./AssetCollectionSidebar";
-import { useEffect, useState } from "react";
-import { AssetList } from "./AssetList";
+import { DialogTitleWithCloseButton } from "components/DialogTitleWithCloseButton";
 
 export interface AssetCardDialogProps {
   open: boolean;
@@ -22,7 +23,7 @@ export function AssetCardDialog(props: AssetCardDialogProps) {
 
   const { rootAssetCollections, assetCollectionMap, assetMap } = useAssets();
   const [selectedAssetCollectionId, setSelectedAssetCollectionId] = useState(
-    getFirstAssetCollection(rootAssetCollections)
+    getFirstAssetCollection(rootAssetCollections),
   );
   const collection = assetCollectionMap[selectedAssetCollectionId.collectionId];
 

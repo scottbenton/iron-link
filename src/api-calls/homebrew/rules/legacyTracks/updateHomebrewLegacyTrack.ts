@@ -1,6 +1,7 @@
-import { createApiFunction } from "api-calls/createApiFunction";
 import { PartialWithFieldValue, updateDoc } from "firebase/firestore";
+
 import { getHomebrewLegacyTrackDoc } from "./_getRef";
+import { createApiFunction } from "api-calls/createApiFunction";
 import { HomebrewLegacyTrackDocument } from "api-calls/homebrew/rules/legacyTracks/_homebrewLegacyTrack.type";
 
 export const updateHomebrewLegacyTrack = createApiFunction<

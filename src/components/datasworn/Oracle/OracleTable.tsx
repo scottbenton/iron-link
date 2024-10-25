@@ -1,6 +1,7 @@
 import { Datasworn } from "@datasworn/core";
-import { OracleRollableTable } from "./OracleRollableTable";
+
 import { OracleRollableColumn } from "./OracleRollableColumn";
+import { OracleRollableTable } from "./OracleRollableTable";
 
 export interface OracleTableProps {
   oracle: Datasworn.OracleRollable | Datasworn.EmbeddedOracleRollable;

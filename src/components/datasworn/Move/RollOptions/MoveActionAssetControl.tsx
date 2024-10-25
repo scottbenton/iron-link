@@ -1,11 +1,12 @@
-import { Datasworn, IdParser } from "@datasworn/core";
-import { CampaignState, CharacterState } from "./common.types";
 import { useMemo } from "react";
-import { useDataswornTree } from "atoms/dataswornTree.atom";
-import { Primary } from "@datasworn/core/dist/StringId";
 import { useTranslation } from "react-i18next";
-import { Stat } from "components/datasworn/Stat";
+import { Datasworn, IdParser } from "@datasworn/core";
+import { Primary } from "@datasworn/core/dist/StringId";
 import RollIcon from "@mui/icons-material/Casino";
+
+import { CampaignState, CharacterState } from "./common.types";
+import { useDataswornTree } from "atoms/dataswornTree.atom";
+import { Stat } from "components/datasworn/Stat";
 import { useRollStatAndAddToLog } from "pages/games/hooks/useRollStatAndAddToLog";
 
 export interface MoveActionAssetControlProps {
@@ -59,17 +60,17 @@ export function MoveActionAssetControl(props: MoveActionAssetControlProps) {
                   label: t(
                     "datasworn.move.asset-control-roll-label",
                     "{{assetName}}'s {{controlLabel}}",
-                    { assetName, controlLabel }
+                    { assetName, controlLabel },
                   ),
                   value:
                     typeof controlValue === "number"
                       ? controlValue
-                      : (typeof defaultControlValue === "number"
+                      : ((typeof defaultControlValue === "number"
                           ? defaultControlValue
-                          : 0) ?? 0,
+                          : 0) ?? 0),
                 });
               }
-            }
+            },
           );
         }
       });

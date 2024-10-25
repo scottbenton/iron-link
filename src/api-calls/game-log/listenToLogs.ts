@@ -1,12 +1,13 @@
 import {
-  QueryConstraint,
-  Unsubscribe,
   limit,
   onSnapshot,
   orderBy,
   query,
+  QueryConstraint,
+  Unsubscribe,
   where,
 } from "firebase/firestore";
+
 import { convertFromDatabase, getCampaignGameLogCollection } from "./_getRef";
 import { Roll } from "types/DieRolls.type";
 
@@ -57,6 +58,6 @@ export function listenToLogs(params: {
     (error) => {
       console.error(error);
       onError("Error getting new logs.");
-    }
+    },
   );
 }

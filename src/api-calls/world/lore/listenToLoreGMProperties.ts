@@ -1,14 +1,15 @@
 import { Unsubscribe } from "firebase/auth";
 import { onSnapshot } from "firebase/firestore";
-import { GMLore } from "types/Lore.type";
+
 import { getPrivateDetailsLoreDoc } from "./_getRef";
 import { getErrorMessage } from "lib/getErrorMessage";
+import { GMLore } from "types/Lore.type";
 
 export function listenToLoreGMProperties(
   worldId: string,
   loreId: string,
   updateGMProperties: (properties: GMLore | undefined) => void,
-  onError: (error: string) => void
+  onError: (error: string) => void,
 ): Unsubscribe {
   return onSnapshot(
     getPrivateDetailsLoreDoc(worldId, loreId),
@@ -22,6 +23,6 @@ export function listenToLoreGMProperties(
     },
     (error) => {
       onError(getErrorMessage(error, "Failed to get lore document gm notes"));
-    }
+    },
   );
 }

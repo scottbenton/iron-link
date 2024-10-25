@@ -1,10 +1,11 @@
-import {
-  CollectionReference,
-  DocumentReference,
-  collection,
-  doc,
-} from "firebase/firestore";
 import { firestore } from "config/firebase.config";
+import {
+  collection,
+  CollectionReference,
+  doc,
+  DocumentReference,
+} from "firebase/firestore";
+
 import { HomebrewImpactCategoryDocument } from "api-calls/homebrew/rules/impacts/_homebrewImpacts.type";
 
 export function constructHomebrewImpactsCollectionPath() {
@@ -18,13 +19,13 @@ export function constructHomebrewImpactsDocPath(impactCategoryId: string) {
 export function getHomebrewImpactsCollection() {
   return collection(
     firestore,
-    constructHomebrewImpactsCollectionPath()
+    constructHomebrewImpactsCollectionPath(),
   ) as CollectionReference<HomebrewImpactCategoryDocument>;
 }
 
 export function getHomebrewImpactsDoc(impactCategoryId: string) {
   return doc(
     firestore,
-    constructHomebrewImpactsDocPath(impactCategoryId)
+    constructHomebrewImpactsDocPath(impactCategoryId),
   ) as DocumentReference<HomebrewImpactCategoryDocument>;
 }

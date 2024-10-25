@@ -1,4 +1,5 @@
 import { addDoc } from "firebase/firestore";
+
 import {
   getCampaignNoteCollection,
   getCharacterNoteCollection,
@@ -30,7 +31,7 @@ export const addNote = createApiFunction<
         order,
         title: "New Page",
         shared: shared ?? false,
-      }
+      },
     )
       .then((doc) => {
         resolve(doc.id);

@@ -1,4 +1,8 @@
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { useNavigate, useParams } from "react-router-dom";
 import { LinearProgress } from "@mui/material";
+
 import { CampaignDocument } from "api-calls/campaign/_campaign.type";
 import { addUserToCampaign } from "api-calls/campaign/addUserToCampaign";
 import { getCampaign } from "api-calls/campaign/getCampaign";
@@ -7,9 +11,6 @@ import { GradientButton } from "components/GradientButton";
 import { PageContent, PageHeader } from "components/Layout";
 import { EmptyState } from "components/Layout/EmptyState";
 import { pathConfig } from "pages/pathConfig";
-import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { useNavigate, useParams } from "react-router-dom";
 
 export function GameJoinPage() {
   const { t } = useTranslation();

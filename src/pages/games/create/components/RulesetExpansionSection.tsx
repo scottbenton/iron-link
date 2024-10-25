@@ -1,9 +1,10 @@
-import { RulesPackageSelector } from "components/datasworn/RulesPackageSelector";
-import { useSetCreateGameAtom, createGameAtom } from "../atoms/createGame.atom";
-import { derivedAtomWithEquality } from "atoms/derivedAtomWithEquality";
-import { useAtomValue } from "jotai";
-import { SectionHeading } from "components/SectionHeading";
 import { useTranslation } from "react-i18next";
+import { useAtomValue } from "jotai";
+
+import { createGameAtom, useSetCreateGameAtom } from "../atoms/createGame.atom";
+import { derivedAtomWithEquality } from "atoms/derivedAtomWithEquality";
+import { RulesPackageSelector } from "components/datasworn/RulesPackageSelector";
+import { SectionHeading } from "components/SectionHeading";
 
 const rulesPackages = derivedAtomWithEquality(createGameAtom, (atom) => ({
   rulesets: atom.rulesets,
@@ -29,7 +30,7 @@ export function RulesetExpansionSection() {
   const handleExpansionChange = (
     rulesetKey: string,
     expansionKey: string,
-    isActive: boolean
+    isActive: boolean,
   ) => {
     setCreateGame((prev) => ({
       ...prev,

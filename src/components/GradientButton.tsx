@@ -1,4 +1,5 @@
 import { Box, ButtonBase, SxProps, Theme, Typography } from "@mui/material";
+
 import { GradientBox } from "./GradientBox";
 import { LinkComponent } from "./LinkComponent";
 

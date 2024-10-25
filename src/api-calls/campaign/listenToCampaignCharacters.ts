@@ -1,4 +1,5 @@
 import { onSnapshot, Unsubscribe } from "firebase/firestore";
+
 import { getCharacterDoc } from "../character/_getRef";
 import { CharacterDocument } from "api-calls/character/_character.type";
 
@@ -22,7 +23,7 @@ export function listenToCampaignCharacters(params: Params): Unsubscribe[] {
       (error) => {
         console.error(error);
         onError(new Error("Failed to fetch characters."));
-      }
+      },
     );
   });
   return unsubscribes;

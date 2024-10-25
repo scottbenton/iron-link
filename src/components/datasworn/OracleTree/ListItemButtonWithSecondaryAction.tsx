@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
   Box,
   ListItem,
@@ -5,7 +6,6 @@ import {
   ListItemButtonProps,
   ListItemProps,
 } from "@mui/material";
-import { useEffect, useState } from "react";
 
 export interface ListItemButtonWithSecondaryActionProps extends ListItemProps {
   onClick?: () => void;
@@ -14,7 +14,7 @@ export interface ListItemButtonWithSecondaryActionProps extends ListItemProps {
 }
 
 export function ListItemButtonWithSecondaryAction(
-  props: ListItemButtonWithSecondaryActionProps
+  props: ListItemButtonWithSecondaryActionProps,
 ) {
   const {
     onClick,

@@ -1,7 +1,8 @@
-import { Box, Skeleton, Typography, TypographyVariant } from "@mui/material";
-import { getHueFromString } from "lib/getHueFromString";
 import { useState } from "react";
 import BackgroundIcon from "@mui/icons-material/Face";
+import { Box, Skeleton, Typography, TypographyVariant } from "@mui/material";
+
+import { getHueFromString } from "lib/getHueFromString";
 
 export type AvatarSizes = "small" | "medium" | "large" | "huge";
 
@@ -87,8 +88,8 @@ export function PortraitAvatarDisplay(props: PortraitAvatarDisplayProps) {
         borderColor: shouldShowColor
           ? `hsl(${hue}, 60%, 40%)`
           : darkBorder
-          ? theme.palette.grey[700]
-          : theme.palette.divider,
+            ? theme.palette.grey[700]
+            : theme.palette.divider,
         borderRadius: rounded ? "100%" : `${theme.shape.borderRadius}px`,
         "&>img": {
           width: isTaller ? `${100 * scale}%` : "auto",

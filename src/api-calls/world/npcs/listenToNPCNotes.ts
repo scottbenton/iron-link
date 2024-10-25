@@ -1,5 +1,6 @@
 import { Unsubscribe } from "firebase/auth";
 import { onSnapshot } from "firebase/firestore";
+
 import { getPublicNotesNPCDoc } from "./_getRef";
 import { getErrorMessage } from "lib/getErrorMessage";
 
@@ -7,7 +8,7 @@ export function listenToNPCNotes(
   worldId: string,
   npcId: string,
   updateNPCNotes: (notes: Uint8Array | undefined) => void,
-  onError: (error: string) => void
+  onError: (error: string) => void,
 ): Unsubscribe {
   return onSnapshot(
     getPublicNotesNPCDoc(worldId, npcId),
@@ -17,6 +18,6 @@ export function listenToNPCNotes(
     },
     (error) => {
       onError(getErrorMessage(error, "Failed to get npc notes"));
-    }
+    },
   );
 }

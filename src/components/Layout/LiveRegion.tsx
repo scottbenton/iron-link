@@ -1,6 +1,7 @@
+import { useEffect } from "react";
+
 import { useAnnouncement } from "atoms/announcement.atom";
 import { ScreenReaderOnly } from "components/ScreenReaderOnly";
-import { useEffect } from "react";
 
 const DEBUG_MODE = true;
 

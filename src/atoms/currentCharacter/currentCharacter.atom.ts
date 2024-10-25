@@ -1,10 +1,11 @@
+import { useEffect } from "react";
+import { Unsubscribe } from "firebase/firestore";
+import { atom, useAtom, useAtomValue, useSetAtom } from "jotai";
+
 import { CharacterDocument } from "api-calls/character/_character.type";
 import { listenToCharacter } from "api-calls/character/listenToCharacter";
 import { derivedAtomWithEquality } from "atoms/derivedAtomWithEquality";
 import { ColorScheme, colorSchemeAtom } from "atoms/theme.atom";
-import { Unsubscribe } from "firebase/firestore";
-import { atom, useAtom, useAtomValue, useSetAtom } from "jotai";
-import { useEffect } from "react";
 
 export const currentCharacterIdAtom = atom<string | null>(null);
 
@@ -41,7 +42,7 @@ export function useSyncCharacter() {
         },
         (error) => {
           console.error(error);
-        }
+        },
       );
     } else {
       setCurrentCharacter({
@@ -70,7 +71,7 @@ const baseCharacterAtom = derivedAtomWithEquality(
     loading: atom.loading,
     hasCharacter: atom.character !== null,
     error: atom.error,
-  })
+  }),
 );
 
 export function useCharacterState() {

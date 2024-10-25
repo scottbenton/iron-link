@@ -1,12 +1,13 @@
+import { PropsWithChildren } from "react";
+import PreviousIcon from "@mui/icons-material/ChevronLeft";
 import { IconButton } from "@mui/material";
+
 import {
   useCloseDataswornDialog,
   useDataswornDialogState,
   usePrevDataswornDialog,
 } from "atoms/dataswornDialog.atom";
 import { DialogTitleWithCloseButton } from "components/DialogTitleWithCloseButton";
-import { PropsWithChildren } from "react";
-import PreviousIcon from "@mui/icons-material/ChevronLeft";
 
 export function DataswornDialogTitle(props: PropsWithChildren) {
   const { children } = props;

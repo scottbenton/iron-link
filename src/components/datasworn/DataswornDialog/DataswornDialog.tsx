@@ -1,9 +1,10 @@
 import { Dialog } from "@mui/material";
+
+import { DataswornDialogContent } from "./DataswornDialogContent";
 import {
   useCloseDataswornDialog,
   useDataswornDialogState,
 } from "atoms/dataswornDialog.atom";
-import { DataswornDialogContent } from "./DataswornDialogContent";
 
 export function DataswornDialog() {
   const { isOpen, openId } = useDataswornDialogState();

@@ -1,14 +1,15 @@
 import { Unsubscribe } from "firebase/auth";
 import { onSnapshot } from "firebase/firestore";
-import { GMLocation } from "types/Locations.type";
+
 import { getPrivateDetailsLocationDoc } from "./_getRef";
 import { getErrorMessage } from "lib/getErrorMessage";
+import { GMLocation } from "types/Locations.type";
 
 export function listenToLocationGMProperties(
   worldId: string,
   locationId: string,
   updateGMProperties: (properties: GMLocation | undefined) => void,
-  onError: (error: string) => void
+  onError: (error: string) => void,
 ): Unsubscribe {
   return onSnapshot(
     getPrivateDetailsLocationDoc(worldId, locationId),
@@ -22,6 +23,6 @@ export function listenToLocationGMProperties(
     },
     (error) => {
       onError(getErrorMessage(error, "Failed to get location gm notes"));
-    }
+    },
   );
 }

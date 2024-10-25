@@ -1,5 +1,6 @@
 import { Datasworn } from "@datasworn/core";
 import { Box, Typography } from "@mui/material";
+
 import { DebouncedClockCircle } from "../../Clocks/DebouncedClockCircle";
 
 export interface AssetClockFieldProps {

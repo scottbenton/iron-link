@@ -1,11 +1,12 @@
-import { Box, Typography } from "@mui/material";
-import { updateCharacter } from "api-calls/character/updateCharacter";
-import { DebouncedConditionMeter } from "components/datasworn/ConditonMeter";
+import { useCallback } from "react";
 import { useTranslation } from "react-i18next";
+import { Box, Typography } from "@mui/material";
+
 import { useCharacterId } from "../../hooks/useCharacterId";
 import { useDerivedCharacterState } from "../../hooks/useDerivedCharacterState";
-import { useCallback } from "react";
 import { useIsOwnerOfCharacter } from "../../hooks/useIsOwnerOfCharacter";
+import { updateCharacter } from "api-calls/character/updateCharacter";
+import { DebouncedConditionMeter } from "components/datasworn/ConditonMeter";
 
 export function ExperienceSection() {
   const characterId = useCharacterId();
@@ -13,7 +14,7 @@ export function ExperienceSection() {
 
   const unspentExperience = useDerivedCharacterState(
     characterId,
-    (character) => character?.characterDocument.data?.unspentExperience ?? 0
+    (character) => character?.characterDocument.data?.unspentExperience ?? 0,
   );
 
   const { t } = useTranslation();
@@ -27,7 +28,7 @@ export function ExperienceSection() {
         }).catch(() => {});
       }
     },
-    [characterId]
+    [characterId],
   );
 
   return (
@@ -42,7 +43,7 @@ export function ExperienceSection() {
       <DebouncedConditionMeter
         label={t(
           "character.character-sidebar.unspent-experience",
-          "Unspent Experience"
+          "Unspent Experience",
         )}
         min={0}
         max={100}

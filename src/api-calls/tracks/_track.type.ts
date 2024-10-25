@@ -1,4 +1,5 @@
 import { Timestamp } from "firebase/firestore";
+
 import { Clock, ProgressTrack, SceneChallenge } from "types/Track.type";
 
 export interface ProgressTrackDocument

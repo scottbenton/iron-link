@@ -1,23 +1,24 @@
 import { onSnapshot, or, query, where } from "firebase/firestore";
-import { HomebrewCollectionDocument } from "api-calls/homebrew/_homebrewCollection.type";
+
 import { getHomebrewCollection } from "./_getRef";
+import { HomebrewCollectionDocument } from "api-calls/homebrew/_homebrewCollection.type";
 
 export function listenToHomebrewCollections(
   uid: string,
   updateCollection: (
     collectionId: string,
-    collection: HomebrewCollectionDocument
+    collection: HomebrewCollectionDocument,
   ) => void,
   removeCollection: (collectionId: string) => void,
   onError: (error: unknown) => void,
-  onLoaded: () => void
+  onLoaded: () => void,
 ) {
   const homebrewQuery = query(
     getHomebrewCollection(),
     or(
       where("editors", "array-contains", uid),
-      where("viewers", "array-contains", uid)
-    )
+      where("viewers", "array-contains", uid),
+    ),
   );
   return onSnapshot(
     homebrewQuery,
@@ -36,6 +37,6 @@ export function listenToHomebrewCollections(
     (error) => {
       console.error(error);
       onError(error);
-    }
+    },
   );
 }

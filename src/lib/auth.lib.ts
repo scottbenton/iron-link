@@ -1,3 +1,4 @@
+import { firebaseAuth } from "../config/firebase.config";
 import {
   GoogleAuthProvider,
   isSignInWithEmailLink,
@@ -10,10 +11,10 @@ import {
   updateProfile,
   User,
 } from "firebase/auth";
-import { firebaseAuth } from "../config/firebase.config";
+
 import { getErrorMessage } from "./getErrorMessage";
-import { updateUserDoc } from "api-calls/user/updateUserDoc";
 import { UserDocument } from "api-calls/user/_user.type";
+import { updateUserDoc } from "api-calls/user/updateUserDoc";
 import { pathConfig } from "pages/pathConfig";
 
 const googleAuthProvider = new GoogleAuthProvider();
@@ -46,7 +47,7 @@ export function loginWithToken(token: string) {
 
 export function sendMagicEmailLink(
   email: string,
-  name?: string
+  name?: string,
 ): Promise<boolean> {
   return new Promise((resolve, reject) => {
     const actionCodeSettings = {
@@ -101,8 +102,8 @@ export function completeMagicLinkSignupIfPresent(): Promise<boolean> {
             reject(
               getErrorMessage(
                 error,
-                "Error signing in from email link. Please try again."
-              )
+                "Error signing in from email link. Please try again.",
+              ),
             );
           });
       } else {
@@ -130,7 +131,7 @@ export function getUser(): Promise<User | null> {
         console.error(error);
         unsubscribe();
         resolve(null);
-      }
+      },
     );
   });
 }

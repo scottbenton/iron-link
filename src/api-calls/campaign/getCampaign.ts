@@ -1,6 +1,7 @@
 import { getDoc } from "firebase/firestore";
-import { CampaignDocument } from "api-calls/campaign/_campaign.type";
+
 import { getCampaignDoc } from "./_getRef";
+import { CampaignDocument } from "api-calls/campaign/_campaign.type";
 import { createApiFunction } from "api-calls/createApiFunction";
 
 export const getCampaign = createApiFunction<string, CampaignDocument>(
@@ -21,5 +22,5 @@ export const getCampaign = createApiFunction<string, CampaignDocument>(
         });
     });
   },
-  "Failed to load campaign."
+  "Failed to load campaign.",
 );

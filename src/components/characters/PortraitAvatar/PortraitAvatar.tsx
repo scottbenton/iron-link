@@ -1,8 +1,11 @@
-import { AvatarSizes, PortraitAvatarDisplay } from "./PortraitAvatarDisplay";
 import {
   useCharacterPortrait,
   useLoadCharacterPortrait,
 } from "atoms/characterPortraits.atom";
+import {
+  AvatarSizes,
+  PortraitAvatarDisplay,
+} from "components/characters/PortraitAvatar/PortraitAvatarDisplay";
 
 export interface PortraitAvatarProps {
   characterId: string;

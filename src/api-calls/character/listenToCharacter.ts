@@ -1,11 +1,12 @@
 import { onSnapshot } from "firebase/firestore";
-import { CharacterDocument } from "api-calls/character/_character.type";
+
 import { getCharacterDoc } from "./_getRef";
+import { CharacterDocument } from "api-calls/character/_character.type";
 
 export function listenToCharacter(
   characterId: string,
   onCharacter: (character: CharacterDocument) => void,
-  onError: (error: unknown) => void
+  onError: (error: unknown) => void,
 ) {
   return onSnapshot(
     getCharacterDoc(characterId),
@@ -17,6 +18,6 @@ export function listenToCharacter(
         onError("No character found");
       }
     },
-    (error) => onError(error)
+    (error) => onError(error),
   );
 }

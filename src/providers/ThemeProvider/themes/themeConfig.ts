@@ -1,6 +1,7 @@
 import { createTheme, SimplePaletteColorOptions, Theme } from "@mui/material";
-import { ColorScheme } from "atoms/theme.atom";
+
 import { grey, sharedStatusColors } from "./colors";
+import { ColorScheme } from "atoms/theme.atom";
 
 export type ThemeConfig = Record<
   ColorScheme,

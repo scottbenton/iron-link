@@ -1,3 +1,7 @@
+import { useCallback, useMemo } from "react";
+import { useTranslation } from "react-i18next";
+import { Datasworn } from "@datasworn/core";
+import RollIcon from "@mui/icons-material/Casino";
 import {
   IconButton,
   InputAdornment,
@@ -5,15 +9,12 @@ import {
   TextFieldProps,
   Tooltip,
 } from "@mui/material";
-import RollIcon from "@mui/icons-material/Casino";
+
 import { useSetAnnouncement } from "atoms/announcement.atom";
-import { useTranslation } from "react-i18next";
 import { useDataswornTree } from "atoms/dataswornTree.atom";
-import { useCallback, useMemo } from "react";
-import { useRollOracle } from "hooks/useRollOracle";
-import { Datasworn } from "@datasworn/core";
-import { getOracleRollable } from "hooks/datasworn/useOracleRollable";
 import { getOracleCollection } from "hooks/datasworn/useOracleCollection";
+import { getOracleRollable } from "hooks/datasworn/useOracleRollable";
+import { useRollOracle } from "hooks/useRollOracle";
 import { OracleTableRoll } from "types/DieRolls.type";
 
 export type OracleTextFieldOracleConfig = {
@@ -79,7 +80,7 @@ export function OracleTextField(props: OracleTextFieldProps) {
 function checkIfAtLeastOneOracleExists(
   oracleId: string | undefined,
   oracleConfig: OracleTextFieldOracleConfig | undefined,
-  tree: Record<string, Datasworn.RulesPackage>
+  tree: Record<string, Datasworn.RulesPackage>,
 ): boolean {
   if (oracleId) {
     const oracle =
@@ -106,7 +107,7 @@ function checkIfAtLeastOneOracleExists(
 
 function rollOracle(
   oracle: string | OracleTextFieldOracleConfig | undefined,
-  getOracleResult: (oracleId: string) => OracleTableRoll | undefined
+  getOracleResult: (oracleId: string) => OracleTableRoll | undefined,
 ): string {
   if (!oracle) return "";
   if (typeof oracle === "string") {

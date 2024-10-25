@@ -1,5 +1,6 @@
 import { Bytes, Timestamp } from "firebase/firestore";
-import { NPC, GMNPC } from "types/NPCs.type";
+
+import { GMNPC, NPC } from "types/NPCs.type";
 
 export interface NPCDocument extends Omit<NPC, "updatedDate" | "createdDate"> {
   updatedTimestamp: Timestamp;

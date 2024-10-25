@@ -1,7 +1,8 @@
 import { setDoc } from "firebase/firestore";
-import { GMNPC } from "types/NPCs.type";
+
 import { getPrivateDetailsNPCDoc } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
+import { GMNPC } from "types/NPCs.type";
 
 interface Params {
   worldId: string;
@@ -25,5 +26,5 @@ export const updateNPCGMProperties = createApiFunction<Params, void>(
         });
     });
   },
-  "Failed to update npc."
+  "Failed to update npc.",
 );

@@ -3,12 +3,12 @@ import { httpsCallable } from "firebase/functions";
 
 export function acceptEditorInvite(
   homebrewCollectionId: string,
-  inviteKey: string
+  inviteKey: string,
 ): Promise<boolean> {
   return new Promise((resolve, reject) => {
     const acceptInvite = httpsCallable(
       functions,
-      "addCurrentUserAsHomebrewCampaignEditor"
+      "addCurrentUserAsHomebrewCampaignEditor",
     );
 
     acceptInvite({ homebrewCollectionId, inviteKey })

@@ -6,8 +6,9 @@ import {
   DocumentReference,
   Timestamp,
 } from "firebase/firestore";
+
+import { GMLoreDocument, LoreDocument, LoreNotesDocument } from "./_lore.type";
 import { Lore } from "types/Lore.type";
-import { GMLoreDocument, LoreNotesDocument, LoreDocument } from "./_lore.type";
 
 export function constructLoresPath(worldId: string) {
   return `/worlds/${worldId}/lore`;
@@ -19,14 +20,14 @@ export function constructLoreDocPath(worldId: string, loreId: string) {
 
 export function constructPrivateDetailsLoreDocPath(
   worldId: string,
-  loreId: string
+  loreId: string,
 ) {
   return constructLoreDocPath(worldId, loreId) + `/private/details`;
 }
 
 export function constructPublicNotesLoreDocPath(
   worldId: string,
-  loreId: string
+  loreId: string,
 ) {
   return constructLoreDocPath(worldId, loreId) + `/public/notes`;
 }
@@ -38,7 +39,7 @@ export function constructLoreImagesPath(worldId: string, loreId: string) {
 export function constructLoreImagePath(
   worldId: string,
   loreId: string,
-  filename: string
+  filename: string,
 ) {
   return `/worlds/${worldId}/lore/${loreId}/${filename}`;
 }
@@ -46,28 +47,28 @@ export function constructLoreImagePath(
 export function getLoreCollection(worldId: string) {
   return collection(
     firestore,
-    constructLoresPath(worldId)
+    constructLoresPath(worldId),
   ) as CollectionReference<LoreDocument>;
 }
 
 export function getLoreDoc(worldId: string, loreId: string) {
   return doc(
     firestore,
-    constructLoreDocPath(worldId, loreId)
+    constructLoreDocPath(worldId, loreId),
   ) as DocumentReference<LoreDocument>;
 }
 
 export function getPrivateDetailsLoreDoc(worldId: string, loreId: string) {
   return doc(
     firestore,
-    constructPrivateDetailsLoreDocPath(worldId, loreId)
+    constructPrivateDetailsLoreDocPath(worldId, loreId),
   ) as DocumentReference<GMLoreDocument>;
 }
 
 export function getPublicNotesLoreDoc(worldId: string, loreId: string) {
   return doc(
     firestore,
-    constructPublicNotesLoreDocPath(worldId, loreId)
+    constructPublicNotesLoreDocPath(worldId, loreId),
   ) as DocumentReference<LoreNotesDocument>;
 }
 

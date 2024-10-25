@@ -1,5 +1,6 @@
-import { atom, useAtomValue, useSetAtom } from "jotai";
 import { useCallback } from "react";
+import { atom, useAtomValue, useSetAtom } from "jotai";
+
 import { Roll } from "types/DieRolls.type";
 
 export type RollDisplay = { id?: string; roll: Roll }[];
@@ -29,7 +30,7 @@ export function useAddRollSnackbar() {
         return newRolls;
       });
     },
-    [setRolls]
+    [setRolls],
   );
 
   return addRoll;
@@ -46,7 +47,7 @@ export function useClearRollSnackbar() {
         return newRolls;
       });
     },
-    [setRolls]
+    [setRolls],
   );
 
   return clearRoll;

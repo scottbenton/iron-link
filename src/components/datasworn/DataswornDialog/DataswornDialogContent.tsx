@@ -1,12 +1,13 @@
-import { Box, Button, DialogActions, DialogContent } from "@mui/material";
-import { EmptyState } from "components/Layout/EmptyState";
 import { useTranslation } from "react-i18next";
+import { Box, Button, DialogActions, DialogContent } from "@mui/material";
+
+import { AssetCard } from "../AssetCard";
+import { Move } from "../Move";
+import { Oracle } from "../Oracle";
+import { OracleTableSharedText } from "../Oracle/OracleTableSharedText";
 import { DataswornDialogTitle } from "./DataswornDialogTitle";
 import { useGetDataswornItem } from "./useGetDataswornItem";
-import { Oracle } from "../Oracle";
-import { Move } from "../Move";
-import { AssetCard } from "../AssetCard";
-import { OracleTableSharedText } from "../Oracle/OracleTableSharedText";
+import { EmptyState } from "components/Layout/EmptyState";
 
 export interface DataswornDialogContentProps {
   id: string;
@@ -81,7 +82,7 @@ export function DataswornDialogContent(props: DataswornDialogContentProps) {
           message={t(
             "datasworn.dialog.not-found-content",
             "The linked item with id {{itemId}} could not be found.",
-            { itemId: id }
+            { itemId: id },
           )}
         />
       </DialogContent>

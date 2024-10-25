@@ -1,5 +1,5 @@
-import { TrackTypes } from "types/Track.type";
 import { LegacyTrackTypes } from "./LegacyTrack.type";
+import { TrackTypes } from "types/Track.type";
 
 export enum RollResult {
   StrongHit = "strong_hit",

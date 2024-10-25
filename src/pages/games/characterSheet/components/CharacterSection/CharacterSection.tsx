@@ -1,10 +1,11 @@
 import { Box } from "@mui/material";
+
 import { CharacterDetails } from "./CharacterDetails";
-import { Stats } from "./Stats";
 import { ConditionMeters } from "./ConditionMeters";
+import { ExperienceSection } from "./ExperienceSection";
 import { ImpactsSection } from "./ImpactsSection";
 import { LegacyTracks } from "./LegacyTracks";
-import { ExperienceSection } from "./ExperienceSection";
+import { Stats } from "./Stats";
 
 export function CharacterSection() {
   return (

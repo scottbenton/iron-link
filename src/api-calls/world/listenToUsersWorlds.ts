@@ -1,6 +1,7 @@
-import { World } from "api-calls/world/_world.type";
-import { decodeWorld, getWorldCollection } from "./_getRef";
 import { onSnapshot, or, query, where } from "firebase/firestore";
+
+import { decodeWorld, getWorldCollection } from "./_getRef";
+import { World } from "api-calls/world/_world.type";
 
 export function listenToUsersWorlds(
   uid: string,
@@ -10,11 +11,11 @@ export function listenToUsersWorlds(
     onLoaded: () => void;
   },
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  onError: (error: any) => void
+  onError: (error: any) => void,
 ) {
   const filter = or(
     where("ownerIds", "array-contains", uid ?? ""),
-    where("campaignGuides", "array-contains", uid ?? "")
+    where("campaignGuides", "array-contains", uid ?? ""),
   );
   return onSnapshot(
     query(getWorldCollection(), filter),
@@ -25,12 +26,12 @@ export function listenToUsersWorlds(
         } else {
           dataHandler.onDocChange(
             change.doc.id,
-            decodeWorld(change.doc.data())
+            decodeWorld(change.doc.data()),
           );
         }
       });
       dataHandler.onLoaded();
     },
-    (error) => onError(error)
+    (error) => onError(error),
   );
 }

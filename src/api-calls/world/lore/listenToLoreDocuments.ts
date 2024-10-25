@@ -1,12 +1,13 @@
 import { Unsubscribe } from "firebase/auth";
 import { onSnapshot, query, where } from "firebase/firestore";
-import { Lore } from "types/Lore.type";
+
 import {
   constructLoreImagePath,
   convertFromDatabase,
   getLoreCollection,
-} from "./_getRef";
+} from "api-calls/world/lore/_getRef";
 import { getImageUrl } from "lib/storage.lib";
+import { Lore } from "types/Lore.type";
 
 export function listenToLoreDocuments(
   worldId: string,
@@ -14,7 +15,7 @@ export function listenToLoreDocuments(
   updateLore: (loreId: string, lore: Lore) => void,
   updateLoreImage: (loreId: string, imageUrl: string) => void,
   removeLore: (loreId: string) => void,
-  onError: (error: string) => void
+  onError: (error: string) => void,
 ): Unsubscribe {
   const loreCollectionRef = getLoreCollection(worldId);
 
@@ -37,8 +38,8 @@ export function listenToLoreDocuments(
               constructLoreImagePath(
                 worldId,
                 change.doc.id,
-                convertedDoc.imageFilenames[0]
-              )
+                convertedDoc.imageFilenames[0],
+              ),
             ).then((url) => {
               updateLoreImage(change.doc.id, url);
             });
@@ -49,6 +50,6 @@ export function listenToLoreDocuments(
     (error) => {
       console.error(error);
       onError("Failed to get lore documents.");
-    }
+    },
   );
 }

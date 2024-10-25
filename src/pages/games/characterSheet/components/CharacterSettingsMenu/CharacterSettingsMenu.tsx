@@ -1,4 +1,9 @@
+import { useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
+import CharacterIcon from "@mui/icons-material/AccountBox";
 import CharacterSettingsIcon from "@mui/icons-material/ManageAccounts";
+import StatsIcon from "@mui/icons-material/Numbers";
+import ThemeIcon from "@mui/icons-material/Palette";
 import {
   IconButton,
   ListItemIcon,
@@ -6,19 +11,15 @@ import {
   Menu,
   MenuItem,
 } from "@mui/material";
-import { useRef, useState } from "react";
-import CharacterIcon from "@mui/icons-material/AccountBox";
-import StatsIcon from "@mui/icons-material/Numbers";
-import ThemeIcon from "@mui/icons-material/Palette";
-import { useTranslation } from "react-i18next";
+
 import { CharacterDetailsDialog } from "./CharacterDetailsDialog";
 import { CharacterStatsDialog } from "./CharacterStatsDialog";
 import { ColorSchemeDialog } from "./ColorSchemeDialog";
+import { DeleteCharacterButton } from "./DeleteCharacterButton";
 import {
   CharacterPermissionType,
   useCampaignPermissions,
 } from "pages/games/gamePageLayout/hooks/usePermissions";
-import { DeleteCharacterButton } from "./DeleteCharacterButton";
 
 export function CharacterSettingsMenu() {
   const [isSettingsMenuOpen, setIsSettingsMenuOpen] = useState(false);
@@ -65,7 +66,7 @@ export function CharacterSettingsMenu() {
           <ListItemText
             primary={t(
               "character.character-sidebar.change-name-or-portrait",
-              "Change Name or Portrait"
+              "Change Name or Portrait",
             )}
           />
         </MenuItem>
@@ -81,7 +82,7 @@ export function CharacterSettingsMenu() {
           <ListItemText
             primary={t(
               "character.character-sidebar.update-stats",
-              "Update Stats"
+              "Update Stats",
             )}
           />
         </MenuItem>
@@ -97,7 +98,7 @@ export function CharacterSettingsMenu() {
           <ListItemText
             primary={t(
               "character.character-sidebar.change-theme",
-              "Change Theme"
+              "Change Theme",
             )}
           />
         </MenuItem>

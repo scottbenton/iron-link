@@ -1,8 +1,9 @@
-import { getUserDoc } from "api-calls/user/getUserDoc";
-import { atom, useAtomValue, useSetAtom } from "jotai";
 import { useEffect, useMemo } from "react";
-import { derivedAtomWithEquality } from "./derivedAtomWithEquality";
 import { useTranslation } from "react-i18next";
+import { atom, useAtomValue, useSetAtom } from "jotai";
+
+import { derivedAtomWithEquality } from "./derivedAtomWithEquality";
+import { getUserDoc } from "api-calls/user/getUserDoc";
 
 type UserDetailsAtom = Record<
   string,
@@ -21,8 +22,8 @@ export function useLoadUserDetails(uid: string) {
   const userDetails = useAtomValue(
     useMemo(
       () => derivedAtomWithEquality(userDetailsAtom, (state) => state[uid]),
-      [uid]
-    )
+      [uid],
+    ),
   );
   const setUserDetails = useSetAtom(userDetailsAtom);
 
@@ -48,10 +49,10 @@ export function useUserName(uid: string) {
       () =>
         derivedAtomWithEquality(
           userDetailsAtom,
-          (state) => state[uid]?.user?.name ?? t("common.loading", "Loading")
+          (state) => state[uid]?.user?.name ?? t("common.loading", "Loading"),
         ),
-      [uid, t]
-    )
+      [uid, t],
+    ),
   );
   useLoadUserDetails(uid);
 

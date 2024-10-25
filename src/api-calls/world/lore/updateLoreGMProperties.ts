@@ -1,7 +1,8 @@
 import { setDoc } from "firebase/firestore";
-import { GMLore } from "types/Lore.type";
+
 import { getPrivateDetailsLoreDoc } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
+import { GMLore } from "types/Lore.type";
 
 interface Params {
   worldId: string;
@@ -25,5 +26,5 @@ export const updateLoreGMProperties = createApiFunction<Params, void>(
         });
     });
   },
-  "Failed to update lore document."
+  "Failed to update lore document.",
 );

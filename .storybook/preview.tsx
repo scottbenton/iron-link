@@ -1,22 +1,22 @@
 import React, { Suspense } from "react";
-import type { Preview } from "@storybook/react";
+import { I18nextProvider } from "react-i18next";
+import "@fontsource-variable/inter";
+import "@fontsource/barlow-condensed/600.css";
 import { Box, LinearProgress } from "@mui/material";
-import { ThemeProvider } from "../src/providers/ThemeProvider";
-import { PreviewHeader } from "./PreviewHeader";
+import type { Preview } from "@storybook/react";
 import {
   reactRouterParameters,
   withRouter,
 } from "storybook-addon-remix-react-router";
-import "../src/App.css";
-import "@fontsource-variable/inter";
-import "@fontsource/barlow-condensed/600.css";
 
-import { allDefaultPackages } from "../src/data/datasworn.packages";
+import "../src/App.css";
 import { useSetDataswornTree } from "../src/atoms/dataswornTree.atom";
-import { i18n } from "../src/i18n/config";
-import { I18nextProvider } from "react-i18next";
 import { RollSnackbarSection } from "../src/components/characters/rolls/RollSnackbarSection";
+import { allDefaultPackages } from "../src/data/datasworn.packages";
+import { i18n } from "../src/i18n/config";
 import { SnackbarProvider } from "../src/providers/SnackbarProvider";
+import { ThemeProvider } from "../src/providers/ThemeProvider";
+import { PreviewHeader } from "./PreviewHeader";
 
 const preview: Preview = {
   parameters: {

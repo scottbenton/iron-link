@@ -1,7 +1,8 @@
-import { Box, Typography } from "@mui/material";
 import { Link, useLocation } from "react-router-dom";
-import { GradientBox } from "components/GradientBox";
+import { Box, Typography } from "@mui/material";
+
 import { NavRouteConfig } from "./navRoutes";
+import { GradientBox } from "components/GradientBox";
 
 export function NavRailItem(props: NavRouteConfig) {
   const { Logo, title, checkIsSelected, href } = props;

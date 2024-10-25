@@ -1,8 +1,9 @@
-import { StatRoll } from "types/DieRolls.type";
-import { RollContainer, RollResult, RollTitle, RollValues } from "./common";
-import { useMove } from "hooks/datasworn/useMove";
 import { useTranslation } from "react-i18next";
+
+import { RollContainer, RollResult, RollTitle, RollValues } from "./common";
 import { getRollResultLabel } from "data/rollResultLabel";
+import { useMove } from "hooks/datasworn/useMove";
+import { StatRoll } from "types/DieRolls.type";
 
 export interface StatRollSnackbarProps {
   rollId: string | undefined;
@@ -55,7 +56,7 @@ export function StatRollSnackbar(props: StatRollSnackbarProps) {
               ? [
                   t(
                     "datasworn.matched-negative-momentum",
-                    "Matched negative momentum"
+                    "Matched negative momentum",
                   ),
                 ]
               : []),

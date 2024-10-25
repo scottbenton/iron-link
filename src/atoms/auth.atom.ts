@@ -1,10 +1,11 @@
-import { UserDocument } from "api-calls/user/_user.type";
-import { updateUserDoc } from "api-calls/user/updateUserDoc";
+import { useEffect } from "react";
 import { firebaseAuth } from "config/firebase.config";
 import { onAuthStateChanged, User } from "firebase/auth";
 import { atom, useAtom, useAtomValue } from "jotai";
-import { useEffect } from "react";
+
 import { derivedAtomWithEquality } from "./derivedAtomWithEquality";
+import { UserDocument } from "api-calls/user/_user.type";
+import { updateUserDoc } from "api-calls/user/updateUserDoc";
 
 export enum AuthState {
   Loading,
@@ -70,7 +71,7 @@ export function useListenToAuth() {
           uid: "",
           status: AuthState.Unauthenticated,
         });
-      }
+      },
     );
     return unsubscribe;
   }, [setAuth]);

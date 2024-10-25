@@ -1,7 +1,8 @@
-import { useDebouncedSync } from "hooks/useDebouncedSync";
+import { SxProps, Theme } from "@mui/material";
+
 import { ClockCircle, ClockSize } from "./ClockCircle";
 import { useSetAnnouncement } from "atoms/announcement.atom";
-import { SxProps, Theme } from "@mui/material";
+import { useDebouncedSync } from "hooks/useDebouncedSync";
 
 export interface DebouncedClockCircleProps {
   segments: number;
@@ -18,7 +19,7 @@ export function DebouncedClockCircle(props: DebouncedClockCircleProps) {
 
   const [localFilledSegments, setLocalFilledSegments] = useDebouncedSync(
     onFilledSegmentsChange,
-    value
+    value,
   );
 
   const announce = useSetAnnouncement();
@@ -28,12 +29,12 @@ export function DebouncedClockCircle(props: DebouncedClockCircleProps) {
       const newValue = prev + 1;
       if (segments < newValue) {
         announce(
-          `Cannot increase clock ${voiceLabel} beyond ${segments}. Resetting field to 0`
+          `Cannot increase clock ${voiceLabel} beyond ${segments}. Resetting field to 0`,
         );
         return 0;
       }
       announce(
-        `Increased clock ${voiceLabel} by 1 for a total of ${newValue} of ${segments} segments.`
+        `Increased clock ${voiceLabel} by 1 for a total of ${newValue} of ${segments} segments.`,
       );
       return newValue;
     });

@@ -2,12 +2,12 @@ import { functions } from "config/firebase.config";
 import { httpsCallable } from "firebase/functions";
 
 export function getHomebrewCollectionFromInviteUrl(
-  inviteKey: string
+  inviteKey: string,
 ): Promise<string | null> {
   return new Promise((resolve, reject) => {
     const getHomebrewId = httpsCallable(
       functions,
-      "getHomebrewIdFromInviteKey"
+      "getHomebrewIdFromInviteKey",
     );
 
     getHomebrewId({ inviteKey })

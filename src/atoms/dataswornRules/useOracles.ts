@@ -1,8 +1,9 @@
 import { CollectionId, Datasworn, IdParser } from "@datasworn/core";
 import { Primary } from "@datasworn/core/dist/StringId";
-import { dataswornTreeAtom } from "atoms/dataswornTree.atom";
 import { atom, useAtomValue } from "jotai";
+
 import { getRulesetFromId } from "./getRulesetFromId";
+import { dataswornTreeAtom } from "atoms/dataswornTree.atom";
 import { useActiveAssetOracleCollections } from "components/datasworn/hooks/useActiveAssetOracleCollections";
 
 export type RootOracleCollections = Record<
@@ -17,7 +18,7 @@ function parseOracleCollection(
   tree: Record<string, Datasworn.RulesPackage>,
   oracleCollectionMap: OracleCollectionMap,
   oracleRollableMap: OracleRollableMap,
-  isParentReplaced: boolean
+  isParentReplaced: boolean,
 ) {
   let isCollectionReplaced = false;
   Object.keys(collection.contents).forEach((oracleKey) => {
@@ -93,7 +94,7 @@ function parseOracleCollection(
         tree,
         oracleCollectionMap,
         oracleRollableMap,
-        isCollectionReplaced
+        isCollectionReplaced,
       );
     });
   }
@@ -105,7 +106,7 @@ const oraclesAtom = atom((get) => {
   IdParser.tree = trees;
   const rootOracleCollectionsMap = CollectionId.getMatches(
     "oracle_collection:*/*",
-    trees
+    trees,
   );
 
   const rootOracleCollections: RootOracleCollections = {};
@@ -135,7 +136,7 @@ const oraclesAtom = atom((get) => {
           trees,
           oracleCollectionMap,
           oracleRollableMap,
-          false
+          false,
         );
       }
     });
@@ -178,7 +179,7 @@ export function useOracles() {
           ...oracleRollableMapWithAssetOracles,
           ...assetOracleCollection.contents,
         };
-      }
+      },
     );
 
     return {

@@ -1,9 +1,10 @@
 import { Datasworn, IdParser } from "@datasworn/core";
+
 import { ironLinkAskTheOracleRulesPackage } from "data/askTheOracle";
 
 export function getRulesetFromId(
   id: string,
-  tree: Record<string, Datasworn.RulesPackage>
+  tree: Record<string, Datasworn.RulesPackage>,
 ): { id: string; title: string; isFromExpansion: boolean } | undefined {
   try {
     const result = IdParser.parse(id);

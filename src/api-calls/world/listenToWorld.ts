@@ -1,12 +1,13 @@
 import { onSnapshot } from "firebase/firestore";
-import { World } from "api-calls/world/_world.type";
+
 import { decodeWorld, getWorldDoc } from "./_getRef";
+import { World } from "api-calls/world/_world.type";
 
 export function listenToWorld(
   worldId: string,
   onDocChange: (data?: World) => void,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  onError: (error: any) => void
+  onError: (error: any) => void,
 ) {
   return onSnapshot(
     getWorldDoc(worldId),
@@ -18,6 +19,6 @@ export function listenToWorld(
         onDocChange(undefined);
       }
     },
-    (error) => onError(error)
+    (error) => onError(error),
   );
 }

@@ -1,14 +1,15 @@
 import { useMemo } from "react";
 import { Box } from "@mui/material";
+import { useAtomValue } from "jotai";
+
+import { useCreateCharacterAtom } from "../atoms/createCharacter.atom";
 import { ImageInput } from "./ImageInput";
-import { ironswornId, starforgedId } from "data/datasworn.packages";
+import { dataswornTreeAtom } from "atoms/dataswornTree.atom";
 import {
   OracleTextField,
   OracleTextFieldOracleConfig,
 } from "components/datasworn/OracleTextField";
-import { useCreateCharacterAtom } from "../atoms/createCharacter.atom";
-import { useAtomValue } from "jotai";
-import { dataswornTreeAtom } from "atoms/dataswornTree.atom";
+import { ironswornId, starforgedId } from "data/datasworn.packages";
 
 const nameOracles: Record<string, OracleTextFieldOracleConfig> = {
   [ironswornId]: {

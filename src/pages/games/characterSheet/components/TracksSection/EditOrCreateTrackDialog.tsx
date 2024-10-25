@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Alert,
   AlertTitle,
@@ -12,19 +14,18 @@ import {
   Stack,
   TextField,
 } from "@mui/material";
+import { TFunction } from "i18next";
+
 import { addProgressTrack } from "api-calls/tracks/addProgressTrack";
 import { updateProgressTrack } from "api-calls/tracks/updateProgressTrack";
-import { TFunction } from "i18next";
 import { useCampaignId } from "pages/games/gamePageLayout/hooks/useCampaignId";
-import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
 import {
-  ProgressTrack,
   Difficulty,
-  TrackStatus,
-  TrackSectionProgressTracks,
-  TrackTypes,
+  ProgressTrack,
   SceneChallenge,
+  TrackSectionProgressTracks,
+  TrackStatus,
+  TrackTypes,
 } from "types/Track.type";
 
 export interface EditOrCreateTrackDialogProps {
@@ -42,7 +43,7 @@ export function EditOrCreateTrackDialog(props: EditOrCreateTrackDialogProps) {
   const [loading, setLoading] = useState<boolean>(false);
 
   const [track, setTrack] = useState<Partial<ProgressTrack | SceneChallenge>>(
-    initialTrack?.track ?? { type: trackType }
+    initialTrack?.track ?? { type: trackType },
   );
   const [resetProgress, setResetProgress] = useState(false);
 
@@ -112,8 +113,8 @@ export function EditOrCreateTrackDialog(props: EditOrCreateTrackDialogProps) {
           setError(
             t(
               "character.character-sidebar.track-update-error",
-              "Error updating track"
-            )
+              "Error updating track",
+            ),
           );
         });
     } else {
@@ -126,8 +127,8 @@ export function EditOrCreateTrackDialog(props: EditOrCreateTrackDialogProps) {
           setError(
             t(
               "character.character-sidebar.track-add-error",
-              "Error adding track"
-            )
+              "Error adding track",
+            ),
           );
         });
     }
@@ -152,7 +153,7 @@ export function EditOrCreateTrackDialog(props: EditOrCreateTrackDialogProps) {
             <TextField
               label={t(
                 "character.character-sidebar.track-title-input",
-                "Title"
+                "Title",
               )}
               required
               value={track.label ?? ""}
@@ -164,7 +165,7 @@ export function EditOrCreateTrackDialog(props: EditOrCreateTrackDialogProps) {
             <TextField
               label={t(
                 "character.character-sidebar.track-description-input",
-                "Description"
+                "Description",
               )}
               value={track.description ?? ""}
               onChange={(evt) =>
@@ -176,7 +177,7 @@ export function EditOrCreateTrackDialog(props: EditOrCreateTrackDialogProps) {
             <TextField
               label={t(
                 "character.character-sidebar.track-difficulty-input",
-                "Difficulty"
+                "Difficulty",
               )}
               value={track.difficulty ?? "-1"}
               onChange={(evt) =>
@@ -194,19 +195,19 @@ export function EditOrCreateTrackDialog(props: EditOrCreateTrackDialogProps) {
               <MenuItem value={Difficulty.Troublesome}>
                 {t(
                   "datasworn.progress-tracks.difficulty-troublesome",
-                  "Troublesome"
+                  "Troublesome",
                 )}
               </MenuItem>
               <MenuItem value={Difficulty.Dangerous}>
                 {t(
                   "datasworn.progress-tracks.difficulty-dangerous",
-                  "Dangerous"
+                  "Dangerous",
                 )}
               </MenuItem>
               <MenuItem value={Difficulty.Formidable}>
                 {t(
                   "datasworn.progress-tracks.difficulty-formidable",
-                  "Formidable"
+                  "Formidable",
                 )}
               </MenuItem>
               <MenuItem value={Difficulty.Extreme}>
@@ -256,18 +257,18 @@ export function EditOrCreateTrackDialog(props: EditOrCreateTrackDialogProps) {
 
 function verifyTrack(
   track: Partial<ProgressTrack | SceneChallenge>,
-  t: TFunction
+  t: TFunction,
 ): string | undefined {
   // track.type === TrackTypes.Clock && track.
   if (!track.label) {
     return t(
       "character.character-sidebar.track-label-required-error",
-      "Label is required"
+      "Label is required",
     );
   } else if (!(track as ProgressTrack).difficulty) {
     return t(
       "character.character-sidebar.track-difficulty-required-error",
-      "Difficulty is required"
+      "Difficulty is required",
     );
   }
 }

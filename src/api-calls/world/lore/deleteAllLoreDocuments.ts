@@ -1,4 +1,5 @@
 import { deleteDoc, getDocs } from "firebase/firestore";
+
 import {
   getLoreCollection,
   getLoreDoc,
@@ -36,5 +37,5 @@ export const deleteAllLoreDocuments = createApiFunction<Params, void>(
         });
     });
   },
-  "Failed to delete Lore Documents."
+  "Failed to delete Lore Documents.",
 );

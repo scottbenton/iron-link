@@ -1,4 +1,5 @@
 import { addDoc, Timestamp } from "firebase/firestore";
+
 import { getLocationCollection } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
 

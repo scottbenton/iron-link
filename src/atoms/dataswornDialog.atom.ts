@@ -1,5 +1,5 @@
-import { atom, useAtomValue, useSetAtom } from "jotai";
 import { useCallback } from "react";
+import { atom, useAtomValue, useSetAtom } from "jotai";
 
 interface DataswornDialogAtomState {
   isOpen: boolean;
@@ -37,7 +37,7 @@ export function useOpenDataswornDialog() {
         }
       });
     },
-    [setDataswornDialogState]
+    [setDataswornDialogState],
   );
 }
 

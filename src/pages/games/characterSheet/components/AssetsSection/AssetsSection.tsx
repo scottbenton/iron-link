@@ -1,12 +1,13 @@
-import { useCampaignId } from "pages/games/gamePageLayout/hooks/useCampaignId";
-import { useCharacterId } from "../../hooks/useCharacterId";
-import { AssetSectionHeader } from "./AssetSectionHeader";
-import { AssetsSectionCard } from "./AssetsSectionCard";
-import { useDerivedCharacterState } from "../../hooks/useDerivedCharacterState";
-import { useDerivedCampaignState } from "pages/games/gamePageLayout/hooks/useDerivedCampaignState";
 import { useMemo, useState } from "react";
 import { Box } from "@mui/material";
+
+import { useCharacterId } from "../../hooks/useCharacterId";
+import { useDerivedCharacterState } from "../../hooks/useDerivedCharacterState";
 import { useIsOwnerOfCharacter } from "../../hooks/useIsOwnerOfCharacter";
+import { AssetSectionHeader } from "./AssetSectionHeader";
+import { AssetsSectionCard } from "./AssetsSectionCard";
+import { useCampaignId } from "pages/games/gamePageLayout/hooks/useCampaignId";
+import { useDerivedCampaignState } from "pages/games/gamePageLayout/hooks/useDerivedCampaignState";
 
 export function AssetsSection() {
   const characterId = useCharacterId();
@@ -14,14 +15,14 @@ export function AssetsSection() {
 
   const characterAssets = useDerivedCharacterState(
     characterId,
-    (character) => character?.assets?.assets ?? {}
+    (character) => character?.assets?.assets ?? {},
   );
   const sortedCharacterAssets = useMemo(
     () =>
       Object.entries(characterAssets).sort(([, a], [, b]) => {
         return a.order - b.order;
       }),
-    [characterAssets]
+    [characterAssets],
   );
   const lastCharacterAssetOrder = useMemo(() => {
     if (sortedCharacterAssets.length !== 0) {
@@ -30,14 +31,14 @@ export function AssetsSection() {
     return 0;
   }, [sortedCharacterAssets]);
   const sharedAssets = useDerivedCampaignState(
-    (state) => state.sharedAssets.assets
+    (state) => state.sharedAssets.assets,
   );
   const sortedSharedAssets = useMemo(
     () =>
       Object.entries(sharedAssets).sort(([, a], [, b]) => {
         return a.order - b.order;
       }),
-    [sharedAssets]
+    [sharedAssets],
   );
   const lastSharedAssetOrder = useMemo(() => {
     if (sortedSharedAssets.length !== 0) {

@@ -1,14 +1,15 @@
-import { ColorScheme, useSetColorScheme } from "atoms/theme.atom";
+import { useEffect } from "react";
+
 import { useCharacterId } from "./useCharacterId";
 import { useDerivedCharacterState } from "./useDerivedCharacterState";
-import { useEffect } from "react";
+import { ColorScheme, useSetColorScheme } from "atoms/theme.atom";
 
 export function useSyncCharacterColorScheme() {
   const characterId = useCharacterId();
   const characterTheme = useDerivedCharacterState(
     characterId,
     (character) =>
-      character?.characterDocument.data?.colorScheme ?? ColorScheme.Default
+      character?.characterDocument.data?.colorScheme ?? ColorScheme.Default,
   );
   const setColorScheme = useSetColorScheme();
 

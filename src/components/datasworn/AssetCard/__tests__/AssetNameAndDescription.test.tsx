@@ -1,9 +1,10 @@
-import { describe, it, expect } from "vitest";
 import { render } from "@testing-library/react";
+
 import {
   AssetNameAndDescription,
   AssetNameAndDescriptionProps,
 } from "../AssetNameAndDescription";
+import { describe, expect, it } from "vitest";
 
 describe("AssetNameAndDescription", () => {
   const defaultProps: AssetNameAndDescriptionProps = {

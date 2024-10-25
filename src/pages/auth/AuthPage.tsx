@@ -1,3 +1,6 @@
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import AccountIcon from "@mui/icons-material/Person";
 import {
   Alert,
   AlertTitle,
@@ -8,16 +11,14 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { PageContent, PageHeader } from "components/Layout";
-import AccountIcon from "@mui/icons-material/Person";
-import { GoogleIcon } from "assets/GoogleIcon";
-import { useState } from "react";
-import { loginWithGoogle, sendMagicEmailLink } from "lib/auth.lib";
 import { FirebaseError } from "firebase/app";
-import { Link } from "react-router-dom";
-import { useSnackbar } from "providers/SnackbarProvider/useSnackbar";
+
+import { GoogleIcon } from "assets/GoogleIcon";
+import { PageContent, PageHeader } from "components/Layout";
+import { loginWithGoogle, sendMagicEmailLink } from "lib/auth.lib";
 import { getErrorMessage } from "lib/getErrorMessage";
 import { pathConfig } from "pages/pathConfig";
+import { useSnackbar } from "providers/SnackbarProvider/useSnackbar";
 
 export interface AuthPageProps {
   isLoginPage: boolean;
@@ -130,7 +131,7 @@ export function AuthPage(props: AuthPageProps) {
                 startIcon={<GoogleIcon />}
                 onClick={() =>
                   loginWithGoogle().catch((e) =>
-                    error(getErrorMessage(e, "Failed to log in"))
+                    error(getErrorMessage(e, "Failed to log in")),
                   )
                 }
               >

@@ -1,5 +1,6 @@
 import { firestore } from "config/firebase.config";
 import { doc, DocumentReference } from "firebase/firestore";
+
 import { SettingsDocument } from "api-calls/character-campaign-settings/_character-campaign-settings.type";
 
 export function constructCampaignSettingsDocPath(campaignId: string) {
@@ -9,7 +10,7 @@ export function constructCampaignSettingsDocPath(campaignId: string) {
 export function getCampaignSettingsDoc(campaignId: string) {
   return doc(
     firestore,
-    constructCampaignSettingsDocPath(campaignId)
+    constructCampaignSettingsDocPath(campaignId),
   ) as DocumentReference<SettingsDocument>;
 }
 
@@ -20,6 +21,6 @@ export function constructCharacterSettingsDocPath(characterId: string) {
 export function getCharacterSettingsDoc(characterId: string) {
   return doc(
     firestore,
-    constructCharacterSettingsDocPath(characterId)
+    constructCharacterSettingsDocPath(characterId),
   ) as DocumentReference<SettingsDocument>;
 }

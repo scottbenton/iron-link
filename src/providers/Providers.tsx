@@ -1,10 +1,11 @@
-import { router } from "pages/routes";
-import { RouterProvider } from "react-router-dom";
-import { ThemeProvider } from "./ThemeProvider";
-import { SnackbarProvider } from "./SnackbarProvider";
-import { HeadProvider } from "./HeadProvider";
-import { ConfirmProvider } from "material-ui-confirm";
 import { useTranslation } from "react-i18next";
+import { RouterProvider } from "react-router-dom";
+import { ConfirmProvider } from "material-ui-confirm";
+
+import { HeadProvider } from "./HeadProvider";
+import { SnackbarProvider } from "./SnackbarProvider";
+import { ThemeProvider } from "./ThemeProvider";
+import { router } from "pages/routes";
 
 export function Providers() {
   const { t } = useTranslation();

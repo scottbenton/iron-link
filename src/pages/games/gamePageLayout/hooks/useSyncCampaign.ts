@@ -1,38 +1,39 @@
-import { useDataswornTreeSetter } from "atoms/dataswornTree.atom";
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
+import { Datasworn } from "@datasworn/core";
+import { Unsubscribe } from "firebase/firestore";
+import { useAtomValue } from "jotai";
+
 import {
   currentCampaignAtom,
   defaultCurrentCampaignAtom,
   useSetCurrentCampaignAtom,
   useSyncProgressTracks,
 } from "../atoms/campaign.atom";
-import { Unsubscribe } from "firebase/firestore";
+import { useSetCampaignCharacters } from "../atoms/campaign.characters.atom";
+import { useListenToLogs } from "../atoms/gameLog.atom";
+import { listenToAssets } from "api-calls/assets/listenToAssets";
 import { listenToCampaign } from "api-calls/campaign/listenToCampaign";
-import { useTranslation } from "react-i18next";
-import { Datasworn } from "@datasworn/core";
+import { listenToCharacter } from "api-calls/character/listenToCharacter";
+import { useDataswornTreeSetter } from "atoms/dataswornTree.atom";
+import { derivedAtomWithEquality } from "atoms/derivedAtomWithEquality";
 import {
   defaultBaseRulesets,
   defaultExpansions,
 } from "data/datasworn.packages";
-import { derivedAtomWithEquality } from "atoms/derivedAtomWithEquality";
-import { useAtomValue } from "jotai";
-import { listenToCharacter } from "api-calls/character/listenToCharacter";
-import { useSetCampaignCharacters } from "../atoms/campaign.characters.atom";
-import { useListenToLogs } from "../atoms/gameLog.atom";
-import { listenToAssets } from "api-calls/assets/listenToAssets";
 
 const expansionsAndRulesetsAtom = derivedAtomWithEquality(
   currentCampaignAtom,
   (atom) => ({
     rulesets: atom.campaign?.rulesets ?? {},
     expansions: atom.campaign?.expansions ?? {},
-  })
+  }),
 );
 
 const charactersAtom = derivedAtomWithEquality(
   currentCampaignAtom,
-  (atom) => atom.campaign?.characters ?? []
+  (atom) => atom.campaign?.characters ?? [],
 );
 
 export function useSyncCampaign() {
@@ -70,8 +71,8 @@ export function useSyncCampaign() {
               loading: false,
               error: t("game.load-failure", "Error loading game"),
             }));
-          }
-        )
+          },
+        ),
       );
       unsubscribes.push(
         listenToAssets(
@@ -96,8 +97,8 @@ export function useSyncCampaign() {
                 error: "Failed to load assets",
               },
             }));
-          }
-        )
+          },
+        ),
       );
     } else {
       setCurrentCampaign(defaultCurrentCampaignAtom);
@@ -161,8 +162,8 @@ export function useSyncCampaign() {
                 },
               },
             }));
-          }
-        )
+          },
+        ),
       );
       unsubscribes.push(
         listenToAssets(
@@ -193,8 +194,8 @@ export function useSyncCampaign() {
                 },
               },
             }));
-          }
-        )
+          },
+        ),
       );
     });
 

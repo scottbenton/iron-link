@@ -1,4 +1,7 @@
-import { ConditionMeter, ConditionMeterProps } from "./ConditionMeter";
+import {
+  ConditionMeter,
+  ConditionMeterProps,
+} from "components/datasworn/ConditonMeter/ConditionMeter";
 import { useDebouncedSync } from "hooks/useDebouncedSync";
 
 export interface DebouncedConditionMeterProps
@@ -12,7 +15,7 @@ export function DebouncedConditionMeter(props: DebouncedConditionMeterProps) {
 
   const [value, setValue] = useDebouncedSync(
     onChange,
-    conditionMeterProps.value ?? conditionMeterProps.defaultValue
+    conditionMeterProps.value ?? conditionMeterProps.defaultValue,
   );
 
   return (

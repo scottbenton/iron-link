@@ -12,14 +12,14 @@ export function useContinueUrl() {
 
       navigate(nextPath + "?" + params.toString());
     },
-    [navigate]
+    [navigate],
   );
 
   const navigateToContinueURL = useCallback(
     (fallbackPath: string) => {
       navigate(searchParams.get("continue") || fallbackPath);
     },
-    [searchParams, navigate]
+    [searchParams, navigate],
   );
 
   return {

@@ -1,11 +1,12 @@
+import { useTranslation } from "react-i18next";
 import { Datasworn } from "@datasworn/core";
 import { Box, Button } from "@mui/material";
-import { GridLayout } from "components/Layout";
-import { MarkdownRenderer } from "components/MarkdownRenderer";
-import { useTranslation } from "react-i18next";
+
 import { AssetCard } from "../AssetCard/AssetCard";
 import { AssetDocument } from "api-calls/assets/_asset.type";
 import { AssetMap } from "atoms/dataswornRules/useAssets";
+import { GridLayout } from "components/Layout";
+import { MarkdownRenderer } from "components/MarkdownRenderer";
 
 export interface AssetListProps {
   assetCollection: Datasworn.AssetCollection;
@@ -26,7 +27,7 @@ export function AssetList(props: AssetListProps) {
       )}
       <GridLayout
         items={Object.values(assetCollection.contents).map(
-          (asset) => asset._id
+          (asset) => asset._id,
         )}
         renderItem={(assetId) => (
           <AssetCard
@@ -50,7 +51,7 @@ export function AssetList(props: AssetListProps) {
         )}
         emptyStateMessage={t(
           "datasworn.no-assets-in-collection",
-          "No assets found in collection"
+          "No assets found in collection",
         )}
         minWidth={300}
       />

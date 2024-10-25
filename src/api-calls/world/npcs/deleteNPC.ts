@@ -1,4 +1,5 @@
 import { deleteDoc } from "firebase/firestore";
+
 import {
   constructNPCImagesPath,
   getNPCDoc,
@@ -24,7 +25,7 @@ export const deleteNPC = createApiFunction<Params, void>((params) => {
     promises.push(deleteDoc(getPublicNotesNPCDoc(worldId, npcId)));
     if (imageFilename) {
       promises.push(
-        deleteImage(constructNPCImagesPath(worldId, npcId), imageFilename)
+        deleteImage(constructNPCImagesPath(worldId, npcId), imageFilename),
       );
     }
 

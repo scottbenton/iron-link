@@ -1,5 +1,6 @@
-import { dataswornTreeAtom } from "atoms/dataswornTree.atom";
 import { atom, useAtomValue } from "jotai";
+
+import { dataswornTreeAtom } from "atoms/dataswornTree.atom";
 
 const rulesetNameAtom = atom((get) => {
   const trees = get(dataswornTreeAtom);

@@ -1,4 +1,4 @@
-import { IconDefinition } from "./Icon.type";
+import { IconDefinition } from "types/Icon.type";
 
 export enum MapEntryType {
   Path = "path",
