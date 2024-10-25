@@ -75,6 +75,7 @@ export function MoveTree() {
                   borderBottom: `1px solid ${theme.palette.divider}`,
                   px: 2,
                   fontFamily: theme.typography.fontFamilyTitle,
+                  zIndex: 3,
                 })}
                 key={rulesetKey}
               >

@@ -1,4 +1,7 @@
-import { TrackProgressRoll } from "types/DieRolls.type";
+import {
+  SpecialTrackProgressRoll,
+  TrackProgressRoll,
+} from "types/DieRolls.type";
 import { RollContainer, RollResult, RollTitle, RollValues } from "./common";
 import { useMove } from "hooks/datasworn/useMove";
 import { useTranslation } from "react-i18next";
@@ -6,7 +9,7 @@ import { getRollResultLabel } from "data/rollResultLabel";
 
 export interface TrackProgressRollSnackbarProps {
   rollId: string | undefined;
-  roll: TrackProgressRoll;
+  roll: TrackProgressRoll | SpecialTrackProgressRoll;
   isExpanded: boolean;
 }
 

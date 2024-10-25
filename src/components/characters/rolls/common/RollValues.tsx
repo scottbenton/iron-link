@@ -89,7 +89,7 @@ export function RollValues(props: RollValuesProps) {
             </Typography>
           </Box>
         )}
-        {progress && (
+        {typeof progress === "number" && (
           <Box
             display={"flex"}
             alignItems={"center"}

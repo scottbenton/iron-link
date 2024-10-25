@@ -10,7 +10,6 @@ export interface OracleTableRendererProps {
 
 export function OracleTableRenderer(props: OracleTableRendererProps) {
   const { oracle } = props;
-  console.log(oracle);
 
   // if (
   //   oracle.oracle_type === "table_text" ||

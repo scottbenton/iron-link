@@ -5,15 +5,18 @@ import { useTranslation } from "react-i18next";
 import RollIcon from "@mui/icons-material/Casino";
 import { useRollStatAndAddToLog } from "pages/games/hooks/useRollStatAndAddToLog";
 import { useConditionMeterRules } from "atoms/dataswornRules/useConditionMeterRules";
-import { CampaignState, CharacterState } from "./common.types";
+import {
+  CampaignRollOptionState,
+  CharacterRollOptionState,
+} from "./common.types";
 import { MoveActionAssetControl } from "./MoveActionAssetControl";
 
 export interface MoveActionRollButtonProps {
   moveId: string;
   disabled?: boolean;
   rollOption: Datasworn.RollableValue;
-  characterData: CharacterState;
-  campaignData: CampaignState;
+  characterData: CharacterRollOptionState;
+  campaignData: CampaignRollOptionState;
   characterId: string;
 }
 
