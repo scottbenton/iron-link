@@ -8,6 +8,13 @@ import { getAsset } from "hooks/datasworn/useAsset";
 import { Primary } from "@datasworn/core/dist/StringId";
 import { TrackTypes } from "types/Track.type";
 
+interface ActionRollGroups {
+  stats: Record<string, Datasworn.RollableValue>;
+  conditionMeters: Record<string, Datasworn.RollableValue>;
+  custom: Record<string, Datasworn.RollableValue>;
+  assetControls: Record<string, Datasworn.RollableValue>;
+}
+
 interface RollOptionGroup {
   actionRolls: Datasworn.RollableValue[];
   specialTracks: string[] | undefined;
@@ -46,6 +53,24 @@ export function extractRollOptions(
         character,
         tree
       );
+      const actionRollMap = {
+        stats: {
+          ...validSharedActionRolls.stats,
+          ...validActionRolls.stats,
+        },
+        conditionMeters: {
+          ...validSharedActionRolls.conditionMeters,
+          ...validActionRolls.conditionMeters,
+        },
+        custom: {
+          ...validSharedActionRolls.custom,
+          ...validActionRolls.custom,
+        },
+        assetControls: {
+          ...validSharedActionRolls.assetControls,
+          ...validActionRolls.assetControls,
+        },
+      };
 
       const enhancements = getEnhancementsFromAssets(
         move._id,
@@ -53,18 +78,33 @@ export function extractRollOptions(
         tree
       );
 
-      Object.values(sharedAssetEnhancements).forEach((assetEnhancement) => {
-        validActionRolls.push(...assetEnhancement.actionRolls);
-      });
+      Object.values({ ...sharedAssetEnhancements, ...enhancements }).forEach(
+        (assetEnhancement) => {
+          Object.entries(assetEnhancement.actionRolls).forEach(
+            ([key, value]) => {
+              const typedKey = key as keyof ActionRollGroups;
+              if (actionRollMap[typedKey]) {
+                actionRollMap[typedKey] = {
+                  ...actionRollMap[typedKey],
+                  ...value,
+                };
+              }
+            }
+          );
+        }
+      );
+
+      const actionRolls = Object.values(actionRollMap).flatMap((rollGroup) =>
+        Object.values(rollGroup)
+      );
 
       if (
-        validActionRolls.length > 0 ||
-        validSharedActionRolls.length > 0 ||
+        actionRolls.length > 0 ||
         Object.keys(enhancements).length > 0 ||
         specialTrackConditions.length > 0
       ) {
         characterOptions[characterId] = {
-          actionRolls: [...validActionRolls, ...validSharedActionRolls],
+          actionRolls,
           assetEnhancements: enhancements,
           specialTracks: specialTrackConditions,
         };
@@ -86,7 +126,7 @@ export type AssetEnhancements = Record<
     assetInputName?: string;
     assetAbilityIndex: number;
     assetAbilityText: string;
-    actionRolls: Datasworn.RollableValue[];
+    actionRolls: ActionRollGroups;
   }
 >;
 
@@ -189,11 +229,8 @@ function extractActionRollOptionsFromEnhancement(
     | Datasworn.MoveProgressRollEnhancement
     | Datasworn.MoveSpecialTrackEnhancement
   )[]
-): Datasworn.RollableValue[] {
-  const conditionMap: Record<
-    string,
-    Record<string, Datasworn.RollableValue>
-  > = {
+): ActionRollGroups {
+  const conditionMap: ActionRollGroups = {
     stats: {},
     conditionMeters: {},
     custom: {},
@@ -218,9 +255,7 @@ function extractActionRollOptionsFromEnhancement(
     }
   });
 
-  return Object.values(conditionMap).flatMap((conditions) =>
-    Object.values(conditions)
-  );
+  return conditionMap;
 }
 
 function extractValidActionRollOptions(
@@ -228,19 +263,17 @@ function extractValidActionRollOptions(
   assets: Record<string, AssetDocument>,
   character: CharacterRollOptionState | undefined,
   tree: Record<string, Datasworn.RulesPackage>
-): Datasworn.RollableValue[] {
-  if (move.roll_type !== "action_roll") return [];
-
-  const conditions = move.trigger.conditions;
-  const conditionMap: Record<
-    string,
-    Record<string, Datasworn.RollableValue>
-  > = {
+): ActionRollGroups {
+  const conditionMap: ActionRollGroups = {
     stats: {},
     conditionMeters: {},
     custom: {},
     assetControls: {},
   };
+
+  if (move.roll_type !== "action_roll") return conditionMap;
+
+  const conditions = move.trigger.conditions;
 
   conditions.forEach((condition) => {
     condition.roll_options.forEach((option) => {
@@ -259,9 +292,7 @@ function extractValidActionRollOptions(
     });
   });
 
-  return Object.values(conditionMap).flatMap((conditions) =>
-    Object.values(conditions)
-  );
+  return conditionMap;
 }
 
 function canUseAssetControlRoll(

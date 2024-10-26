@@ -103,6 +103,7 @@ export function MoveRollOptions(props: MoveRollOptions) {
                 ? 0
                 : 1
             }
+            gap={1}
           >
             {!characterId && (
               <Typography variant="overline">
@@ -112,6 +113,14 @@ export function MoveRollOptions(props: MoveRollOptions) {
             <AssetEnhancements
               enhancements={characterRollOptions.assetEnhancements}
             />
+            {characterRollOptions.specialTracks && (
+              <SpecialTracks
+                moveId={move._id}
+                moveName={move.name}
+                tracks={characterRollOptions.specialTracks}
+                characterData={characterData[rollOptionCharacterId]}
+              />
+            )}
             {characterRollOptions.actionRolls.length > 0 && (
               <ActionRolls
                 moveId={move._id}
@@ -122,14 +131,6 @@ export function MoveRollOptions(props: MoveRollOptions) {
                 }}
                 campaignData={campaignData}
                 includeAdds
-              />
-            )}
-            {characterRollOptions.specialTracks && (
-              <SpecialTracks
-                moveId={move._id}
-                moveName={move.name}
-                tracks={characterRollOptions.specialTracks}
-                characterData={characterData[rollOptionCharacterId]}
               />
             )}
           </Box>

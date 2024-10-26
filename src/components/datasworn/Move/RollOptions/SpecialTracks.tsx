@@ -21,6 +21,8 @@ export function SpecialTracks(props: SpecialTracksProps) {
 
   const rollTrackProgress = useRollCompleteSpecialTrack();
 
+  if (tracks.length === 0) return null;
+
   return (
     <Stack spacing={2}>
       {tracks.map((trackId) => (
