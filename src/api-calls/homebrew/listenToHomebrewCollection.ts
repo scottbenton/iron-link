@@ -1,12 +1,13 @@
 import { onSnapshot } from "firebase/firestore";
-import { HomebrewCollectionDocument } from "api-calls/homebrew/_homebrewCollection.type";
+
 import { getHomebrewCollectionDoc } from "./_getRef";
+import { HomebrewCollectionDocument } from "api-calls/homebrew/_homebrewCollection.type";
 
 export function listenToHomebrewCollection(
   collectionId: string,
   updateCollection: (collection: HomebrewCollectionDocument) => void,
   onError: (error: unknown) => void,
-  onLoaded: () => void
+  onLoaded: () => void,
 ) {
   return onSnapshot(
     getHomebrewCollectionDoc(collectionId),
@@ -21,6 +22,6 @@ export function listenToHomebrewCollection(
     (error) => {
       console.error(error);
       onError(error);
-    }
+    },
   );
 }

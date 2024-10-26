@@ -1,4 +1,6 @@
+import { useState } from "react";
 import { Datasworn } from "@datasworn/core";
+import ChevronIcon from "@mui/icons-material/ChevronRight";
 import {
   Collapse,
   List,
@@ -6,14 +8,13 @@ import {
   ListItemButton,
   ListItemText,
 } from "@mui/material";
-import ChevronIcon from "@mui/icons-material/ChevronRight";
-import { useState } from "react";
 import { ListItemIcon } from "@mui/material";
-import { OracleListItem } from "./OracleListItem";
+
 import {
   CollectionVisibilityState,
   VisibilitySettings,
 } from "./getOracleCollectionVisiblity";
+import { OracleListItem } from "./OracleListItem";
 import { OracleTableSharedTextListItem } from "./OracleTableSharedTextListItem";
 
 export interface OracleCollectionListItemProps {
@@ -155,7 +156,7 @@ const tableSharedTexts = [
 ];
 function sortOracleSubCollections(
   c1: Datasworn.OracleCollection,
-  c2: Datasworn.OracleCollection
+  c2: Datasworn.OracleCollection,
 ) {
   const isC1SharedText = tableSharedTexts.includes(c1.oracle_type);
   const isC2SharedText = tableSharedTexts.includes(c2.oracle_type);

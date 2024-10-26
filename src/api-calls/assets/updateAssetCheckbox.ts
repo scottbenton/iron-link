@@ -1,4 +1,5 @@
 import { updateDoc } from "firebase/firestore";
+
 import { getCampaignAssetDoc, getCharacterAssetDoc } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
 
@@ -25,7 +26,7 @@ export const updateAssetCheckbox = createApiFunction<
         : getCampaignAssetDoc(campaignId as string, assetId),
       {
         [`enabledAbilities.${abilityIndex}`]: checked,
-      }
+      },
     )
       .then(() => {
         resolve();

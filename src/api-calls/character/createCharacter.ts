@@ -1,14 +1,15 @@
 import { addDoc } from "firebase/firestore";
-import { momentumTrack } from "data/defaultTracks";
+
+import { getCharacterAssetCollection } from "../assets/_getRef";
+import { getCharacterCollection } from "./_getRef";
+import { updateCharacterPortrait } from "./updateCharacterPortrait";
 import { AssetDocument } from "api-calls/assets/_asset.type";
 import {
   CharacterDocument,
   StatsMap,
 } from "api-calls/character/_character.type";
-import { getCharacterAssetCollection } from "../assets/_getRef";
-import { getCharacterCollection } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
-import { updateCharacterPortrait } from "./updateCharacterPortrait";
+import { momentumTrack } from "data/defaultTracks";
 
 export const createCharacter = createApiFunction<
   {
@@ -36,7 +37,7 @@ export const createCharacter = createApiFunction<
       .then((doc) => {
         const id = doc.id;
         const assetPromises = assets.map((asset) =>
-          addDoc(getCharacterAssetCollection(id), asset)
+          addDoc(getCharacterAssetCollection(id), asset),
         );
         Promise.all(assetPromises)
           .then(() => {
@@ -67,7 +68,7 @@ export function createCharacterAndUploadPortrait(
         };
       }
     | undefined,
-  campaignId: string
+  campaignId: string,
 ) {
   return new Promise<string>((resolve) => {
     createCharacter({

@@ -1,9 +1,9 @@
 import { storage } from "config/firebase.config";
 import {
+  deleteObject,
   getDownloadURL,
   ref,
   uploadBytes,
-  deleteObject,
 } from "firebase/storage";
 
 export const MAX_FILE_SIZE = 2 * 1024 * 1024;
@@ -55,7 +55,7 @@ export function getImageUrl(path: string): Promise<string> {
 export function replaceImage(
   folderPath: string,
   oldImageFilename: string | undefined,
-  newImage: File
+  newImage: File,
 ) {
   return new Promise<void>((resolve, reject) => {
     let deleteImagePromise: Promise<void> | undefined;
@@ -70,7 +70,7 @@ export function replaceImage(
         if (newImage) {
           if (newImage.size > MAX_FILE_SIZE) {
             reject(
-              `Image must be smaller than ${MAX_FILE_SIZE_LABEL} in size.`
+              `Image must be smaller than ${MAX_FILE_SIZE_LABEL} in size.`,
             );
             return;
           }

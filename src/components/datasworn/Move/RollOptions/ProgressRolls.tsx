@@ -1,8 +1,9 @@
+import { useTranslation } from "react-i18next";
 import { Box, Button, Stack } from "@mui/material";
+
 import { ProgressTrack } from "components/datasworn/ProgressTrack";
 import { useDerivedCampaignState } from "pages/games/gamePageLayout/hooks/useDerivedCampaignState";
 import { useRollCompleteProgressTrack } from "pages/games/hooks/useRollCompleteProgressTrack";
-import { useTranslation } from "react-i18next";
 import { TrackStatus, TrackTypes } from "types/Track.type";
 
 export interface ProgressRollsProps {
@@ -22,11 +23,11 @@ export function ProgressRolls(props: ProgressRollsProps) {
     Object.entries(campaign.tracks.tracks)
       .filter(
         ([, track]) =>
-          track.type === trackType && track.status === TrackStatus.Active
+          track.type === trackType && track.status === TrackStatus.Active,
       )
       .sort(
-        ([, t1], [, t2]) => t2.createdDate.getTime() - t1.createdDate.getTime()
-      )
+        ([, t1], [, t2]) => t2.createdDate.getTime() - t1.createdDate.getTime(),
+      ),
   );
 
   return (

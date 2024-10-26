@@ -6,10 +6,11 @@ import {
   updateDoc,
   where,
 } from "firebase/firestore";
+
 import { getHomebrewCollectionDoc } from "./_getRef";
-import { createApiFunction } from "api-calls/createApiFunction";
-import { getCharacterCollection } from "api-calls/character/_getRef";
 import { getCampaignCollection } from "api-calls/campaign/_getRef";
+import { getCharacterCollection } from "api-calls/character/_getRef";
+import { createApiFunction } from "api-calls/createApiFunction";
 
 export const deleteHomebrewExpansion = createApiFunction<{ id: string }, void>(
   async (params) => {
@@ -18,15 +19,15 @@ export const deleteHomebrewExpansion = createApiFunction<{ id: string }, void>(
     const characterLoadPromise = getDocs(
       query(
         getCharacterCollection(),
-        where("expansionIds", "array-contains", id)
-      )
+        where("expansionIds", "array-contains", id),
+      ),
     );
 
     const campaignLoadPromise = getDocs(
       query(
         getCampaignCollection(),
-        where("expansionIds", "array-contains", id)
-      )
+        where("expansionIds", "array-contains", id),
+      ),
     );
 
     const characterSnapshot = await characterLoadPromise;
@@ -38,19 +39,19 @@ export const deleteHomebrewExpansion = createApiFunction<{ id: string }, void>(
       promises.push(
         updateDoc(doc.ref, {
           expansionIds: arrayRemove(id),
-        })
+        }),
       );
     });
     campaignSnapshot.docs.forEach((doc) => {
       promises.push(
         updateDoc(doc.ref, {
           expansionIds: arrayRemove(id),
-        })
+        }),
       );
     });
 
     await Promise.all(promises);
     deleteDoc(getHomebrewCollectionDoc(id));
   },
-  "Failed to delete expansion."
+  "Failed to delete expansion.",
 );

@@ -1,6 +1,7 @@
-import { Box, ButtonBase, SxProps, Theme, useTheme } from "@mui/material";
-import { ClockSegment } from "./ClockSegment";
 import { PropsWithChildren } from "react";
+import { Box, ButtonBase, SxProps, Theme, useTheme } from "@mui/material";
+
+import { ClockSegment } from "./ClockSegment";
 
 export type ClockSize = "small" | "medium";
 
@@ -25,7 +26,7 @@ export function ClockCircle(props: ClockCircleProps) {
     props: PropsWithChildren<{
       onClick?: () => void;
       sx: SxProps;
-    }>
+    }>,
   ) => {
     const { children, onClick, sx } = props;
     const ariaLabel = `Clock with ${segments} segments. ${value} filled.`;

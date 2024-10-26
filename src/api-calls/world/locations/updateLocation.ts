@@ -1,7 +1,8 @@
 import { UpdateData, updateDoc } from "firebase/firestore";
-import { Location } from "types/Locations.type";
+
 import { convertUpdateDataToDatabase, getLocationDoc } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
+import { Location } from "types/Locations.type";
 
 interface LocationParams {
   worldId: string;
@@ -16,7 +17,7 @@ export const updateLocation = createApiFunction<LocationParams, void>(
     return new Promise((resolve, reject) => {
       updateDoc(
         getLocationDoc(worldId, locationId),
-        convertUpdateDataToDatabase(location)
+        convertUpdateDataToDatabase(location),
       )
         .then(() => {
           resolve();
@@ -26,5 +27,5 @@ export const updateLocation = createApiFunction<LocationParams, void>(
         });
     });
   },
-  "Failed to update location."
+  "Failed to update location.",
 );

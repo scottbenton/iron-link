@@ -1,12 +1,13 @@
 import { Unsubscribe } from "firebase/auth";
 import { onSnapshot, query, where } from "firebase/firestore";
-import { Location } from "types/Locations.type";
+
 import {
   constructLocationImagePath,
   convertFromDatabase,
   getLocationCollection,
-} from "./_getRef";
+} from "api-calls/world/locations/_getRef";
 import { getImageUrl } from "lib/storage.lib";
+import { Location } from "types/Locations.type";
 
 export function listenToLocations(
   worldId: string,
@@ -14,7 +15,7 @@ export function listenToLocations(
   updateLocation: (locationId: string, location: Location) => void,
   updateLocationImage: (locationId: string, imageUrl: string) => void,
   removeLocation: (locationId: string) => void,
-  onError: (error: string) => void
+  onError: (error: string) => void,
 ): Unsubscribe {
   const locationCollectionRef = getLocationCollection(worldId);
 
@@ -37,8 +38,8 @@ export function listenToLocations(
               constructLocationImagePath(
                 worldId,
                 change.doc.id,
-                convertedDoc.imageFilenames[0]
-              )
+                convertedDoc.imageFilenames[0],
+              ),
             ).then((url) => {
               updateLocationImage(change.doc.id, url);
             });
@@ -49,6 +50,6 @@ export function listenToLocations(
     (error) => {
       console.error(error);
       onError("Failed to get locations");
-    }
+    },
   );
 }

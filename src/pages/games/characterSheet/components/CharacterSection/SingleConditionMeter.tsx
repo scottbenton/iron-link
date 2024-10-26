@@ -1,8 +1,9 @@
-import { DebouncedConditionMeter } from "components/datasworn/ConditonMeter";
 import { useCallback } from "react";
+import { useTranslation } from "react-i18next";
 import { Datasworn } from "@datasworn/core";
 import RollIcon from "@mui/icons-material/Casino";
-import { useTranslation } from "react-i18next";
+
+import { DebouncedConditionMeter } from "components/datasworn/ConditonMeter";
 import {
   CharacterPermissionType,
   useCampaignPermissions,
@@ -33,7 +34,7 @@ export function SingleConditionMeter(props: SingleConditionMeterProps) {
 
   const handleChange = useCallback(
     (value: number) => onChange(conditionMeterKey, value, isShared),
-    [conditionMeterKey, onChange, isShared]
+    [conditionMeterKey, onChange, isShared],
   );
 
   const rollConditionMeter = useRollStatAndAddToLog();

@@ -1,10 +1,11 @@
+import { useCallback, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Button, Checkbox, FormControlLabel } from "@mui/material";
 import { Box } from "@mui/material";
+
 import { AssetDocument } from "api-calls/assets/_asset.type";
 import { addAsset } from "api-calls/assets/addAsset";
 import { AssetCardDialog } from "components/datasworn/AssetCardDialog/AssetCardDialog";
-import { useCallback, useState } from "react";
-import { useTranslation } from "react-i18next";
 
 export interface AssetsSectionHeaderProps {
   campaignId: string;
@@ -44,7 +45,7 @@ export function AssetSectionHeader(props: AssetsSectionHeaderProps) {
         },
       });
     },
-    [characterId, campaignId, lastCharacterAssetOrder, lastSharedAssetOrder]
+    [characterId, campaignId, lastCharacterAssetOrder, lastSharedAssetOrder],
   );
 
   return (
@@ -63,7 +64,7 @@ export function AssetSectionHeader(props: AssetsSectionHeaderProps) {
       <FormControlLabel
         label={t(
           "character.character-sidebar.expand-assets",
-          "Show all abilities"
+          "Show all abilities",
         )}
         control={
           <Checkbox

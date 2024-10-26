@@ -1,10 +1,11 @@
-import {
-  CollectionReference,
-  DocumentReference,
-  collection,
-  doc,
-} from "firebase/firestore";
 import { firestore } from "config/firebase.config";
+import {
+  collection,
+  CollectionReference,
+  doc,
+  DocumentReference,
+} from "firebase/firestore";
+
 import { HomebrewOracleCollectionDocument } from "api-calls/homebrew/oracles/collections/_homebrewOracleCollection.type";
 
 export function constructHomebrewOracleCollectionCollectionPath() {
@@ -18,13 +19,13 @@ export function constructHomebrewOracleCollectionDocPath(collectionId: string) {
 export function getHomebrewOracleCollectionCollection() {
   return collection(
     firestore,
-    constructHomebrewOracleCollectionCollectionPath()
+    constructHomebrewOracleCollectionCollectionPath(),
   ) as CollectionReference<HomebrewOracleCollectionDocument>;
 }
 
 export function getHomebrewOracleCollectionDoc(collectionId: string) {
   return doc(
     firestore,
-    constructHomebrewOracleCollectionDocPath(collectionId)
+    constructHomebrewOracleCollectionDocPath(collectionId),
   ) as DocumentReference<HomebrewOracleCollectionDocument>;
 }

@@ -1,7 +1,8 @@
-import { constructLocationImagesPath, getLocationDoc } from "./_getRef";
-import { replaceImage } from "lib/storage.lib";
 import { updateDoc } from "firebase/firestore";
+
+import { constructLocationImagesPath, getLocationDoc } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
+import { replaceImage } from "lib/storage.lib";
 
 export const uploadLocationImage = createApiFunction<
   {
@@ -18,7 +19,7 @@ export const uploadLocationImage = createApiFunction<
     replaceImage(
       constructLocationImagesPath(worldId, locationId),
       oldImageFilename,
-      image
+      image,
     )
       .then(() => {
         const filename = image.name;

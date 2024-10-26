@@ -1,14 +1,15 @@
+import { useState } from "react";
 import { Datasworn } from "@datasworn/core";
+import ChevronIcon from "@mui/icons-material/ChevronRight";
 import { Collapse, ListItem, ListItemButton } from "@mui/material";
+import { ListItemText } from "@mui/material";
+import { ListItemIcon } from "@mui/material";
+
+import { Move } from "../Move";
 import {
   MoveVisibilityState,
   VisibilitySettings,
 } from "./getMoveCategoryVisibility";
-import { useState } from "react";
-import { ListItemText } from "@mui/material";
-import { ListItemIcon } from "@mui/material";
-import ChevronIcon from "@mui/icons-material/ChevronRight";
-import { Move } from "../Move";
 
 export interface MoveListItemProps {
   move: Datasworn.Move;

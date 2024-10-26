@@ -1,14 +1,15 @@
-import { createApiFunction } from "api-calls/createApiFunction";
-import { removeCharacterFromCampaign } from "api-calls/campaign/removeCharacterFromCampaign";
 import { firebaseAuth } from "config/firebase.config";
 import { deleteDoc } from "firebase/firestore";
-import { deleteNotes } from "api-calls/notes/deleteNotes";
-import { getCharacterSettingsDoc } from "api-calls/character-campaign-settings/_getRef";
+
 import {
   constructCharacterPortraitFolderPath,
   getCharacterDoc,
 } from "./_getRef";
 import { deleteAllAssets } from "api-calls/assets/deleteAllAssets";
+import { removeCharacterFromCampaign } from "api-calls/campaign/removeCharacterFromCampaign";
+import { getCharacterSettingsDoc } from "api-calls/character-campaign-settings/_getRef";
+import { createApiFunction } from "api-calls/createApiFunction";
+import { deleteNotes } from "api-calls/notes/deleteNotes";
 import { deleteImage } from "lib/storage.lib";
 
 export const deleteCharacter = createApiFunction<
@@ -39,8 +40,8 @@ export const deleteCharacter = createApiFunction<
           promises.push(
             deleteImage(
               constructCharacterPortraitFolderPath(characterId),
-              portraitFilename
-            )
+              portraitFilename,
+            ),
           );
         }
 

@@ -1,8 +1,9 @@
-import { Box, Typography } from "@mui/material";
-import { useStatRules } from "atoms/dataswornRules/useStatRules";
 import { useTranslation } from "react-i18next";
-import { ConditionMeter } from "components/datasworn/ConditonMeter";
+import { Box, Typography } from "@mui/material";
+
 import { useCreateCharacterAtom } from "../atoms/createCharacter.atom";
+import { useStatRules } from "atoms/dataswornRules/useStatRules";
+import { ConditionMeter } from "components/datasworn/ConditonMeter";
 
 export function Stats() {
   const [character, setCharacter] = useCreateCharacterAtom();
@@ -22,7 +23,7 @@ export function Stats() {
         >
           {t(
             "character.create.choose-stats-helper-text",
-            "Select a value for each stat."
+            "Select a value for each stat.",
           )}
         </Typography>
       </Box>

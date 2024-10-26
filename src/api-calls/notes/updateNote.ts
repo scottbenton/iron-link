@@ -1,4 +1,6 @@
+import { projectId } from "config/firebase.config";
 import { Bytes, setDoc, updateDoc } from "firebase/firestore";
+
 import {
   constructCampaignNoteContentPath,
   constructCampaignNoteDocPath,
@@ -10,7 +12,6 @@ import {
   getCharacterNoteDocument,
 } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
-import { projectId } from "config/firebase.config";
 
 export const updateNote = createApiFunction<
   {
@@ -64,7 +65,7 @@ export const updateNote = createApiFunction<
               },
             }),
             keepalive: true,
-          }
+          },
         ).catch((e) => console.error(e));
       }
       fetch(
@@ -84,7 +85,7 @@ export const updateNote = createApiFunction<
             },
           }),
           keepalive: true,
-        }
+        },
       ).catch((e) => console.error(e));
 
       resolve();
@@ -97,8 +98,8 @@ export const updateNote = createApiFunction<
             : getCampaignNoteDocument(campaignId as string, noteId),
           {
             title,
-          }
-        )
+          },
+        ),
       );
 
       if (content) {
@@ -110,8 +111,8 @@ export const updateNote = createApiFunction<
             {
               notes: Bytes.fromUint8Array(content),
             },
-            { merge: true }
-          )
+            { merge: true },
+          ),
         );
       }
 

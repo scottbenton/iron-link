@@ -1,8 +1,9 @@
-import { Box, Button, Stack } from "@mui/material";
-import { CharacterRollOptionState } from "./common.types";
-import { ProgressTrack } from "components/datasworn/ProgressTrack";
-import { useSpecialTrackRules } from "atoms/dataswornRules/useSpecialTrackRules";
 import { useTranslation } from "react-i18next";
+import { Box, Button, Stack } from "@mui/material";
+
+import { CharacterRollOptionState } from "./common.types";
+import { useSpecialTrackRules } from "atoms/dataswornRules/useSpecialTrackRules";
+import { ProgressTrack } from "components/datasworn/ProgressTrack";
 import { useRollCompleteSpecialTrack } from "pages/games/hooks/useRollCompleteSpecialTrack";
 
 export interface SpecialTracksProps {
@@ -40,7 +41,7 @@ export function SpecialTracks(props: SpecialTracksProps) {
                 trackId,
                 specialTracks[trackId].label,
                 characterData.specialTracks?.[trackId]?.value ?? 0,
-                moveId
+                moveId,
               );
             }}
           >

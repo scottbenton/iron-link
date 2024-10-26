@@ -1,6 +1,7 @@
-import { createApiFunction } from "api-calls/createApiFunction";
 import { updateDoc } from "firebase/firestore";
+
 import { getLocationDoc } from "./_getRef";
+import { createApiFunction } from "api-calls/createApiFunction";
 
 export const updateLocationCharacterBond = createApiFunction<
   {

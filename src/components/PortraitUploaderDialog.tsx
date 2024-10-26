@@ -1,3 +1,8 @@
+import { ChangeEventHandler, useState } from "react";
+import AvatarEditor from "react-avatar-editor";
+import CloseIcon from "@mui/icons-material/Close";
+import ZoomInIcon from "@mui/icons-material/ZoomIn";
+import ZoomOutIcon from "@mui/icons-material/ZoomOut";
 import {
   Box,
   Button,
@@ -8,13 +13,9 @@ import {
   DialogTitle,
   IconButton,
 } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
-import { ChangeEventHandler, useState } from "react";
-import AvatarEditor from "react-avatar-editor";
-import { useSnackbar } from "providers/SnackbarProvider/useSnackbar";
-import ZoomInIcon from "@mui/icons-material/ZoomIn";
-import ZoomOutIcon from "@mui/icons-material/ZoomOut";
+
 import { MAX_FILE_SIZE, MAX_FILE_SIZE_LABEL } from "lib/storage.lib";
+import { useSnackbar } from "providers/SnackbarProvider/useSnackbar";
 
 export interface PortraitUploaderDialogProps {
   open: boolean;
@@ -22,7 +23,7 @@ export interface PortraitUploaderDialogProps {
   handleUpload: (
     image: File | string,
     scale: number,
-    position: { x: number; y: number }
+    position: { x: number; y: number },
   ) => Promise<void>;
   existingPortraitFile?: File | string;
   existingPortraitSettings?: {
@@ -46,17 +47,17 @@ export function PortraitUploaderDialog(props: PortraitUploaderDialogProps) {
 
   const [loading, setLoading] = useState<boolean>(false);
   const [file, setFile] = useState<File | string | undefined>(
-    existingPortraitFile
+    existingPortraitFile,
   );
 
   const [scale, setScale] = useState<number>(
-    existingPortraitSettings?.scale ?? 1
+    existingPortraitSettings?.scale ?? 1,
   );
   const [position, setPosition] = useState<{ x: number; y: number }>(
     existingPortraitSettings?.position ?? {
       x: 0.5,
       y: 0.5,
-    }
+    },
   );
 
   const handleFileInputChange: ChangeEventHandler<HTMLInputElement> = (evt) => {
@@ -65,7 +66,7 @@ export function PortraitUploaderDialog(props: PortraitUploaderDialogProps) {
     if (files && files.length > 0) {
       if (files[0].size > MAX_FILE_SIZE) {
         error(
-          `File is too large. The max file size is ${MAX_FILE_SIZE_LABEL}.`
+          `File is too large. The max file size is ${MAX_FILE_SIZE_LABEL}.`,
         );
         evt.target.value = "";
         return;

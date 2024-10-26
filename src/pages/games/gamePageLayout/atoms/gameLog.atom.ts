@@ -1,14 +1,15 @@
-import { atom, useAtomValue, useSetAtom } from "jotai";
 import { useCallback, useEffect } from "react";
-import { Roll } from "types/DieRolls.type";
+import { atom, useAtomValue, useSetAtom } from "jotai";
+
 import { useCampaignId } from "../hooks/useCampaignId";
 import {
   CampaignPermissionType,
   useCampaignPermissions,
 } from "../hooks/usePermissions";
 import { listenToLogs } from "api-calls/game-log/listenToLogs";
-import { useDerivedAtomState } from "atoms/useDerivedAtomState";
 import { rollDisplayAtom } from "atoms/rollDisplay.atom";
+import { useDerivedAtomState } from "atoms/useDerivedAtomState";
+import { Roll } from "types/DieRolls.type";
 
 const DEFAULT_AMOUNT_TO_LOAD = 20;
 const LOAD_MORE_AMOUNT = 20;
@@ -43,7 +44,7 @@ export function useLoadMoreLogs() {
 export function useListenToLogs() {
   const totalLogsToLoad = useDerivedAtomState(
     gameLogAtom,
-    (state) => state.totalLogsToLoad
+    (state) => state.totalLogsToLoad,
   );
   const campaignId = useCampaignId();
   const isGuide =

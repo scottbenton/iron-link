@@ -1,14 +1,15 @@
-import { CampaignDocument } from "api-calls/campaign/_campaign.type";
-import { CampaignCharacterPortrait } from "./CampaignCharacterPortrait";
-import { useAuthAtom } from "atoms/auth.atom";
 import { AvatarGroup } from "@mui/material";
+
+import { CampaignCharacterPortrait } from "./CampaignCharacterPortrait";
+import { CampaignDocument } from "api-calls/campaign/_campaign.type";
+import { useAuthAtom } from "atoms/auth.atom";
 
 export interface CampaignCharacterPortraitsProps {
   campaignCharacters: CampaignDocument["characters"];
 }
 
 export function CampaignCharacterPortraits(
-  props: CampaignCharacterPortraitsProps
+  props: CampaignCharacterPortraitsProps,
 ) {
   const { campaignCharacters } = props;
 

@@ -1,3 +1,5 @@
+import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Box,
   Button,
@@ -7,20 +9,20 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { D10Icon } from "assets/D10Icon";
-import { D6Icon } from "assets/D6Icon";
-import { RollResult, StatRoll } from "types/DieRolls.type";
-import React, { useState } from "react";
-import { useSnackbar } from "providers/SnackbarProvider";
+
+import { DEFAULT_MOMENTUM } from "../../../../../data/constants.ts";
 import { useCharacterIdOptional } from "../../hooks/useCharacterId";
 import { useDerivedCharacterState } from "../../hooks/useDerivedCharacterState";
-import { getRoll } from "pages/games/hooks/useRollStatAndAddToLog";
 import { updateLog } from "api-calls/game-log/updateLog";
-import { useCampaignId } from "pages/games/gamePageLayout/hooks/useCampaignId";
+import { D6Icon } from "assets/D6Icon";
+import { D10Icon } from "assets/D10Icon";
+import { RollSnackbar } from "components/characters/rolls/RollSnackbar";
 import { DialogTitleWithCloseButton } from "components/DialogTitleWithCloseButton";
 import { useMove } from "hooks/datasworn/useMove";
-import { useTranslation } from "react-i18next";
-import { RollSnackbar } from "components/characters/rolls/RollSnackbar";
+import { useCampaignId } from "pages/games/gamePageLayout/hooks/useCampaignId";
+import { getRoll } from "pages/games/hooks/useRollStatAndAddToLog";
+import { useSnackbar } from "providers/SnackbarProvider";
+import { RollResult, StatRoll } from "types/DieRolls.type";
 
 export interface DieRerollDialogProps {
   open: boolean;
@@ -37,7 +39,7 @@ export function DieRerollDialog(props: DieRerollDialogProps) {
   const characterId = useCharacterIdOptional();
   const momentum = useDerivedCharacterState(
     characterId,
-    (state) => state?.characterDocument.data?.momentum ?? 0
+    (state) => state?.characterDocument.data?.momentum ?? DEFAULT_MOMENTUM,
   );
 
   const { info } = useSnackbar();
@@ -52,7 +54,7 @@ export function DieRerollDialog(props: DieRerollDialogProps) {
     10,
     (matchedNegativeMomentum ? 0 : action) +
       (roll.modifier ?? 0) +
-      (roll.adds ?? 0)
+      (roll.adds ?? 0),
   );
 
   let result: RollResult = RollResult.WeakHit;
@@ -74,7 +76,7 @@ export function DieRerollDialog(props: DieRerollDialogProps) {
   const handleRoll = (
     setter: React.Dispatch<React.SetStateAction<number>>,
     dieSides: number,
-    dieLabel: string
+    dieLabel: string,
   ) => {
     const roll = getRoll(dieSides);
     setter(roll);

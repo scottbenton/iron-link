@@ -1,7 +1,8 @@
 import { UpdateData, updateDoc } from "firebase/firestore";
+
 import { getCampaignDoc } from "./_getRef";
-import { createApiFunction } from "api-calls/createApiFunction";
 import { CampaignDocument } from "api-calls/campaign/_campaign.type";
+import { createApiFunction } from "api-calls/createApiFunction";
 
 export const updateCampaign = createApiFunction<
   {

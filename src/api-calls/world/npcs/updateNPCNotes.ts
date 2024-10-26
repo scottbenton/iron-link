@@ -1,9 +1,10 @@
+import { projectId } from "config/firebase.config";
 import { Bytes, setDoc } from "firebase/firestore";
+
 import {
   constructPublicNotesNPCDocPath,
   getPublicNotesNPCDoc,
 } from "./_getRef";
-import { projectId } from "config/firebase.config";
 import { createApiFunction } from "api-calls/createApiFunction";
 
 interface Params {
@@ -20,7 +21,7 @@ export const updateNPCNotes = createApiFunction<Params, void>((params) => {
     if (isBeacon) {
       const contentPath = `projects/${projectId}/databases/(default)/documents${constructPublicNotesNPCDocPath(
         worldId,
-        npcId
+        npcId,
       )}`;
 
       const token = window.sessionStorage.getItem("id-token") ?? "";
@@ -42,7 +43,7 @@ export const updateNPCNotes = createApiFunction<Params, void>((params) => {
               },
             }),
             keepalive: true,
-          }
+          },
         ).catch((e) => console.error(e));
       }
 
@@ -51,7 +52,7 @@ export const updateNPCNotes = createApiFunction<Params, void>((params) => {
       setDoc(
         getPublicNotesNPCDoc(worldId, npcId),
         { notes: Bytes.fromUint8Array(notes) },
-        { merge: true }
+        { merge: true },
       )
         .then(() => {
           resolve();

@@ -1,20 +1,21 @@
 import { useCallback } from "react";
+import { useTranslation } from "react-i18next";
+
+import { useCharacterIdOptional } from "../characterSheet/hooks/useCharacterId";
+import { useIsOwnerOfCharacter } from "../characterSheet/hooks/useIsOwnerOfCharacter";
+import { useCampaignId } from "../gamePageLayout/hooks/useCampaignId";
 import { getRoll } from "./useRollStatAndAddToLog";
+import { addRoll } from "api-calls/game-log/addRoll";
+import { useSetAnnouncement } from "atoms/announcement.atom";
+import { useUID } from "atoms/auth.atom";
+import { useAddRollSnackbar } from "atoms/rollDisplay.atom";
+import { getRollResultLabel } from "data/rollResultLabel";
+import { createId } from "lib/id.lib";
 import {
   RollResult,
   RollType,
   SpecialTrackProgressRoll,
 } from "types/DieRolls.type";
-import { useCharacterIdOptional } from "../characterSheet/hooks/useCharacterId";
-import { useIsOwnerOfCharacter } from "../characterSheet/hooks/useIsOwnerOfCharacter";
-import { useCampaignId } from "../gamePageLayout/hooks/useCampaignId";
-import { useUID } from "atoms/auth.atom";
-import { addRoll } from "api-calls/game-log/addRoll";
-import { createId } from "lib/id.lib";
-import { useAddRollSnackbar } from "atoms/rollDisplay.atom";
-import { useSetAnnouncement } from "atoms/announcement.atom";
-import { useTranslation } from "react-i18next";
-import { getRollResultLabel } from "data/rollResultLabel";
 
 export function useRollCompleteSpecialTrack() {
   const { t } = useTranslation();
@@ -33,7 +34,7 @@ export function useRollCompleteSpecialTrack() {
       specialTrackKey: string,
       trackLabel: string,
       trackProgress: number,
-      moveId: string
+      moveId: string,
     ) => {
       const challenge1 = getRoll(10);
       const challenge2 = getRoll(10);
@@ -54,7 +55,7 @@ export function useRollCompleteSpecialTrack() {
         trackProgress,
         specialTrackKey,
         result,
-        characterId: isCharacterOwner ? characterId ?? null : null,
+        characterId: isCharacterOwner ? (characterId ?? null) : null,
         uid,
         gmsOnly: false,
         moveId,
@@ -78,8 +79,8 @@ export function useRollCompleteSpecialTrack() {
             challenge1,
             challenge2,
             rollResult: getRollResultLabel(result),
-          }
-        )
+          },
+        ),
       );
 
       return result;
@@ -92,7 +93,7 @@ export function useRollCompleteSpecialTrack() {
       uid,
       isCharacterOwner,
       t,
-    ]
+    ],
   );
 
   return rollSpecialTrack;

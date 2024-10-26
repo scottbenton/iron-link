@@ -1,6 +1,7 @@
-import { createApiFunction } from "api-calls/createApiFunction";
 import { PartialWithFieldValue, updateDoc } from "firebase/firestore";
+
 import { getHomebrewConditionMeterDoc } from "./_getRef";
+import { createApiFunction } from "api-calls/createApiFunction";
 import { HomebrewConditionMeterDocument } from "api-calls/homebrew/rules/conditionMeters/_homebrewConditionMeters.type";
 
 export const updateHomebrewConditionMeter = createApiFunction<

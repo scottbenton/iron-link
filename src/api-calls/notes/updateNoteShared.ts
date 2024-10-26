@@ -1,4 +1,5 @@
 import { updateDoc } from "firebase/firestore";
+
 import { getCampaignNoteDocument, getCharacterNoteDocument } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
 
@@ -25,7 +26,7 @@ export const updateNoteShared = createApiFunction<
         : getCampaignNoteDocument(campaignId as string, noteId),
       {
         shared,
-      }
+      },
     )
       .then(() => resolve())
       .catch(reject);

@@ -21,7 +21,7 @@ export function getMoveCategoryVisibility(
   moveCategoryMap: MoveCategoryMap,
   moveMap: MoveMap,
   categoryVisibilityMap: Record<string, CategoryVisibilityState>,
-  visibleMoves: Record<string, MoveVisibilityState>
+  visibleMoves: Record<string, MoveVisibilityState>,
 ): boolean {
   if (!searchValue.trim()) {
     categoryVisibilityMap[categoryId] = CategoryVisibilityState.All;
@@ -69,7 +69,7 @@ export function getMoveCategoryVisibility(
       moveCategoryMap,
       moveMap,
       categoryVisibilityMap,
-      visibleMoves
+      visibleMoves,
     );
     if (areSubCollectionsVisible) {
       collectionVisibility = CategoryVisibilityState.Some;

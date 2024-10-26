@@ -1,10 +1,11 @@
-import { createApiFunction } from "api-calls/createApiFunction";
 import { updateDoc } from "firebase/firestore";
-import { Roll } from "types/DieRolls.type";
+
 import {
   convertRollToGameLogDocument,
   getCampaignGameLogDocument,
 } from "./_getRef";
+import { createApiFunction } from "api-calls/createApiFunction";
+import { Roll } from "types/DieRolls.type";
 
 export const updateLog = createApiFunction<
   { campaignId: string; logId: string; log: Roll },

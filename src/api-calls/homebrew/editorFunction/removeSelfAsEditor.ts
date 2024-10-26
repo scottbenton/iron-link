@@ -2,12 +2,12 @@ import { functions } from "config/firebase.config";
 import { httpsCallable } from "firebase/functions";
 
 export function removeSelfAsEditor(
-  homebrewCollectionId: string
+  homebrewCollectionId: string,
 ): Promise<boolean> {
   return new Promise((resolve, reject) => {
     const removeEditor = httpsCallable(
       functions,
-      "removeCurrentUserAsHomebrewCampaignEditor"
+      "removeCurrentUserAsHomebrewCampaignEditor",
     );
 
     removeEditor({ homebrewCollectionId })

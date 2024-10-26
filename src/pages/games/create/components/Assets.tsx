@@ -1,12 +1,13 @@
-import { Button, IconButton } from "@mui/material";
 import { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { GridLayout } from "components/Layout";
-import { AssetCard } from "components/datasworn/AssetCard";
 import RemoveAssetIcon from "@mui/icons-material/Close";
-import { AssetCardDialog } from "components/datasworn/AssetCardDialog/AssetCardDialog";
+import { Button, IconButton } from "@mui/material";
+
 import { useCreateCharacterAtom } from "../atoms/createCharacter.atom";
 import { AssetDocument } from "api-calls/assets/_asset.type";
+import { AssetCard } from "components/datasworn/AssetCard";
+import { AssetCardDialog } from "components/datasworn/AssetCardDialog/AssetCardDialog";
+import { GridLayout } from "components/Layout";
 
 export function Assets() {
   const [character, setCharacter] = useCreateCharacterAtom();
@@ -19,7 +20,7 @@ export function Assets() {
       index: number,
       controlKey: string,
       value: string | boolean | number,
-      shared: boolean
+      shared: boolean,
     ) => {
       setCharacter((prev) => {
         const newAssets = [...prev[shared ? "gameAssets" : "characterAssets"]];
@@ -34,7 +35,7 @@ export function Assets() {
         return { ...prev, assets: newAssets };
       });
     },
-    [setCharacter]
+    [setCharacter],
   );
 
   const combinedAssets = [
@@ -58,7 +59,7 @@ export function Assets() {
         minWidth={300}
         emptyStateMessage={t(
           "character.create.add-asset-empty-state",
-          "Add an asset now, or add one later from the character sheet."
+          "Add an asset now, or add one later from the character sheet.",
         )}
         emptyStateAction={
           <Button
@@ -130,7 +131,7 @@ interface AssetGridCardProps {
     index: number,
     controlKey: string,
     value: string | boolean | number,
-    shared: boolean
+    shared: boolean,
   ) => void;
 }
 
@@ -143,7 +144,7 @@ function AssetGridCard(props: AssetGridCardProps) {
     (controlKey: string, value: string | boolean | number) => {
       onAssetControlChange(index, controlKey, value, shared);
     },
-    [onAssetControlChange, index, shared]
+    [onAssetControlChange, index, shared],
   );
 
   return (

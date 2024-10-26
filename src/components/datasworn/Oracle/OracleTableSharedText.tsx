@@ -1,6 +1,7 @@
 import { Datasworn } from "@datasworn/core";
-import { MarkdownRenderer } from "components/MarkdownRenderer";
+
 import { SimpleTable, SimpleTableColumnDefinition } from "./SimpleTable";
+import { MarkdownRenderer } from "components/MarkdownRenderer";
 
 export interface OracleTableSharedTextProps {
   oracle:

@@ -1,10 +1,11 @@
-import { Box, SxProps, Theme, Typography } from "@mui/material";
-import { EmptyState } from "components/Layout/EmptyState";
-import { useMove } from "hooks/datasworn/useMove";
 import { useTranslation } from "react-i18next";
-import { MoveRollOptions } from "./MoveRollOptions";
-import { MarkdownRenderer } from "components/MarkdownRenderer";
+import { Box, SxProps, Theme, Typography } from "@mui/material";
+
 import { MoveOracles } from "./MoveOracles";
+import { MoveRollOptions } from "./MoveRollOptions";
+import { EmptyState } from "components/Layout/EmptyState";
+import { MarkdownRenderer } from "components/MarkdownRenderer";
+import { useMove } from "hooks/datasworn/useMove";
 
 export interface MoveProps {
   moveId: string;
@@ -24,7 +25,7 @@ export function Move(props: MoveProps) {
         message={t(
           "datasworn.move-not-found",
           "Move with id {{moveId}} could not be found",
-          { moveId }
+          { moveId },
         )}
       />
     );

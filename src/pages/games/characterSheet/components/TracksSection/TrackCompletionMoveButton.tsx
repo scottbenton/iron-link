@@ -1,7 +1,8 @@
-import { Button } from "@mui/material";
-import { useMove } from "hooks/datasworn/useMove";
-import RollIcon from "@mui/icons-material/Casino";
 import { useTranslation } from "react-i18next";
+import RollIcon from "@mui/icons-material/Casino";
+import { Button } from "@mui/material";
+
+import { useMove } from "hooks/datasworn/useMove";
 import { useRollCompleteProgressTrack } from "pages/games/hooks/useRollCompleteProgressTrack";
 import { TrackTypes } from "types/Track.type";
 
@@ -13,7 +14,7 @@ export interface TrackCompletionMoveButtonProps {
 }
 
 export function TrackCompletionMoveButton(
-  props: TrackCompletionMoveButtonProps
+  props: TrackCompletionMoveButtonProps,
 ) {
   const { moveId, trackType, trackLabel, trackProgress } = props;
   const { t } = useTranslation();
@@ -39,7 +40,7 @@ export function TrackCompletionMoveButton(
       {t(
         "character.character-sidebar.tracks-progress-track-completion-roll",
         "Roll {{moveName}}",
-        { moveName: move.name }
+        { moveName: move.name },
       )}
     </Button>
   );

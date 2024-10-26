@@ -1,6 +1,7 @@
 import { onSnapshot, query, where } from "firebase/firestore";
-import { CharacterDocument } from "api-calls/character/_character.type";
+
 import { getCharacterCollection } from "./_getRef";
+import { CharacterDocument } from "api-calls/character/_character.type";
 
 export function listenToUsersCharacters(
   uid: string,
@@ -10,14 +11,14 @@ export function listenToUsersCharacters(
     onLoaded: () => void;
   },
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  onError: (error: any) => void
+  onError: (error: any) => void,
 ) {
   if (!uid) {
     return;
   }
   const characterQuery = query(
     getCharacterCollection(),
-    where("uid", "==", uid)
+    where("uid", "==", uid),
   );
   return onSnapshot(
     characterQuery,
@@ -31,6 +32,6 @@ export function listenToUsersCharacters(
       });
       dataHandler.onLoaded();
     },
-    (error) => onError(error)
+    (error) => onError(error),
   );
 }

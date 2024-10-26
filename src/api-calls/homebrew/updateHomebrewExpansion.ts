@@ -1,7 +1,8 @@
 import { PartialWithFieldValue, updateDoc } from "firebase/firestore";
+
 import { getHomebrewCollectionDoc } from "./_getRef";
-import { ExpansionDocument } from "api-calls/homebrew/_homebrewCollection.type";
 import { createApiFunction } from "api-calls/createApiFunction";
+import { ExpansionDocument } from "api-calls/homebrew/_homebrewCollection.type";
 
 export const updateHomebrewExpansion = createApiFunction<
   { id: string; expansion: PartialWithFieldValue<ExpansionDocument> },

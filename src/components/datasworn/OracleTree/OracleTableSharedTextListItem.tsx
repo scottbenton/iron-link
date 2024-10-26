@@ -1,4 +1,7 @@
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Datasworn } from "@datasworn/core";
+import OracleTableIcon from "@mui/icons-material/List";
 import {
   Box,
   IconButton,
@@ -7,12 +10,10 @@ import {
   TextField,
   Tooltip,
 } from "@mui/material";
-import { useState } from "react";
+
 import { ListItemButtonWithSecondaryAction } from "./ListItemButtonWithSecondaryAction";
-import { useRollOracleAndAddToLog } from "pages/games/hooks/useRollOracleAndAddToLog";
-import { useTranslation } from "react-i18next";
 import { useOpenDataswornDialog } from "atoms/dataswornDialog.atom";
-import OracleTableIcon from "@mui/icons-material/List";
+import { useRollOracleAndAddToLog } from "pages/games/hooks/useRollOracleAndAddToLog";
 
 export interface OracleTableSharedTextListItemProps {
   collection:
@@ -23,7 +24,7 @@ export interface OracleTableSharedTextListItemProps {
 }
 
 export function OracleTableSharedTextListItem(
-  props: OracleTableSharedTextListItemProps
+  props: OracleTableSharedTextListItemProps,
 ) {
   const { collection, disabled } = props;
   const rollOracleTable = useRollOracleAndAddToLog();
@@ -68,7 +69,7 @@ export function OracleTableSharedTextListItem(
           <Tooltip
             title={t(
               "datasworn.oracle.view-full-table-button",
-              "View full table"
+              "View full table",
             )}
           >
             <span>

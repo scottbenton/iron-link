@@ -1,6 +1,7 @@
+import { atom, useAtom, useSetAtom } from "jotai";
+
 import { AssetDocument } from "api-calls/assets/_asset.type";
 import { CharacterDocument } from "api-calls/character/_character.type";
-import { atom, useAtom, useSetAtom } from "jotai";
 
 export interface CharacterStore {
   characterDocument: {

@@ -1,4 +1,5 @@
 import { deleteDoc, getDocs } from "firebase/firestore";
+
 import {
   getLocationCollection,
   getLocationDoc,
@@ -21,7 +22,7 @@ export const deleteAllLocations = createApiFunction<Params, void>((params) => {
         docs.forEach((doc) => {
           promises.push(deleteDoc(getLocationDoc(worldId, doc.id)));
           promises.push(
-            deleteDoc(getPrivateDetailsLocationDoc(worldId, doc.id))
+            deleteDoc(getPrivateDetailsLocationDoc(worldId, doc.id)),
           );
           promises.push(deleteDoc(getPublicNotesLocationDoc(worldId, doc.id)));
         });

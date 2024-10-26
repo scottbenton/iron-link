@@ -1,9 +1,20 @@
-import { describe, expect, it, vi } from "vitest";
-import { fireEvent, render, screen, within } from "@testing-library/react";
-import { AssetControl, AssetControlProps } from "../AssetControl";
 import { Datasworn } from "@datasworn/core";
-import { TestWrapper } from "tests/TestWrapper";
+import { fireEvent, render, screen, within } from "@testing-library/react";
 
+import { AssetControl, AssetControlProps } from "../AssetControl";
+import { useRollStatAndAddToLog } from "pages/games/hooks/useRollStatAndAddToLog";
+import { TestWrapper } from "tests/TestWrapper";
+import { beforeEach, describe, expect, it, MockedFunction, vi } from "vitest";
+
+const mockRollStat = vi.fn();
+const mockUseRollStat = useRollStatAndAddToLog as MockedFunction<
+  typeof useRollStatAndAddToLog
+>;
+mockUseRollStat.mockImplementation(() => mockRollStat);
+
+vi.mock("pages/games/hooks/useRollStatAndAddToLog", () => ({
+  useRollStatAndAddToLog: vi.fn(),
+}));
 describe("AssetControl", () => {
   const setup = (props?: Partial<AssetControlProps>) => {
     const defaultProps: AssetControlProps = {
@@ -25,6 +36,10 @@ describe("AssetControl", () => {
       onControlChange: defaultProps.onControlChange,
     };
   };
+
+  beforeEach(() => {
+    mockRollStat.mockReset();
+  });
 
   it("should render AssetSelectEnhancementField for select_enhancement type", () => {
     setup({
@@ -72,6 +87,25 @@ describe("AssetControl", () => {
       } as Datasworn.AssetControlField,
     });
     expect(screen.getByText("Condition Meter")).toBeInTheDocument();
+  });
+
+  it("should roll the condition meter if condition_meter is rollable", () => {
+    setup({
+      control: {
+        field_type: "condition_meter",
+        label: "Condition Meter",
+        value: 5,
+        min: 0,
+        max: 10,
+        rollable: true,
+        // I would add a test case for the negative, but datasworn has this hardcoded as true currently.
+      } as Datasworn.AssetControlField,
+    });
+    expect(mockRollStat).toHaveBeenCalledTimes(0);
+    const rollButton = screen.getByTestId("roll-button");
+    expect(rollButton).toBeInTheDocument();
+    fireEvent.click(rollButton);
+    expect(mockRollStat).toHaveBeenCalledTimes(1);
   });
 
   it("should render AssetTextField for text type", () => {
@@ -181,7 +215,7 @@ describe("AssetControl", () => {
     fireEvent.change(textField, { target: { value: "New Value" } });
     expect(onControlChange).toHaveBeenCalledWith(
       "test-control-id",
-      "New Value"
+      "New Value",
     );
   });
 

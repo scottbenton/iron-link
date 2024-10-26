@@ -1,3 +1,7 @@
+import { useEffect, useId, useState } from "react";
+import { useTranslation } from "react-i18next";
+import AddIcon from "@mui/icons-material/Add";
+import MinusIcon from "@mui/icons-material/Remove";
 import {
   Box,
   capitalize,
@@ -6,14 +10,11 @@ import {
   Link,
   Typography,
 } from "@mui/material";
-import { useSetAnnouncement } from "atoms/announcement.atom";
-import { useEffect, useId, useState } from "react";
-import MinusIcon from "@mui/icons-material/Remove";
-import AddIcon from "@mui/icons-material/Add";
-import { ProgressTrackTick } from "./ProgressTrackTick";
-import { Difficulty, TrackStatus } from "types/Track.type";
-import { useTranslation } from "react-i18next";
 import { TFunction } from "i18next";
+
+import { ProgressTrackTick } from "./ProgressTrackTick";
+import { useSetAnnouncement } from "atoms/announcement.atom";
+import { Difficulty, TrackStatus } from "types/Track.type";
 
 export interface ProgressTrackProps {
   difficulty?: Difficulty;
@@ -54,7 +55,7 @@ export function ProgressTrack(props: ProgressTrackProps) {
       {
         value,
         fullBoxes: Math.floor(value / 4),
-      }
+      },
     );
   };
 
@@ -72,8 +73,8 @@ export function ProgressTrack(props: ProgressTrackProps) {
               "{{label}} is already fully filled",
               {
                 label,
-              }
-            )
+              },
+            ),
           );
         } else {
           announce(
@@ -82,8 +83,8 @@ export function ProgressTrack(props: ProgressTrackProps) {
               "{{label}} is already empty",
               {
                 label,
-              }
-            )
+              },
+            ),
           );
         }
       } else {
@@ -91,8 +92,8 @@ export function ProgressTrack(props: ProgressTrackProps) {
           t(
             "datasworn.progress-track.updated",
             "Updated {{label}} to {{fillText}}",
-            { label, fillText: getValueText(newValue) }
-          )
+            { label, fillText: getValueText(newValue) },
+          ),
         );
       }
     }
@@ -185,7 +186,7 @@ export function ProgressTrack(props: ProgressTrackProps) {
               <IconButton
                 aria-label={t(
                   "datasworn.progress-track.button-decrement",
-                  "Decrement"
+                  "Decrement",
                 )}
                 onClick={() => handleChange(false)}
               >
@@ -194,7 +195,7 @@ export function ProgressTrack(props: ProgressTrackProps) {
               <IconButton
                 aria-label={t(
                   "datasworn.progress-track.button-increment",
-                  "Increment"
+                  "Increment",
                 )}
                 onClick={() => handleChange(true)}
               >
@@ -246,7 +247,7 @@ function getDifficultyLabel(difficulty: Difficulty, t: TFunction): string {
     case Difficulty.Troublesome:
       return t(
         "datasworn.progress-tracks.difficulty-troublesome",
-        "Troublesome"
+        "Troublesome",
       );
     case Difficulty.Dangerous:
       return t("datasworn.progress-tracks.difficulty-dangerous", "Dangerous");

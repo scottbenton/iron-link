@@ -3,7 +3,7 @@ import { httpsCallable } from "firebase/functions";
 // import { constructHomebrewEditorInvitePath } from "pages/Homebrew/routes";
 
 export function getEditorInviteUrl(
-  homebrewCollectionId: string
+  homebrewCollectionId: string,
 ): Promise<string | null> {
   return new Promise((resolve, reject) => {
     const getInviteKey = httpsCallable(functions, "getHomebrewEditorInviteKey");

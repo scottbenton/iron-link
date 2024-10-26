@@ -1,14 +1,15 @@
+import { useMemo } from "react";
+import { atom, useAtomValue } from "jotai";
+
 import { usersCampaignsAtom } from "atoms/users.campaigns";
 import { PortraitAvatar } from "components/characters/PortraitAvatar";
-import { atom, useAtomValue } from "jotai";
-import { useMemo } from "react";
 
 export interface CampaignCharacterPortraitProps {
   characterId: string;
 }
 
 export function CampaignCharacterPortrait(
-  props: CampaignCharacterPortraitProps
+  props: CampaignCharacterPortraitProps,
 ) {
   const { characterId } = props;
   const characterPortraitSettings = useAtomValue(
@@ -18,10 +19,10 @@ export function CampaignCharacterPortrait(
           (get) =>
             get(usersCampaignsAtom).campaignCharacterPortraitSettings[
               characterId
-            ]
+            ],
         ),
-      [characterId]
-    )
+      [characterId],
+    ),
   );
 
   return (

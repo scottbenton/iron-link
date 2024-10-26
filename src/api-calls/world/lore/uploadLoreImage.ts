@@ -1,7 +1,8 @@
-import { constructLoreImagesPath, getLoreDoc } from "./_getRef";
-import { replaceImage } from "lib/storage.lib";
 import { updateDoc } from "firebase/firestore";
+
+import { constructLoreImagesPath, getLoreDoc } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
+import { replaceImage } from "lib/storage.lib";
 
 export const uploadLoreImage = createApiFunction<
   { worldId: string; loreId: string; image: File; oldImageFilename?: string },
@@ -13,7 +14,7 @@ export const uploadLoreImage = createApiFunction<
     replaceImage(
       constructLoreImagesPath(worldId, loreId),
       oldImageFilename,
-      image
+      image,
     )
       .then(() => {
         const filename = image.name;

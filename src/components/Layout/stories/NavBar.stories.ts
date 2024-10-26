@@ -1,4 +1,5 @@
 import { Meta, StoryObj } from "@storybook/react";
+
 import { NavBar } from "../NavBar";
 import { authenticatedNavRoutes, unauthenticatedNavRoutes } from "../navRoutes";
 

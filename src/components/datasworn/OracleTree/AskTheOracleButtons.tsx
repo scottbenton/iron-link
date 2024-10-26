@@ -1,8 +1,9 @@
+import { useTranslation } from "react-i18next";
 import { Typography } from "@mui/material";
 import { Box, Button } from "@mui/material";
+
 import { askTheOracleIds, askTheOracleLabels } from "data/askTheOracle";
 import { useRollOracleAndAddToLog } from "pages/games/hooks/useRollOracleAndAddToLog";
-import { useTranslation } from "react-i18next";
 
 export function AskTheOracleButtons() {
   const rollOracleTable = useRollOracleAndAddToLog();

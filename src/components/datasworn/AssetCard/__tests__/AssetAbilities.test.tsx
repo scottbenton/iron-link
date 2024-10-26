@@ -1,8 +1,9 @@
-import { render, screen, fireEvent } from "@testing-library/react";
-import { AssetAbilities } from "../AssetAbilities";
 import { Datasworn } from "@datasworn/core";
+import { fireEvent, render, screen } from "@testing-library/react";
+
+import { AssetAbilities } from "../AssetAbilities";
 import { AssetDocument } from "api-calls/assets/_asset.type";
-import { describe, it, expect, vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 describe("AssetAbilities", () => {
   const mockAbilities: Datasworn.AssetAbility[] = [
@@ -35,7 +36,7 @@ describe("AssetAbilities", () => {
       <AssetAbilities
         abilities={mockAbilities}
         assetDocument={mockAssetDocument}
-      />
+      />,
     );
     const checkboxes = screen.getAllByRole("checkbox");
     expect(checkboxes[0]).toBeChecked();
@@ -49,7 +50,7 @@ describe("AssetAbilities", () => {
       <AssetAbilities
         abilities={mockAbilities}
         onAbilityToggle={onAbilityToggle}
-      />
+      />,
     );
     const checkboxes = screen.getAllByRole("checkbox");
     fireEvent.click(checkboxes[0]);

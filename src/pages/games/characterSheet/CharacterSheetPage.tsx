@@ -1,10 +1,11 @@
-import { Box, Card, LinearProgress } from "@mui/material";
-import { useCharacterState } from "./hooks/useCharacterState";
-import { EmptyState } from "components/Layout/EmptyState";
 import { useTranslation } from "react-i18next";
+import { Box, Card, LinearProgress } from "@mui/material";
+
 import { CharacterSidebarContents } from "./components/CharacterSidebarContents";
-import { useSyncCharacterColorScheme } from "./hooks/useSyncCharacterColorScheme";
 import { ReferenceSidebarContents } from "./components/ReferenceSidebarContents";
+import { useCharacterState } from "./hooks/useCharacterState";
+import { useSyncCharacterColorScheme } from "./hooks/useSyncCharacterColorScheme";
+import { EmptyState } from "components/Layout/EmptyState";
 
 export function CharacterSheetPage() {
   const { error, hasCharacter } = useCharacterState();
@@ -21,7 +22,7 @@ export function CharacterSheetPage() {
       <EmptyState
         message={t(
           "character.error-loading-character",
-          "Error loading character"
+          "Error loading character",
         )}
       />
     );

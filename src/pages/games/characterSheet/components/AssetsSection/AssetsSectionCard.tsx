@@ -1,13 +1,14 @@
+import React, { useCallback } from "react";
+import { useTranslation } from "react-i18next";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { IconButton, Tooltip } from "@mui/material";
+import { useConfirm } from "material-ui-confirm";
+
 import { AssetDocument } from "api-calls/assets/_asset.type";
 import { removeAsset } from "api-calls/assets/removeAsset";
 import { updateAsset } from "api-calls/assets/updateAsset";
 import { updateAssetCheckbox } from "api-calls/assets/updateAssetCheckbox";
 import { AssetCard } from "components/datasworn/AssetCard";
-import { useConfirm } from "material-ui-confirm";
-import React, { useCallback } from "react";
-import { useTranslation } from "react-i18next";
-import DeleteIcon from "@mui/icons-material/Delete";
 
 export interface AssetsSectionCardProps {
   doesUserOwnCharacter: boolean;
@@ -40,7 +41,7 @@ function AssetsSectionCardUnMemoized(props: AssetsSectionCardProps) {
         checked,
       }).catch(() => {});
     },
-    [shared, characterId, campaignId, assetId]
+    [shared, characterId, campaignId, assetId],
   );
 
   const handleAssetOptionChange = useCallback(
@@ -54,7 +55,7 @@ function AssetsSectionCardUnMemoized(props: AssetsSectionCardProps) {
         },
       }).catch(() => {});
     },
-    [shared, assetId, characterId, campaignId]
+    [shared, assetId, characterId, campaignId],
   );
 
   const handleAssetControlChange = useCallback(
@@ -68,7 +69,7 @@ function AssetsSectionCardUnMemoized(props: AssetsSectionCardProps) {
         },
       }).catch(() => {});
     },
-    [shared, assetId, characterId, campaignId]
+    [shared, assetId, characterId, campaignId],
   );
 
   const confirm = useConfirm();
@@ -76,11 +77,11 @@ function AssetsSectionCardUnMemoized(props: AssetsSectionCardProps) {
     confirm({
       title: t(
         "character.character-sidebar.delete-asset-dialog-title",
-        "Delete Asset"
+        "Delete Asset",
       ),
       description: t(
         "character.character-sidebar.delete-asset-dialog-description",
-        "Are you sure you want to delete this asset?"
+        "Are you sure you want to delete this asset?",
       ),
       confirmationText: t("common.delete", "Delete"),
     })
@@ -101,7 +102,7 @@ function AssetsSectionCardUnMemoized(props: AssetsSectionCardProps) {
         <Tooltip
           title={t(
             "character.character-sidebar.delete-asset-dialog-title",
-            "Delete Asset"
+            "Delete Asset",
           )}
         >
           <IconButton onClick={handleDeleteAsset} color="inherit">

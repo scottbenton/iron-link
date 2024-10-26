@@ -1,7 +1,8 @@
-import { describe, it, expect, vi } from "vitest";
-import { render, fireEvent, screen, within } from "@testing-library/react";
-import { AssetOption } from "../AssetOption";
 import { Datasworn } from "@datasworn/core";
+import { fireEvent, render, screen, within } from "@testing-library/react";
+
+import { AssetOption } from "../AssetOption";
+import { describe, expect, it, vi } from "vitest";
 
 const textAssetOptionWithDefault: Datasworn.TextField = {
   field_type: "text",
@@ -94,7 +95,7 @@ describe("AssetOption", () => {
       <AssetOption
         assetOption={textAssetOptionWithDefault}
         assetOptionKey="testKey"
-      />
+      />,
     );
     const input = getByLabelText("Test Label");
     expect(input).toBeInTheDocument();
@@ -106,7 +107,7 @@ describe("AssetOption", () => {
       <AssetOption
         assetOption={textAssetOptionWithoutDefault}
         assetOptionKey="testKey"
-      />
+      />,
     );
     const input = getByLabelText("Test Label");
     expect(input).toBeInTheDocument();
@@ -121,7 +122,7 @@ describe("AssetOption", () => {
         assetOptionKey="testKey"
         value={"User Value"}
         onAssetOptionChange={onChange}
-      />
+      />,
     );
     const input = getByLabelText("Test Label");
     expect(input).toBeInTheDocument();
@@ -137,7 +138,7 @@ describe("AssetOption", () => {
       <AssetOption
         assetOption={selectEnhancementFieldWithDefault}
         assetOptionKey="testKey"
-      />
+      />,
     );
     const inputBox = getByLabelText("Test Select");
 
@@ -150,7 +151,7 @@ describe("AssetOption", () => {
         assetOption={selectEnhancementFieldWithoutDefault}
         assetOptionKey="testKey"
         onAssetOptionChange={() => {}}
-      />
+      />,
     );
     const inputBox = screen.getByLabelText("Test Select");
     expect(inputBox).toBeInTheDocument();
@@ -164,7 +165,7 @@ describe("AssetOption", () => {
         assetOptionKey="testKey"
         value={"choice4"}
         onAssetOptionChange={onChange}
-      />
+      />,
     );
     const button = getByLabelText("Test Select");
     expect(button).toHaveTextContent("Choice 4");
@@ -181,7 +182,7 @@ describe("AssetOption", () => {
       <AssetOption
         assetOption={selectValueFieldWithDefault}
         assetOptionKey="testKey"
-      />
+      />,
     );
     const inputBox = getByLabelText("Test Select");
 
@@ -194,7 +195,7 @@ describe("AssetOption", () => {
         assetOption={selectValueFieldWithoutDefault}
         assetOptionKey="testKey"
         onAssetOptionChange={() => {}}
-      />
+      />,
     );
     const inputBox = screen.getByLabelText("Test Select");
     expect(inputBox).toBeInTheDocument();
@@ -209,7 +210,7 @@ describe("AssetOption", () => {
         assetOptionKey="testKey"
         value={"edge"}
         onAssetOptionChange={onChange}
-      />
+      />,
     );
     const button = getByLabelText("Test Select");
     expect(button).toHaveTextContent("Edge");

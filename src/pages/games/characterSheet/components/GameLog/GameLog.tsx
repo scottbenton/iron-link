@@ -1,12 +1,13 @@
 import { useCallback, useEffect, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { Box, LinearProgress } from "@mui/material";
+
 import { GameLogEntry } from "./GameLogEntry";
+import { EmptyState } from "components/Layout/EmptyState";
 import {
   useGameLogs,
   useLoadMoreLogs,
 } from "pages/games/gamePageLayout/atoms/gameLog.atom";
-import { EmptyState } from "components/Layout/EmptyState";
-import { useTranslation } from "react-i18next";
 
 export function GameLog() {
   const { loading, error, logs, totalLogsToLoad } = useGameLogs();
@@ -14,7 +15,7 @@ export function GameLog() {
 
   const orderedLogs = useMemo(() => {
     return Object.entries(logs).sort(
-      ([, l1], [, l2]) => l1.timestamp.getTime() - l2.timestamp.getTime()
+      ([, l1], [, l2]) => l1.timestamp.getTime() - l2.timestamp.getTime(),
     );
   }, [logs]);
 
@@ -44,7 +45,7 @@ export function GameLog() {
             }
           });
         },
-        { threshold: 0.5 }
+        { threshold: 0.5 },
       );
 
       observer.observe(loadMoreLogsElement);

@@ -8,14 +8,14 @@ export function decodeDataswornId(id: string) {
 
 export function generateCustomDataswornId(
   idPrefix: string,
-  idContents: string
+  idContents: string,
 ) {
   return `${idPrefix}/custom/${encodeContents(idContents)}`;
 }
 
 export function generateAssetDataswornId(
   assetGroupId: string,
-  idContents: string
+  idContents: string,
 ) {
   return `${assetGroupId}/${encodeContents(idContents)}`;
 }
@@ -41,7 +41,7 @@ export function convertIdPart(
     testRegex?: RegExp;
     replaceRegex?: RegExp;
     replaceNumbers?: boolean;
-  }
+  },
 ) {
   const {
     testRegex = defaultRegex,
@@ -72,16 +72,16 @@ export function convertIdPart(
   }
 
   throw new Error(
-    `Failed to create valid ID: ID Part = ${idPart}, New ID Part = ${newIdPart}`
+    `Failed to create valid ID: ID Part = ${idPart}, New ID Part = ${newIdPart}`,
   );
 }
 
 export function encodeAndConstructDataswornId(
   homebrewId: string,
   midsection: string,
-  idPart: string
+  idPart: string,
 ) {
   return `${homebrewId.toLocaleLowerCase()}/${midsection}/${convertIdPart(
-    idPart
+    idPart,
   )}`;
 }

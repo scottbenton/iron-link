@@ -1,5 +1,8 @@
+import { ChangeEventHandler, useCallback, useEffect, useState } from "react";
+import AvatarEditor from "react-avatar-editor";
 import { useTranslation } from "react-i18next";
-import { DialogTitleWithCloseButton } from "components/DialogTitleWithCloseButton";
+import ZoomInIcon from "@mui/icons-material/ZoomIn";
+import ZoomOutIcon from "@mui/icons-material/ZoomOut";
 import {
   Box,
   Button,
@@ -9,18 +12,16 @@ import {
   DialogContent,
   TextField,
 } from "@mui/material";
-import { MAX_FILE_SIZE, MAX_FILE_SIZE_LABEL } from "lib/storage.lib";
-import { useSnackbar } from "providers/SnackbarProvider";
-import { ChangeEventHandler, useCallback, useEffect, useState } from "react";
-import ZoomInIcon from "@mui/icons-material/ZoomIn";
-import ZoomOutIcon from "@mui/icons-material/ZoomOut";
-import AvatarEditor from "react-avatar-editor";
-import { useCharacterPortrait } from "atoms/characterPortraits.atom";
-import { updateCharacter } from "api-calls/character/updateCharacter";
-import { updateCharacterPortrait } from "api-calls/character/updateCharacterPortrait";
-import { removeCharacterPortrait } from "api-calls/character/removeCharacterPortrait";
+
 import { useCharacterId } from "../../hooks/useCharacterId";
 import { useDerivedCharacterState } from "../../hooks/useDerivedCharacterState";
+import { removeCharacterPortrait } from "api-calls/character/removeCharacterPortrait";
+import { updateCharacter } from "api-calls/character/updateCharacter";
+import { updateCharacterPortrait } from "api-calls/character/updateCharacterPortrait";
+import { useCharacterPortrait } from "atoms/characterPortraits.atom";
+import { DialogTitleWithCloseButton } from "components/DialogTitleWithCloseButton";
+import { MAX_FILE_SIZE, MAX_FILE_SIZE_LABEL } from "lib/storage.lib";
+import { useSnackbar } from "providers/SnackbarProvider";
 
 export interface CharacterDetailsDialogProps {
   open: boolean;
@@ -43,8 +44,8 @@ export function CharacterDetailsDialog(props: CharacterDetailsDialogProps) {
           name: character?.characterDocument.data?.name ?? "",
           profileImage: character?.characterDocument.data?.profileImage,
         }),
-        []
-      )
+        [],
+      ),
     );
 
   const initialFileUrl = useCharacterPortrait(characterId ?? "").url;
@@ -58,13 +59,13 @@ export function CharacterDetailsDialog(props: CharacterDetailsDialogProps) {
 
   const [file, setFile] = useState<File | string | undefined>(initialFileUrl);
   const [scale, setScale] = useState<number>(
-    initialPortraitSettings?.scale ?? 1
+    initialPortraitSettings?.scale ?? 1,
   );
   const [position, setPosition] = useState<{ x: number; y: number }>(
     initialPortraitSettings?.position ?? {
       x: 0.5,
       y: 0.5,
-    }
+    },
   );
   useEffect(() => {
     setScale(initialPortraitSettings?.scale ?? 1);
@@ -73,7 +74,7 @@ export function CharacterDetailsDialog(props: CharacterDetailsDialogProps) {
 
   useEffect(() => {
     setFile((prevFile) =>
-      !prevFile || typeof prevFile === "string" ? initialFileUrl : prevFile
+      !prevFile || typeof prevFile === "string" ? initialFileUrl : prevFile,
     );
   }, [initialFileUrl]);
 
@@ -89,8 +90,8 @@ export function CharacterDetailsDialog(props: CharacterDetailsDialogProps) {
             "File is too large. The max file size is {{maxFileSize}}",
             {
               maxFileSize: MAX_FILE_SIZE_LABEL,
-            }
-          )
+            },
+          ),
         );
         evt.target.value = "";
         return;
@@ -111,7 +112,7 @@ export function CharacterDetailsDialog(props: CharacterDetailsDialogProps) {
       const promises: Promise<unknown>[] = [];
       if (name && name !== initialName) {
         promises.push(
-          updateCharacter({ characterId, character: { name } }).catch(() => {})
+          updateCharacter({ characterId, character: { name } }).catch(() => {}),
         );
       }
       if (
@@ -127,7 +128,7 @@ export function CharacterDetailsDialog(props: CharacterDetailsDialogProps) {
               portrait: file,
               scale,
               position,
-            })
+            }),
           );
         } else {
           promises.push(
@@ -135,7 +136,7 @@ export function CharacterDetailsDialog(props: CharacterDetailsDialogProps) {
               "profileImage.position": position,
               "profileImage.scale": scale,
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            } as any)
+            } as any),
           );
         }
       } else if (!file && initialPortraitSettings) {
@@ -143,7 +144,7 @@ export function CharacterDetailsDialog(props: CharacterDetailsDialogProps) {
           removeCharacterPortrait({
             characterId,
             oldPortraitFilename: initialPortraitSettings.filename,
-          })
+          }),
         );
       }
 
@@ -163,7 +164,7 @@ export function CharacterDetailsDialog(props: CharacterDetailsDialogProps) {
       <DialogTitleWithCloseButton onClose={onClose}>
         {t(
           "character.character-sidebar.change-character-name-portrait",
-          "Change Character Name and Portrait"
+          "Change Character Name and Portrait",
         )}
       </DialogTitleWithCloseButton>
       <DialogContent>

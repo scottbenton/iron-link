@@ -1,10 +1,11 @@
-import { AppBar, Box, Drawer, IconButton, List, Toolbar } from "@mui/material";
-import { NavRouteConfig } from "./navRoutes";
-import { IronLinkLogo } from "./IronLinkLogo";
-import { AppSettingsMenu } from "./AppSettingsMenu";
-import HamburgerMenuIcon from "@mui/icons-material/Menu";
 import { useState } from "react";
+import HamburgerMenuIcon from "@mui/icons-material/Menu";
+import { AppBar, Box, Drawer, IconButton, List, Toolbar } from "@mui/material";
+
+import { AppSettingsMenu } from "./AppSettingsMenu";
+import { IronLinkLogo } from "./IronLinkLogo";
 import { NavBarListItem } from "./NavBarListItem";
+import { NavRouteConfig } from "./navRoutes";
 
 export interface NavBarProps {
   routes: NavRouteConfig[];

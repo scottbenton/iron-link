@@ -1,7 +1,8 @@
-import { Box, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
-import { MarkdownRenderer } from "components/MarkdownRenderer";
+import { Box, Typography } from "@mui/material";
+
 import { AssetEnhancements as IAssetEnhancements } from "./RollOptions/extractRollOptions";
+import { MarkdownRenderer } from "components/MarkdownRenderer";
 
 export interface AssetEnhancementsProps {
   enhancements: IAssetEnhancements;
@@ -9,6 +10,7 @@ export interface AssetEnhancementsProps {
 
 export function AssetEnhancements(props: AssetEnhancementsProps) {
   const { enhancements } = props;
+
   const { t } = useTranslation();
 
   if (Object.keys(enhancements).length === 0) {
@@ -25,12 +27,12 @@ export function AssetEnhancements(props: AssetEnhancementsProps) {
                 ? t(
                     "datasworn.move.asset-enhancement-asset-input-name",
                     "{{assetName}} Asset: {{assetInputName}}",
-                    { assetName, assetInputName }
+                    { assetName, assetInputName },
                   )
                 : t(
                     "datasworn.move.asset-enhancement-asset-name",
                     "{{assetName}} Asset",
-                    { assetName }
+                    { assetName },
                   )}
             </Typography>
             <MarkdownRenderer
@@ -39,7 +41,7 @@ export function AssetEnhancements(props: AssetEnhancementsProps) {
               markdown={assetAbilityText}
             />
           </Box>
-        )
+        ),
       )}
     </Box>
   );

@@ -1,4 +1,5 @@
 import { updateDoc } from "firebase/firestore";
+
 import { getCampaignNoteDocument, getCharacterNoteDocument } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
 
@@ -23,7 +24,7 @@ export const updateNoteOrder = createApiFunction<
         : getCampaignNoteDocument(campaignId as string, noteId),
       {
         order,
-      }
+      },
     )
       .then(() => {
         resolve();

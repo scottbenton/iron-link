@@ -1,5 +1,5 @@
-import { IconDefinition } from "./Icon.type";
-import { Difficulty } from "./Track.type";
+import { IconDefinition } from "types/Icon.type";
+import { Difficulty } from "types/Track.type";
 
 export enum DefaultNPCSpecies {
   Ironlander = "ironlander",

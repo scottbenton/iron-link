@@ -1,8 +1,9 @@
 import { CollectionId, Datasworn, IdParser } from "@datasworn/core";
 import { Primary } from "@datasworn/core/dist/StringId";
-import { dataswornTreeAtom } from "atoms/dataswornTree.atom";
 import { atom, useAtomValue } from "jotai";
+
 import { getRulesetFromId } from "./getRulesetFromId";
+import { dataswornTreeAtom } from "atoms/dataswornTree.atom";
 import { useActiveAssetMoveCategories } from "components/datasworn/hooks/useActiveAssetMoveCategories";
 
 export type RootMoveCategories = Record<
@@ -16,7 +17,7 @@ function parseMoveCategory(
   category: Datasworn.MoveCategory,
   tree: Record<string, Datasworn.RulesPackage>,
   moveCategoryMap: MoveCategoryMap,
-  moveMap: MoveMap
+  moveMap: MoveMap,
 ) {
   Object.keys(category.contents).forEach((moveKey) => {
     const oracle = category.contents[moveKey];
@@ -76,7 +77,7 @@ const movesAtom = atom((get) => {
   IdParser.tree = trees;
   const rootMoveCategoriesMap = CollectionId.getMatches(
     "move_category:*/*",
-    trees
+    trees,
   );
 
   const rootMoveCategories: RootMoveCategories = {};
@@ -142,7 +143,7 @@ export function useMoves() {
           ...moveMapWithAssetMoves,
           ...assetMoveCategory.contents,
         };
-      }
+      },
     );
 
     return {

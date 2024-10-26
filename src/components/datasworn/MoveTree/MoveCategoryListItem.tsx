@@ -1,3 +1,5 @@
+import { useState } from "react";
+import ChevronIcon from "@mui/icons-material/ChevronRight";
 import {
   Collapse,
   List,
@@ -5,14 +7,13 @@ import {
   ListItemButton,
   ListItemText,
 } from "@mui/material";
-import ChevronIcon from "@mui/icons-material/ChevronRight";
-import { useState } from "react";
 import { ListItemIcon } from "@mui/material";
-import { MoveListItem } from "./MoveListItem";
+
 import {
   CategoryVisibilityState,
   VisibilitySettings,
 } from "./getMoveCategoryVisibility";
+import { MoveListItem } from "./MoveListItem";
 import { MoveCategoryMap, MoveMap } from "atoms/dataswornRules/useMoves";
 
 export interface MoveCategoryListItemProps {

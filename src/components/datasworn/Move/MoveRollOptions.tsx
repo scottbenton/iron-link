@@ -1,33 +1,34 @@
+import { useMemo } from "react";
+import { useParams } from "react-router-dom";
 import { Datasworn } from "@datasworn/core";
 import { Box, Typography } from "@mui/material";
-import { useParams } from "react-router-dom";
-import { derivedAtomWithEquality } from "atoms/derivedAtomWithEquality";
-import { campaignCharactersAtom } from "pages/games/gamePageLayout/atoms/campaign.characters.atom";
 import { useAtomValue } from "jotai";
-import { useUID } from "atoms/auth.atom";
-import { useMemo } from "react";
-import { currentCampaignAtom } from "pages/games/gamePageLayout/atoms/campaign.atom";
+
+import { AssetEnhancements } from "./AssetEnhancements";
 import {
   ActionRolls,
   CharacterRollOptionState,
   ProgressRolls,
 } from "./RollOptions";
-import { AssetEnhancements } from "./AssetEnhancements";
 import { extractRollOptions } from "./RollOptions/extractRollOptions";
-import { useDataswornTree } from "atoms/dataswornTree.atom";
 import { SpecialTracks } from "./RollOptions/SpecialTracks";
+import { useUID } from "atoms/auth.atom";
+import { useDataswornTree } from "atoms/dataswornTree.atom";
+import { derivedAtomWithEquality } from "atoms/derivedAtomWithEquality";
+import { currentCampaignAtom } from "pages/games/gamePageLayout/atoms/campaign.atom";
+import { campaignCharactersAtom } from "pages/games/gamePageLayout/atoms/campaign.characters.atom";
 
 const derivedCampaignState = derivedAtomWithEquality(
   currentCampaignAtom,
   (state) => ({
     conditionMeters: state.campaign?.conditionMeters ?? {},
     assets: state.sharedAssets.assets ?? {},
-  })
+  }),
 );
 
 const derivedCampaignCharacterState = (
   uid: string,
-  currentCharacterId?: string
+  currentCharacterId?: string,
 ) =>
   derivedAtomWithEquality(campaignCharactersAtom, (state) => {
     const characterData: Record<string, CharacterRollOptionState> = {};
@@ -65,14 +66,14 @@ export function MoveRollOptions(props: MoveRollOptions) {
   const characterData = useAtomValue(
     useMemo(
       () => derivedCampaignCharacterState(uid, characterId),
-      [uid, characterId]
-    )
+      [uid, characterId],
+    ),
   );
   const dataswornTree = useDataswornTree();
   const campaignData = useAtomValue(derivedCampaignState);
   const rollOptions = useMemo(
     () => extractRollOptions(move, campaignData, characterData, dataswornTree),
-    [move, campaignData, characterData, dataswornTree]
+    [move, campaignData, characterData, dataswornTree],
   );
 
   return (
@@ -128,7 +129,7 @@ export function MoveRollOptions(props: MoveRollOptions) {
               />
             )}
           </Box>
-        )
+        ),
       )}
     </Box>
   );

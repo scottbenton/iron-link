@@ -1,6 +1,7 @@
-import { Datasworn, IdParser } from "@datasworn/core";
-import { useDataswornTree } from "atoms/dataswornTree.atom";
 import { useEffect, useState } from "react";
+import { Datasworn, IdParser } from "@datasworn/core";
+
+import { useDataswornTree } from "atoms/dataswornTree.atom";
 
 type ReturnType =
   | {
@@ -33,7 +34,7 @@ export function useGetDataswornItem(itemId: string): ReturnType {
   const tree = useDataswornTree();
 
   const [returnType, setReturnType] = useState<ReturnType>(
-    getDataswornItem(itemId, tree)
+    getDataswornItem(itemId, tree),
   );
 
   useEffect(() => {
@@ -45,7 +46,7 @@ export function useGetDataswornItem(itemId: string): ReturnType {
 
 function getDataswornItem(
   itemId: string,
-  tree: Record<string, Datasworn.RulesPackage>
+  tree: Record<string, Datasworn.RulesPackage>,
 ): ReturnType {
   try {
     IdParser.tree = tree;

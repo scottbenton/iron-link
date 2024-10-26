@@ -1,4 +1,5 @@
 import { Box, Divider, Typography } from "@mui/material";
+
 import { D6Icon } from "assets/D6Icon";
 import { D10Icon } from "assets/D10Icon";
 import { ProgressTrackTick } from "components/datasworn/ProgressTrack/ProgressTrackTick";

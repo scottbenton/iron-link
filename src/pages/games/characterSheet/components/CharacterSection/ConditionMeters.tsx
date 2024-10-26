@@ -1,19 +1,21 @@
+import { useCallback } from "react";
+import { useTranslation } from "react-i18next";
+import ResetIcon from "@mui/icons-material/RestartAlt";
 import { Box, Typography } from "@mui/material";
+
+import { DEFAULT_MOMENTUM } from "../../../../../data/constants.ts";
+import { useCharacterId } from "../../hooks/useCharacterId";
+import { useDerivedCharacterState } from "../../hooks/useDerivedCharacterState";
+import { useIsOwnerOfCharacter } from "../../hooks/useIsOwnerOfCharacter";
+import { useMomentumParameters } from "../../hooks/useMomentumResetValue";
+import { SingleConditionMeter } from "./SingleConditionMeter";
+import { updateCampaign } from "api-calls/campaign/updateCampaign";
 import { updateCharacter } from "api-calls/character/updateCharacter";
 import { useConditionMeterRules } from "atoms/dataswornRules/useConditionMeterRules";
 import { DebouncedConditionMeter } from "components/datasworn/ConditonMeter";
 import { momentumTrack } from "data/defaultTracks";
-import { useTranslation } from "react-i18next";
-import { useMomentumParameters } from "../../hooks/useMomentumResetValue";
-import ResetIcon from "@mui/icons-material/RestartAlt";
-import { useCharacterId } from "../../hooks/useCharacterId";
-import { useDerivedCharacterState } from "../../hooks/useDerivedCharacterState";
-import { useCallback } from "react";
-import { SingleConditionMeter } from "./SingleConditionMeter";
-import { useDerivedCampaignDocumentState } from "pages/games/gamePageLayout/hooks/useDerivedCampaignState";
-import { updateCampaign } from "api-calls/campaign/updateCampaign";
 import { useCampaignId } from "pages/games/gamePageLayout/hooks/useCampaignId";
-import { useIsOwnerOfCharacter } from "../../hooks/useIsOwnerOfCharacter";
+import { useDerivedCampaignDocumentState } from "pages/games/gamePageLayout/hooks/useDerivedCampaignState";
 
 export function ConditionMeters() {
   const campaignId = useCampaignId();
@@ -21,16 +23,16 @@ export function ConditionMeters() {
   const isCharacterOwner = useIsOwnerOfCharacter();
 
   const campaignConditionMeterValues = useDerivedCampaignDocumentState(
-    (campaign) => campaign?.conditionMeters ?? {}
+    (campaign) => campaign?.conditionMeters ?? {},
   );
   const { conditionMeterValues, momentum, adds } = useDerivedCharacterState(
     characterId,
     (character) => ({
       conditionMeterValues:
         character?.characterDocument.data?.conditionMeters ?? {},
-      momentum: character?.characterDocument.data?.momentum ?? 2,
+      momentum: character?.characterDocument.data?.momentum ?? DEFAULT_MOMENTUM,
       adds: character?.characterDocument.data?.adds ?? 0,
-    })
+    }),
   );
 
   const { resetValue, max } = useMomentumParameters();
@@ -56,7 +58,7 @@ export function ConditionMeters() {
         }).catch(() => {});
       }
     },
-    [campaignId, characterId]
+    [campaignId, characterId],
   );
 
   const handleMomentumChange = useCallback(
@@ -68,7 +70,7 @@ export function ConditionMeters() {
         }).catch(() => {});
       }
     },
-    [characterId]
+    [characterId],
   );
 
   return (
@@ -110,7 +112,7 @@ export function ConditionMeters() {
           action={{
             actionLabel: t(
               "character.character-sidebar.momentum-track-reset",
-              "Reset"
+              "Reset",
             ),
             ActionIcon: ResetIcon,
           }}

@@ -22,7 +22,7 @@ export function HeadProvider(props: PropsWithChildren) {
           property="og:description"
           content={t(
             "iron-link.description",
-            "A character sheet and campaign manager for players and guides playing Ironsworn or Starforged"
+            "A character sheet and campaign manager for players and guides playing Ironsworn or Starforged",
           )}
         />
         {/* <meta property="og:url" content={url} />

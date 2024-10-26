@@ -1,6 +1,6 @@
-import { getImageUrl } from "lib/storage.lib";
 import { constructCharacterPortraitPath } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
+import { getImageUrl } from "lib/storage.lib";
 
 export const getCharacterPortraitUrl = createApiFunction<
   {

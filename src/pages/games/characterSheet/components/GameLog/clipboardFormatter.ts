@@ -1,15 +1,16 @@
+import { Datasworn } from "@datasworn/core";
+
+import { getRollResultLabel } from "data/rollResultLabel";
+import { getMove } from "hooks/datasworn/useMove";
 import {
   ClockProgressionRoll,
   OracleTableRoll,
-  RollType,
   Roll,
+  RollType,
   StatRoll,
   TrackProgressRoll,
 } from "types/DieRolls.type";
 import { TrackTypes } from "types/Track.type";
-import { Datasworn } from "@datasworn/core";
-import { getRollResultLabel } from "data/rollResultLabel";
-import { getMove } from "hooks/datasworn/useMove";
 
 export function formatQuote(contents: string) {
   return `<blockquote>${contents}</blockquote>`;
@@ -29,7 +30,7 @@ export function formatParagraph(contents: string) {
 
 export function convertRollToClipboard(
   roll: Roll,
-  tree: Record<string, Datasworn.RulesPackage>
+  tree: Record<string, Datasworn.RulesPackage>,
 ):
   | {
       rich: string;
@@ -65,10 +66,10 @@ export function convertRollToClipboard(
 
       return {
         rich: convertClockProgressionRollToClipboardRich(
-          clockProgressionContents
+          clockProgressionContents,
         ),
         plain: convertClockProgressionRollToClipboardPlain(
-          clockProgressionContents
+          clockProgressionContents,
         ),
       };
     }
@@ -86,7 +87,7 @@ interface StatRollContents {
 
 export function extractStatRollContents(
   roll: StatRoll,
-  moveName: string | undefined
+  moveName: string | undefined,
 ): StatRollContents {
   const title = moveName ? `${moveName} (${roll.rollLabel})` : roll.rollLabel;
   let actionContents = roll.action + "";
@@ -110,14 +111,14 @@ export function extractStatRollContents(
 }
 
 export function convertStatRollToClipboardRich(
-  contents: StatRollContents
+  contents: StatRollContents,
 ): string {
   const title = formatParagraph(contents.title);
   const action = formatParagraph(
-    formatItalic("Action: ") + contents.actionContents
+    formatItalic("Action: ") + contents.actionContents,
   );
   const challenge = formatParagraph(
-    formatItalic("Challenge: ") + contents.challengeContents
+    formatItalic("Challenge: ") + contents.challengeContents,
   );
   const result = formatBold(contents.result);
 
@@ -140,7 +141,7 @@ interface OracleRollContents {
 }
 
 export function extractOracleRollContents(
-  roll: OracleTableRoll
+  roll: OracleTableRoll,
 ): OracleRollContents {
   const title = roll.oracleCategoryName
     ? `${roll.oracleCategoryName} / ${roll.rollLabel}`
@@ -156,7 +157,7 @@ export function extractOracleRollContents(
 }
 
 export function convertOracleRollToClipboardRich(
-  contents: OracleRollContents
+  contents: OracleRollContents,
 ): string {
   const title = formatParagraph(contents.title);
   const roll = formatParagraph(formatItalic("Roll: ") + contents.roll);
@@ -166,7 +167,7 @@ export function convertOracleRollToClipboardRich(
 }
 
 export function convertOracleRollToClipboardPlain(
-  contents: OracleRollContents
+  contents: OracleRollContents,
 ) {
   return `
 ${contents.title}
@@ -200,7 +201,7 @@ function getTrackTypeLabel(type: TrackTypes) {
 }
 
 export function extractTrackProgressRollContents(
-  roll: TrackProgressRoll
+  roll: TrackProgressRoll,
 ): TrackProgressRollContents {
   const title = `${getTrackTypeLabel(roll.trackType)}: ${roll.rollLabel}`;
   const progress = roll.trackProgress + "";
@@ -216,14 +217,14 @@ export function extractTrackProgressRollContents(
 }
 
 export function convertTrackProgressRollToClipboardRich(
-  contents: TrackProgressRollContents
+  contents: TrackProgressRollContents,
 ): string {
   const title = formatParagraph(contents.title);
   const progress = formatParagraph(
-    formatItalic("Progress: ") + contents.progress
+    formatItalic("Progress: ") + contents.progress,
   );
   const challenge = formatParagraph(
-    formatItalic("Challenge: ") + contents.challenge
+    formatItalic("Challenge: ") + contents.challenge,
   );
   const result = formatBold(contents.result);
 
@@ -231,7 +232,7 @@ export function convertTrackProgressRollToClipboardRich(
 }
 
 export function convertTrackProgressRollToClipboardPlain(
-  contents: TrackProgressRollContents
+  contents: TrackProgressRollContents,
 ) {
   return `
 ${contents.title}
@@ -248,7 +249,7 @@ interface ClockProgressionRollContents {
 }
 
 export function extractClockProgressionRollContents(
-  roll: ClockProgressionRoll
+  roll: ClockProgressionRoll,
 ): ClockProgressionRollContents {
   const title = roll.rollLabel;
   const rollResult = roll.roll + "";
@@ -262,7 +263,7 @@ export function extractClockProgressionRollContents(
 }
 
 export function convertClockProgressionRollToClipboardRich(
-  contents: ClockProgressionRollContents
+  contents: ClockProgressionRollContents,
 ): string {
   const title = formatParagraph(contents.title);
   const roll = formatParagraph(formatItalic("Roll: ") + contents.roll);
@@ -272,7 +273,7 @@ export function convertClockProgressionRollToClipboardRich(
 }
 
 export function convertClockProgressionRollToClipboardPlain(
-  contents: ClockProgressionRollContents
+  contents: ClockProgressionRollContents,
 ) {
   return `
 ${contents.title}

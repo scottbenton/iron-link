@@ -1,4 +1,5 @@
 import { Box, BoxProps } from "@mui/material";
+
 import { usePrefersReducedMotion } from "hooks/usePrefersReducedMotion";
 
 export interface GradientBoxProps extends BoxProps {

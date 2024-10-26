@@ -6,7 +6,8 @@ import {
   doc,
   DocumentReference,
 } from "firebase/firestore";
-import { WorldDocument, World } from "./_world.type";
+
+import { World, WorldDocument } from "./_world.type";
 
 export function constructWorldsPath() {
   return `/worlds`;
@@ -19,14 +20,14 @@ export function constructWorldDocPath(worldId: string) {
 export function getWorldCollection() {
   return collection(
     firestore,
-    constructWorldsPath()
+    constructWorldsPath(),
   ) as CollectionReference<WorldDocument>;
 }
 
 export function getWorldDoc(worldId: string) {
   return doc(
     firestore,
-    constructWorldDocPath(worldId)
+    constructWorldDocPath(worldId),
   ) as DocumentReference<WorldDocument>;
 }
 

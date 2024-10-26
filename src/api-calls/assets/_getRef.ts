@@ -5,6 +5,7 @@ import {
   doc,
   DocumentReference,
 } from "firebase/firestore";
+
 import { AssetDocument } from "api-calls/assets/_asset.type";
 
 export function constructCharacterAssetCollectionPath(characterId: string) {
@@ -13,7 +14,7 @@ export function constructCharacterAssetCollectionPath(characterId: string) {
 
 export function constructCharacterAssetDocPath(
   characterId: string,
-  assetId: string
+  assetId: string,
 ) {
   return `${constructCharacterAssetCollectionPath(characterId)}/${assetId}`;
 }
@@ -24,7 +25,7 @@ export function constructCampaignAssetCollectionPath(campaignId: string) {
 
 export function constructCampaignAssetDocPath(
   campaignId: string,
-  assetId: string
+  assetId: string,
 ) {
   return `${constructCampaignAssetCollectionPath(campaignId)}/${assetId}`;
 }
@@ -32,27 +33,27 @@ export function constructCampaignAssetDocPath(
 export function getCharacterAssetCollection(characterId: string) {
   return collection(
     firestore,
-    constructCharacterAssetCollectionPath(characterId)
+    constructCharacterAssetCollectionPath(characterId),
   ) as CollectionReference<AssetDocument>;
 }
 
 export function getCharacterAssetDoc(characterId: string, assetId: string) {
   return doc(
     firestore,
-    constructCharacterAssetDocPath(characterId, assetId)
+    constructCharacterAssetDocPath(characterId, assetId),
   ) as DocumentReference<AssetDocument>;
 }
 
 export function getCampaignAssetCollection(campaignId: string) {
   return collection(
     firestore,
-    constructCampaignAssetCollectionPath(campaignId)
+    constructCampaignAssetCollectionPath(campaignId),
   ) as CollectionReference<AssetDocument>;
 }
 
 export function getCampaignAssetDoc(campaignId: string, assetId: string) {
   return doc(
     firestore,
-    constructCampaignAssetDocPath(campaignId, assetId)
+    constructCampaignAssetDocPath(campaignId, assetId),
   ) as DocumentReference<AssetDocument>;
 }

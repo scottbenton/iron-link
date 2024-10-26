@@ -1,15 +1,16 @@
-import { useNavigate, useParams } from "react-router-dom";
-import { CreateCharacter } from "../create/components/CreateCharacter";
-import { Alert, Box } from "@mui/material";
-import { GradientButton } from "components/GradientButton";
-import { useTranslation } from "react-i18next";
 import { useCallback, useState } from "react";
-import { useAuthAtom } from "atoms/auth.atom";
+import { useTranslation } from "react-i18next";
+import { useNavigate, useParams } from "react-router-dom";
+import { Alert, Box } from "@mui/material";
+
 import { useCreateCharacterAtom } from "../create/atoms/createCharacter.atom";
-import { createCharacterAndUploadPortrait } from "api-calls/character/createCharacter";
-import { addCharacterToCampaign } from "api-calls/campaign/addCharacterToCampaign";
-import { pathConfig } from "pages/pathConfig";
+import { CreateCharacter } from "../create/components/CreateCharacter";
 import { addAsset } from "api-calls/assets/addAsset";
+import { addCharacterToCampaign } from "api-calls/campaign/addCharacterToCampaign";
+import { createCharacterAndUploadPortrait } from "api-calls/character/createCharacter";
+import { useAuthAtom } from "atoms/auth.atom";
+import { GradientButton } from "components/GradientButton";
+import { pathConfig } from "pages/pathConfig";
 
 export function AddCharacter() {
   const { campaignId } = useParams<{ campaignId: string }>();
@@ -42,7 +43,7 @@ export function AddCharacter() {
             campaignId,
             asset,
           });
-        })
+        }),
       ).catch(() => {});
     }
 
@@ -52,7 +53,7 @@ export function AddCharacter() {
       stats,
       characterAssets,
       portrait,
-      campaignId
+      campaignId,
     )
       .then((characterId) => {
         addCharacterToCampaign({ uid, campaignId, characterId })
@@ -66,15 +67,15 @@ export function AddCharacter() {
             setError(
               t(
                 "character.error-adding-character-to-game",
-                "Error adding character to game"
-              )
+                "Error adding character to game",
+              ),
             );
           });
       })
       .catch((e) => {
         console.error(e);
         setError(
-          t("character.error-creating-character", "Error creating character")
+          t("character.error-creating-character", "Error creating character"),
         );
       });
 
