@@ -16,7 +16,6 @@ import { AssetEnhancements } from "./AssetEnhancements";
 import { extractRollOptions } from "./RollOptions/extractRollOptions";
 import { useDataswornTree } from "atoms/dataswornTree.atom";
 import { SpecialTracks } from "./RollOptions/SpecialTracks";
-// import { ProgressRolls } from "./RollOptions/ProgressRolls";
 
 const derivedCampaignState = derivedAtomWithEquality(
   currentCampaignAtom,
@@ -76,13 +75,8 @@ export function MoveRollOptions(props: MoveRollOptions) {
     [move, campaignData, characterData, dataswornTree]
   );
 
-  const hasRollOptions =
-    Object.keys(rollOptions.sharedEnhancements).length > 0 ||
-    Object.keys(rollOptions.character).length > 0 ||
-    rollOptions.visibleProgressTrack;
-
   return (
-    <Box mt={hasRollOptions ? 1 : 0}>
+    <Box>
       {rollOptions.visibleProgressTrack && (
         <ProgressRolls
           moveId={move._id}
