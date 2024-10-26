@@ -4,7 +4,10 @@ import { Datasworn, IdParser } from "@datasworn/core";
 import { Primary } from "@datasworn/core/dist/StringId";
 import RollIcon from "@mui/icons-material/Casino";
 
-import { CampaignState, CharacterState } from "./common.types";
+import {
+  CampaignRollOptionState,
+  CharacterRollOptionState,
+} from "./common.types";
 import { useDataswornTree } from "atoms/dataswornTree.atom";
 import { Stat } from "components/datasworn/Stat";
 import { useRollStatAndAddToLog } from "pages/games/hooks/useRollStatAndAddToLog";
@@ -13,8 +16,8 @@ export interface MoveActionAssetControlProps {
   moveId: string;
   disabled?: boolean;
   rollOption: Datasworn.AssetControlValueRef;
-  characterData: CharacterState;
-  campaignData: CampaignState;
+  characterData: CharacterRollOptionState;
+  campaignData: CampaignRollOptionState;
   characterId: string;
 }
 
@@ -37,17 +40,20 @@ export function MoveActionAssetControl(props: MoveActionAssetControlProps) {
   const rollStat = useRollStatAndAddToLog();
 
   const assetValues = useMemo(() => {
-    const actualAssetValues: {
-      label: string;
-      value: number;
-    }[] = [];
+    const actualAssetValues: Record<
+      string,
+      {
+        label: string;
+        value: number;
+      }
+    > = {};
 
     rollOption.assets?.forEach((assetWildcard) => {
       const matches = IdParser.getMatches(assetWildcard as Primary, tree);
       matches.forEach((asset) => {
         if (asset.type === "asset") {
-          Object.values({ ...characterAssets, ...campaignAssets }).forEach(
-            (assetDocument) => {
+          Object.entries({ ...characterAssets, ...campaignAssets }).forEach(
+            ([assetDocumentId, assetDocument]) => {
               const control = asset.controls?.[rollOption.control];
               if (control && assetDocument.id === asset._id) {
                 const controlValue =
@@ -56,7 +62,9 @@ export function MoveActionAssetControl(props: MoveActionAssetControlProps) {
                 const controlLabel = control.label;
                 const assetName =
                   assetDocument.optionValues?.["name"] ?? asset.name;
-                actualAssetValues.push({
+                actualAssetValues[
+                  `${asset._id}-${assetDocumentId}-${rollOption.control}`
+                ] = {
                   label: t(
                     "datasworn.move.asset-control-roll-label",
                     "{{assetName}}'s {{controlLabel}}",
@@ -68,7 +76,7 @@ export function MoveActionAssetControl(props: MoveActionAssetControlProps) {
                       : ((typeof defaultControlValue === "number"
                           ? defaultControlValue
                           : 0) ?? 0),
-                });
+                };
               }
             },
           );
@@ -81,7 +89,7 @@ export function MoveActionAssetControl(props: MoveActionAssetControlProps) {
 
   return (
     <>
-      {assetValues.map((assetValue, index) => (
+      {Object.values(assetValues).map((assetValue, index) => (
         <Stat
           key={index}
           disabled={disabled}

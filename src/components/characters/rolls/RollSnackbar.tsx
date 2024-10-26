@@ -33,13 +33,14 @@ export function RollSnackbar(props: RollSnackbarProps) {
           isExpanded={isExpanded}
         />
       )}
-      {roll.type === RollType.TrackProgress && (
-        <TrackProgressRollSnackbar
-          rollId={rollId}
-          roll={roll}
-          isExpanded={isExpanded}
-        />
-      )}
+      {roll.type === RollType.TrackProgress ||
+        (roll.type === RollType.SpecialTrackProgress && (
+          <TrackProgressRollSnackbar
+            rollId={rollId}
+            roll={roll}
+            isExpanded={isExpanded}
+          />
+        ))}
     </RollCard>
   );
 }

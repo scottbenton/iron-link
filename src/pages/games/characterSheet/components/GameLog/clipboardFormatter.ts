@@ -10,7 +10,6 @@ import {
   StatRoll,
   TrackProgressRoll,
 } from "types/DieRolls.type";
-import { LegacyTrackTypes } from "types/LegacyTrack.type";
 import { TrackTypes } from "types/Track.type";
 
 export function formatQuote(contents: string) {
@@ -184,7 +183,7 @@ interface TrackProgressRollContents {
   result: string;
 }
 
-function getTrackTypeLabel(type: TrackTypes | LegacyTrackTypes) {
+function getTrackTypeLabel(type: TrackTypes) {
   switch (type) {
     case TrackTypes.Vow:
       return "Vow";
@@ -196,12 +195,6 @@ function getTrackTypeLabel(type: TrackTypes | LegacyTrackTypes) {
       return "Fray";
     case TrackTypes.Journey:
       return "Journey";
-    case LegacyTrackTypes.BONDS:
-      return "Bonds";
-    case LegacyTrackTypes.DISCOVERIES:
-      return "Discoveries";
-    case LegacyTrackTypes.QUESTS:
-      return "Quests";
     default:
       return "";
   }

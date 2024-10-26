@@ -5,8 +5,15 @@ import { Box, Typography } from "@mui/material";
 import { useAtomValue } from "jotai";
 
 import { AssetEnhancements } from "./AssetEnhancements";
-import { ActionRolls, CharacterState } from "./RollOptions";
+import {
+  ActionRolls,
+  CharacterRollOptionState,
+  ProgressRolls,
+} from "./RollOptions";
+import { extractRollOptions } from "./RollOptions/extractRollOptions";
+import { SpecialTracks } from "./RollOptions/SpecialTracks";
 import { useUID } from "atoms/auth.atom";
+import { useDataswornTree } from "atoms/dataswornTree.atom";
 import { derivedAtomWithEquality } from "atoms/derivedAtomWithEquality";
 import { currentCampaignAtom } from "pages/games/gamePageLayout/atoms/campaign.atom";
 import { campaignCharactersAtom } from "pages/games/gamePageLayout/atoms/campaign.characters.atom";
@@ -24,7 +31,7 @@ const derivedCampaignCharacterState = (
   currentCharacterId?: string,
 ) =>
   derivedAtomWithEquality(campaignCharactersAtom, (state) => {
-    const characterData: Record<string, CharacterState> = {};
+    const characterData: Record<string, CharacterRollOptionState> = {};
     Object.entries(state).forEach(([characterId, characterState]) => {
       if (
         uid === characterState.characterDocument.data?.uid &&
@@ -38,6 +45,7 @@ const derivedCampaignCharacterState = (
           adds: characterState.characterDocument.data?.adds,
           momentum: characterState.characterDocument.data?.momentum,
           assets: characterState.assets?.assets ?? {},
+          specialTracks: characterState.characterDocument.data?.specialTracks,
         };
       }
     });
@@ -61,97 +69,68 @@ export function MoveRollOptions(props: MoveRollOptions) {
       [uid, characterId],
     ),
   );
+  const dataswornTree = useDataswornTree();
   const campaignData = useAtomValue(derivedCampaignState);
-  const actionRollOptions = extractActionRollOptions(move);
+  const rollOptions = useMemo(
+    () => extractRollOptions(move, campaignData, characterData, dataswornTree),
+    [move, campaignData, characterData, dataswornTree],
+  );
 
-  const hasRollOptions = actionRollOptions.length > 0;
   return (
-    <Box mt={hasRollOptions ? 1 : 0}>
-      {Object.keys(characterData).length === 0 && (
-        <Box display="flex" flexWrap="wrap" gap={1}>
-          {move.roll_type === "action_roll" && (
-            <ActionRolls
-              moveId={move._id}
-              actionRolls={actionRollOptions}
-              campaignData={campaignData}
-            />
-          )}
-        </Box>
+    <Box>
+      {rollOptions.visibleProgressTrack && (
+        <ProgressRolls
+          moveId={move._id}
+          moveName={move.name}
+          trackType={rollOptions.visibleProgressTrack}
+        />
       )}
-      {Object.entries(characterData).map(
-        ([characterId, character], idx, arr) => (
+      <AssetEnhancements enhancements={rollOptions.sharedEnhancements} />
+      {Object.entries(rollOptions.character).map(
+        ([rollOptionCharacterId, characterRollOptions], idx) => (
           <Box
-            key={characterId}
+            key={rollOptionCharacterId}
             display="flex"
             flexDirection="column"
-            mt={idx === 0 ? 0 : 1}
+            mt={
+              Object.keys(rollOptions.sharedEnhancements).length === 0 &&
+              idx === 0
+                ? 0
+                : 1
+            }
+            gap={1}
           >
-            {arr.length > 1 && (
-              <Typography variant="overline">{character.name}</Typography>
+            {!characterId && (
+              <Typography variant="overline">
+                {characterData[rollOptionCharacterId].name}
+              </Typography>
             )}
-            {move.roll_type === "action_roll" && (
+            <AssetEnhancements
+              enhancements={characterRollOptions.assetEnhancements}
+            />
+            {characterRollOptions.specialTracks && (
+              <SpecialTracks
+                moveId={move._id}
+                moveName={move.name}
+                tracks={characterRollOptions.specialTracks}
+                characterData={characterData[rollOptionCharacterId]}
+              />
+            )}
+            {characterRollOptions.actionRolls.length > 0 && (
               <ActionRolls
                 moveId={move._id}
-                actionRolls={actionRollOptions}
-                character={{ id: characterId, data: character }}
+                actionRolls={characterRollOptions.actionRolls}
+                character={{
+                  id: rollOptionCharacterId,
+                  data: characterData[rollOptionCharacterId],
+                }}
                 campaignData={campaignData}
                 includeAdds
               />
             )}
-            <AssetEnhancements
-              moveId={move._id}
-              campaign={campaignData}
-              assetDocuments={character.assets}
-              character={{ id: characterId, data: character }}
-            />
           </Box>
         ),
       )}
-      <AssetEnhancements
-        moveId={move._id}
-        campaign={campaignData}
-        assetDocuments={campaignData.assets}
-        character={
-          characterId
-            ? { id: characterId, data: characterData[characterId] }
-            : undefined
-        }
-      />
     </Box>
-  );
-}
-
-function extractActionRollOptions(
-  move: Datasworn.Move,
-): Datasworn.RollableValue[] {
-  if (move.roll_type !== "action_roll") return [];
-
-  const conditions = move.trigger.conditions;
-  const conditionMap: Record<
-    string,
-    Record<string, Datasworn.RollableValue>
-  > = {
-    stats: {},
-    conditionMeters: {},
-    custom: {},
-    assetControls: {},
-  };
-
-  conditions.forEach((condition) => {
-    condition.roll_options.forEach((option) => {
-      if (option.using === "stat") {
-        conditionMap.stats[option.stat] = option;
-      } else if (option.using === "condition_meter") {
-        conditionMap.conditionMeters[option.condition_meter] = option;
-      } else if (option.using === "custom") {
-        conditionMap.custom[option.label] = option;
-      } else if (option.using === "asset_control") {
-        conditionMap.assetControls[option.control] = option;
-      }
-    });
-  });
-
-  return Object.values(conditionMap).flatMap((conditions) =>
-    Object.values(conditions),
   );
 }

@@ -1,4 +1,3 @@
-import { LegacyTrackTypes } from "./LegacyTrack.type";
 import { TrackTypes } from "types/Track.type";
 
 export enum RollResult {
@@ -11,6 +10,7 @@ export enum RollType {
   Stat = "stat",
   OracleTable = "oracle_table",
   TrackProgress = "track_progress",
+  SpecialTrackProgress = "special_track_progress",
   ClockProgression = "clock_progression",
 }
 
@@ -52,7 +52,17 @@ export interface TrackProgressRoll extends BaseRoll {
   challenge2: number;
   trackProgress: number;
   result: RollResult;
-  trackType: TrackTypes | LegacyTrackTypes;
+  trackType: TrackTypes;
+  moveId?: string;
+}
+
+export interface SpecialTrackProgressRoll extends BaseRoll {
+  type: RollType.SpecialTrackProgress;
+  challenge1: number;
+  challenge2: number;
+  trackProgress: number;
+  result: RollResult;
+  specialTrackKey: string;
   moveId?: string;
 }
 
@@ -69,4 +79,5 @@ export type Roll =
   | StatRoll
   | OracleTableRoll
   | TrackProgressRoll
-  | ClockProgressionRoll;
+  | ClockProgressionRoll
+  | SpecialTrackProgressRoll;

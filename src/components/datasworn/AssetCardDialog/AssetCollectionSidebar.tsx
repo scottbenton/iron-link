@@ -27,8 +27,6 @@ export function AssetCollectionSidebar(props: AssetCollectionSidebarProps) {
     setSelectedCollectionId,
   } = props;
 
-  // const { t } = useTranslation();
-
   return (
     <Card variant={"outlined"} sx={{ bgcolor: "background.default" }}>
       {Object.entries(rootAssetCollections).map(
@@ -45,33 +43,41 @@ export function AssetCollectionSidebar(props: AssetCollectionSidebarProps) {
                 {ruleset.title}
               </ListSubheader>
             )}
-            {ruleset.rootAssets.map((collectionId, index) => (
-              <ListItem
-                disablePadding
-                key={collectionId}
-                sx={(theme) => ({
-                  bgcolor:
-                    theme.palette.mode === "light"
-                      ? index % 2 === 0
-                        ? "grey.100"
-                        : "grey.200"
-                      : index % 2 === 0
-                        ? "grey.900"
-                        : "grey.800",
-                })}
-              >
-                <ListItemButton
-                  selected={collectionId === selectedCollectionId}
-                  onClick={() =>
-                    setSelectedCollectionId(rulesetKey, collectionId)
-                  }
+            {ruleset.rootAssets.map((collectionId, index) => {
+              const collection = collectionMap[collectionId];
+              if (!collection) {
+                return null;
+              }
+              return (
+                <ListItem
+                  disablePadding
+                  key={collectionId}
+                  sx={(theme) => ({
+                    bgcolor:
+                      theme.palette.mode === "light"
+                        ? index % 2 === 0
+                          ? "grey.100"
+                          : "grey.200"
+                        : index % 2 === 0
+                          ? "grey.900"
+                          : "grey.800",
+                  })}
                 >
-                  <ListItemText
-                    primary={collectionMap[collectionId]?.name ?? collectionId}
-                  />
-                </ListItemButton>
-              </ListItem>
-            ))}
+                  <ListItemButton
+                    selected={collectionId === selectedCollectionId}
+                    onClick={() =>
+                      setSelectedCollectionId(rulesetKey, collectionId)
+                    }
+                  >
+                    <ListItemText
+                      primary={
+                        collectionMap[collectionId]?.name ?? collectionId
+                      }
+                    />
+                  </ListItemButton>
+                </ListItem>
+              );
+            })}
           </List>
         ),
       )}
