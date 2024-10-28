@@ -15,12 +15,9 @@ export function useDataswornTree() {
 export function useSetDataswornTree(
   tree: Record<string, Datasworn.RulesPackage>,
 ) {
-  const setTree = useSetAtom(dataswornTreeAtom);
+  const setTree = useDataswornTreeSetter();
   useEffect(() => {
-    setTree({
-      [ironLinkAskTheOracleRulesPackage._id]: ironLinkAskTheOracleRulesPackage,
-      ...tree,
-    });
+    setTree(tree);
   }, [tree, setTree]);
 }
 
@@ -31,7 +28,7 @@ export function useDataswornTreeSetter() {
       setTree({
         [ironLinkAskTheOracleRulesPackage._id]:
           ironLinkAskTheOracleRulesPackage,
-        ...tree,
+        ...JSON.parse(JSON.stringify(tree)),
       });
     },
     [setTree],
