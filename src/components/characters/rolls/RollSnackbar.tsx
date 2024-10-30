@@ -23,24 +23,30 @@ export function RollSnackbar(props: RollSnackbarProps) {
       isExpanded={isExpanded}
       actions={actions}
     >
-      {roll.type === RollType.Stat && (
-        <StatRollSnackbar rollId={rollId} roll={roll} isExpanded={isExpanded} />
-      )}
-      {roll.type === RollType.OracleTable && (
-        <OracleRollSnackbar
-          rollId={rollId}
-          roll={roll}
-          isExpanded={isExpanded}
-        />
-      )}
-      {roll.type === RollType.TrackProgress ||
-        (roll.type === RollType.SpecialTrackProgress && (
-          <TrackProgressRollSnackbar
+      <>
+        {roll.type === RollType.Stat && (
+          <StatRollSnackbar
             rollId={rollId}
             roll={roll}
             isExpanded={isExpanded}
           />
-        ))}
+        )}
+        {roll.type === RollType.OracleTable && (
+          <OracleRollSnackbar
+            rollId={rollId}
+            roll={roll}
+            isExpanded={isExpanded}
+          />
+        )}
+        {roll.type === RollType.TrackProgress ||
+          (roll.type === RollType.SpecialTrackProgress && (
+            <TrackProgressRollSnackbar
+              rollId={rollId}
+              roll={roll}
+              isExpanded={isExpanded}
+            />
+          ))}
+      </>
     </RollCard>
   );
 }

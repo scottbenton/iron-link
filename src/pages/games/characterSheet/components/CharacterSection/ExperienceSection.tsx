@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Box, Typography } from "@mui/material";
 
 import { useCharacterId } from "../../hooks/useCharacterId";
-import { useDerivedCharacterState } from "../../hooks/useDerivedCharacterState";
+import { useDerivedCurrentCharacterState } from "../../hooks/useDerivedCharacterState";
 import { useIsOwnerOfCharacter } from "../../hooks/useIsOwnerOfCharacter";
 import { updateCharacter } from "api-calls/character/updateCharacter";
 import { DebouncedConditionMeter } from "components/datasworn/ConditonMeter";
@@ -12,8 +12,7 @@ export function ExperienceSection() {
   const characterId = useCharacterId();
   const isCharacterOwner = useIsOwnerOfCharacter();
 
-  const unspentExperience = useDerivedCharacterState(
-    characterId,
+  const unspentExperience = useDerivedCurrentCharacterState(
     (character) => character?.characterDocument.data?.unspentExperience ?? 0,
   );
 

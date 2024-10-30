@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Button, Dialog, DialogActions, DialogContent } from "@mui/material";
 
 import { useCharacterId } from "../../hooks/useCharacterId";
-import { useDerivedCharacterState } from "../../hooks/useDerivedCharacterState";
+import { useDerivedCurrentCharacterState } from "../../hooks/useDerivedCharacterState";
 import { updateCharacter } from "api-calls/character/updateCharacter";
 import { ColorScheme } from "atoms/theme.atom";
 import { ColorSchemeSelector } from "components/ColorSchemeSelector";
@@ -19,8 +19,7 @@ export function ColorSchemeDialog(props: ColorSchemeDialogProps) {
   const { t } = useTranslation();
 
   const characterId = useCharacterId();
-  const colorScheme = useDerivedCharacterState(
-    characterId,
+  const colorScheme = useDerivedCurrentCharacterState(
     (character) => character?.characterDocument.data?.colorScheme,
   );
 

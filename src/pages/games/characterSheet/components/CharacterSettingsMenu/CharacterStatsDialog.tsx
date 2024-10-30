@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Button, Dialog, DialogActions, DialogContent } from "@mui/material";
 
 import { useCharacterId } from "../../hooks/useCharacterId";
-import { useDerivedCharacterState } from "../../hooks/useDerivedCharacterState";
+import { useDerivedCurrentCharacterState } from "../../hooks/useDerivedCharacterState";
 import { updateCharacter } from "api-calls/character/updateCharacter";
 import { useStatRules } from "atoms/dataswornRules/useStatRules";
 import { ConditionMeter } from "components/datasworn/ConditonMeter";
@@ -20,8 +20,7 @@ export function CharacterStatsDialog(props: CharacterStatsDialogProps) {
   const { t } = useTranslation();
 
   const characterId = useCharacterId();
-  const stats = useDerivedCharacterState(
-    characterId,
+  const stats = useDerivedCurrentCharacterState(
     (character) => character?.characterDocument.data?.stats ?? {},
   );
   const statRules = useStatRules();

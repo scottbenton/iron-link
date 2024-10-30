@@ -1,7 +1,7 @@
 import { Box, Typography } from "@mui/material";
 
 import { useCharacterId } from "../../hooks/useCharacterId";
-import { useDerivedCharacterState } from "../../hooks/useDerivedCharacterState";
+import { useDerivedCurrentCharacterState } from "../../hooks/useDerivedCharacterState";
 import { InitiativeStatus } from "api-calls/character/_character.type";
 import { updateCharacter } from "api-calls/character/updateCharacter";
 import { PortraitAvatar } from "components/characters/PortraitAvatar";
@@ -17,14 +17,12 @@ export function CharacterDetails() {
     useCampaignPermissions().characterPermission ===
     CharacterPermissionType.Owner;
 
-  const { name, initiativeStatus, portraitSettings } = useDerivedCharacterState(
-    characterId,
-    (character) => ({
+  const { name, initiativeStatus, portraitSettings } =
+    useDerivedCurrentCharacterState((character) => ({
       name: character?.characterDocument.data?.name ?? "",
       initiativeStatus: character?.characterDocument.data?.initiativeStatus,
       portraitSettings: character?.characterDocument.data?.profileImage,
-    }),
-  );
+    }));
 
   return (
     <Box display="flex" gap={2}>

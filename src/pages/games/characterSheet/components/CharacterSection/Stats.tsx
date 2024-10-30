@@ -5,7 +5,7 @@ import { Box, Typography } from "@mui/material";
 
 import { DEFAULT_MOMENTUM } from "../../../../../data/constants.ts";
 import { useCharacterId } from "../../hooks/useCharacterId";
-import { useDerivedCharacterState } from "../../hooks/useDerivedCharacterState";
+import { useDerivedCurrentCharacterState } from "../../hooks/useDerivedCharacterState";
 import { useIsOwnerOfCharacter } from "../../hooks/useIsOwnerOfCharacter";
 import { updateCharacter } from "api-calls/character/updateCharacter";
 import { useStatRules } from "atoms/dataswornRules/useStatRules";
@@ -15,8 +15,7 @@ import { useRollStatAndAddToLog } from "pages/games/hooks/useRollStatAndAddToLog
 
 export function Stats() {
   const characterId = useCharacterId();
-  const { stats, adds, momentum } = useDerivedCharacterState(
-    characterId,
+  const { stats, adds, momentum } = useDerivedCurrentCharacterState(
     (character) => ({
       stats: character?.characterDocument.data?.stats ?? {},
       adds: character?.characterDocument.data?.adds ?? 0,

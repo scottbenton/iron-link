@@ -3,12 +3,15 @@ import { Box, Card, LinearProgress } from "@mui/material";
 
 import { CharacterSidebarContents } from "./components/CharacterSidebarContents";
 import { ReferenceSidebarContents } from "./components/ReferenceSidebarContents";
-import { useCharacterState } from "./hooks/useCharacterState";
+import { useDerivedCurrentCharacterState } from "./hooks/useDerivedCharacterState";
 import { useSyncCharacterColorScheme } from "./hooks/useSyncCharacterColorScheme";
 import { EmptyState } from "components/Layout/EmptyState";
 
 export function CharacterSheetPage() {
-  const { error, hasCharacter } = useCharacterState();
+  const { hasCharacter, error } = useDerivedCurrentCharacterState((store) => ({
+    hasCharacter: !!store?.characterDocument?.data,
+    error: store?.characterDocument?.error,
+  }));
 
   const { t } = useTranslation();
   useSyncCharacterColorScheme();

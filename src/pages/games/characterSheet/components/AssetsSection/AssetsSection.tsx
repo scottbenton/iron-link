@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { Box } from "@mui/material";
 
 import { useCharacterId } from "../../hooks/useCharacterId";
-import { useDerivedCharacterState } from "../../hooks/useDerivedCharacterState";
+import { useDerivedCurrentCharacterState } from "../../hooks/useDerivedCharacterState";
 import { useIsOwnerOfCharacter } from "../../hooks/useIsOwnerOfCharacter";
 import { AssetSectionHeader } from "./AssetSectionHeader";
 import { AssetsSectionCard } from "./AssetsSectionCard";
@@ -13,8 +13,7 @@ export function AssetsSection() {
   const characterId = useCharacterId();
   const campaignId = useCampaignId();
 
-  const characterAssets = useDerivedCharacterState(
-    characterId,
+  const characterAssets = useDerivedCurrentCharacterState(
     (character) => character?.assets?.assets ?? {},
   );
   const sortedCharacterAssets = useMemo(
