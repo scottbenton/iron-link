@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { useAtomValue } from "jotai";
 
+import { useCharacterIdOptional } from "./useCharacterId";
 import { derivedAtomWithEquality } from "atoms/derivedAtomWithEquality";
 import {
   campaignCharactersAtom,
@@ -21,4 +22,11 @@ export function useDerivedCharacterState<T>(
       [characterId],
     ),
   );
+}
+
+export function useDerivedCurrentCharacterState<T>(
+  select: (store: CharacterStore | undefined) => T,
+) {
+  const characterId = useCharacterIdOptional();
+  return useDerivedCharacterState(characterId, select);
 }

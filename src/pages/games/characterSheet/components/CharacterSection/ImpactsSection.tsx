@@ -16,7 +16,7 @@ import {
 import { Button } from "@mui/material";
 
 import { useCharacterId } from "../../hooks/useCharacterId";
-import { useDerivedCharacterState } from "../../hooks/useDerivedCharacterState";
+import { useDerivedCurrentCharacterState } from "../../hooks/useDerivedCharacterState";
 import { useIsOwnerOfCharacter } from "../../hooks/useIsOwnerOfCharacter";
 import { updateCharacter } from "api-calls/character/updateCharacter";
 import { useImpactRules } from "atoms/dataswornRules/useImpactRules";
@@ -27,8 +27,7 @@ export function ImpactsSection() {
   const characterId = useCharacterId();
   const isCharacterOwner = useIsOwnerOfCharacter();
 
-  const impacts = useDerivedCharacterState(
-    characterId,
+  const impacts = useDerivedCurrentCharacterState(
     (character) => character?.characterDocument.data?.debilities ?? {},
   );
   const { impactCategories, impacts: impactRules } = useImpactRules();

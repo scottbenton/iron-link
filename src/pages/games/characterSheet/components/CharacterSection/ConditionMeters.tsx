@@ -5,7 +5,7 @@ import { Box, Typography } from "@mui/material";
 
 import { DEFAULT_MOMENTUM } from "../../../../../data/constants.ts";
 import { useCharacterId } from "../../hooks/useCharacterId";
-import { useDerivedCharacterState } from "../../hooks/useDerivedCharacterState";
+import { useDerivedCurrentCharacterState } from "../../hooks/useDerivedCharacterState";
 import { useIsOwnerOfCharacter } from "../../hooks/useIsOwnerOfCharacter";
 import { useMomentumParameters } from "../../hooks/useMomentumResetValue";
 import { SingleConditionMeter } from "./SingleConditionMeter";
@@ -25,15 +25,13 @@ export function ConditionMeters() {
   const campaignConditionMeterValues = useDerivedCampaignDocumentState(
     (campaign) => campaign?.conditionMeters ?? {},
   );
-  const { conditionMeterValues, momentum, adds } = useDerivedCharacterState(
-    characterId,
-    (character) => ({
+  const { conditionMeterValues, momentum, adds } =
+    useDerivedCurrentCharacterState((character) => ({
       conditionMeterValues:
         character?.characterDocument.data?.conditionMeters ?? {},
       momentum: character?.characterDocument.data?.momentum ?? DEFAULT_MOMENTUM,
       adds: character?.characterDocument.data?.adds ?? 0,
-    }),
-  );
+    }));
 
   const { resetValue, max } = useMomentumParameters();
 

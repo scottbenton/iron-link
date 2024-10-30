@@ -1,7 +1,9 @@
-import { atom, useAtom, useSetAtom } from "jotai";
+import { useMemo } from "react";
+import { atom, useAtom, useAtomValue, useSetAtom } from "jotai";
 
 import { AssetDocument } from "api-calls/assets/_asset.type";
 import { CharacterDocument } from "api-calls/character/_character.type";
+import { derivedAtomWithEquality } from "atoms/derivedAtomWithEquality";
 
 export interface CharacterStore {
   characterDocument: {
@@ -28,4 +30,19 @@ export function useCampaignCharactersAtom() {
 
 export function useSetCampaignCharacters() {
   return useSetAtom(campaignCharactersAtom);
+}
+
+export function useDerivedCampaignCharactersState<T>(
+  select: (store: CampaignCharactersAtom) => T,
+): T {
+  return useAtomValue(
+    useMemo(
+      () =>
+        derivedAtomWithEquality(campaignCharactersAtom, (state) =>
+          select(state),
+        ),
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      [],
+    ),
+  );
 }

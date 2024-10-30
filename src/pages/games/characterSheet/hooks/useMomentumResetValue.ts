@@ -1,17 +1,12 @@
 import { useMemo } from "react";
-import { useAtomValue } from "jotai";
 
-import { currentCharacterAtom } from "atoms/currentCharacter/currentCharacter.atom";
+import { useDerivedCurrentCharacterState } from "./useDerivedCharacterState";
 import { useImpactRules } from "atoms/dataswornRules/useImpactRules";
-import { derivedAtomWithEquality } from "atoms/derivedAtomWithEquality";
-
-const impactAtom = derivedAtomWithEquality(
-  currentCharacterAtom,
-  (atom) => atom.character?.debilities ?? {},
-);
 
 export function useMomentumParameters() {
-  const impacts = useAtomValue(impactAtom);
+  const impacts = useDerivedCurrentCharacterState(
+    (store) => store?.characterDocument.data?.debilities ?? {},
+  );
   const { impacts: impactRules } = useImpactRules();
 
   return useMemo(() => {

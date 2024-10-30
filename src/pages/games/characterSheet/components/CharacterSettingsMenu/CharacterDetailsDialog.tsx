@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 
 import { useCharacterId } from "../../hooks/useCharacterId";
-import { useDerivedCharacterState } from "../../hooks/useDerivedCharacterState";
+import { useDerivedCurrentCharacterState } from "../../hooks/useDerivedCharacterState";
 import { removeCharacterPortrait } from "api-calls/character/removeCharacterPortrait";
 import { updateCharacter } from "api-calls/character/updateCharacter";
 import { updateCharacterPortrait } from "api-calls/character/updateCharacterPortrait";
@@ -37,8 +37,7 @@ export function CharacterDetailsDialog(props: CharacterDetailsDialogProps) {
 
   const characterId = useCharacterId();
   const { name: initialName, profileImage: initialPortraitSettings } =
-    useDerivedCharacterState(
-      characterId,
+    useDerivedCurrentCharacterState(
       useCallback(
         (character) => ({
           name: character?.characterDocument.data?.name ?? "",

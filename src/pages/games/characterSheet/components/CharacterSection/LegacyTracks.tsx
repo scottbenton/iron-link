@@ -2,7 +2,7 @@ import { useCallback } from "react";
 import { Box, Typography } from "@mui/material";
 
 import { useCharacterId } from "../../hooks/useCharacterId";
-import { useDerivedCharacterState } from "../../hooks/useDerivedCharacterState";
+import { useDerivedCurrentCharacterState } from "../../hooks/useDerivedCharacterState";
 import { useIsOwnerOfCharacter } from "../../hooks/useIsOwnerOfCharacter";
 import { updateCharacter } from "api-calls/character/updateCharacter";
 import { useSpecialTrackRules } from "atoms/dataswornRules/useSpecialTrackRules";
@@ -12,8 +12,7 @@ export function LegacyTracks() {
   const characterId = useCharacterId();
   const isCharacterOwner = useIsOwnerOfCharacter();
 
-  const legacyTracks = useDerivedCharacterState(
-    characterId,
+  const legacyTracks = useDerivedCurrentCharacterState(
     (character) => character?.characterDocument.data?.specialTracks ?? {},
   );
   const specialTrackRules = useSpecialTrackRules();
