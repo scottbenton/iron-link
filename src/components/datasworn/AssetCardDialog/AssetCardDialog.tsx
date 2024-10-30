@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { useTranslation } from "react-i18next";
-import { Box, Dialog, DialogContent } from "@mui/material";
+import { Box, Dialog, DialogContent, Skeleton } from "@mui/material";
 
 import { AssetCollectionSidebar } from "./AssetCollectionSidebar";
 import { AssetList } from "./AssetList";
@@ -10,6 +10,7 @@ import {
   useAssets,
 } from "atoms/dataswornRules/useAssets";
 import { DialogTitleWithCloseButton } from "components/DialogTitleWithCloseButton";
+import { GridLayout } from "components/Layout";
 
 export interface AssetCardDialogProps {
   open: boolean;
@@ -25,14 +26,22 @@ export function AssetCardDialog(props: AssetCardDialogProps) {
   const [selectedAssetCollectionId, setSelectedAssetCollectionId] = useState(
     getFirstAssetCollection(rootAssetCollections),
   );
-  const collection = assetCollectionMap[selectedAssetCollectionId.collectionId];
+  const [collection, setCollection] = useState(
+    assetCollectionMap[selectedAssetCollectionId.collectionId],
+  );
+  const [isPending, startTransition] = useTransition();
+  // const collection = assetCollectionMap[selectedAssetCollectionId.collectionId];
 
   useEffect(() => {
-    setSelectedAssetCollectionId(getFirstAssetCollection(rootAssetCollections));
-  }, [rootAssetCollections]);
+    const firstAssetCollection = getFirstAssetCollection(rootAssetCollections);
+    setSelectedAssetCollectionId(firstAssetCollection);
+    startTransition(() => {
+      setCollection(assetCollectionMap[firstAssetCollection.collectionId]);
+    });
+  }, [rootAssetCollections, assetCollectionMap]);
 
   return (
-    <Dialog open={open} onClose={handleClose} maxWidth={"lg"}>
+    <Dialog open={open} onClose={handleClose} maxWidth={"lg"} fullWidth>
       <DialogTitleWithCloseButton onClose={handleClose}>
         {t("datasworn.assets", "Assets")}
       </DialogTitleWithCloseButton>
@@ -49,18 +58,32 @@ export function AssetCardDialog(props: AssetCardDialogProps) {
             rootAssetCollections={rootAssetCollections}
             collectionMap={assetCollectionMap}
             selectedCollectionId={selectedAssetCollectionId.collectionId}
-            setSelectedCollectionId={(rulesetId, collectionId) =>
-              setSelectedAssetCollectionId({ rulesetId, collectionId })
-            }
+            setSelectedCollectionId={(rulesetId, collectionId) => {
+              setSelectedAssetCollectionId({ rulesetId, collectionId });
+              startTransition(() => {
+                setCollection(assetCollectionMap[collectionId]);
+              });
+            }}
           />
         </Box>
         <Box sx={{ flexGrow: 1 }}>
-          {collection && (
-            <AssetList
-              assetCollection={collection}
-              assetMap={assetMap}
-              selectAsset={handleAssetSelection}
+          {isPending ? (
+            <GridLayout
+              items={[1, 2, 3, 4, 5]}
+              renderItem={() => <Skeleton variant="rectangular" height={500} />}
+              emptyStateMessage={""}
+              minWidth={300}
             />
+          ) : (
+            <>
+              {collection && (
+                <AssetList
+                  assetCollection={collection}
+                  assetMap={assetMap}
+                  selectAsset={handleAssetSelection}
+                />
+              )}
+            </>
           )}
         </Box>
       </DialogContent>
