@@ -1,6 +1,9 @@
 import { useCallback, useEffect, useMemo } from "react";
 import { atom, useAtomValue, useSetAtom } from "jotai";
 
+import { useCampaignId } from "../hooks/useCampaignId";
+import { useDerivedCampaignState } from "../hooks/useDerivedCampaignState";
+import { useCampaignPermissions } from "../hooks/usePermissions";
 import {
   NoteContentDocument,
   NoteDocument,
@@ -8,13 +11,10 @@ import {
   ViewPermissions,
   WritePermissions,
 } from "api-calls/notes/_notes.type";
-import { derivedAtomWithEquality } from "atoms/derivedAtomWithEquality";
-import { useUID } from "atoms/auth.atom";
-import { useCampaignId } from "../hooks/useCampaignId";
-import { useDerivedCampaignState } from "../hooks/useDerivedCampaignState";
-import { useCampaignPermissions } from "../hooks/usePermissions";
 import { listenToNoteFolders } from "api-calls/notes/listenToNoteFolders";
 import { listenToNotes } from "api-calls/notes/listenToNotes";
+import { useUID } from "atoms/auth.atom";
+import { derivedAtomWithEquality } from "atoms/derivedAtomWithEquality";
 import { FAKE_ROOT_NOTE_FOLDER_KEY } from "pages/games/characterSheet/components/NotesSection/FolderView/rootNodeName";
 
 export interface INotesAtom {
@@ -106,7 +106,6 @@ export function useSyncNotes() {
         campaignId,
         campaignPermission,
         (folders) => {
-          console.debug("Got notes folder");
           setNotesAtom((prev) => ({
             ...prev,
             folders: {
@@ -191,4 +190,10 @@ export function useSyncNotes() {
     setNotesAtom,
     noteFoldersToSync,
   ]);
+
+  useEffect(() => {
+    return () => {
+      setNotesAtom(defaultNotesAtom);
+    };
+  }, [campaignId, setNotesAtom]);
 }

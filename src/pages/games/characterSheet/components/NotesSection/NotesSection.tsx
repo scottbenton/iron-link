@@ -1,9 +1,9 @@
 import { Box, LinearProgress } from "@mui/material";
 
 import { DefaultNoteChooser } from "./DefaultNoteChooser";
+import { FolderView, FolderViewToolbar } from "./FolderView";
 import { NoteBreadcrumbs } from "./NoteBreadcrumbs";
 import { useDerivedNotesAtom } from "pages/games/gamePageLayout/atoms/notes.atom";
-import { FolderView, FolderViewToolbar } from "./FolderView";
 
 export function NotesSection() {
   const areAnyNotesLoading = useDerivedNotesAtom((notes) => {

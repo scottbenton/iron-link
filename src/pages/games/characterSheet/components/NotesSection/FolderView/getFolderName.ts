@@ -1,6 +1,7 @@
-import { GUIDE_NOTE_FOLDER_NAME } from "api-calls/notes/_getRef";
 import { TFunction } from "i18next";
+
 import { FAKE_ROOT_NOTE_FOLDER_KEY } from "./rootNodeName";
+import { GUIDE_NOTE_FOLDER_NAME } from "api-calls/notes/_getRef";
 
 export function getItemName(params: {
   name: string;

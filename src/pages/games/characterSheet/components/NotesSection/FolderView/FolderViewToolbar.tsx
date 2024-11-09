@@ -1,18 +1,19 @@
-import { Box, Button, IconButton, Tooltip } from "@mui/material";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import FolderIcon from "@mui/icons-material/CreateNewFolder";
-import DocumentIcon from "@mui/icons-material/NoteAdd";
-import { addFolder } from "api-calls/notes/addFolder";
-import { useUID } from "atoms/auth.atom";
-import { useCampaignId } from "pages/games/gamePageLayout/hooks/useCampaignId";
-import { useDerivedNotesAtom } from "pages/games/gamePageLayout/atoms/notes.atom";
-import { addNote } from "api-calls/notes/addNote";
-import { NameItemDialog } from "./NameItemDialog";
-import { useState } from "react";
 import RenameIcon from "@mui/icons-material/DriveFileRenameOutline";
-import { updateNoteFolder } from "api-calls/notes/updateNoteFolder";
-import { FAKE_ROOT_NOTE_FOLDER_KEY } from "./rootNodeName";
+import DocumentIcon from "@mui/icons-material/NoteAdd";
+import { Box, Button, IconButton, Tooltip } from "@mui/material";
+
 import { NoteToolbar } from "../Layout";
+import { NameItemDialog } from "./NameItemDialog";
+import { FAKE_ROOT_NOTE_FOLDER_KEY } from "./rootNodeName";
+import { addFolder } from "api-calls/notes/addFolder";
+import { addNote } from "api-calls/notes/addNote";
+import { updateNoteFolder } from "api-calls/notes/updateNoteFolder";
+import { useUID } from "atoms/auth.atom";
+import { useDerivedNotesAtom } from "pages/games/gamePageLayout/atoms/notes.atom";
+import { useCampaignId } from "pages/games/gamePageLayout/hooks/useCampaignId";
 
 export interface FolderViewToolbarProps {
   folderId: string;

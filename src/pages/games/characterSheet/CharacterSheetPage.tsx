@@ -2,11 +2,11 @@ import { useTranslation } from "react-i18next";
 import { Box, Card, LinearProgress } from "@mui/material";
 
 import { CharacterSidebarContents } from "./components/CharacterSidebarContents";
+import { NotesSection } from "./components/NotesSection";
 import { ReferenceSidebarContents } from "./components/ReferenceSidebarContents";
 import { useDerivedCurrentCharacterState } from "./hooks/useDerivedCharacterState";
 import { useSyncCharacterColorScheme } from "./hooks/useSyncCharacterColorScheme";
 import { EmptyState } from "components/Layout/EmptyState";
-import { NotesSection } from "./components/NotesSection";
 
 export function CharacterSheetPage() {
   const { hasCharacter, error } = useDerivedCurrentCharacterState((store) => ({

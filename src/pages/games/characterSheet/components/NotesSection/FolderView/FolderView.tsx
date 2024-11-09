@@ -1,17 +1,18 @@
+import { useTranslation } from "react-i18next";
+import DocIcon from "@mui/icons-material/Description";
+import FolderIcon from "@mui/icons-material/Folder";
+import FolderSharedIcon from "@mui/icons-material/FolderShared";
 import { Box, Card, CardActionArea, Typography } from "@mui/material";
+
+import { getItemName } from "./getFolderName";
+import { FAKE_ROOT_NOTE_FOLDER_KEY } from "./rootNodeName";
+import { ViewPermissions } from "api-calls/notes/_notes.type";
+import { useUID } from "atoms/auth.atom";
 import { GridLayout } from "components/Layout";
 import {
   useDerivedNotesAtom,
   useSetOpenItem,
 } from "pages/games/gamePageLayout/atoms/notes.atom";
-import FolderIcon from "@mui/icons-material/Folder";
-import FolderSharedIcon from "@mui/icons-material/FolderShared";
-import DocIcon from "@mui/icons-material/Description";
-import { ViewPermissions } from "api-calls/notes/_notes.type";
-import { FAKE_ROOT_NOTE_FOLDER_KEY } from "./rootNodeName";
-import { getItemName } from "./getFolderName";
-import { useTranslation } from "react-i18next";
-import { useUID } from "atoms/auth.atom";
 
 export interface FolderViewProps {
   folderId: string;

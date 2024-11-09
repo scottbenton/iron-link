@@ -6,7 +6,7 @@ import {
   DocumentReference,
 } from "firebase/firestore";
 
-import { NoteDocument, NoteFolder, NoteContentDocument } from "./_notes.type";
+import { NoteContentDocument, NoteDocument, NoteFolder } from "./_notes.type";
 
 // Collection Paths
 

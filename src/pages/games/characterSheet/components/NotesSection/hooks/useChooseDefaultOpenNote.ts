@@ -1,19 +1,19 @@
 import { useEffect } from "react";
 
+import { CampaignType } from "api-calls/campaign/_campaign.type";
+import { GUIDE_NOTE_FOLDER_NAME } from "api-calls/notes/_getRef";
+import { ViewPermissions, WritePermissions } from "api-calls/notes/_notes.type";
+import { addFolder } from "api-calls/notes/addFolder";
+import { useUID } from "atoms/auth.atom";
 import {
   useDerivedNotesAtom,
   useSetOpenItem,
 } from "pages/games/gamePageLayout/atoms/notes.atom";
+import { useCampaignId } from "pages/games/gamePageLayout/hooks/useCampaignId";
 import {
   CampaignPermissionType,
   useCampaignPermissions,
 } from "pages/games/gamePageLayout/hooks/usePermissions";
-import { useUID } from "atoms/auth.atom";
-import { addFolder } from "api-calls/notes/addFolder";
-import { useCampaignId } from "pages/games/gamePageLayout/hooks/useCampaignId";
-import { ViewPermissions, WritePermissions } from "api-calls/notes/_notes.type";
-import { GUIDE_NOTE_FOLDER_NAME } from "api-calls/notes/_getRef";
-import { CampaignType } from "api-calls/campaign/_campaign.type";
 
 export function useChooseDefaultOpenNote() {
   const isSomethingOpen = useDerivedNotesAtom(
@@ -36,7 +36,6 @@ export function useChooseDefaultOpenNote() {
     ) {
       const userFolder = folderState.folders[uid];
       if (!userFolder) {
-        console.debug("ADDING A USER FOLDER");
         addFolder({
           uid,
           campaignId,
@@ -59,7 +58,6 @@ export function useChooseDefaultOpenNote() {
         campaignPermission === CampaignPermissionType.Guide &&
         !folderState.folders[GUIDE_NOTE_FOLDER_NAME]
       ) {
-        console.debug("ADDING A GUIDE FOLDER");
         addFolder({
           uid,
           campaignId,
@@ -81,9 +79,7 @@ export function useChooseDefaultOpenNote() {
   }, [campaignPermission, campaignType, folderState, uid, campaignId]);
 
   useEffect(() => {
-    console.debug(isSomethingOpen, folderState);
     if (!isSomethingOpen && !folderState.loading) {
-      console.debug(campaignPermission);
       if (campaignPermission === CampaignPermissionType.Viewer) {
         return;
       }
@@ -91,7 +87,6 @@ export function useChooseDefaultOpenNote() {
       if (campaignPermission === CampaignPermissionType.Guide) {
         const guideFolder = folderState.folders[GUIDE_NOTE_FOLDER_NAME];
         if (guideFolder) {
-          console.debug("OPENING GUIDE FOLDER");
           setOpenItem({
             type: "folder",
             folderId: GUIDE_NOTE_FOLDER_NAME,
@@ -101,16 +96,13 @@ export function useChooseDefaultOpenNote() {
       }
 
       const userFolder = folderState.folders[uid];
-      console.debug(userFolder);
       if (userFolder) {
-        console.debug("OPENING USER FOLDER");
         setOpenItem({
           type: "folder",
           folderId: uid,
         });
         return;
       }
-      console.debug("COULD NOT OPEN ANYTHING");
     }
   }, [isSomethingOpen, folderState, campaignPermission, uid, setOpenItem]);
 }

@@ -28,8 +28,6 @@ export function listenToNotes(
       ? [where("parentFolderId", "in", accessibleParentNoteFolderIds)]
       : [];
 
-  console.debug(accessibleParentNoteFolderIds);
-
   let noteQuery: Query<NoteDocument, DocumentData> = query(
     getNoteCollection(campaignId),
     or(
