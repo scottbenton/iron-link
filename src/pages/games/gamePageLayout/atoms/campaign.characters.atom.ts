@@ -41,8 +41,7 @@ export function useDerivedCampaignCharactersState<T>(
         derivedAtomWithEquality(campaignCharactersAtom, (state) =>
           select(state),
         ),
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      [],
+      [select],
     ),
   );
 }

@@ -3,24 +3,21 @@ import { updateDoc } from "firebase/firestore";
 import { getNoteDocument } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
 
-export const updateNoteOrder = createApiFunction<
+export const updateNoteParentFolder = createApiFunction<
   {
     campaignId: string;
     noteId: string;
-    order: number;
+    parentFolderId: string;
   },
   void
 >((params) => {
-  const { campaignId, noteId, order } = params;
+  const { campaignId, noteId, parentFolderId } = params;
+
   return new Promise((resolve, reject) => {
     updateDoc(getNoteDocument(campaignId, noteId), {
-      order,
+      parentFolderId,
     })
-      .then(() => {
-        resolve();
-      })
-      .catch((e) => {
-        reject(e);
-      });
+      .then(() => resolve())
+      .catch(reject);
   });
-}, "Failed to reorder note.");
+}, "Failed to move note.");

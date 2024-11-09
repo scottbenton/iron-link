@@ -2,21 +2,16 @@ import { projectId } from "config/firebase.config";
 import { Bytes, setDoc, updateDoc } from "firebase/firestore";
 
 import {
-  constructCampaignNoteContentPath,
-  constructCampaignNoteDocPath,
-  constructCharacterNoteContentPath,
-  constructCharacterNoteDocPath,
-  getCampaignNoteContentDocument,
-  getCampaignNoteDocument,
-  getCharacterNoteContentDocument,
-  getCharacterNoteDocument,
+  constructNoteContentPath,
+  constructNoteDocPath,
+  getNoteContentDocument,
+  getNoteDocument,
 } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
 
 export const updateNote = createApiFunction<
   {
-    campaignId: string | undefined;
-    characterId: string | undefined;
+    campaignId: string;
     noteId: string;
     title: string;
     content?: Uint8Array;
@@ -24,21 +19,11 @@ export const updateNote = createApiFunction<
   },
   void
 >((params) => {
-  const { campaignId, characterId, noteId, title, content, isBeaconRequest } =
-    params;
+  const { campaignId, noteId, title, content, isBeaconRequest } = params;
 
   return new Promise((resolve, reject) => {
-    if (!campaignId && !characterId) {
-      reject(new Error("Either campaign or character ID must be defined."));
-      return;
-    }
-
-    const noteContentPath = characterId
-      ? constructCharacterNoteContentPath(characterId, noteId)
-      : constructCampaignNoteContentPath(campaignId as string, noteId);
-    const noteDocPath = characterId
-      ? constructCharacterNoteDocPath(characterId, noteId)
-      : constructCampaignNoteDocPath(campaignId as string, noteId);
+    const noteContentPath = constructNoteContentPath(campaignId, noteId);
+    const noteDocPath = constructNoteDocPath(campaignId, noteId);
 
     // If we are making this call when closing the page, we want to use a fetch call with keepalive
     if (isBeaconRequest) {
@@ -92,22 +77,15 @@ export const updateNote = createApiFunction<
     } else {
       const promises: Promise<unknown>[] = [];
       promises.push(
-        updateDoc(
-          characterId
-            ? getCharacterNoteDocument(characterId, noteId)
-            : getCampaignNoteDocument(campaignId as string, noteId),
-          {
-            title,
-          },
-        ),
+        updateDoc(getNoteDocument(campaignId, noteId), {
+          title,
+        }),
       );
 
       if (content) {
         promises.push(
           setDoc(
-            characterId
-              ? getCharacterNoteContentDocument(characterId, noteId)
-              : getCampaignNoteContentDocument(campaignId as string, noteId),
+            getNoteContentDocument(campaignId, noteId),
             {
               notes: Bytes.fromUint8Array(content),
             },

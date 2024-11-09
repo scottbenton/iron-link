@@ -10,32 +10,21 @@ import {
   where,
 } from "firebase/firestore";
 
-import { getNoteCollection } from "./_getRef";
-import { NoteDocument, ViewPermissions } from "./_notes.type";
+import { getNoteFolderCollection } from "./_getRef";
+import { NoteFolder, ViewPermissions } from "./_notes.type";
 import { CampaignPermissionType } from "pages/games/gamePageLayout/hooks/usePermissions";
 
-export function listenToNotes(
+export function listenToNoteFolders(
   uid: string,
   campaignId: string,
   permissions: CampaignPermissionType,
-  accessibleParentNoteFolderIds: string[],
-  onNotes: (notes: Record<string, NoteDocument>) => void,
+  onNoteFolders: (folders: Record<string, NoteFolder>) => void,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onError: (error: any) => void,
 ): Unsubscribe {
-  const parentNoteFolderWhere =
-    accessibleParentNoteFolderIds.length > 0
-      ? [where("parentFolderId", "in", accessibleParentNoteFolderIds)]
-      : [];
-
-  console.debug(accessibleParentNoteFolderIds);
-
-  let noteQuery: Query<NoteDocument, DocumentData> = query(
-    getNoteCollection(campaignId),
-    or(
-      where("viewPermissions.type", "==", ViewPermissions.Public),
-      and(where("viewPermissions", "==", null), ...parentNoteFolderWhere),
-    ),
+  let noteFolderQuery: Query<NoteFolder, DocumentData> = query(
+    getNoteFolderCollection(campaignId),
+    where("viewPermissions.type", "==", ViewPermissions.Public),
   );
   const basePlayerPermissions = [
     where("viewPermissions.type", "==", ViewPermissions.Public),
@@ -44,15 +33,10 @@ export function listenToNotes(
       where("viewPermissions.type", "==", ViewPermissions.OnlyAuthor),
       where("creator", "==", uid),
     ),
-    and(
-      where("viewPermissions", "==", null),
-
-      ...parentNoteFolderWhere,
-    ),
   ];
   if (permissions === CampaignPermissionType.Player) {
-    noteQuery = query(
-      getNoteCollection(campaignId),
+    noteFolderQuery = query(
+      getNoteFolderCollection(campaignId),
       or(
         ...basePlayerPermissions,
         and(
@@ -66,8 +50,9 @@ export function listenToNotes(
       ),
     );
   } else if (permissions === CampaignPermissionType.Guide) {
-    noteQuery = query(
-      getNoteCollection(campaignId),
+    console.debug("USING GUIDE NOTE QUERY");
+    noteFolderQuery = query(
+      getNoteFolderCollection(campaignId),
       or(
         ...basePlayerPermissions,
         where("viewPermissions.type", "==", ViewPermissions.OnlyGuides),
@@ -81,13 +66,14 @@ export function listenToNotes(
   }
 
   return onSnapshot(
-    noteQuery,
-    (snapshot: QuerySnapshot<NoteDocument>) => {
-      const notes: Record<string, NoteDocument> = {};
+    noteFolderQuery,
+    (snapshot: QuerySnapshot<NoteFolder>) => {
+      const noteFolders: Record<string, NoteFolder> = {};
       snapshot.forEach((doc) => {
-        notes[doc.id] = doc.data() as NoteDocument;
+        console.debug(doc);
+        noteFolders[doc.id] = doc.data() as NoteFolder;
       });
-      onNotes(notes);
+      onNoteFolders(noteFolders);
     },
     onError,
   );

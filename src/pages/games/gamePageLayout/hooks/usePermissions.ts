@@ -19,14 +19,15 @@ const campaignPermissions = derivedAtomWithEquality(
 
 // Decreasing levels of ownership
 export enum CharacterPermissionType {
-  Owner,
-  Guide,
-  Viewer,
+  Owner = "owner",
+  Guide = "guide",
+  OtherPlayer = "other_player",
+  Viewer = "viewer",
 }
 export enum CampaignPermissionType {
-  Guide,
-  Player,
-  Viewer,
+  Guide = "guide",
+  Player = "player",
+  Viewer = "viewer",
 }
 
 export function useCampaignPermissions() {
@@ -41,8 +42,12 @@ export function useCampaignPermissions() {
             const { players, gmIds, campaignType, characters } =
               get(campaignPermissions);
 
-            const isUserGuide = gmIds.includes(currentUserUid);
-            const isUserPlayer = players.includes(currentUserUid);
+            const isUserInCampaign = players.includes(currentUserUid);
+            const isUserGuide =
+              (isUserInCampaign &&
+                (campaignType === CampaignType.Solo ||
+                  campaignType === CampaignType.Coop)) ||
+              gmIds.includes(currentUserUid);
 
             const characterPermissions: Record<
               string,
@@ -55,6 +60,9 @@ export function useCampaignPermissions() {
               } else if (isUserGuide) {
                 characterPermissions[characterId] =
                   CharacterPermissionType.Guide;
+              } else if (isUserInCampaign) {
+                characterPermissions[characterId] =
+                  CharacterPermissionType.OtherPlayer;
               } else {
                 characterPermissions[characterId] =
                   CharacterPermissionType.Viewer;
@@ -65,7 +73,7 @@ export function useCampaignPermissions() {
               campaignType,
               campaignPermission: isUserGuide
                 ? CampaignPermissionType.Guide
-                : isUserPlayer
+                : isUserInCampaign
                   ? CampaignPermissionType.Player
                   : CampaignPermissionType.Viewer,
               permissionsByCharacter: characterPermissions,

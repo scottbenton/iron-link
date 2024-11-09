@@ -6,6 +6,7 @@ import { ReferenceSidebarContents } from "./components/ReferenceSidebarContents"
 import { useDerivedCurrentCharacterState } from "./hooks/useDerivedCharacterState";
 import { useSyncCharacterColorScheme } from "./hooks/useSyncCharacterColorScheme";
 import { EmptyState } from "components/Layout/EmptyState";
+import { NotesSection } from "./components/NotesSection";
 
 export function CharacterSheetPage() {
   const { hasCharacter, error } = useDerivedCurrentCharacterState((store) => ({
@@ -51,7 +52,17 @@ export function CharacterSheetPage() {
       >
         <CharacterSidebarContents />
       </Card>
-      <Box flexGrow={1}></Box>
+      <Box
+        sx={{
+          overflow: "hidden",
+          display: "flex",
+          flexDirection: "column",
+          flexGrow: 1,
+          px: 1,
+        }}
+      >
+        <NotesSection />
+      </Box>
       <Card
         variant="outlined"
         sx={{

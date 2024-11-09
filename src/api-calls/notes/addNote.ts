@@ -1,38 +1,29 @@
 import { addDoc } from "firebase/firestore";
 
-import {
-  getCampaignNoteCollection,
-  getCharacterNoteCollection,
-} from "./_getRef";
+import { getNoteCollection } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
 
 export const addNote = createApiFunction<
   {
-    campaignId?: string;
-    characterId?: string;
+    uid: string;
+    campaignId: string;
+    parentFolderId: string;
     order: number;
-    shared?: boolean;
+    title: string;
   },
   string
 >((params) => {
-  const { campaignId, characterId, order, shared } = params;
+  const { uid, campaignId, title, order, parentFolderId } = params;
 
   return new Promise((resolve, reject) => {
-    if (!campaignId && !characterId) {
-      reject(new Error("Either character or campaign ID must be defined"));
-      return;
-    }
-
-    addDoc(
-      characterId
-        ? getCharacterNoteCollection(characterId)
-        : getCampaignNoteCollection(campaignId as string),
-      {
-        order,
-        title: "New Page",
-        shared: shared ?? false,
-      },
-    )
+    addDoc(getNoteCollection(campaignId), {
+      order,
+      creator: uid,
+      title,
+      parentFolderId,
+      viewPermissions: null,
+      writePermissions: null,
+    })
       .then((doc) => {
         resolve(doc.id);
       })

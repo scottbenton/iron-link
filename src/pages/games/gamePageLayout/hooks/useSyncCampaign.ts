@@ -22,6 +22,7 @@ import {
   defaultBaseRulesets,
   defaultExpansions,
 } from "data/datasworn.packages";
+import { useSyncNotes } from "../atoms/notes.atom";
 
 const expansionsAndRulesetsAtom = derivedAtomWithEquality(
   currentCampaignAtom,
@@ -212,4 +213,5 @@ export function useSyncCampaign() {
 
   useListenToLogs();
   useSyncProgressTracks();
+  useSyncNotes();
 }
