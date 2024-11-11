@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { atom, useAtomValue, useSetAtom } from "jotai";
 
 import { useCampaignId } from "../hooks/useCampaignId";
@@ -11,6 +12,7 @@ import {
   ViewPermissions,
   WritePermissions,
 } from "api-calls/notes/_notes.type";
+import { listenToNoteContent } from "api-calls/notes/listenToNoteContent";
 import { listenToNoteFolders } from "api-calls/notes/listenToNoteFolders";
 import { listenToNotes } from "api-calls/notes/listenToNotes";
 import { useUID } from "atoms/auth.atom";
@@ -196,4 +198,41 @@ export function useSyncNotes() {
       setNotesAtom(defaultNotesAtom);
     };
   }, [campaignId, setNotesAtom]);
+}
+
+export function useListenToActiveNoteContent(noteId: string) {
+  const { t } = useTranslation();
+
+  const [noteContent, setNoteContent] = useState<Uint8Array>();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string>();
+
+  const campaignId = useCampaignId();
+
+  useEffect(() => {
+    setLoading(true);
+    const unsubscribe = listenToNoteContent(
+      campaignId,
+      noteId,
+      (content) => {
+        setNoteContent(content);
+        setLoading(false);
+        setError(undefined);
+      },
+      (error) => {
+        console.error(error);
+        setError(t("Failed to load note content"));
+        setLoading(false);
+      },
+    );
+
+    return () => {
+      unsubscribe();
+      setNoteContent(undefined);
+      setLoading(false);
+      setError(undefined);
+    };
+  }, [campaignId, noteId, t]);
+
+  return { noteContent, loading, error };
 }

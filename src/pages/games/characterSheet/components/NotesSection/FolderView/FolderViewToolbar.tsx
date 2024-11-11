@@ -6,6 +6,8 @@ import DocumentIcon from "@mui/icons-material/NoteAdd";
 import { Box, Button, IconButton, Tooltip } from "@mui/material";
 
 import { NoteToolbar } from "../Layout";
+import { useFolderPermission } from "../NoteView/useFolderPermissions";
+import { FolderDeleteButton } from "./FolderDeleteButton";
 import { NameItemDialog } from "./NameItemDialog";
 import { FAKE_ROOT_NOTE_FOLDER_KEY } from "./rootNodeName";
 import { addFolder } from "api-calls/notes/addFolder";
@@ -26,8 +28,6 @@ export function FolderViewToolbar(props: FolderViewToolbarProps) {
   const uid = useUID();
   const campaignId = useCampaignId();
 
-  console.debug(folderId);
-
   const folder = useDerivedNotesAtom(
     (notes) => {
       return notes.folders.folders[folderId];
@@ -35,13 +35,15 @@ export function FolderViewToolbar(props: FolderViewToolbarProps) {
     [folderId],
   );
 
-  const isImmutableFolder = !folder.parentFolderId;
+  const isImmutableFolder = !folder?.parentFolderId;
 
   const [nameItemDialogSettings, setNameItemDialogSettings] = useState<{
     open: boolean;
     type: "folder" | "note";
     renamingCurrent?: boolean;
   }>({ open: false, type: "folder" });
+
+  const { canDelete } = useFolderPermission(folderId);
 
   // Something's gone wrong, lets stop before we break things
   if (!folder || folderId === FAKE_ROOT_NOTE_FOLDER_KEY) return null;
@@ -62,7 +64,6 @@ export function FolderViewToolbar(props: FolderViewToolbarProps) {
   };
 
   const createNote = (name: string) => {
-    console.log("createNote");
     addNote({
       uid,
       campaignId,
@@ -84,19 +85,6 @@ export function FolderViewToolbar(props: FolderViewToolbarProps) {
 
   return (
     <NoteToolbar>
-      <Tooltip title={t("notes.toolbar.create-folder", "Create Folder")}>
-        <IconButton
-          onClick={() =>
-            setNameItemDialogSettings({
-              open: true,
-              type: "folder",
-            })
-          }
-        >
-          <FolderIcon />
-        </IconButton>
-      </Tooltip>
-
       {!isImmutableFolder && (
         <Tooltip title={t("notes.toolbar.rename-folder", "Rename Folder")}>
           <IconButton
@@ -112,8 +100,27 @@ export function FolderViewToolbar(props: FolderViewToolbarProps) {
           </IconButton>
         </Tooltip>
       )}
+      {!isImmutableFolder && canDelete && folder.parentFolderId && (
+        <FolderDeleteButton
+          parentFolderId={folder.parentFolderId}
+          folderId={folderId}
+          name={folder.name}
+        />
+      )}
 
-      <Box flexGrow={1} display="flex" justifyContent="flex-end">
+      <Box flexGrow={1} display="flex" justifyContent="flex-end" gap={1}>
+        <Tooltip title={t("notes.toolbar.create-folder", "Create Folder")}>
+          <IconButton
+            onClick={() =>
+              setNameItemDialogSettings({
+                open: true,
+                type: "folder",
+              })
+            }
+          >
+            <FolderIcon />
+          </IconButton>
+        </Tooltip>
         <Button
           sx={{ justifySelf: "end" }}
           variant="contained"

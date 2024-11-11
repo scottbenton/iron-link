@@ -50,7 +50,6 @@ export function listenToNoteFolders(
       ),
     );
   } else if (permissions === CampaignPermissionType.Guide) {
-    console.debug("USING GUIDE NOTE QUERY");
     noteFolderQuery = query(
       getNoteFolderCollection(campaignId),
       or(
@@ -70,7 +69,6 @@ export function listenToNoteFolders(
     (snapshot: QuerySnapshot<NoteFolder>) => {
       const noteFolders: Record<string, NoteFolder> = {};
       snapshot.forEach((doc) => {
-        console.debug(doc);
         noteFolders[doc.id] = doc.data() as NoteFolder;
       });
       onNoteFolders(noteFolders);

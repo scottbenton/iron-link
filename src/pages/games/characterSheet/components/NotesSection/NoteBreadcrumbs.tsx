@@ -38,7 +38,6 @@ export function NoteBreadcrumbs() {
       ),
   );
 
-  console.debug(campaignPermission, campaignType, hasCampaignNoteChildren);
   let hasAccessToMoreThanOneTopLevelFolder = false;
   if (
     (campaignPermission === CampaignPermissionType.Guide &&
@@ -47,7 +46,6 @@ export function NoteBreadcrumbs() {
   ) {
     hasAccessToMoreThanOneTopLevelFolder = true;
   }
-  console.debug(hasAccessToMoreThanOneTopLevelFolder);
 
   const breadcrumbItems: BreadcrumbItem[] = useDerivedNotesAtom(
     (store) => {
@@ -65,15 +63,15 @@ export function NoteBreadcrumbs() {
             id: item.type === "folder" ? item.folderId : item.noteId,
             name:
               item.type === "folder"
-                ? store.folders.folders[item.folderId].name
-                : store.notes.notes[item.noteId].title,
+                ? store.folders.folders[item.folderId]?.name
+                : store.notes.notes[item.noteId]?.title,
           });
         }
 
         const parentFolderId =
           item.type === "folder"
-            ? store.folders.folders[item.folderId].parentFolderId
-            : store.notes.notes[item.noteId].parentFolderId;
+            ? store.folders.folders[item.folderId]?.parentFolderId
+            : store.notes.notes[item.noteId]?.parentFolderId;
         const parentFolder = parentFolderId
           ? store.folders.folders[parentFolderId]
           : undefined;
@@ -96,15 +94,13 @@ export function NoteBreadcrumbs() {
     [hasAccessToMoreThanOneTopLevelFolder],
   );
 
-  // TODO - if player is a guide and this is not a solo game OR notes already exist, show a dropdown on the first breadcrumb to allow switching between user and guide notes
-
   if (breadcrumbItems.length > 0) {
     return (
       <>
         <Breadcrumbs>
           {breadcrumbItems.map((item, index) =>
             index === breadcrumbItems.length - 1 ? (
-              <Typography>
+              <Typography key={index}>
                 {getItemName({
                   name: item.name,
                   id: item.id,
@@ -114,6 +110,7 @@ export function NoteBreadcrumbs() {
               </Typography>
             ) : (
               <Link
+                key={index}
                 component={"button"}
                 onClick={() =>
                   item.type === "folder"

@@ -2,8 +2,9 @@ import { useTranslation } from "react-i18next";
 import DocIcon from "@mui/icons-material/Description";
 import FolderIcon from "@mui/icons-material/Folder";
 import FolderSharedIcon from "@mui/icons-material/FolderShared";
-import { Box, Card, CardActionArea, Typography } from "@mui/material";
+import { Card, CardActionArea, Typography } from "@mui/material";
 
+import { OpenItemWrapper } from "../Layout";
 import { getItemName } from "./getFolderName";
 import { FAKE_ROOT_NOTE_FOLDER_KEY } from "./rootNodeName";
 import { ViewPermissions } from "api-calls/notes/_notes.type";
@@ -52,7 +53,7 @@ export function FolderView(props: FolderViewProps) {
   const setOpenItem = useSetOpenItem();
 
   return (
-    <Box mx={-1}>
+    <OpenItemWrapper sx={{ mx: -1 }}>
       {subFolders.length > 0 && (
         <GridLayout
           sx={{ mb: 1 }}
@@ -115,6 +116,6 @@ export function FolderView(props: FolderViewProps) {
           </CardActionArea>
         </Card>
       ))}
-    </Box>
+    </OpenItemWrapper>
   );
 }
