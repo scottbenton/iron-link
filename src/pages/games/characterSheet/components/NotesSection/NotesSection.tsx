@@ -1,8 +1,7 @@
-import { Box, LinearProgress } from "@mui/material";
+import { LinearProgress } from "@mui/material";
 
 import { DefaultNoteChooser } from "./DefaultNoteChooser";
 import { FolderView, FolderViewToolbar } from "./FolderView";
-import { NoteBreadcrumbs } from "./NoteBreadcrumbs";
 import { NoteView } from "./NoteView";
 import { useDerivedNotesAtom } from "pages/games/gamePageLayout/atoms/notes.atom";
 
@@ -20,9 +19,6 @@ export function NotesSection() {
   return (
     <>
       <DefaultNoteChooser />
-      <Box px={1.5}>
-        <NoteBreadcrumbs />
-      </Box>
       {openItem?.type === "folder" && (
         <>
           <FolderViewToolbar folderId={openItem.folderId} />

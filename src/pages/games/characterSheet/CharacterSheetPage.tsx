@@ -45,7 +45,8 @@ export function CharacterSheetPage() {
         variant="outlined"
         sx={{
           bgcolor: "background.default",
-          width: 350,
+          maxWidth: 350,
+          width: "100%",
           p: 2,
           overflow: "auto",
         }}
@@ -67,7 +68,8 @@ export function CharacterSheetPage() {
         variant="outlined"
         sx={{
           bgcolor: "background.default",
-          width: 350,
+          maxWidth: 350,
+          width: "100%",
           overflow: "hidden",
           display: "flex",
           flexDirection: "column",

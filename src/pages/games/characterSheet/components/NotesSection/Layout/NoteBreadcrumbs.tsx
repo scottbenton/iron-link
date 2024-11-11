@@ -1,8 +1,8 @@
 import { useTranslation } from "react-i18next";
 import { Breadcrumbs, Link, Typography } from "@mui/material";
 
-import { getItemName } from "./FolderView/getFolderName";
-import { FAKE_ROOT_NOTE_FOLDER_KEY } from "./FolderView/rootNodeName";
+import { getItemName } from "../FolderView/getFolderName";
+import { FAKE_ROOT_NOTE_FOLDER_KEY } from "../FolderView/rootNodeName";
 import { GUIDE_NOTE_FOLDER_NAME } from "api-calls/notes/_getRef";
 import { useUID } from "atoms/auth.atom";
 import {

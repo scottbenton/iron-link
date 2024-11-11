@@ -40,6 +40,7 @@ export function Editor(props: EditorProps) {
                 flexGrow: 1,
                 display: "flex",
                 flexDirection: "column",
+                overflow: "hidden",
               }
         }
       >
@@ -75,7 +76,7 @@ export function Editor(props: EditorProps) {
                 : {}),
             },
             ".ProseMirror": {
-              height: "100%",
+              minHeight: "100%",
               borderWidth: 1,
               borderStyle: "solid",
               borderColor: "transparent",
@@ -99,9 +100,6 @@ export function Editor(props: EditorProps) {
               },
               "&.ProseMirror>:first-of-type": {
                 marginTop: 0,
-              },
-              "&.ProseMirror>*": {
-                maxWidth: "65ch",
               },
             },
             blockquote: {

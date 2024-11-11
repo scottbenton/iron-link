@@ -107,7 +107,7 @@ export function NoteViewToolbar(props: NoteToolbarContentProps) {
     <>
       <TextTypeDropdown editor={editor} />
       <ToggleButtonGroup sx={{ mr: 1 }}>
-        <Tooltip title={"Bold"} enterDelay={300}>
+        <Tooltip title={t("note.editor-toolbar.bold", "Bold")} enterDelay={300}>
           <ToggleButton
             size={"small"}
             value={"bold"}
@@ -118,7 +118,10 @@ export function NoteViewToolbar(props: NoteToolbarContentProps) {
           </ToggleButton>
         </Tooltip>
 
-        <Tooltip title={"Italic"} enterDelay={300}>
+        <Tooltip
+          title={t("note.editor-toolbar.italic", "Italic")}
+          enterDelay={300}
+        >
           <ToggleButton
             size={"small"}
             value={"italic"}
@@ -129,7 +132,10 @@ export function NoteViewToolbar(props: NoteToolbarContentProps) {
           </ToggleButton>
         </Tooltip>
 
-        <Tooltip title={"Strikethrough"} enterDelay={300}>
+        <Tooltip
+          title={t("note.editor-toolbar.strikethrough", "Strikethrough")}
+          enterDelay={300}
+        >
           <ToggleButton
             size={"small"}
             value={"strikethrough"}
@@ -141,7 +147,10 @@ export function NoteViewToolbar(props: NoteToolbarContentProps) {
         </Tooltip>
       </ToggleButtonGroup>
       <ToggleButtonGroup sx={{ mr: 1 }}>
-        <Tooltip title={"Bulleted List"} enterDelay={300}>
+        <Tooltip
+          title={t("note.editor-toolbar.bulleted-list", "Bulleted List")}
+          enterDelay={300}
+        >
           <ToggleButton
             size={"small"}
             value={"bullet list"}
@@ -151,7 +160,10 @@ export function NoteViewToolbar(props: NoteToolbarContentProps) {
             <BulletListIcon />
           </ToggleButton>
         </Tooltip>
-        <Tooltip title={"Numbered List"} enterDelay={300}>
+        <Tooltip
+          title={t("note.editor-toolbar.numbered-list", "Numbered List")}
+          enterDelay={300}
+        >
           <ToggleButton
             size={"small"}
             value={"number list"}
@@ -161,7 +173,10 @@ export function NoteViewToolbar(props: NoteToolbarContentProps) {
             <NumberedListIcon />
           </ToggleButton>
         </Tooltip>
-        <Tooltip title={"Horizontal Rule"} enterDelay={300}>
+        <Tooltip
+          title={t("note.editor-toolbar.horizontal-line", "Horizontal Line")}
+          enterDelay={300}
+        >
           <ToggleButton
             size={"small"}
             value={"horizontal rule"}
@@ -170,7 +185,10 @@ export function NoteViewToolbar(props: NoteToolbarContentProps) {
             <HorizontalRuleIcon />
           </ToggleButton>
         </Tooltip>
-        <Tooltip title={"Quote"} enterDelay={300}>
+        <Tooltip
+          title={t("note.editor-toolbar.quote", "Quote")}
+          enterDelay={300}
+        >
           <ToggleButton
             size={"small"}
             value={"quote"}
@@ -181,7 +199,10 @@ export function NoteViewToolbar(props: NoteToolbarContentProps) {
         </Tooltip>
       </ToggleButtonGroup>
       <Box display="flex" alignItems="center">
-        <Tooltip title={"Rename Note"} enterDelay={300}>
+        <Tooltip
+          title={t("note.editor-toolbar.rename-note", "Rename Note")}
+          enterDelay={300}
+        >
           <IconButton onClick={handleRename}>
             <RenameIcon />
           </IconButton>
@@ -194,7 +215,10 @@ export function NoteViewToolbar(props: NoteToolbarContentProps) {
           name={noteName}
         />
         {permissions.canDelete && (
-          <Tooltip title={"Delete Note"} enterDelay={300}>
+          <Tooltip
+            title={t("note.editor-toolbar.delete-note", "Delete Note")}
+            enterDelay={300}
+          >
             <IconButton onClick={handleDelete}>
               <DeleteIcon />
             </IconButton>

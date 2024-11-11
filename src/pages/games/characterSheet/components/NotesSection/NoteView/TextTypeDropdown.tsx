@@ -1,6 +1,8 @@
 import React from "react";
 import { MenuItem, SxProps, TextField } from "@mui/material";
 import { Editor } from "@tiptap/react";
+import { TFunction } from "i18next";
+import { useTranslation } from "react-i18next";
 
 export interface TextTypeDropdownProps {
   editor: Editor;
@@ -16,14 +18,16 @@ enum TEXT_TYPES {
   paragraph = "p",
 }
 
-const textLabels = {
-  [TEXT_TYPES.heading1]: "Heading 1",
-  [TEXT_TYPES.heading2]: "Heading 2",
-  [TEXT_TYPES.heading3]: "Heading 3",
-  [TEXT_TYPES.heading4]: "Heading 4",
-  [TEXT_TYPES.heading5]: "Heading 5",
-  [TEXT_TYPES.paragraph]: "Normal Text",
-};
+function getTextLabels(t: TFunction) {
+  return {
+    [TEXT_TYPES.heading1]: t("notes.text-type.heading-1", "Heading 1"),
+    [TEXT_TYPES.heading2]: t("notes.text-type.heading-2", "Heading 2"),
+    [TEXT_TYPES.heading3]: t("notes.text-type.heading-3", "Heading 3"),
+    [TEXT_TYPES.heading4]: t("notes.text-type.heading-4", "Heading 4"),
+    [TEXT_TYPES.heading5]: t("notes.text-type.heading-5", "Heading 5"),
+    [TEXT_TYPES.paragraph]: t("notes.text-type.normal-text", "Normal Text"),
+  };
+}
 
 export const TextTypeDropdown: React.FC<TextTypeDropdownProps> = (props) => {
   const { editor, sx } = props;
@@ -60,6 +64,9 @@ export const TextTypeDropdown: React.FC<TextTypeDropdownProps> = (props) => {
     }
   };
 
+  const { t } = useTranslation();
+  const textLabels = getTextLabels(t);
+
   return (
     <>
       <TextField
@@ -70,7 +77,10 @@ export const TextTypeDropdown: React.FC<TextTypeDropdownProps> = (props) => {
         onChange={(evt) => setActiveTextType(evt.target.value as TEXT_TYPES)}
         variant={"standard"}
         margin={"none"}
-        sx={[{ width: "140px", mr: 1 }, ...(Array.isArray(sx) ? sx : [sx])]}
+        sx={[
+          { minWidth: "140px", width: "140px", mr: 1 },
+          ...(Array.isArray(sx) ? sx : [sx]),
+        ]}
         // size={"small"}
       >
         {Object.keys(textLabels).map((key, index) => (
