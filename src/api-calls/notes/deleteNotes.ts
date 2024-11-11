@@ -1,26 +1,25 @@
 import { getDocs } from "firebase/firestore";
 
-import {
-  getCampaignNoteCollection,
-  getCharacterNoteCollection,
-} from "./_getRef";
+import { getNoteCollection, getNoteFolderCollection } from "./_getRef";
 import { removeNote } from "./removeNote";
 import { createApiFunction } from "api-calls/createApiFunction";
 
-function getAllNotes(
-  campaignId: string | undefined,
-  characterId: string | undefined,
-): Promise<string[]> {
+function getAllFolders(campaignId: string): Promise<string[]> {
   return new Promise<string[]>((resolve, reject) => {
-    if (!characterId && !campaignId) {
-      reject(new Error("Either character or campaign ID must be defined."));
-      return;
-    }
-    getDocs(
-      characterId
-        ? getCharacterNoteCollection(characterId)
-        : getCampaignNoteCollection(campaignId as string),
-    )
+    getDocs(getNoteFolderCollection(campaignId))
+      .then((snapshot) => {
+        const ids = snapshot.docs.map((doc) => doc.id);
+        resolve(ids);
+      })
+      .catch(() => {
+        reject("Failed to get note folders.");
+      });
+  });
+}
+
+function getAllNotes(campaignId: string): Promise<string[]> {
+  return new Promise<string[]>((resolve, reject) => {
+    getDocs(getNoteCollection(campaignId))
       .then((snapshot) => {
         const ids = snapshot.docs.map((doc) => doc.id);
         resolve(ids);
@@ -31,19 +30,12 @@ function getAllNotes(
   });
 }
 
-export const deleteNotes = createApiFunction<
-  { characterId?: string; campaignId?: string },
-  void
->(({ campaignId, characterId }) => {
+export const deleteNotes = createApiFunction<string, void>((campaignId) => {
   return new Promise<void>((resolve, reject) => {
-    if (!campaignId && !characterId) {
-      reject("Either campaign or character ID must be defined.");
-      return;
-    }
-    getAllNotes(campaignId, characterId)
+    getAllNotes(campaignId)
       .then((noteIds) => {
         const promises = noteIds.map((noteId) =>
-          removeNote({ campaignId, characterId, noteId }),
+          removeNote({ campaignId, noteId }),
         );
         Promise.all(promises)
           .then(() => {
@@ -56,5 +48,17 @@ export const deleteNotes = createApiFunction<
       .catch((e) => {
         reject(e);
       });
+    getAllFolders(campaignId).then((noteIds) => {
+      const promises = noteIds.map((noteId) =>
+        removeNote({ campaignId, noteId }),
+      );
+      Promise.all(promises)
+        .then(() => {
+          resolve();
+        })
+        .catch((e) => {
+          reject(e);
+        });
+    });
   });
-}, "Failed to delete some or all notes.");
+}, "Failed to delete some or all note folders.");

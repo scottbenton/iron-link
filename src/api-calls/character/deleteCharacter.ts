@@ -9,7 +9,6 @@ import { deleteAllAssets } from "api-calls/assets/deleteAllAssets";
 import { removeCharacterFromCampaign } from "api-calls/campaign/removeCharacterFromCampaign";
 import { getCharacterSettingsDoc } from "api-calls/character-campaign-settings/_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
-import { deleteNotes } from "api-calls/notes/deleteNotes";
 import { deleteImage } from "lib/storage.lib";
 
 export const deleteCharacter = createApiFunction<
@@ -45,7 +44,6 @@ export const deleteCharacter = createApiFunction<
           );
         }
 
-        promises.push(deleteNotes({ characterId }));
         promises.push(deleteDoc(getCharacterSettingsDoc(characterId)));
         promises.push(deleteAllAssets({ characterId }));
 

@@ -8,13 +8,15 @@ export interface GridLayoutProps<T> {
   loading?: boolean;
   error?: string;
   emptyStateAction?: React.ReactNode;
-  emptyStateMessage: string;
+  emptyStateMessage?: string;
   minWidth: number;
   sx?: SxProps<Theme>;
+  gap?: number;
 }
 
 export function GridLayout<T>(props: GridLayoutProps<T>) {
   const {
+    gap = 2,
     items,
     renderItem,
     loading,
@@ -34,6 +36,9 @@ export function GridLayout<T>(props: GridLayoutProps<T>) {
   }
 
   if (items.length === 0) {
+    if (!emptyStateMessage) {
+      return null;
+    }
     return (
       <EmptyState
         message={emptyStateMessage}
@@ -50,7 +55,7 @@ export function GridLayout<T>(props: GridLayoutProps<T>) {
           {
             display: "grid",
             gridTemplateColumns: `repeat(auto-fill, minmax(${minWidth}px, 1fr))`,
-            gap: 2,
+            gap,
             [`@container (max-width: ${minWidth}px)`]: {
               gridTemplateColumns: "1fr",
             },

@@ -1,37 +1,22 @@
 import { deleteDoc } from "firebase/firestore";
 
-import {
-  getCampaignNoteContentDocument,
-  getCampaignNoteDocument,
-  getCharacterNoteContentDocument,
-  getCharacterNoteDocument,
-} from "./_getRef";
+import { getNoteContentDocument, getNoteDocument } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
 
 export const removeNote = createApiFunction<
   {
-    characterId?: string;
-    campaignId?: string;
+    campaignId: string;
     noteId: string;
   },
   void
 >((params) => {
-  const { campaignId, characterId, noteId } = params;
+  const { campaignId, noteId } = params;
 
   return new Promise((resolve, reject) => {
-    if (!campaignId && !characterId) {
-      reject(new Error("Either character or campaign ID must be defined."));
-    }
-    const deleteNotePromise = deleteDoc(
-      characterId
-        ? getCharacterNoteDocument(characterId, noteId)
-        : getCampaignNoteDocument(campaignId as string, noteId),
-    );
+    const deleteNotePromise = deleteDoc(getNoteDocument(campaignId, noteId));
 
     const deleteContentPromise = deleteDoc(
-      characterId
-        ? getCharacterNoteContentDocument(characterId, noteId)
-        : getCampaignNoteContentDocument(campaignId as string, noteId),
+      getNoteContentDocument(campaignId, noteId),
     );
 
     Promise.all([deleteNotePromise, deleteContentPromise])

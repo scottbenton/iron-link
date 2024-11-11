@@ -6,88 +6,73 @@ import {
   DocumentReference,
 } from "firebase/firestore";
 
-import { NoteContentDocument, NoteDocument } from "./_notes.type";
+import { NoteContentDocument, NoteDocument, NoteFolder } from "./_notes.type";
 
-export function constructCampaignNoteCollectionPath(campaignId: string) {
+// Collection Paths
+
+export function constructNoteFolderCollectionPath(campaignId: string) {
+  return `/campaigns/${campaignId}/noteFolders`;
+}
+export function constructNoteCollectionPath(campaignId: string) {
   return `/campaigns/${campaignId}/notes`;
 }
 
-export function constructCampaignNoteDocPath(
-  campaignId: string,
-  noteId: string,
-) {
+// Document Paths
+
+export function constructNoteDocPath(campaignId: string, noteId: string) {
   return `/campaigns/${campaignId}/notes/${noteId}`;
 }
+export function constructNoteFolderPath(campaignId: string, folderId: string) {
+  return `/campaigns/${campaignId}/noteFolders/${folderId}`;
+}
 
-export function constructCampaignNoteContentPath(
-  campaignId: string,
-  noteId: string,
-) {
+export function constructNoteContentPath(campaignId: string, noteId: string) {
   return `/campaigns/${campaignId}/notes/${noteId}/content/content`;
 }
 
-export function getCampaignNoteCollection(campaignId: string) {
+// Collection References
+
+export function getNoteFolderCollection(campaignId: string) {
   return collection(
     firestore,
-    constructCampaignNoteCollectionPath(campaignId),
+    constructNoteFolderCollectionPath(campaignId),
+  ) as CollectionReference<NoteFolder>;
+}
+
+export function getNoteCollection(campaignId: string) {
+  return collection(
+    firestore,
+    constructNoteCollectionPath(campaignId),
   ) as CollectionReference<NoteDocument>;
 }
 
-export function getCampaignNoteDocument(campaignId: string, noteId: string) {
+// Document References
+
+export function getNoteFolderDocument(campaignId: string, folderId: string) {
   return doc(
     firestore,
-    constructCampaignNoteDocPath(campaignId, noteId),
+    constructNoteFolderPath(campaignId, folderId),
+  ) as DocumentReference<NoteFolder>;
+}
+
+export function getNoteDocument(campaignId: string, noteId: string) {
+  return doc(
+    firestore,
+    constructNoteDocPath(campaignId, noteId),
   ) as DocumentReference<NoteDocument>;
 }
 
-export function getCampaignNoteContentDocument(
-  campaignId: string,
-  noteId: string,
-) {
+export function getNoteContentDocument(campaignId: string, noteId: string) {
   return doc(
     firestore,
-    constructCampaignNoteContentPath(campaignId, noteId),
+    constructNoteContentPath(campaignId, noteId),
   ) as DocumentReference<NoteContentDocument>;
 }
 
-export function constructCharacterNoteCollectionPath(characterId: string) {
-  return `/characters/${characterId}/notes`;
-}
+// So what does it look like to fetch all this information?
 
-export function constructCharacterNoteDocPath(
-  characterId: string,
-  noteId: string,
-) {
-  return `/characters/${characterId}/notes/${noteId}`;
-}
+// Query all folders where I have permission
+// THEN
+// Query all notes where I have permission OR notes in folders where I have permission
 
-export function constructCharacterNoteContentPath(
-  characterId: string,
-  noteId: string,
-) {
-  return `/characters/${characterId}/notes/${noteId}/content/content`;
-}
-
-export function getCharacterNoteCollection(characterId: string) {
-  return collection(
-    firestore,
-    constructCharacterNoteCollectionPath(characterId),
-  ) as CollectionReference<NoteDocument>;
-}
-
-export function getCharacterNoteDocument(characterId: string, noteId: string) {
-  return doc(
-    firestore,
-    constructCharacterNoteDocPath(characterId, noteId),
-  ) as DocumentReference<NoteDocument>;
-}
-
-export function getCharacterNoteContentDocument(
-  characterId: string,
-  noteId: string,
-) {
-  return doc(
-    firestore,
-    constructCharacterNoteContentPath(characterId, noteId),
-  ) as DocumentReference<NoteContentDocument>;
-}
+export const GUIDE_NOTE_FOLDER_NAME = "guide-notes";

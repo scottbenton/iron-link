@@ -56,7 +56,7 @@ export interface CharacterDocument {
     [trackName: string]: number;
   };
 
-  // TODO - when migrating, don't forget these new propertys
+  // TODO - when migrating, don't forget these new properties
   unspentExperience?: number;
   colorScheme?: ColorScheme;
 }

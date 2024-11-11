@@ -13,6 +13,7 @@ import {
 } from "../atoms/campaign.atom";
 import { useSetCampaignCharacters } from "../atoms/campaign.characters.atom";
 import { useListenToLogs } from "../atoms/gameLog.atom";
+import { useSyncNotes } from "../atoms/notes.atom";
 import { listenToAssets } from "api-calls/assets/listenToAssets";
 import { listenToCampaign } from "api-calls/campaign/listenToCampaign";
 import { listenToCharacter } from "api-calls/character/listenToCharacter";
@@ -212,4 +213,5 @@ export function useSyncCampaign() {
 
   useListenToLogs();
   useSyncProgressTracks();
+  useSyncNotes();
 }

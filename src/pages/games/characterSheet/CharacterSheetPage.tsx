@@ -2,6 +2,7 @@ import { useTranslation } from "react-i18next";
 import { Box, Card, LinearProgress } from "@mui/material";
 
 import { CharacterSidebarContents } from "./components/CharacterSidebarContents";
+import { NotesSection } from "./components/NotesSection";
 import { ReferenceSidebarContents } from "./components/ReferenceSidebarContents";
 import { useDerivedCurrentCharacterState } from "./hooks/useDerivedCharacterState";
 import { useSyncCharacterColorScheme } from "./hooks/useSyncCharacterColorScheme";
@@ -44,19 +45,31 @@ export function CharacterSheetPage() {
         variant="outlined"
         sx={{
           bgcolor: "background.default",
-          width: 350,
+          maxWidth: 350,
+          width: "100%",
           p: 2,
           overflow: "auto",
         }}
       >
         <CharacterSidebarContents />
       </Card>
-      <Box flexGrow={1}></Box>
+      <Box
+        sx={{
+          overflow: "hidden",
+          display: "flex",
+          flexDirection: "column",
+          flexGrow: 1,
+          px: 1,
+        }}
+      >
+        <NotesSection />
+      </Box>
       <Card
         variant="outlined"
         sx={{
           bgcolor: "background.default",
-          width: 350,
+          maxWidth: 350,
+          width: "100%",
           overflow: "hidden",
           display: "flex",
           flexDirection: "column",
