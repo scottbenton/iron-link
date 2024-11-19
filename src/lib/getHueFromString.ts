@@ -3,7 +3,7 @@ export function getHueFromString(str: string = "") {
   for (let i = 0; i < str.length; i++) {
     hash = str.charCodeAt(i) + ((hash << 5) - hash);
   }
-  return hash % 360;
+  return Math.abs(hash) % 360;
 }
 
 export function getHSLFromString(

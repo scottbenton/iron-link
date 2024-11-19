@@ -47,7 +47,7 @@ export function GameLayout() {
         <CampaignTabs />
       </PageHeader>
       <PageContent
-        viewHeight
+        viewHeight={isOnCharacterCreatePage ? "min-full" : "max-full"}
         maxWidth={isOnCharacterCreatePage ? "md" : undefined}
       >
         <Outlet />

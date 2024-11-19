@@ -15,7 +15,7 @@ export function OpenItemWrapper(
         {
           display: "flex",
           flexDirection: "column",
-          flexGrow: 1,
+          // flexGrow: 1,
           overflow: "auto",
           px: 0.5,
         },

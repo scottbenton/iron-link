@@ -2,7 +2,7 @@ import { useEffect } from "react";
 
 import { CampaignType } from "api-calls/campaign/_campaign.type";
 import { GUIDE_NOTE_FOLDER_NAME } from "api-calls/notes/_getRef";
-import { ViewPermissions, WritePermissions } from "api-calls/notes/_notes.type";
+import { EditPermissions, ReadPermissions } from "api-calls/notes/_notes.type";
 import { addFolder } from "api-calls/notes/addFolder";
 import { useUID } from "atoms/auth.atom";
 import {
@@ -42,14 +42,8 @@ export function useChooseDefaultOpenNote() {
           parentFolderId: null,
           order: 0,
           name: uid,
-          viewPermissions: {
-            type: ViewPermissions.OnlyAuthor,
-            inherited: false,
-          },
-          writePermissions: {
-            type: WritePermissions.OnlyAuthor,
-            inherited: false,
-          },
+          readPermissions: ReadPermissions.OnlyAuthor,
+          editPermissions: EditPermissions.OnlyAuthor,
           folderId: uid,
         });
       }
@@ -64,14 +58,8 @@ export function useChooseDefaultOpenNote() {
           parentFolderId: null,
           order: 0,
           name: GUIDE_NOTE_FOLDER_NAME,
-          viewPermissions: {
-            type: ViewPermissions.OnlyGuides,
-            inherited: false,
-          },
-          writePermissions: {
-            type: WritePermissions.OnlyGuides,
-            inherited: false,
-          },
+          readPermissions: ReadPermissions.OnlyGuides,
+          editPermissions: EditPermissions.OnlyGuides,
           folderId: GUIDE_NOTE_FOLDER_NAME,
         });
       }

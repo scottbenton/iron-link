@@ -1,17 +1,17 @@
 import { Bytes } from "firebase/firestore";
 
-export enum ViewPermissions {
+export enum ReadPermissions {
+  OnlyAuthor = "only_author",
   OnlyGuides = "only_guides",
   AllPlayers = "all_players",
-  GuidesAndPlayerSubset = "guides_and_player_subset",
-  OnlyAuthor = "only_author",
+  GuidesAndAuthor = "guides_and_author",
   Public = "public",
 }
-export enum WritePermissions {
-  OnlyGuides = "only_guides",
-  AllPlayers = "all_players",
-  GuidesAndPlayerSubset = "guides_and_player_subset",
+export enum EditPermissions {
   OnlyAuthor = "only_author",
+  OnlyGuides = "only_guides",
+  GuidesAndAuthor = "guides_and_author",
+  AllPlayers = "all_players",
 }
 
 export interface NoteDocument {
@@ -21,17 +21,10 @@ export interface NoteDocument {
   creator: string;
 
   parentFolderId: string;
-  // If permission set is null, inherit from the parent folder
-  viewPermissions: {
-    type: ViewPermissions;
-    players?: string[];
-    inherited: boolean;
-  } | null;
-  writePermissions: {
-    type: WritePermissions;
-    players?: string[];
-    inherited: boolean;
-  } | null;
+
+  // Permission sets can be null - we query folders first.
+  readPermissions: ReadPermissions | null;
+  editPermissions: EditPermissions | null;
 }
 
 export interface NoteContentDocument {
@@ -46,14 +39,6 @@ export interface NoteFolder {
   creator: string;
 
   // Permission sets cannot be null - if we update a parent, we need to manually update children
-  viewPermissions: {
-    type: ViewPermissions;
-    players?: string[];
-    inherited: boolean;
-  };
-  writePermissions: {
-    type: WritePermissions;
-    players?: string[];
-    inherited: boolean;
-  };
+  readPermissions: ReadPermissions;
+  editPermissions: EditPermissions;
 }

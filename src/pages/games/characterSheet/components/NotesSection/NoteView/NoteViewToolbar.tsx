@@ -20,8 +20,9 @@ import { Editor } from "@tiptap/react";
 import { useConfirm } from "material-ui-confirm";
 
 import { NameItemDialog } from "../FolderView/NameItemDialog";
+import { ShareButton } from "../ShareButton";
 import { TextTypeDropdown } from "./TextTypeDropdown";
-import { NotePermissions } from "./useNotePermission";
+import { NotePermissions, useNotePermission } from "./useNotePermission";
 import { removeNote } from "api-calls/notes/removeNote";
 import { updateNote } from "api-calls/notes/updateNote";
 import {
@@ -43,17 +44,25 @@ export function NoteViewToolbar(props: NoteToolbarContentProps) {
   const campaignId = useCampaignId();
 
   const setOpenNote = useSetOpenItem();
-  const noteName = useDerivedNotesAtom(
+  const note = useDerivedNotesAtom(
     (state) => {
-      return state.notes.notes[openNoteId].title;
+      return state.notes.notes[openNoteId];
     },
     [openNoteId],
   );
+  const noteName = note.title;
+  const { isInGuideFolder } = useNotePermission(openNoteId);
+
   const parentFolderId = useDerivedNotesAtom(
     (state) => {
       return state.notes.notes[openNoteId].parentFolderId;
     },
     [openNoteId],
+  );
+  const parentFolder = useDerivedNotesAtom(
+    (state) =>
+      parentFolderId ? state.folders.folders[parentFolderId] : undefined,
+    [parentFolderId],
   );
 
   const confirm = useConfirm();
@@ -214,6 +223,28 @@ export function NoteViewToolbar(props: NoteToolbarContentProps) {
           itemLabel="Note"
           name={noteName}
         />
+        {parentFolder && parentFolderId && (
+          <ShareButton
+            item={{
+              type: "note",
+              id: openNoteId,
+              ownerId: note.creator,
+            }}
+            currentPermissions={{
+              editPermissions:
+                note.editPermissions ?? parentFolder.editPermissions,
+              readPermissions:
+                note.readPermissions ?? parentFolder.readPermissions,
+            }}
+            parentFolder={{
+              id: parentFolderId,
+              name: parentFolder.name,
+              editPermissions: parentFolder.editPermissions,
+              readPermissions: parentFolder.readPermissions,
+            }}
+            isInGMFolder={isInGuideFolder}
+          />
+        )}
         {permissions.canDelete && (
           <Tooltip
             title={t("note.editor-toolbar.delete-note", "Delete Note")}

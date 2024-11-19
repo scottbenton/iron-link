@@ -124,7 +124,7 @@ export function Editor(props: EditorProps) {
             ".collaboration-cursor__label": {
               borderRadius: `${theme.shape.borderRadius}px`,
               borderBottomLeftRadius: 0,
-              color: theme.palette.text.secondary,
+              color: "#000000aa",
               ...theme.typography.caption,
               left: "-1px",
               lineHeight: "normal",

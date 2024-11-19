@@ -42,8 +42,8 @@ export function FolderDeleteButton(props: FolderDeleteButtonProps) {
         });
         removeNoteFolderTransaction({
           campaignId,
-          folderIds: descendants.folderIds,
-          noteIds: descendants.noteIds,
+          folderIds: Object.keys(descendants.folders),
+          noteIds: Object.keys(descendants.notes),
         });
       })
       .catch(() => {});

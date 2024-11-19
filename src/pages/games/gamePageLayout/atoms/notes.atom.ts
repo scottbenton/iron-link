@@ -6,11 +6,11 @@ import { useCampaignId } from "../hooks/useCampaignId";
 import { useDerivedCampaignState } from "../hooks/useDerivedCampaignState";
 import { useCampaignPermissions } from "../hooks/usePermissions";
 import {
+  EditPermissions,
   NoteContentDocument,
   NoteDocument,
   NoteFolder,
-  ViewPermissions,
-  WritePermissions,
+  ReadPermissions,
 } from "api-calls/notes/_notes.type";
 import { listenToNoteContent } from "api-calls/notes/listenToNoteContent";
 import { listenToNoteFolders } from "api-calls/notes/listenToNoteFolders";
@@ -119,14 +119,8 @@ export function useSyncNotes() {
                   parentFolderId: null,
                   creator: "",
                   order: 0,
-                  viewPermissions: {
-                    type: ViewPermissions.OnlyGuides,
-                    inherited: false,
-                  },
-                  writePermissions: {
-                    type: WritePermissions.OnlyGuides,
-                    inherited: false,
-                  },
+                  readPermissions: ReadPermissions.OnlyGuides,
+                  editPermissions: EditPermissions.OnlyGuides,
                 },
               },
               error: undefined,

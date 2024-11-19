@@ -3,7 +3,7 @@ import { Breakpoint, Container, Paper, SxProps, Theme } from "@mui/material";
 
 export interface PageContentProps extends PropsWithChildren {
   isPaper?: boolean;
-  viewHeight?: boolean;
+  viewHeight?: "min-full" | "max-full";
   hiddenHeader?: boolean;
   maxWidth?: false | Breakpoint;
   sx?: SxProps<Theme>;
@@ -35,6 +35,7 @@ export function PageContent(props: PageContentProps) {
                 display: "flex",
                 flexDirection: "column",
                 minHeight: "100vh",
+                maxHeight: viewHeight === "max-full" ? "100vh" : undefined,
               },
               mt: hiddenHeader ? -4 : 0,
               borderRadius: hiddenHeader ? 0 : undefined,

@@ -13,9 +13,21 @@ export function NavRail(props: NavRailProps) {
   const { routes } = props;
 
   return (
-    <Box flexShrink={0}>
+    <>
+      <Box
+        sx={{
+          width: 80,
+          flexShrink: 0,
+        }}
+      />
       <Box
         sx={(theme) => ({
+          position: "fixed",
+
+          top: 0,
+          left: 0,
+          bottom: 0,
+
           bgcolor: "grey.900",
           color: "common.white",
           width: 80,
@@ -47,6 +59,6 @@ export function NavRail(props: NavRailProps) {
         </Stack>
         <AppSettingsMenu />
       </Box>
-    </Box>
+    </>
   );
 }

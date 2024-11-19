@@ -21,8 +21,8 @@ export const addNote = createApiFunction<
       creator: uid,
       title,
       parentFolderId,
-      viewPermissions: null,
-      writePermissions: null,
+      readPermissions: null,
+      editPermissions: null,
     })
       .then((doc) => {
         resolve(doc.id);
