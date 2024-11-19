@@ -52,7 +52,7 @@ export function FolderViewToolbar(props: FolderViewToolbarProps) {
     renamingCurrent?: boolean;
   }>({ open: false, type: "folder" });
 
-  const { canDelete, isInGuideFolder } = useFolderPermission(folderId);
+  const { canEdit, canDelete, isInGuideFolder } = useFolderPermission(folderId);
 
   // Something's gone wrong, lets stop before we break things
   if (!folder || folderId === FAKE_ROOT_NOTE_FOLDER_KEY) return null;
@@ -94,93 +94,100 @@ export function FolderViewToolbar(props: FolderViewToolbarProps) {
 
   return (
     <NoteToolbar>
-      {!isImmutableFolder && (
-        <Tooltip title={t("notes.toolbar.rename-folder", "Rename Folder")}>
-          <IconButton
-            onClick={() =>
-              setNameItemDialogSettings({
-                open: true,
-                type: "folder",
-                renamingCurrent: true,
-              })
-            }
-          >
-            <RenameIcon />
-          </IconButton>
-        </Tooltip>
-      )}
-      {!isImmutableFolder && parentFolder && parentFolderId && (
-        <ShareButton
-          item={{ type: "folder", id: folderId, ownerId: folder.creator }}
-          currentPermissions={{
-            writePermissions: folder.editPermissions,
-            viewPermissions: folder.readPermissions,
-          }}
-          parentFolder={{
-            id: parentFolderId,
-            name: parentFolder.name,
-            writePermissions: parentFolder.editPermissions,
-            viewPermissions: parentFolder.readPermissions,
-          }}
-          isInGMFolder={isInGuideFolder}
-        />
-      )}
-      {!isImmutableFolder && canDelete && folder.parentFolderId && (
-        <FolderDeleteButton
-          parentFolderId={folder.parentFolderId}
-          folderId={folderId}
-          name={folder.name}
-        />
-      )}
+      {canEdit && (
+        <>
+          {!isImmutableFolder && (
+            <Tooltip title={t("notes.toolbar.rename-folder", "Rename Folder")}>
+              <IconButton
+                onClick={() =>
+                  setNameItemDialogSettings({
+                    open: true,
+                    type: "folder",
+                    renamingCurrent: true,
+                  })
+                }
+              >
+                <RenameIcon />
+              </IconButton>
+            </Tooltip>
+          )}
+          {!isImmutableFolder && parentFolder && parentFolderId && (
+            <ShareButton
+              item={{ type: "folder", id: folderId, ownerId: folder.creator }}
+              currentPermissions={{
+                writePermissions: folder.editPermissions,
+                viewPermissions: folder.readPermissions,
+              }}
+              parentFolder={{
+                id: parentFolderId,
+                name: parentFolder.name,
+                writePermissions: parentFolder.editPermissions,
+                viewPermissions: parentFolder.readPermissions,
+              }}
+              isInGMFolder={isInGuideFolder}
+            />
+          )}
+          {!isImmutableFolder && canDelete && folder.parentFolderId && (
+            <FolderDeleteButton
+              parentFolderId={folder.parentFolderId}
+              folderId={folderId}
+              name={folder.name}
+            />
+          )}
 
-      <Box flexGrow={1} display="flex" justifyContent="flex-end" gap={1}>
-        <Tooltip title={t("notes.toolbar.create-folder", "Create Folder")}>
-          <IconButton
-            onClick={() =>
+          <Box flexGrow={1} display="flex" justifyContent="flex-end" gap={1}>
+            <Tooltip title={t("notes.toolbar.create-folder", "Create Folder")}>
+              <IconButton
+                onClick={() =>
+                  setNameItemDialogSettings({
+                    open: true,
+                    type: "folder",
+                  })
+                }
+              >
+                <FolderIcon />
+              </IconButton>
+            </Tooltip>
+            <Button
+              sx={{ justifySelf: "end" }}
+              variant="contained"
+              endIcon={<DocumentIcon />}
+              onClick={() =>
+                setNameItemDialogSettings({
+                  open: true,
+                  type: "note",
+                })
+              }
+            >
+              {t("notes.toolbar.create-note", "Create Note")}
+            </Button>
+          </Box>
+          <NameItemDialog
+            open={nameItemDialogSettings.open}
+            itemLabel={
+              nameItemDialogSettings.type === "folder"
+                ? t("notes.folder", "Folder")
+                : t("notes.note", "Note")
+            }
+            name={nameItemDialogSettings.renamingCurrent ? folder.name : ""}
+            onSave={(name) => {
+              if (nameItemDialogSettings.renamingCurrent) {
+                renameCurrentFolder(name);
+              } else if (nameItemDialogSettings.type === "folder") {
+                createFolder(name);
+              } else {
+                createNote(name);
+              }
+            }}
+            onClose={() =>
               setNameItemDialogSettings({
-                open: true,
-                type: "folder",
+                ...nameItemDialogSettings,
+                open: false,
               })
             }
-          >
-            <FolderIcon />
-          </IconButton>
-        </Tooltip>
-        <Button
-          sx={{ justifySelf: "end" }}
-          variant="contained"
-          endIcon={<DocumentIcon />}
-          onClick={() =>
-            setNameItemDialogSettings({
-              open: true,
-              type: "note",
-            })
-          }
-        >
-          {t("notes.toolbar.create-note", "Create Note")}
-        </Button>
-      </Box>
-      <NameItemDialog
-        open={nameItemDialogSettings.open}
-        itemLabel={
-          nameItemDialogSettings.type === "folder"
-            ? t("notes.folder", "Folder")
-            : t("notes.note", "Note")
-        }
-        name={nameItemDialogSettings.renamingCurrent ? folder.name : ""}
-        onSave={(name) => {
-          if (nameItemDialogSettings.renamingCurrent) {
-            renameCurrentFolder(name);
-          } else if (nameItemDialogSettings.type === "folder") {
-            createFolder(name);
-          } else {
-            createNote(name);
-          }
-        }}
-        onClose={() =>
-          setNameItemDialogSettings({ ...nameItemDialogSettings, open: false })
-        }
-      />
+          />
+        </>
+      )}
     </NoteToolbar>
   );
 }
