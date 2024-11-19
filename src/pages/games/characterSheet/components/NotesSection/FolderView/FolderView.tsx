@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import DocIcon from "@mui/icons-material/Description";
 import FolderIcon from "@mui/icons-material/Folder";
 import FolderSharedIcon from "@mui/icons-material/FolderShared";
-import { Card, CardActionArea, Typography } from "@mui/material";
+import { Card, CardActionArea, Divider, Typography } from "@mui/material";
 
 import { OpenItemWrapper } from "../Layout";
 import { getItemName } from "./getFolderName";
@@ -78,6 +78,15 @@ export function FolderView(props: FolderViewProps) {
 
   return (
     <OpenItemWrapper sx={{ mx: -1 }}>
+      {folderId === undefined &&
+        (subFolders.length > 0 || notes.length > 0) && (
+          <>
+            <Divider sx={{ my: 1 }} />
+            <Typography variant="overline" px={1}>
+              {t("notes.shared-with-me", "Shared with you")}
+            </Typography>
+          </>
+        )}
       {subFolders.length > 0 && (
         <GridLayout
           sx={{ mb: 1 }}

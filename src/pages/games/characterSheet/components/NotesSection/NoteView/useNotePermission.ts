@@ -46,7 +46,7 @@ export function useNotePermission(noteId: string): NotePermissions {
         return {
           writePermissions: note.editPermissions,
           noteAuthor,
-          isNoteInGuideFolder: false,
+          isNoteInGuideFolder,
         };
       }
 
