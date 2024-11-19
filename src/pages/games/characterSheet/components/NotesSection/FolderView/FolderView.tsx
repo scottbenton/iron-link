@@ -7,25 +7,39 @@ import { Card, CardActionArea, Typography } from "@mui/material";
 import { OpenItemWrapper } from "../Layout";
 import { getItemName } from "./getFolderName";
 import { FAKE_ROOT_NOTE_FOLDER_KEY } from "./rootNodeName";
-import { ViewPermissions } from "api-calls/notes/_notes.type";
+import { ReadPermissions } from "api-calls/notes/_notes.type";
 import { useUID } from "atoms/auth.atom";
 import { GridLayout } from "components/Layout";
 import {
   useDerivedNotesAtom,
   useSetOpenItem,
 } from "pages/games/gamePageLayout/atoms/notes.atom";
+import { useCampaignPermissions } from "pages/games/gamePageLayout/hooks/usePermissions";
 
 export interface FolderViewProps {
-  folderId: string;
+  folderId: string | undefined;
 }
 export function FolderView(props: FolderViewProps) {
   const { folderId } = props;
 
   const { t } = useTranslation();
   const uid = useUID();
+  const campaignType = useCampaignPermissions().campaignType;
 
   const subFolders = useDerivedNotesAtom(
     (notes) => {
+      if (!folderId) {
+        return Object.entries(notes.folders.folders).filter(([, folder]) => {
+          const parentId = folder.parentFolderId;
+          if (parentId === null) {
+            return false;
+          }
+          if (!notes.folders.folders[parentId]) {
+            return true;
+          }
+          return false;
+        });
+      }
       if (folderId === FAKE_ROOT_NOTE_FOLDER_KEY) {
         return Object.entries(notes.folders.folders)
           .filter(
@@ -43,6 +57,16 @@ export function FolderView(props: FolderViewProps) {
 
   const notes = useDerivedNotesAtom(
     (notes) => {
+      if (!folderId) {
+        return Object.entries(notes.notes.notes).filter(([, note]) => {
+          const parentFolderId = note.parentFolderId;
+          const parentFolder = notes.folders.folders[parentFolderId];
+          if (!parentFolder) {
+            return true;
+          }
+          return false;
+        });
+      }
       return Object.entries(notes.notes.notes).filter(
         ([, note]) => note.parentFolderId === folderId,
       );
@@ -79,8 +103,8 @@ export function FolderView(props: FolderViewProps) {
                   setOpenItem({ type: "folder", folderId: subFolderId })
                 }
               >
-                {subFolder.viewPermissions.type !==
-                ViewPermissions.OnlyAuthor ? (
+                {subFolder.readPermissions.type !==
+                ReadPermissions.OnlyAuthor ? (
                   <FolderSharedIcon color="action" />
                 ) : (
                   <FolderIcon color="action" />
@@ -91,6 +115,7 @@ export function FolderView(props: FolderViewProps) {
                     id: subFolderId,
                     uid,
                     t,
+                    campaignType,
                   })}
                 </Typography>
               </CardActionArea>

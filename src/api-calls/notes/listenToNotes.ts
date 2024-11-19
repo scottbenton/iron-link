@@ -11,7 +11,7 @@ import {
 } from "firebase/firestore";
 
 import { getNoteCollection } from "./_getRef";
-import { NoteDocument, ViewPermissions } from "./_notes.type";
+import { NoteDocument, ReadPermissions } from "./_notes.type";
 import { CampaignPermissionType } from "pages/games/gamePageLayout/hooks/usePermissions";
 
 export function listenToNotes(
@@ -23,30 +23,36 @@ export function listenToNotes(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onError: (error: any) => void,
 ): Unsubscribe {
-  const parentNoteFolderWhere =
+  const parentNoteFolderQuery =
     accessibleParentNoteFolderIds.length > 0
-      ? [where("parentFolderId", "in", accessibleParentNoteFolderIds)]
+      ? [
+          and(
+            where("readPermissions", "==", null),
+            where("parentFolderId", "in", accessibleParentNoteFolderIds),
+          ),
+        ]
       : [];
 
   let noteQuery: Query<NoteDocument, DocumentData> = query(
     getNoteCollection(campaignId),
     or(
-      where("viewPermissions.type", "==", ViewPermissions.Public),
-      and(where("viewPermissions", "==", null), ...parentNoteFolderWhere),
+      where("readPermissions.type", "==", ReadPermissions.Public),
+      ...parentNoteFolderQuery,
     ),
   );
+
   const basePlayerPermissions = [
-    where("viewPermissions.type", "==", ViewPermissions.Public),
-    where("viewPermissions.type", "==", ViewPermissions.AllPlayers),
+    where("readPermissions.type", "==", ReadPermissions.Public),
+    where("readPermissions.type", "==", ReadPermissions.AllPlayers),
     and(
-      where("viewPermissions.type", "==", ViewPermissions.OnlyAuthor),
+      where("readPermissions.type", "==", ReadPermissions.OnlyAuthor),
       where("creator", "==", uid),
     ),
     and(
-      where("viewPermissions", "==", null),
-
-      ...parentNoteFolderWhere,
+      where("readPermissions.type", "==", ReadPermissions.GuidesAndAuthor),
+      where("creator", "==", uid),
     ),
+    ...parentNoteFolderQuery,
   ];
   if (permissions === CampaignPermissionType.Player) {
     noteQuery = query(
@@ -54,12 +60,8 @@ export function listenToNotes(
       or(
         ...basePlayerPermissions,
         and(
-          where(
-            "viewPermissions.type",
-            "==",
-            ViewPermissions.GuidesAndPlayerSubset,
-          ),
-          where("viewPermissions.players", "array-contains", uid),
+          where("readPermissions.type", "==", ReadPermissions.GuidesAndAuthor),
+          where("readPermissions.players", "array-contains", uid),
         ),
       ),
     );
@@ -68,12 +70,8 @@ export function listenToNotes(
       getNoteCollection(campaignId),
       or(
         ...basePlayerPermissions,
-        where("viewPermissions.type", "==", ViewPermissions.OnlyGuides),
-        where(
-          "viewPermissions.type",
-          "==",
-          ViewPermissions.GuidesAndPlayerSubset,
-        ),
+        where("readPermissions.type", "==", ReadPermissions.OnlyGuides),
+        where("readPermissions.type", "==", ReadPermissions.GuidesAndAuthor),
       ),
     );
   }

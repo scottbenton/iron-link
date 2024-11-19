@@ -7,6 +7,7 @@ import { Box, Button, IconButton, Tooltip } from "@mui/material";
 
 import { NoteToolbar } from "../Layout";
 import { useFolderPermission } from "../NoteView/useFolderPermissions";
+import { ShareButton } from "../ShareButton";
 import { FolderDeleteButton } from "./FolderDeleteButton";
 import { NameItemDialog } from "./NameItemDialog";
 import { FAKE_ROOT_NOTE_FOLDER_KEY } from "./rootNodeName";
@@ -34,6 +35,14 @@ export function FolderViewToolbar(props: FolderViewToolbarProps) {
     },
     [folderId],
   );
+  const parentFolderId = folder?.parentFolderId;
+
+  const parentFolder = useDerivedNotesAtom(
+    (notes) => {
+      return parentFolderId ? notes.folders.folders[parentFolderId] : undefined;
+    },
+    [parentFolderId],
+  );
 
   const isImmutableFolder = !folder?.parentFolderId;
 
@@ -43,7 +52,7 @@ export function FolderViewToolbar(props: FolderViewToolbarProps) {
     renamingCurrent?: boolean;
   }>({ open: false, type: "folder" });
 
-  const { canDelete } = useFolderPermission(folderId);
+  const { canDelete, isInGuideFolder } = useFolderPermission(folderId);
 
   // Something's gone wrong, lets stop before we break things
   if (!folder || folderId === FAKE_ROOT_NOTE_FOLDER_KEY) return null;
@@ -55,9 +64,9 @@ export function FolderViewToolbar(props: FolderViewToolbarProps) {
       parentFolderId: folderId,
       name,
       order: 1,
-      viewPermissions: { ...folder.viewPermissions, inherited: true },
-      writePermissions: {
-        ...folder.writePermissions,
+      readPermissions: { ...folder.readPermissions, inherited: true },
+      editPermissions: {
+        ...folder.editPermissions,
         inherited: true,
       },
     }).catch(() => {});
@@ -99,6 +108,22 @@ export function FolderViewToolbar(props: FolderViewToolbarProps) {
             <RenameIcon />
           </IconButton>
         </Tooltip>
+      )}
+      {!isImmutableFolder && parentFolder && parentFolderId && (
+        <ShareButton
+          item={{ type: "folder", id: folderId, ownerId: folder.creator }}
+          currentPermissions={{
+            writePermissions: folder.editPermissions,
+            viewPermissions: folder.readPermissions,
+          }}
+          parentFolder={{
+            id: parentFolderId,
+            name: parentFolder.name,
+            writePermissions: parentFolder.editPermissions,
+            viewPermissions: parentFolder.readPermissions,
+          }}
+          isInGMFolder={isInGuideFolder}
+        />
       )}
       {!isImmutableFolder && canDelete && folder.parentFolderId && (
         <FolderDeleteButton

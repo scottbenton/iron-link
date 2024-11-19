@@ -47,11 +47,13 @@ export function NoteView(props: NoteViewProps) {
         documentPassword={campaignId}
         Toolbar={({ editor }) => (
           <NoteToolbar>
-            <NoteViewToolbar
-              editor={editor}
-              openNoteId={openNoteId}
-              permissions={notePermissions}
-            />
+            {notePermissions.canEdit ? (
+              <NoteViewToolbar
+                editor={editor}
+                openNoteId={openNoteId}
+                permissions={notePermissions}
+              />
+            ) : undefined}
           </NoteToolbar>
         )}
         initialValue={noteContent}

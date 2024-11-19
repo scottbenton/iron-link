@@ -4,21 +4,21 @@ import { getNoteDocument } from "./_getRef";
 import { NoteDocument } from "./_notes.type";
 import { createApiFunction } from "api-calls/createApiFunction";
 
-export const updateNoteShared = createApiFunction<
+export const updateNotePermissions = createApiFunction<
   {
     campaignId: string;
     noteId: string;
-    viewPermissions: NoteDocument["viewPermissions"];
-    writePermissions: NoteDocument["writePermissions"];
+    readPermissions: NoteDocument["readPermissions"];
+    editPermissions: NoteDocument["editPermissions"];
   },
   void
 >((params) => {
-  const { campaignId, noteId, viewPermissions, writePermissions } = params;
+  const { campaignId, noteId, readPermissions, editPermissions } = params;
 
   return new Promise((resolve, reject) => {
     updateDoc(getNoteDocument(campaignId, noteId), {
-      viewPermissions,
-      writePermissions,
+      readPermissions,
+      editPermissions,
     })
       .then(() => resolve())
       .catch(reject);

@@ -11,8 +11,8 @@ export const addFolder = createApiFunction<
     parentFolderId: string | null;
     order: number;
     name?: string;
-    viewPermissions: NoteFolder["viewPermissions"];
-    writePermissions: NoteFolder["writePermissions"];
+    readPermissions: NoteFolder["readPermissions"];
+    editPermissions: NoteFolder["editPermissions"];
     folderId?: string;
   },
   string
@@ -23,8 +23,8 @@ export const addFolder = createApiFunction<
     order,
     parentFolderId,
     name,
-    viewPermissions,
-    writePermissions,
+    readPermissions,
+    editPermissions,
     folderId,
   } = params;
 
@@ -34,8 +34,8 @@ export const addFolder = createApiFunction<
       order,
       creator: uid,
       parentFolderId,
-      viewPermissions: viewPermissions,
-      writePermissions: writePermissions,
+      readPermissions,
+      editPermissions,
     };
 
     if (folderId) {

@@ -33,8 +33,8 @@ export function Layout() {
       <Box
         display={"flex"}
         flexDirection={{ xs: "column", sm: "row" }}
-        maxHeight={{ xs: undefined, sm: "100vh" }}
         flexGrow={1}
+        position="relative"
       >
         <LiveRegion />
         <SkipToContentButton />
@@ -46,7 +46,6 @@ export function Layout() {
             display: "flex",
             flexDirection: "column",
             flexGrow: 1,
-            overflowY: { xs: "unset", sm: "auto" },
           }}
           component={"main"}
           id={"main-content"}

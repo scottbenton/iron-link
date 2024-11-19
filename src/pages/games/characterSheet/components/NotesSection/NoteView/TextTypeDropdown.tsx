@@ -1,8 +1,8 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { MenuItem, SxProps, TextField } from "@mui/material";
 import { Editor } from "@tiptap/react";
 import { TFunction } from "i18next";
-import { useTranslation } from "react-i18next";
 
 export interface TextTypeDropdownProps {
   editor: Editor;

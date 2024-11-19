@@ -11,7 +11,7 @@ import {
 } from "firebase/firestore";
 
 import { getNoteFolderCollection } from "./_getRef";
-import { NoteFolder, ViewPermissions } from "./_notes.type";
+import { NoteFolder, ReadPermissions } from "./_notes.type";
 import { CampaignPermissionType } from "pages/games/gamePageLayout/hooks/usePermissions";
 
 export function listenToNoteFolders(
@@ -24,42 +24,32 @@ export function listenToNoteFolders(
 ): Unsubscribe {
   let noteFolderQuery: Query<NoteFolder, DocumentData> = query(
     getNoteFolderCollection(campaignId),
-    where("viewPermissions.type", "==", ViewPermissions.Public),
+    where("readPermissions.type", "==", ReadPermissions.Public),
   );
   const basePlayerPermissions = [
-    where("viewPermissions.type", "==", ViewPermissions.Public),
-    where("viewPermissions.type", "==", ViewPermissions.AllPlayers),
+    where("readPermissions.type", "==", ReadPermissions.Public),
+    where("readPermissions.type", "==", ReadPermissions.AllPlayers),
     and(
-      where("viewPermissions.type", "==", ViewPermissions.OnlyAuthor),
+      where("readPermissions.type", "==", ReadPermissions.OnlyAuthor),
+      where("creator", "==", uid),
+    ),
+    and(
+      where("readPermissions.type", "==", ReadPermissions.GuidesAndAuthor),
       where("creator", "==", uid),
     ),
   ];
   if (permissions === CampaignPermissionType.Player) {
     noteFolderQuery = query(
       getNoteFolderCollection(campaignId),
-      or(
-        ...basePlayerPermissions,
-        and(
-          where(
-            "viewPermissions.type",
-            "==",
-            ViewPermissions.GuidesAndPlayerSubset,
-          ),
-          where("viewPermissions.players", "array-contains", uid),
-        ),
-      ),
+      or(...basePlayerPermissions),
     );
   } else if (permissions === CampaignPermissionType.Guide) {
     noteFolderQuery = query(
       getNoteFolderCollection(campaignId),
       or(
         ...basePlayerPermissions,
-        where("viewPermissions.type", "==", ViewPermissions.OnlyGuides),
-        where(
-          "viewPermissions.type",
-          "==",
-          ViewPermissions.GuidesAndPlayerSubset,
-        ),
+        where("readPermissions.type", "==", ReadPermissions.OnlyGuides),
+        where("readPermissions.type", "==", ReadPermissions.GuidesAndAuthor),
       ),
     );
   }

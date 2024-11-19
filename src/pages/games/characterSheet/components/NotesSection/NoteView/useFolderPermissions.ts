@@ -1,5 +1,5 @@
 import { GUIDE_NOTE_FOLDER_NAME } from "api-calls/notes/_getRef";
-import { NoteFolder, WritePermissions } from "api-calls/notes/_notes.type";
+import { EditPermissions, NoteFolder } from "api-calls/notes/_notes.type";
 import { useUID } from "atoms/auth.atom";
 import { useDerivedNotesAtom } from "pages/games/gamePageLayout/atoms/notes.atom";
 import {
@@ -8,44 +8,51 @@ import {
 } from "pages/games/gamePageLayout/hooks/usePermissions";
 
 export interface FolderPermissions {
+  isInGuideFolder: boolean;
+  canChangePermissions: boolean;
   canEdit: boolean;
   canDelete: boolean;
 }
 
 export function useFolderPermission(folderId: string): FolderPermissions {
-  const { writePermissions, folderCreator, isFolderInGuideFolder } =
-    useDerivedNotesAtom((state) => {
-      const folder = state.folders.folders[folderId];
-      if (!folder) {
-        return {};
-      }
-      const folderCreator = folder.creator;
-
-      let isFolderInGuideFolder = false;
-      let folderIdToCheck: string | null = folderId;
-      while (folderIdToCheck) {
-        if (folderIdToCheck === GUIDE_NOTE_FOLDER_NAME) {
-          isFolderInGuideFolder = true;
-          break;
+  const { writePermissions, folderCreator, isInGuideFolder } =
+    useDerivedNotesAtom(
+      (state) => {
+        const folder = state.folders.folders[folderId];
+        if (!folder) {
+          return {
+            isInGuideFolder: false,
+          };
         }
-        const currentFolder: NoteFolder =
-          state.folders.folders[folderIdToCheck];
-        folderIdToCheck = currentFolder?.parentFolderId;
-      }
+        const folderCreator = folder.creator;
 
-      if (folder.writePermissions) {
+        let isInGuideFolder = false;
+        let folderIdToCheck: string | null = folderId;
+        while (folderIdToCheck) {
+          if (folderIdToCheck === GUIDE_NOTE_FOLDER_NAME) {
+            isInGuideFolder = true;
+            break;
+          }
+          const currentFolder: NoteFolder =
+            state.folders.folders[folderIdToCheck];
+          folderIdToCheck = currentFolder?.parentFolderId;
+        }
+
+        if (folder.editPermissions) {
+          return {
+            writePermissions: folder.editPermissions,
+            folderCreator,
+            isInGuideFolder: isInGuideFolder ?? false,
+          };
+        }
+
         return {
-          writePermissions: folder.writePermissions,
           folderCreator,
-          isFolderInGuideFolder,
+          isInGuideFolder: isInGuideFolder ?? false,
         };
-      }
-
-      return {
-        folderCreator,
-        isFolderInGuideFolder,
-      };
-    });
+      },
+      [folderId],
+    );
 
   const uid = useUID();
   const { campaignPermission } = useCampaignPermissions();
@@ -55,48 +62,60 @@ export function useFolderPermission(folderId: string): FolderPermissions {
     campaignPermission === CampaignPermissionType.Viewer
   ) {
     return {
+      canChangePermissions: false,
       canEdit: false,
       canDelete: false,
+      isInGuideFolder: isInGuideFolder,
     };
   }
 
   const isUserGuide = campaignPermission === CampaignPermissionType.Guide;
   const isUserFolderCreator = folderCreator === uid;
-  const canDelete = isFolderInGuideFolder ? isUserGuide : isUserFolderCreator;
+  const canChangePermissions = isInGuideFolder
+    ? isUserGuide
+    : isUserFolderCreator;
+  const canDelete = isInGuideFolder ? isUserGuide : isUserFolderCreator;
 
-  if (writePermissions.type === WritePermissions.AllPlayers) {
+  if (writePermissions.type === EditPermissions.AllPlayers) {
     return {
+      canChangePermissions,
       canEdit: true,
       canDelete,
+      isInGuideFolder,
     };
   }
 
-  if (writePermissions.type === WritePermissions.OnlyAuthor) {
+  if (writePermissions.type === EditPermissions.OnlyAuthor) {
     return {
+      canChangePermissions,
       canEdit: isUserFolderCreator,
       canDelete,
+      isInGuideFolder,
     };
   }
 
-  if (writePermissions.type === WritePermissions.GuidesAndPlayerSubset) {
-    const isGuideOrInPlayerSubset =
-      isUserGuide || writePermissions.players?.includes(uid) || false;
-
+  if (writePermissions.type === EditPermissions.GuidesAndAuthor) {
     return {
-      canEdit: isGuideOrInPlayerSubset,
+      canChangePermissions,
+      canEdit: isUserFolderCreator || isUserGuide,
       canDelete,
+      isInGuideFolder,
     };
   }
 
-  if (writePermissions.type === WritePermissions.OnlyGuides) {
+  if (writePermissions.type === EditPermissions.OnlyGuides) {
     return {
+      canChangePermissions,
       canEdit: isUserGuide,
       canDelete,
+      isInGuideFolder,
     };
   }
 
   return {
+    canChangePermissions: false,
     canEdit: false,
     canDelete: false,
+    isInGuideFolder,
   };
 }

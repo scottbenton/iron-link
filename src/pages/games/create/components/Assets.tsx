@@ -89,7 +89,7 @@ export function Assets() {
         handleAssetSelection={(asset) => {
           setCharacter((prev) => {
             const newCharacter = { ...prev };
-            if (asset.shared) {
+            if (!asset.shared) {
               const existingAssets = newCharacter.characterAssets;
               newCharacter.characterAssets = [
                 ...newCharacter.characterAssets,
@@ -167,6 +167,7 @@ function AssetGridCard(props: AssetGridCardProps) {
               }
             })
           }
+          color="inherit"
         >
           <RemoveAssetIcon />
         </IconButton>

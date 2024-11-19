@@ -13,6 +13,7 @@ export const rtcExtensions = (params: {
   provider?: WebrtcProvider;
   user?: User;
 }) => {
+  const userColor = hslToHex(getHueFromString(params.user?.uid ?? ""), 70, 80);
   const { doc, provider, user } = params;
   const extensions: Extensions = [
     StarterKit.configure({
@@ -23,7 +24,7 @@ export const rtcExtensions = (params: {
       provider: provider,
       user: {
         name: user?.displayName ?? "Unknown User",
-        color: user ? hslToHex(getHueFromString(user.uid), 70, 80) : "#d0d0d0",
+        color: user ? userColor : "#d0d0d0",
       },
     }),
   ];

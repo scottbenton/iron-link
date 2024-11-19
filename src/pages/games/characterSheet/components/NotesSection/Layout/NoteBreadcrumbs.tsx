@@ -75,10 +75,14 @@ export function NoteBreadcrumbs() {
         const parentFolder = parentFolderId
           ? store.folders.folders[parentFolderId]
           : undefined;
-        item =
-          parentFolder && parentFolderId
-            ? { type: "folder", folderId: parentFolderId }
-            : undefined;
+
+        if (parentFolderId && !parentFolder) {
+          item = { type: "folder", folderId: uid };
+        } else if (parentFolderId && parentFolder) {
+          item = { type: "folder", folderId: parentFolderId };
+        } else {
+          item = undefined;
+        }
       }
 
       if (hasAccessToMoreThanOneTopLevelFolder) {
@@ -106,6 +110,7 @@ export function NoteBreadcrumbs() {
                   id: item.id,
                   uid,
                   t,
+                  campaignType,
                 })}
               </Typography>
             ) : (
@@ -131,6 +136,7 @@ export function NoteBreadcrumbs() {
                   id: item.id,
                   uid,
                   t,
+                  campaignType,
                 })}
               </Link>
             ),
