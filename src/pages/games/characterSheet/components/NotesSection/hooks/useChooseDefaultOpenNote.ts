@@ -42,14 +42,8 @@ export function useChooseDefaultOpenNote() {
           parentFolderId: null,
           order: 0,
           name: uid,
-          readPermissions: {
-            type: ReadPermissions.OnlyAuthor,
-            inherited: false,
-          },
-          editPermissions: {
-            type: EditPermissions.OnlyAuthor,
-            inherited: false,
-          },
+          readPermissions: ReadPermissions.OnlyAuthor,
+          editPermissions: EditPermissions.OnlyAuthor,
           folderId: uid,
         });
       }
@@ -64,14 +58,8 @@ export function useChooseDefaultOpenNote() {
           parentFolderId: null,
           order: 0,
           name: GUIDE_NOTE_FOLDER_NAME,
-          readPermissions: {
-            type: ReadPermissions.OnlyGuides,
-            inherited: false,
-          },
-          editPermissions: {
-            type: EditPermissions.OnlyGuides,
-            inherited: false,
-          },
+          readPermissions: ReadPermissions.OnlyGuides,
+          editPermissions: EditPermissions.OnlyGuides,
           folderId: GUIDE_NOTE_FOLDER_NAME,
         });
       }

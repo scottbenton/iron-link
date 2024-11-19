@@ -64,11 +64,8 @@ export function FolderViewToolbar(props: FolderViewToolbarProps) {
       parentFolderId: folderId,
       name,
       order: 1,
-      readPermissions: { ...folder.readPermissions, inherited: true },
-      editPermissions: {
-        ...folder.editPermissions,
-        inherited: true,
-      },
+      readPermissions: folder.readPermissions,
+      editPermissions: folder.editPermissions,
     }).catch(() => {});
   };
 
@@ -115,14 +112,14 @@ export function FolderViewToolbar(props: FolderViewToolbarProps) {
             <ShareButton
               item={{ type: "folder", id: folderId, ownerId: folder.creator }}
               currentPermissions={{
-                writePermissions: folder.editPermissions,
-                viewPermissions: folder.readPermissions,
+                editPermissions: folder.editPermissions,
+                readPermissions: folder.readPermissions,
               }}
               parentFolder={{
                 id: parentFolderId,
                 name: parentFolder.name,
-                writePermissions: parentFolder.editPermissions,
-                viewPermissions: parentFolder.readPermissions,
+                editPermissions: parentFolder.editPermissions,
+                readPermissions: parentFolder.readPermissions,
               }}
               isInGMFolder={isInGuideFolder}
             />

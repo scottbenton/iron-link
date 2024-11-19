@@ -36,20 +36,20 @@ export function listenToNotes(
   let noteQuery: Query<NoteDocument, DocumentData> = query(
     getNoteCollection(campaignId),
     or(
-      where("readPermissions.type", "==", ReadPermissions.Public),
+      where("readPermissions", "==", ReadPermissions.Public),
       ...parentNoteFolderQuery,
     ),
   );
 
   const basePlayerPermissions = [
-    where("readPermissions.type", "==", ReadPermissions.Public),
-    where("readPermissions.type", "==", ReadPermissions.AllPlayers),
+    where("readPermissions", "==", ReadPermissions.Public),
+    where("readPermissions", "==", ReadPermissions.AllPlayers),
     and(
-      where("readPermissions.type", "==", ReadPermissions.OnlyAuthor),
+      where("readPermissions", "==", ReadPermissions.OnlyAuthor),
       where("creator", "==", uid),
     ),
     and(
-      where("readPermissions.type", "==", ReadPermissions.GuidesAndAuthor),
+      where("readPermissions", "==", ReadPermissions.GuidesAndAuthor),
       where("creator", "==", uid),
     ),
     ...parentNoteFolderQuery,
@@ -60,7 +60,7 @@ export function listenToNotes(
       or(
         ...basePlayerPermissions,
         and(
-          where("readPermissions.type", "==", ReadPermissions.GuidesAndAuthor),
+          where("readPermissions", "==", ReadPermissions.GuidesAndAuthor),
           where("readPermissions.players", "array-contains", uid),
         ),
       ),
@@ -70,8 +70,8 @@ export function listenToNotes(
       getNoteCollection(campaignId),
       or(
         ...basePlayerPermissions,
-        where("readPermissions.type", "==", ReadPermissions.OnlyGuides),
-        where("readPermissions.type", "==", ReadPermissions.GuidesAndAuthor),
+        where("readPermissions", "==", ReadPermissions.OnlyGuides),
+        where("readPermissions", "==", ReadPermissions.GuidesAndAuthor),
       ),
     );
   }

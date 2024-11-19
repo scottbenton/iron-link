@@ -78,7 +78,7 @@ export function useNotePermission(noteId: string): NotePermissions {
     ? isUserGuide
     : isUserNoteAuthor;
 
-  if (writePermissions.type === EditPermissions.AllPlayers) {
+  if (writePermissions === EditPermissions.AllPlayers) {
     return {
       canEdit: true,
       canDelete: isUserNoteAuthor,
@@ -87,7 +87,7 @@ export function useNotePermission(noteId: string): NotePermissions {
     };
   }
 
-  if (writePermissions.type === EditPermissions.OnlyAuthor) {
+  if (writePermissions === EditPermissions.OnlyAuthor) {
     return {
       canEdit: isUserNoteAuthor,
       canDelete: isUserNoteAuthor,
@@ -96,7 +96,7 @@ export function useNotePermission(noteId: string): NotePermissions {
     };
   }
 
-  if (writePermissions.type === EditPermissions.GuidesAndAuthor) {
+  if (writePermissions === EditPermissions.GuidesAndAuthor) {
     return {
       canEdit: isUserGuide || isUserNoteAuthor,
       canDelete: isUserGuide || isUserNoteAuthor,
@@ -105,7 +105,7 @@ export function useNotePermission(noteId: string): NotePermissions {
     };
   }
 
-  if (writePermissions.type === EditPermissions.OnlyGuides) {
+  if (writePermissions === EditPermissions.OnlyGuides) {
     return {
       canEdit: isUserGuide,
       canDelete: isUserGuide,

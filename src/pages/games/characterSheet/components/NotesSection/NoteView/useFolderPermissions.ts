@@ -76,7 +76,7 @@ export function useFolderPermission(folderId: string): FolderPermissions {
     : isUserFolderCreator;
   const canDelete = isInGuideFolder ? isUserGuide : isUserFolderCreator;
 
-  if (writePermissions.type === EditPermissions.AllPlayers) {
+  if (writePermissions === EditPermissions.AllPlayers) {
     return {
       canChangePermissions,
       canEdit: true,
@@ -85,7 +85,7 @@ export function useFolderPermission(folderId: string): FolderPermissions {
     };
   }
 
-  if (writePermissions.type === EditPermissions.OnlyAuthor) {
+  if (writePermissions === EditPermissions.OnlyAuthor) {
     return {
       canChangePermissions,
       canEdit: isUserFolderCreator,
@@ -94,7 +94,7 @@ export function useFolderPermission(folderId: string): FolderPermissions {
     };
   }
 
-  if (writePermissions.type === EditPermissions.GuidesAndAuthor) {
+  if (writePermissions === EditPermissions.GuidesAndAuthor) {
     return {
       canChangePermissions,
       canEdit: isUserFolderCreator || isUserGuide,
@@ -103,7 +103,7 @@ export function useFolderPermission(folderId: string): FolderPermissions {
     };
   }
 
-  if (writePermissions.type === EditPermissions.OnlyGuides) {
+  if (writePermissions === EditPermissions.OnlyGuides) {
     return {
       canChangePermissions,
       canEdit: isUserGuide,

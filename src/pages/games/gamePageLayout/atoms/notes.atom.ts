@@ -119,14 +119,8 @@ export function useSyncNotes() {
                   parentFolderId: null,
                   creator: "",
                   order: 0,
-                  readPermissions: {
-                    type: ReadPermissions.OnlyGuides,
-                    inherited: false,
-                  },
-                  editPermissions: {
-                    type: EditPermissions.OnlyGuides,
-                    inherited: false,
-                  },
+                  readPermissions: ReadPermissions.OnlyGuides,
+                  editPermissions: EditPermissions.OnlyGuides,
                 },
               },
               error: undefined,

@@ -112,8 +112,7 @@ export function FolderView(props: FolderViewProps) {
                   setOpenItem({ type: "folder", folderId: subFolderId })
                 }
               >
-                {subFolder.readPermissions.type !==
-                ReadPermissions.OnlyAuthor ? (
+                {subFolder.readPermissions !== ReadPermissions.OnlyAuthor ? (
                   <FolderSharedIcon color="action" />
                 ) : (
                   <FolderIcon color="action" />

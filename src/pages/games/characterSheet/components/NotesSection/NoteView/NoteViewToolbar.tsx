@@ -231,16 +231,16 @@ export function NoteViewToolbar(props: NoteToolbarContentProps) {
               ownerId: note.creator,
             }}
             currentPermissions={{
-              writePermissions:
+              editPermissions:
                 note.editPermissions ?? parentFolder.editPermissions,
-              viewPermissions:
+              readPermissions:
                 note.readPermissions ?? parentFolder.readPermissions,
             }}
             parentFolder={{
               id: parentFolderId,
               name: parentFolder.name,
-              writePermissions: parentFolder.editPermissions,
-              viewPermissions: parentFolder.readPermissions,
+              editPermissions: parentFolder.editPermissions,
+              readPermissions: parentFolder.readPermissions,
             }}
             isInGMFolder={isInGuideFolder}
           />

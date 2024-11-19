@@ -1,7 +1,7 @@
 import { addDoc, setDoc } from "firebase/firestore";
 
 import { getNoteFolderCollection, getNoteFolderDocument } from "./_getRef";
-import { NoteFolder } from "./_notes.type";
+import { EditPermissions, NoteFolder, ReadPermissions } from "./_notes.type";
 import { createApiFunction } from "api-calls/createApiFunction";
 
 export const addFolder = createApiFunction<
@@ -11,8 +11,8 @@ export const addFolder = createApiFunction<
     parentFolderId: string | null;
     order: number;
     name?: string;
-    readPermissions: NoteFolder["readPermissions"];
-    editPermissions: NoteFolder["editPermissions"];
+    readPermissions: ReadPermissions;
+    editPermissions: EditPermissions;
     folderId?: string;
   },
   string

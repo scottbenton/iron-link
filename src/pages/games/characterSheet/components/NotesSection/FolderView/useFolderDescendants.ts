@@ -1,24 +1,35 @@
+import { NoteDocument, NoteFolder } from "api-calls/notes/_notes.type";
 import { useDerivedNotesAtom } from "pages/games/gamePageLayout/atoms/notes.atom";
 
 export interface FolderDescendants {
-  folderIds: string[];
-  noteIds: string[];
+  folders: Record<string, NoteFolder>;
+  notes: Record<string, NoteDocument>;
 }
 
-export function useFolderDescendants(folderId: string): FolderDescendants {
+export function useFolderDescendants(
+  folderId: string | undefined,
+): FolderDescendants {
   return useDerivedNotesAtom((state) => {
-    const folderMap: Record<string, boolean> = {};
-    const noteIds: string[] = [];
+    if (folderId === undefined) {
+      return {
+        folders: {},
+        notes: {},
+      };
+    }
+    const checkedFolderMap: Record<string, boolean> = {};
+    const folders: Record<string, NoteFolder> = {};
+    const notes: Record<string, NoteDocument> = {};
 
     const allFolders = state.folders.folders;
 
     function processAncestorsAndReturnResult(testingFolderId: string): boolean {
-      if (testingFolderId in folderMap) {
-        return folderMap[testingFolderId];
+      if (testingFolderId in checkedFolderMap) {
+        return checkedFolderMap[testingFolderId];
       }
 
       if (testingFolderId === folderId) {
-        folderMap[testingFolderId] = true;
+        checkedFolderMap[testingFolderId] = true;
+        folders[testingFolderId] = allFolders[testingFolderId];
         return true;
       }
 
@@ -27,27 +38,32 @@ export function useFolderDescendants(folderId: string): FolderDescendants {
         return false;
       }
       if (folder.parentFolderId) {
-        return processAncestorsAndReturnResult(folder.parentFolderId);
+        const result = processAncestorsAndReturnResult(folder.parentFolderId);
+        checkedFolderMap[testingFolderId] = result;
+        if (result) {
+          folders[testingFolderId] = folder;
+        }
+        return result;
       }
       return false;
     }
 
     Object.keys(allFolders).forEach((id) => {
       if (processAncestorsAndReturnResult(id)) {
-        folderMap[id] = true;
+        checkedFolderMap[id] = true;
       }
     });
 
     Object.entries(state.notes.notes).forEach(([noteId, note]) => {
       const parentFolder = note.parentFolderId;
-      if (folderMap[parentFolder]) {
-        noteIds.push(noteId);
+      if (checkedFolderMap[parentFolder]) {
+        notes[noteId] = note;
       }
     });
 
     return {
-      folderIds: Object.keys(folderMap).filter((id) => folderMap[id]),
-      noteIds,
+      folders,
+      notes,
     };
   });
 }

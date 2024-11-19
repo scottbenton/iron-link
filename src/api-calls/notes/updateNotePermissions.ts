@@ -1,15 +1,15 @@
 import { updateDoc } from "firebase/firestore";
 
 import { getNoteDocument } from "./_getRef";
-import { NoteDocument } from "./_notes.type";
+import { EditPermissions, ReadPermissions } from "./_notes.type";
 import { createApiFunction } from "api-calls/createApiFunction";
 
 export const updateNotePermissions = createApiFunction<
   {
     campaignId: string;
     noteId: string;
-    readPermissions: NoteDocument["readPermissions"];
-    editPermissions: NoteDocument["editPermissions"];
+    readPermissions: ReadPermissions | null;
+    editPermissions: EditPermissions | null;
   },
   void
 >((params) => {

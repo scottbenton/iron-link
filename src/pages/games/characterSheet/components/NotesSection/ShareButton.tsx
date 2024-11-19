@@ -18,17 +18,14 @@ import {
 
 import { getItemName } from "./FolderView/getFolderName";
 import { CampaignType } from "api-calls/campaign/_campaign.type";
-import {
-  EditPermissions,
-  NoteFolder,
-  ReadPermissions,
-} from "api-calls/notes/_notes.type";
-import { updateNoteFolder } from "api-calls/notes/updateNoteFolder";
+import { EditPermissions, ReadPermissions } from "api-calls/notes/_notes.type";
 import { updateNotePermissions } from "api-calls/notes/updateNotePermissions";
 import { useUID } from "atoms/auth.atom";
 import { DialogTitleWithCloseButton } from "components/DialogTitleWithCloseButton";
 import { useCampaignId } from "pages/games/gamePageLayout/hooks/useCampaignId";
 import { useCampaignPermissions } from "pages/games/gamePageLayout/hooks/usePermissions";
+import { useFolderDescendants } from "./FolderView/useFolderDescendants";
+import { updateNoteFolderPermissions } from "api-calls/notes/updateNoteFolderPermissions";
 
 interface PermissionOption {
   label: string;
@@ -43,15 +40,15 @@ export interface ShareButtonProps {
     ownerId: string;
   };
   currentPermissions: {
-    writePermissions: NoteFolder["editPermissions"];
-    viewPermissions: NoteFolder["readPermissions"];
+    editPermissions: EditPermissions;
+    readPermissions: ReadPermissions;
   };
   isInGMFolder: boolean;
   parentFolder: {
     id: string;
     name: string;
-    writePermissions: NoteFolder["editPermissions"];
-    viewPermissions: NoteFolder["readPermissions"];
+    editPermissions: EditPermissions;
+    readPermissions: ReadPermissions;
   };
 }
 
@@ -66,7 +63,14 @@ export function ShareButton(props: ShareButtonProps) {
   const [open, setOpen] = useState(false);
 
   const { type, id, ownerId } = item;
-  const { writePermissions, viewPermissions } = currentPermissions;
+  const {
+    editPermissions: writePermissions,
+    readPermissions: viewPermissions,
+  } = currentPermissions;
+
+  const folderDescendants = useFolderDescendants(
+    item.type === "folder" ? item.id : undefined,
+  );
 
   const [updatedViewPermissions, setUpdatedViewPermissions] =
     useState(viewPermissions);
@@ -81,16 +85,13 @@ export function ShareButton(props: ShareButtonProps) {
   }, [writePermissions, viewPermissions, open]);
 
   const handleSetViewPermissions = (type: ReadPermissions) => {
-    setUpdatedViewPermissions({
-      type,
-      inherited: false,
-    });
+    setUpdatedViewPermissions(type);
 
     // Update write permissions if they are more permissive than the new view permissions
     if (
       isEditPermissionMorePermissiveThanReadPermission(
         type,
-        updatedWritePermissions.type,
+        updatedWritePermissions,
       )
     ) {
       let newEditPermissions: EditPermissions;
@@ -99,17 +100,11 @@ export function ShareButton(props: ShareButtonProps) {
       } else {
         newEditPermissions = EditPermissions.OnlyAuthor;
       }
-      setUpdatedWritePermissions({
-        type: newEditPermissions,
-        inherited: false,
-      });
+      setUpdatedWritePermissions(newEditPermissions);
     }
   };
   const handleSetEditPermissions = (type: EditPermissions) => {
-    setUpdatedWritePermissions({
-      type,
-      inherited: false,
-    });
+    setUpdatedWritePermissions(type);
   };
 
   // We need to ensure that write permissions are restricted to the read permissions
@@ -172,7 +167,7 @@ export function ShareButton(props: ShareButtonProps) {
             "You and the Guide(s)",
           ),
           value: ReadPermissions.GuidesAndAuthor,
-          disabled: updatedViewPermissions.type === ReadPermissions.OnlyAuthor,
+          disabled: updatedViewPermissions === ReadPermissions.OnlyAuthor,
         });
       }
     }
@@ -195,40 +190,27 @@ export function ShareButton(props: ShareButtonProps) {
         label: t("notes.share-permissions.all-players", "All Players"),
         value: ReadPermissions.AllPlayers,
         disabled:
-          updatedViewPermissions.type === ReadPermissions.OnlyAuthor ||
-          updatedViewPermissions.type === ReadPermissions.OnlyGuides ||
-          updatedViewPermissions.type === ReadPermissions.GuidesAndAuthor,
+          updatedViewPermissions === ReadPermissions.OnlyAuthor ||
+          updatedViewPermissions === ReadPermissions.OnlyGuides ||
+          updatedViewPermissions === ReadPermissions.GuidesAndAuthor,
       });
     }
     return options;
   }, [isInGMFolder, ownerId, t, uid, updatedViewPermissions, campaignType]);
 
   const handleShare = () => {
-    const finalizedReadPermissions =
-      updatedViewPermissions.type === parentFolder.viewPermissions.type
-        ? {
-            type: parentFolder.viewPermissions.type,
-            inherited: true,
-          }
-        : updatedViewPermissions;
-
-    const finalizedWritePermissions =
-      updatedWritePermissions.type === parentFolder.writePermissions.type
-        ? {
-            type: parentFolder.writePermissions.type,
-            inherited: true,
-          }
-        : updatedWritePermissions;
-
     setOpen(false);
 
     if (type === "folder") {
-      updateNoteFolder({
+      updateNoteFolderPermissions({
         campaignId,
         folderId: id,
-        noteFolder: {
-          readPermissions: finalizedReadPermissions,
-          editPermissions: finalizedWritePermissions,
+        descendantFolders: folderDescendants.folders,
+        descendantNotes: folderDescendants.notes,
+        currentPermissions,
+        nextPermissions: {
+          readPermissions: updatedViewPermissions,
+          editPermissions: updatedWritePermissions,
         },
       })
         .then(() => {})
@@ -237,8 +219,8 @@ export function ShareButton(props: ShareButtonProps) {
       updateNotePermissions({
         campaignId,
         noteId: id,
-        readPermissions: finalizedReadPermissions,
-        editPermissions: finalizedWritePermissions,
+        readPermissions: updatedViewPermissions,
+        editPermissions: updatedWritePermissions,
       })
         .then(() => {})
         .catch(() => {});
@@ -264,7 +246,7 @@ export function ShareButton(props: ShareButtonProps) {
               <FormLabel id="read-permissions">
                 {t("notes.share-permissions.view", "Who can view?")}
               </FormLabel>
-              {updatedViewPermissions.inherited && (
+              {updatedViewPermissions === parentFolder.readPermissions && (
                 <Typography variant={"body2"} color="text.secondary" mb={1}>
                   {t(
                     "notes.share-permissions.inherited",
@@ -283,7 +265,7 @@ export function ShareButton(props: ShareButtonProps) {
               )}
               <RadioGroup
                 aria-labelledby="read-permissions"
-                value={updatedViewPermissions.type}
+                value={updatedViewPermissions}
                 onChange={(_, value) =>
                   handleSetViewPermissions(value as ReadPermissions)
                 }
@@ -305,7 +287,7 @@ export function ShareButton(props: ShareButtonProps) {
               <FormLabel id="write-permissions">
                 {t("notes.share-permissions.write", "Who can edit?")}
               </FormLabel>
-              {updatedWritePermissions.inherited && (
+              {updatedWritePermissions === parentFolder.editPermissions && (
                 <Typography variant={"body2"} color="text.secondary" mb={1}>
                   {t(
                     "notes.share-permissions.inherited",
@@ -324,7 +306,7 @@ export function ShareButton(props: ShareButtonProps) {
               )}
               <RadioGroup
                 aria-labelledby="write-permissions"
-                value={updatedWritePermissions.type}
+                value={updatedWritePermissions}
                 onChange={(_, value) =>
                   handleSetEditPermissions(value as EditPermissions)
                 }

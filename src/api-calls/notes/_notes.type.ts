@@ -23,14 +23,8 @@ export interface NoteDocument {
   parentFolderId: string;
 
   // Permission sets can be null - we query folders first.
-  readPermissions: {
-    type: ReadPermissions;
-    inherited: boolean;
-  } | null;
-  editPermissions: {
-    type: EditPermissions;
-    inherited: boolean;
-  } | null;
+  readPermissions: ReadPermissions | null;
+  editPermissions: EditPermissions | null;
 }
 
 export interface NoteContentDocument {
@@ -45,12 +39,6 @@ export interface NoteFolder {
   creator: string;
 
   // Permission sets cannot be null - if we update a parent, we need to manually update children
-  readPermissions: {
-    type: ReadPermissions;
-    inherited: boolean;
-  };
-  editPermissions: {
-    type: EditPermissions;
-    inherited: boolean;
-  };
+  readPermissions: ReadPermissions;
+  editPermissions: EditPermissions;
 }
