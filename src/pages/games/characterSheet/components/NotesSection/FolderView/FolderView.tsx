@@ -1,19 +1,37 @@
+import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import DocIcon from "@mui/icons-material/Description";
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
 import FolderIcon from "@mui/icons-material/Folder";
 import FolderSharedIcon from "@mui/icons-material/FolderShared";
 import { Card, CardActionArea, Divider, Typography } from "@mui/material";
 
-import { OpenItemWrapper } from "../Layout";
 import { getItemName } from "./getFolderName";
+import { NoteItem } from "./NoteItem";
 import { FAKE_ROOT_NOTE_FOLDER_KEY } from "./rootNodeName";
-import { ReadPermissions } from "api-calls/notes/_notes.type";
+import { SortableNoteItem } from "./SortableNoteItem";
+import {
+  closestCenter,
+  DndContext,
+  DragEndEvent,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import { NoteDocument, ReadPermissions } from "api-calls/notes/_notes.type";
+import { updateNoteOrder } from "api-calls/notes/updateNoteOrder";
 import { useUID } from "atoms/auth.atom";
 import { GridLayout } from "components/Layout";
 import {
   useDerivedNotesAtom,
   useSetOpenItem,
 } from "pages/games/gamePageLayout/atoms/notes.atom";
+import { useCampaignId } from "pages/games/gamePageLayout/hooks/useCampaignId";
 import { useCampaignPermissions } from "pages/games/gamePageLayout/hooks/usePermissions";
 
 export interface FolderViewProps {
@@ -24,6 +42,7 @@ export function FolderView(props: FolderViewProps) {
 
   const { t } = useTranslation();
   const uid = useUID();
+  const campaignId = useCampaignId();
   const campaignType = useCampaignPermissions().campaignType;
 
   const subFolders = useDerivedNotesAtom(
@@ -55,31 +74,114 @@ export function FolderView(props: FolderViewProps) {
     [folderId],
   );
 
-  const notes = useDerivedNotesAtom(
+  const { sortedNoteIds, noteMap } = useDerivedNotesAtom(
     (notes) => {
+      const sortedNoteIds: string[] = [];
+      const noteMap: Record<string, NoteDocument> = {};
+
       if (!folderId) {
-        return Object.entries(notes.notes.notes).filter(([, note]) => {
+        Object.entries(notes.notes.notes).forEach(([noteId, note]) => {
           const parentFolderId = note.parentFolderId;
           const parentFolder = notes.folders.folders[parentFolderId];
           if (!parentFolder) {
-            return true;
+            sortedNoteIds.push(noteId);
+            noteMap[noteId] = note;
           }
-          return false;
+        });
+      } else {
+        Object.entries(notes.notes.notes).forEach(([noteId, note]) => {
+          if (note.parentFolderId === folderId) {
+            sortedNoteIds.push(noteId);
+            noteMap[noteId] = note;
+          }
         });
       }
-      return Object.entries(notes.notes.notes).filter(
-        ([, note]) => note.parentFolderId === folderId,
-      );
+
+      sortedNoteIds.sort((a, b) => {
+        if (folderId) {
+          return noteMap[a].order - noteMap[b].order;
+        } else {
+          return noteMap[a].title.localeCompare(noteMap[b].title);
+        }
+      });
+
+      return {
+        sortedNoteIds,
+        noteMap,
+      };
     },
     [folderId],
   );
 
+  // localally sorted nodes allows us to show updates immediately
+  const [localSortedNodes, setLocalSortedNodes] = useState(sortedNoteIds);
+  useEffect(() => {
+    setLocalSortedNodes(sortedNoteIds);
+  }, [sortedNoteIds]);
+
   const setOpenItem = useSetOpenItem();
 
+  const handleDragEnd = useCallback(
+    (event: DragEndEvent) => {
+      const activeId = event.active.id as string;
+      const overId = event.over?.id as string;
+
+      if (!overId) {
+        return;
+      }
+
+      if (activeId !== overId) {
+        // Find the index of the new position
+        const overIndex = localSortedNodes.indexOf(overId);
+        const activeIndex = localSortedNodes.indexOf(activeId);
+
+        if (overIndex < 0 || activeIndex < 0) {
+          return;
+        }
+
+        const overOrder = noteMap[overId].order;
+        let otherSideOrder: number;
+        if (overIndex > activeIndex) {
+          // We are moving the note back in the list, so we need the note after's order
+          otherSideOrder =
+            overIndex + 1 === localSortedNodes.length
+              ? overOrder + 2
+              : noteMap[localSortedNodes[overIndex + 1]].order;
+        } else {
+          // We are moving the note forward in the list, so we need the note before's order
+          otherSideOrder =
+            overIndex === 0
+              ? overOrder - 2
+              : noteMap[localSortedNodes[overIndex - 1]].order;
+        }
+        const updatedOrder = (overOrder + otherSideOrder) / 2;
+
+        // Setting this locally so we can update the UI immediately
+        setLocalSortedNodes((prev) => {
+          return arrayMove(prev, activeIndex, overIndex);
+        });
+
+        updateNoteOrder({
+          campaignId,
+          noteId: activeId,
+          order: updatedOrder,
+        });
+      }
+    },
+    [campaignId, noteMap, localSortedNodes],
+  );
+
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    }),
+  );
+
   return (
-    <OpenItemWrapper sx={{ mx: -1 }}>
+    <>
       {folderId === undefined &&
-        (subFolders.length > 0 || notes.length > 0) && (
+        (subFolders.length > 0 || sortedNoteIds.length > 0) && (
           <>
             <Divider sx={{ my: 1 }} />
             <Typography variant="overline" px={1}>
@@ -131,24 +233,32 @@ export function FolderView(props: FolderViewProps) {
           )}
         />
       )}
-      {notes.map(([noteId, note]) => (
-        <Card variant={"outlined"} key={noteId} sx={{ mt: 1 }}>
-          <CardActionArea
-            sx={{
-              py: 1.5,
-              px: 2,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "flex-start",
-              gap: 1,
-            }}
-            onClick={() => setOpenItem({ type: "note", noteId })}
+      {folderId ? (
+        <DndContext
+          collisionDetection={closestCenter}
+          sensors={sensors}
+          onDragEnd={handleDragEnd}
+        >
+          <SortableContext
+            items={sortedNoteIds}
+            strategy={verticalListSortingStrategy}
           >
-            <DocIcon sx={{ color: "primary.light" }} />
-            <Typography>{note.title}</Typography>
-          </CardActionArea>
-        </Card>
-      ))}
-    </OpenItemWrapper>
+            {sortedNoteIds.map((noteId) => (
+              <SortableNoteItem
+                key={noteId}
+                id={noteId}
+                note={noteMap[noteId]}
+              />
+            ))}
+          </SortableContext>
+        </DndContext>
+      ) : (
+        <>
+          {sortedNoteIds.map((noteId) => (
+            <NoteItem key={noteId} id={noteId} note={noteMap[noteId]} />
+          ))}
+        </>
+      )}
+    </>
   );
 }

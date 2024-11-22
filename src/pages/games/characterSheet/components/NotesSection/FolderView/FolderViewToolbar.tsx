@@ -44,6 +44,21 @@ export function FolderViewToolbar(props: FolderViewToolbarProps) {
     [parentFolderId],
   );
 
+  const nextNoteOrder = useDerivedNotesAtom(
+    (atom) => {
+      let highestOrder = Number.MIN_VALUE;
+      Object.values(atom.notes.notes).forEach((note) => {
+        if (note.parentFolderId === folderId) {
+          if (note.order > highestOrder) {
+            highestOrder = note.order;
+          }
+        }
+      });
+      return highestOrder + 1;
+    },
+    [folderId],
+  );
+
   const isImmutableFolder = !folder?.parentFolderId;
 
   const [nameItemDialogSettings, setNameItemDialogSettings] = useState<{
@@ -75,7 +90,7 @@ export function FolderViewToolbar(props: FolderViewToolbarProps) {
       campaignId,
       parentFolderId: folderId,
       title: name,
-      order: 1,
+      order: nextNoteOrder,
     }).catch(() => {});
   };
 
