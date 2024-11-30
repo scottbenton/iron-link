@@ -1,9 +1,11 @@
 import { Unsubscribe } from "firebase/auth";
 import { onSnapshot } from "firebase/firestore";
 
-import { getPrivateDetailsNPCDoc } from "./_getRef";
-import { getErrorMessage } from "lib/getErrorMessage";
 import { GMNPC } from "types/NPCs.type";
+
+import { getErrorMessage } from "lib/getErrorMessage";
+
+import { getPrivateDetailsNPCDoc } from "./_getRef";
 
 export function listenToNPCGMProperties(
   worldId: string,

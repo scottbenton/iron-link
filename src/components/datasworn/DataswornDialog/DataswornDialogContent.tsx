@@ -1,5 +1,7 @@
-import { useTranslation } from "react-i18next";
 import { Box, Button, DialogActions, DialogContent } from "@mui/material";
+import { useTranslation } from "react-i18next";
+
+import { EmptyState } from "components/Layout/EmptyState";
 
 import { AssetCard } from "../AssetCard";
 import { Move } from "../Move";
@@ -7,7 +9,6 @@ import { Oracle } from "../Oracle";
 import { OracleTableSharedText } from "../Oracle/OracleTableSharedText";
 import { DataswornDialogTitle } from "./DataswornDialogTitle";
 import { useGetDataswornItem } from "./useGetDataswornItem";
-import { EmptyState } from "components/Layout/EmptyState";
 
 export interface DataswornDialogContentProps {
   id: string;

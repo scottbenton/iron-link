@@ -1,12 +1,13 @@
-import { firestore } from "config/firebase.config";
 import {
-  collection,
   CollectionReference,
-  doc,
   DocumentReference,
+  collection,
+  doc,
 } from "firebase/firestore";
 
 import { HomebrewAssetCollectionDocument } from "api-calls/homebrew/assets/collections/_homebrewAssetCollection.type";
+
+import { firestore } from "config/firebase.config";
 
 export function constructHomebrewAssetCollectionCollectionPath() {
   return `homebrew/homebrew/asset_collections`;

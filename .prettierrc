@@ -1,3 +1,23 @@
 {
-  "endOfLine": "auto"
+  "endOfLine": "auto",
+  "importOrder": [
+    "^assets/(.*)$",
+    "^providers/(.*)$",
+    "^components/(.*)$",
+    "^pages/(.*)$",
+    "^types/(.*)$",
+    "^hooks/(.*)$",
+    "^api-calls/(.*)$",
+    "^atoms/(.*)$",
+    "^stores/(.*)$",
+    "^config/(.*)$",
+    "^data/(.*)$",
+    "^i18n/(.*)$",
+    "^lib/(.*)$",
+    "^tests/(.*)$",
+    "^[./]"
+  ],
+  "importOrderSeparation": true,
+  "importOrderSortSpecifiers": true,
+  "plugins": ["@trivago/prettier-plugin-sort-imports"]
 }

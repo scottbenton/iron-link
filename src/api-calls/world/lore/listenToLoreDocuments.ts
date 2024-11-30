@@ -1,13 +1,15 @@
 import { Unsubscribe } from "firebase/auth";
 import { onSnapshot, query, where } from "firebase/firestore";
 
+import { Lore } from "types/Lore.type";
+
 import {
   constructLoreImagePath,
   convertFromDatabase,
   getLoreCollection,
 } from "api-calls/world/lore/_getRef";
+
 import { getImageUrl } from "lib/storage.lib";
-import { Lore } from "types/Lore.type";
 
 export function listenToLoreDocuments(
   worldId: string,

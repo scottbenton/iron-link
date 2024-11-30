@@ -1,5 +1,5 @@
 import { Box, Fade } from "@mui/material";
-import { Editor as TTEditor, EditorContent } from "@tiptap/react";
+import { EditorContent, Editor as TTEditor } from "@tiptap/react";
 
 export interface EditorProps {
   outlined?: boolean;

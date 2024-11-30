@@ -1,5 +1,3 @@
-import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
 import {
   Alert,
   AlertTitle,
@@ -14,13 +12,18 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+
+import { DialogTitleWithCloseButton } from "components/DialogTitleWithCloseButton";
+import { ClockCircle } from "components/datasworn/Clocks/ClockCircle";
+
+import { useCampaignId } from "pages/games/gamePageLayout/hooks/useCampaignId";
+
+import { Clock, TrackStatus, TrackTypes } from "types/Track.type";
 
 import { addProgressTrack } from "api-calls/tracks/addProgressTrack";
 import { updateProgressTrack } from "api-calls/tracks/updateProgressTrack";
-import { ClockCircle } from "components/datasworn/Clocks/ClockCircle";
-import { DialogTitleWithCloseButton } from "components/DialogTitleWithCloseButton";
-import { useCampaignId } from "pages/games/gamePageLayout/hooks/useCampaignId";
-import { Clock, TrackStatus, TrackTypes } from "types/Track.type";
 
 const segmentOptions = [4, 6, 8, 10];
 

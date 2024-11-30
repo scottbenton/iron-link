@@ -1,8 +1,9 @@
-import { useTranslation } from "react-i18next";
 import { Box, Typography } from "@mui/material";
+import { useTranslation } from "react-i18next";
+
+import { MarkdownRenderer } from "components/MarkdownRenderer";
 
 import { AssetEnhancements as IAssetEnhancements } from "./RollOptions/extractRollOptions";
-import { MarkdownRenderer } from "components/MarkdownRenderer";
 
 export interface AssetEnhancementsProps {
   enhancements: IAssetEnhancements;

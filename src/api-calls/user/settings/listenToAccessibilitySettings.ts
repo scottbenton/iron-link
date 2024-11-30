@@ -1,7 +1,8 @@
 import { onSnapshot } from "firebase/firestore";
 
-import { getUserAccessibilitySettingsDoc } from "./_getRef";
 import { AccessibilitySettingsDocument } from "api-calls/user/settings/_settings.type";
+
+import { getUserAccessibilitySettingsDoc } from "./_getRef";
 
 export const listenToAccessibilitySettings = (
   uid: string,

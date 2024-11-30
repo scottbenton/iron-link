@@ -1,18 +1,12 @@
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
 import CheckIcon from "@mui/icons-material/Check";
 import { Box, Button } from "@mui/material";
 import { useConfirm } from "material-ui-confirm";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
-import { useIsOwnerOfCharacter } from "../../hooks/useIsOwnerOfCharacter";
-import { getTrackTypeLabel, trackCompletionMoveIds } from "./common";
-import { EditOrCreateTrackDialog } from "./EditOrCreateTrackDialog";
-import { TrackCompletionMoveButton } from "./TrackCompletionMoveButton";
-import { removeProgressTrack } from "api-calls/tracks/removeProgressTrack";
-import { updateProgressTrack } from "api-calls/tracks/updateProgressTrack";
-import { useSetAnnouncement } from "atoms/announcement.atom";
 import { DebouncedClockCircle } from "components/datasworn/Clocks/DebouncedClockCircle";
 import { ProgressTrack } from "components/datasworn/ProgressTrack";
+
 import {
   Difficulty,
   ProgressTrack as IProgressTrack,
@@ -20,6 +14,16 @@ import {
   TrackStatus,
   TrackTypes,
 } from "types/Track.type";
+
+import { removeProgressTrack } from "api-calls/tracks/removeProgressTrack";
+import { updateProgressTrack } from "api-calls/tracks/updateProgressTrack";
+
+import { useSetAnnouncement } from "atoms/announcement.atom";
+
+import { useIsOwnerOfCharacter } from "../../hooks/useIsOwnerOfCharacter";
+import { EditOrCreateTrackDialog } from "./EditOrCreateTrackDialog";
+import { TrackCompletionMoveButton } from "./TrackCompletionMoveButton";
+import { getTrackTypeLabel, trackCompletionMoveIds } from "./common";
 
 export interface TrackProgressTrackProps {
   trackId: string;

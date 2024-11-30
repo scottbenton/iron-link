@@ -1,17 +1,18 @@
-import { useDeferredValue, useMemo, useState } from "react";
-import { useTranslation } from "react-i18next";
 import SearchIcon from "@mui/icons-material/Search";
 import { Box, Input, InputAdornment, List, ListSubheader } from "@mui/material";
+import { useDeferredValue, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
+
+import { useOracles } from "atoms/dataswornRules/useOracles";
 
 import { AskTheOracleButtons } from "./AskTheOracleButtons";
+import { OracleCollectionListItem } from "./OracleCollectionListItem";
 import {
   CollectionVisibilityState,
-  getOracleCollectionVisibility,
   OracleVisibilityState,
   VisibilitySettings,
+  getOracleCollectionVisibility,
 } from "./getOracleCollectionVisiblity";
-import { OracleCollectionListItem } from "./OracleCollectionListItem";
-import { useOracles } from "atoms/dataswornRules/useOracles";
 
 export function OracleTree() {
   const { t } = useTranslation();

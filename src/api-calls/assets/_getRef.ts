@@ -1,12 +1,13 @@
-import { firestore } from "config/firebase.config";
 import {
-  collection,
   CollectionReference,
-  doc,
   DocumentReference,
+  collection,
+  doc,
 } from "firebase/firestore";
 
 import { AssetDocument } from "api-calls/assets/_asset.type";
+
+import { firestore } from "config/firebase.config";
 
 export function constructCharacterAssetCollectionPath(characterId: string) {
   return `/characters/${characterId}/assets`;

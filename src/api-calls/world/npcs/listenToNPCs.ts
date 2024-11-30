@@ -1,13 +1,15 @@
 import { Unsubscribe } from "firebase/auth";
 import { onSnapshot, query, where } from "firebase/firestore";
 
+import { NPC } from "types/NPCs.type";
+
 import {
   constructNPCImagePath,
   convertFromDatabase,
   getNPCCollection,
 } from "api-calls/world/npcs/_getRef";
+
 import { getImageUrl } from "lib/storage.lib";
-import { NPC } from "types/NPCs.type";
 
 export function listenToNPCs(
   worldId: string,

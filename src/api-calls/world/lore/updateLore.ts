@@ -1,8 +1,10 @@
 import { updateDoc } from "firebase/firestore";
 
-import { convertToDatabase, getLoreDoc } from "./_getRef";
-import { createApiFunction } from "api-calls/createApiFunction";
 import { Lore } from "types/Lore.type";
+
+import { createApiFunction } from "api-calls/createApiFunction";
+
+import { convertToDatabase, getLoreDoc } from "./_getRef";
 
 interface LoreParams {
   worldId: string;

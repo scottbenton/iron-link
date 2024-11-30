@@ -1,5 +1,3 @@
-import { useCallback, useRef, useState } from "react";
-import { useTranslation } from "react-i18next";
 import {
   Box,
   Button,
@@ -9,16 +7,20 @@ import {
   Menu,
   MenuItem,
 } from "@mui/material";
+import { useCallback, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 
-import { getTrackTypeLabel } from "./common";
-import { EditOrCreateClockDialog } from "./EditOrCreateClockDialog";
-import { EditOrCreateTrackDialog } from "./EditOrCreateTrackDialog";
 import { useSetCurrentCampaignAtom } from "pages/games/gamePageLayout/atoms/campaign.atom";
 import {
   CampaignPermissionType,
   useCampaignPermissions,
 } from "pages/games/gamePageLayout/hooks/usePermissions";
+
 import { TrackSectionProgressTracks, TrackTypes } from "types/Track.type";
+
+import { EditOrCreateClockDialog } from "./EditOrCreateClockDialog";
+import { EditOrCreateTrackDialog } from "./EditOrCreateTrackDialog";
+import { getTrackTypeLabel } from "./common";
 
 export interface TracksSectionHeaderProps {
   showCompletedTracks: boolean;

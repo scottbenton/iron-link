@@ -1,8 +1,9 @@
 import { Datasworn } from "@datasworn/core";
 import { Stack } from "@mui/material";
 
-import { AssetControl } from "./AssetControl";
 import { AssetDocument } from "api-calls/assets/_asset.type";
+
+import { AssetControl } from "./AssetControl";
 
 export interface AssetControlsProps {
   controls:

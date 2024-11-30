@@ -1,9 +1,11 @@
-import { useTranslation } from "react-i18next";
 import { Box, Typography } from "@mui/material";
+import { useTranslation } from "react-i18next";
+
+import { ConditionMeter } from "components/datasworn/ConditonMeter";
+
+import { useStatRules } from "atoms/dataswornRules/useStatRules";
 
 import { useCreateCharacterAtom } from "../atoms/createCharacter.atom";
-import { useStatRules } from "atoms/dataswornRules/useStatRules";
-import { ConditionMeter } from "components/datasworn/ConditonMeter";
 
 export function Stats() {
   const [character, setCharacter] = useCreateCharacterAtom();

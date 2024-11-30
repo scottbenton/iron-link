@@ -1,8 +1,15 @@
-import { useMemo } from "react";
-import { useParams } from "react-router-dom";
 import { Datasworn } from "@datasworn/core";
 import { Box, Typography } from "@mui/material";
 import { useAtomValue } from "jotai";
+import { useMemo } from "react";
+import { useParams } from "react-router-dom";
+
+import { currentCampaignAtom } from "pages/games/gamePageLayout/atoms/campaign.atom";
+import { campaignCharactersAtom } from "pages/games/gamePageLayout/atoms/campaign.characters.atom";
+
+import { useUID } from "atoms/auth.atom";
+import { useDataswornTree } from "atoms/dataswornTree.atom";
+import { derivedAtomWithEquality } from "atoms/derivedAtomWithEquality";
 
 import { AssetEnhancements } from "./AssetEnhancements";
 import {
@@ -10,13 +17,8 @@ import {
   CharacterRollOptionState,
   ProgressRolls,
 } from "./RollOptions";
-import { extractRollOptions } from "./RollOptions/extractRollOptions";
 import { SpecialTracks } from "./RollOptions/SpecialTracks";
-import { useUID } from "atoms/auth.atom";
-import { useDataswornTree } from "atoms/dataswornTree.atom";
-import { derivedAtomWithEquality } from "atoms/derivedAtomWithEquality";
-import { currentCampaignAtom } from "pages/games/gamePageLayout/atoms/campaign.atom";
-import { campaignCharactersAtom } from "pages/games/gamePageLayout/atoms/campaign.characters.atom";
+import { extractRollOptions } from "./RollOptions/extractRollOptions";
 
 const derivedCampaignState = derivedAtomWithEquality(
   currentCampaignAtom,

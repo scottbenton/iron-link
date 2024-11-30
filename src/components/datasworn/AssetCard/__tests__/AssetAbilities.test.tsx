@@ -1,9 +1,10 @@
 import { Datasworn } from "@datasworn/core";
 import { fireEvent, render, screen } from "@testing-library/react";
+import { describe, expect, it, vi } from "vitest";
+
+import { AssetDocument } from "api-calls/assets/_asset.type";
 
 import { AssetAbilities } from "../AssetAbilities";
-import { AssetDocument } from "api-calls/assets/_asset.type";
-import { describe, expect, it, vi } from "vitest";
 
 describe("AssetAbilities", () => {
   const mockAbilities: Datasworn.AssetAbility[] = [

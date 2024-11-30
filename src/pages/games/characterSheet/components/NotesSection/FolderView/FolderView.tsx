@@ -1,34 +1,37 @@
-import { useCallback, useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
 import {
-  arrayMove,
-  SortableContext,
-  sortableKeyboardCoordinates,
-  verticalListSortingStrategy,
-} from "@dnd-kit/sortable";
-import { Divider, Typography } from "@mui/material";
-
-import { NoteItem } from "./NoteItem";
-import { FAKE_ROOT_NOTE_FOLDER_KEY } from "./rootNodeName";
-import { SortableNoteItem } from "./SortableNoteItem";
-import {
-  closestCenter,
   DndContext,
   DragEndEvent,
   KeyboardSensor,
   PointerSensor,
+  closestCenter,
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
-import { NoteDocument } from "api-calls/notes/_notes.type";
-import { updateNoteOrder } from "api-calls/notes/updateNoteOrder";
+import {
+  SortableContext,
+  arrayMove,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { Divider, Typography } from "@mui/material";
+import { useCallback, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+
 import { GridLayout } from "components/Layout";
+
 import {
   useDerivedNotesAtom,
   useSetOpenItem,
 } from "pages/games/gamePageLayout/atoms/notes.atom";
 import { useCampaignId } from "pages/games/gamePageLayout/hooks/useCampaignId";
+
+import { NoteDocument } from "api-calls/notes/_notes.type";
+import { updateNoteOrder } from "api-calls/notes/updateNoteOrder";
+
 import { FolderItem } from "./FolderItem";
+import { NoteItem } from "./NoteItem";
+import { SortableNoteItem } from "./SortableNoteItem";
+import { FAKE_ROOT_NOTE_FOLDER_KEY } from "./rootNodeName";
 
 export interface FolderViewProps {
   folderId: string | undefined;

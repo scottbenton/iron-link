@@ -1,14 +1,16 @@
-import { firestore } from "config/firebase.config";
 import {
-  collection,
   CollectionReference,
-  doc,
   DocumentReference,
   Timestamp,
+  collection,
+  doc,
 } from "firebase/firestore";
 
-import { GMLoreDocument, LoreDocument, LoreNotesDocument } from "./_lore.type";
 import { Lore } from "types/Lore.type";
+
+import { firestore } from "config/firebase.config";
+
+import { GMLoreDocument, LoreDocument, LoreNotesDocument } from "./_lore.type";
 
 export function constructLoresPath(worldId: string) {
   return `/worlds/${worldId}/lore`;

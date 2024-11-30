@@ -8,8 +8,10 @@ import {
   Typography,
 } from "@mui/material";
 
-import { NoteDocument } from "api-calls/notes/_notes.type";
 import { useSetOpenItem } from "pages/games/gamePageLayout/atoms/notes.atom";
+
+import { NoteDocument } from "api-calls/notes/_notes.type";
+
 import { NoteActionMenu } from "./NoteActionMenu";
 
 export interface NoteItemProps {

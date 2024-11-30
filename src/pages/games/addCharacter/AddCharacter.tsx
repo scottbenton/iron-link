@@ -1,16 +1,20 @@
+import { Alert, Box } from "@mui/material";
 import { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
-import { Alert, Box } from "@mui/material";
 
-import { useCreateCharacterAtom } from "../create/atoms/createCharacter.atom";
-import { CreateCharacter } from "../create/components/CreateCharacter";
+import { GradientButton } from "components/GradientButton";
+
+import { pathConfig } from "pages/pathConfig";
+
 import { addAsset } from "api-calls/assets/addAsset";
 import { addCharacterToCampaign } from "api-calls/campaign/addCharacterToCampaign";
 import { createCharacterAndUploadPortrait } from "api-calls/character/createCharacter";
+
 import { useAuthAtom } from "atoms/auth.atom";
-import { GradientButton } from "components/GradientButton";
-import { pathConfig } from "pages/pathConfig";
+
+import { useCreateCharacterAtom } from "../create/atoms/createCharacter.atom";
+import { CreateCharacter } from "../create/components/CreateCharacter";
 
 export function AddCharacter() {
   const { campaignId } = useParams<{ campaignId: string }>();

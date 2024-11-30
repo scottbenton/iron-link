@@ -1,10 +1,12 @@
-import { useTranslation } from "react-i18next";
 import RollIcon from "@mui/icons-material/Casino";
 import { Button } from "@mui/material";
+import { useTranslation } from "react-i18next";
+
+import { useRollCompleteProgressTrack } from "pages/games/hooks/useRollCompleteProgressTrack";
+
+import { TrackTypes } from "types/Track.type";
 
 import { useMove } from "hooks/datasworn/useMove";
-import { useRollCompleteProgressTrack } from "pages/games/hooks/useRollCompleteProgressTrack";
-import { TrackTypes } from "types/Track.type";
 
 export interface TrackCompletionMoveButtonProps {
   moveId: string;

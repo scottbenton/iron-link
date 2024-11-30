@@ -1,7 +1,8 @@
-import { onSnapshot, query, Unsubscribe, where } from "firebase/firestore";
+import { Unsubscribe, onSnapshot, query, where } from "firebase/firestore";
+
+import { Track } from "types/Track.type";
 
 import { convertFromDatabase, getCampaignTracksCollection } from "./_getRef";
-import { Track } from "types/Track.type";
 
 export function listenToProgressTracks(
   gameId: string,

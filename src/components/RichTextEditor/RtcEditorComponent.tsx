@@ -2,9 +2,10 @@ import { Editor as TTEditor, useEditor } from "@tiptap/react";
 import { WebrtcProvider } from "y-webrtc";
 import * as Y from "yjs";
 
+import { useAuthAtom } from "atoms/auth.atom";
+
 import { Editor } from "./Editor";
 import { rtcExtensions } from "./rtcExtensions";
-import { useAuthAtom } from "atoms/auth.atom";
 
 export interface RtcRichTextEditorProps {
   provider: WebrtcProvider;

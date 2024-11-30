@@ -1,8 +1,10 @@
 import { setDoc } from "firebase/firestore";
 
-import { getPrivateDetailsLoreDoc } from "./_getRef";
-import { createApiFunction } from "api-calls/createApiFunction";
 import { GMLore } from "types/Lore.type";
+
+import { createApiFunction } from "api-calls/createApiFunction";
+
+import { getPrivateDetailsLoreDoc } from "./_getRef";
 
 interface Params {
   worldId: string;

@@ -1,14 +1,16 @@
-import { useTranslation } from "react-i18next";
-import { Outlet, useLocation } from "react-router-dom";
 import { LinearProgress } from "@mui/material";
 import { useAtomValue } from "jotai";
+import { useTranslation } from "react-i18next";
+import { Outlet, useLocation } from "react-router-dom";
+
+import { PageContent, PageHeader } from "components/Layout";
+import { EmptyState } from "components/Layout/EmptyState";
+
+import { derivedAtomWithEquality } from "atoms/derivedAtomWithEquality";
 
 import { currentCampaignAtom } from "./atoms/campaign.atom";
 import { CampaignTabs } from "./components/CampaignTabs";
 import { useSyncCampaign } from "./hooks/useSyncCampaign";
-import { derivedAtomWithEquality } from "atoms/derivedAtomWithEquality";
-import { PageContent, PageHeader } from "components/Layout";
-import { EmptyState } from "components/Layout/EmptyState";
 
 const campaignState = derivedAtomWithEquality(currentCampaignAtom, (atom) => ({
   hasCampaign: !!atom.campaign,

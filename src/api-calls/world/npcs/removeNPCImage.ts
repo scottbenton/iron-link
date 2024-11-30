@@ -1,7 +1,9 @@
+import { createApiFunction } from "api-calls/createApiFunction";
+
+import { deleteImage } from "lib/storage.lib";
+
 import { constructNPCImagesPath } from "./_getRef";
 import { updateNPC } from "./updateNPC";
-import { createApiFunction } from "api-calls/createApiFunction";
-import { deleteImage } from "lib/storage.lib";
 
 export const removeNPCImage = createApiFunction<
   {

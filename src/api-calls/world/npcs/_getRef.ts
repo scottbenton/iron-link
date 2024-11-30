@@ -1,14 +1,16 @@
-import { firestore } from "config/firebase.config";
 import {
-  collection,
   CollectionReference,
-  doc,
   DocumentReference,
   Timestamp,
+  collection,
+  doc,
 } from "firebase/firestore";
 
-import { GMNPCDocument, NPCDocument, NPCNotesDocument } from "./_npcs.type";
 import { NPC } from "types/NPCs.type";
+
+import { firestore } from "config/firebase.config";
+
+import { GMNPCDocument, NPCDocument, NPCNotesDocument } from "./_npcs.type";
 
 export function constructNPCsPath(worldId: string) {
   return `/worlds/${worldId}/npcs`;

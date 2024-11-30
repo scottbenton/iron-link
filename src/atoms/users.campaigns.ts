@@ -1,14 +1,16 @@
-import { useEffect } from "react";
 import { Unsubscribe } from "firebase/firestore";
 import { t } from "i18next";
 import { atom, useAtom, useAtomValue } from "jotai";
+import { useEffect } from "react";
 
-import { useCurrentUserUID } from "./auth.atom";
 import { CampaignDocument } from "api-calls/campaign/_campaign.type";
 import { listenToUsersCampaigns } from "api-calls/campaign/listenToUsersCampaigns";
 import { CharacterDocument } from "api-calls/character/_character.type";
 import { getCharacter } from "api-calls/character/getCharacter";
+
 import { getErrorMessage } from "lib/getErrorMessage";
+
+import { useCurrentUserUID } from "./auth.atom";
 
 interface CampaignCharacterPortraitSettingsEntry {
   shouldLoad: boolean;

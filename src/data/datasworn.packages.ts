@@ -1,6 +1,6 @@
 import { Datasworn } from "@datasworn/core";
-import ironswornJson from "@datasworn/ironsworn-classic/json/classic.json";
 import delveJson from "@datasworn/ironsworn-classic-delve/json/delve.json";
+import ironswornJson from "@datasworn/ironsworn-classic/json/classic.json";
 import starforgedJson from "@datasworn/starforged/json/starforged.json";
 import sunderedIslesJson from "@datasworn/sundered-isles/json/sundered_isles.json";
 

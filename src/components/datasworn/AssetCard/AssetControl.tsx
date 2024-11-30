@@ -1,8 +1,10 @@
-import { useCallback } from "react";
-import { useTranslation } from "react-i18next";
 import { Datasworn } from "@datasworn/core";
 import RollIcon from "@mui/icons-material/Casino";
 import { Box } from "@mui/material";
+import { useCallback } from "react";
+import { useTranslation } from "react-i18next";
+
+import { AssetDocument } from "api-calls/assets/_asset.type";
 
 import { DEFAULT_MOMENTUM } from "../../../data/constants.ts";
 import { useCharacterIdOptional } from "../../../pages/games/characterSheet/hooks/useCharacterId.ts";
@@ -15,7 +17,6 @@ import { AssetClockField } from "./fields/AssetClockField";
 import { AssetCounterField } from "./fields/AssetCounterField";
 import { AssetSelectEnhancementField } from "./fields/AssetSelectEnhancementField";
 import { AssetTextField } from "./fields/AssetTextField";
-import { AssetDocument } from "api-calls/assets/_asset.type";
 
 export interface AssetControlProps {
   controlId: string;

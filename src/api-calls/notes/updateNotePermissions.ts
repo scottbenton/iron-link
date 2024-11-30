@@ -1,8 +1,9 @@
 import { updateDoc } from "firebase/firestore";
 
+import { createApiFunction } from "api-calls/createApiFunction";
+
 import { getNoteDocument } from "./_getRef";
 import { EditPermissions, ReadPermissions } from "./_notes.type";
-import { createApiFunction } from "api-calls/createApiFunction";
 
 export const updateNotePermissions = createApiFunction<
   {

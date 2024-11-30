@@ -1,9 +1,10 @@
 import { useTranslation } from "react-i18next";
 
+import { SectionHeading } from "components/SectionHeading";
+
 import { Assets } from "./Assets";
 import { CharacterDetails } from "./CharacterDetails";
 import { Stats } from "./Stats";
-import { SectionHeading } from "components/SectionHeading";
 
 export function CreateCharacter() {
   const { t } = useTranslation();

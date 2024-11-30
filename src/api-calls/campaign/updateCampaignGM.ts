@@ -1,8 +1,9 @@
 import { arrayRemove, arrayUnion, updateDoc } from "firebase/firestore";
 
-import { getCampaignDoc } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
 import { getWorldDoc } from "api-calls/world/_getRef";
+
+import { getCampaignDoc } from "./_getRef";
 
 export const updateCampaignGM = createApiFunction<
   {

@@ -1,11 +1,13 @@
 import { LinearProgress } from "@mui/material";
 
+import { useDerivedNotesAtom } from "pages/games/gamePageLayout/atoms/notes.atom";
+
+import { useUID } from "atoms/auth.atom";
+
 import { DefaultNoteChooser } from "./DefaultNoteChooser";
 import { FolderView, FolderViewToolbar } from "./FolderView";
 import { OpenItemWrapper } from "./Layout";
 import { NoteView } from "./NoteView";
-import { useUID } from "atoms/auth.atom";
-import { useDerivedNotesAtom } from "pages/games/gamePageLayout/atoms/notes.atom";
 
 export function NotesSection() {
   const areAnyNotesLoading = useDerivedNotesAtom((notes) => {

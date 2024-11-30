@@ -1,14 +1,16 @@
-import { firestore } from "config/firebase.config";
 import {
-  collection,
   CollectionReference,
-  doc,
   DocumentReference,
   Timestamp,
+  collection,
+  doc,
 } from "firebase/firestore";
 
-import { GameLogDocument } from "./_game-log.type";
 import { Roll } from "types/DieRolls.type";
+
+import { firestore } from "config/firebase.config";
+
+import { GameLogDocument } from "./_game-log.type";
 
 export function constructCampaignGameLogCollectionPath(campaignId: string) {
   return `/campaigns/${campaignId}/game-log`;

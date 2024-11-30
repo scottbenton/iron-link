@@ -1,7 +1,8 @@
 import { useCallback } from "react";
 
-import { ProgressTrack, ProgressTrackProps } from "./ProgressTrack";
 import { useDebouncedSync } from "hooks/useDebouncedSync";
+
+import { ProgressTrack, ProgressTrackProps } from "./ProgressTrack";
 
 export interface DebouncedProgressTrackProps
   extends Omit<ProgressTrackProps, "onChange"> {

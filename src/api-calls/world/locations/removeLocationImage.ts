@@ -1,7 +1,9 @@
+import { createApiFunction } from "api-calls/createApiFunction";
+
+import { deleteImage } from "lib/storage.lib";
+
 import { constructLocationImagesPath } from "./_getRef";
 import { updateLocation } from "./updateLocation";
-import { createApiFunction } from "api-calls/createApiFunction";
-import { deleteImage } from "lib/storage.lib";
 
 export const removeLocationImage = createApiFunction<
   {

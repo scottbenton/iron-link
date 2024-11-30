@@ -1,7 +1,8 @@
 import { deleteDoc } from "firebase/firestore";
 
-import { getCampaignGameLogDocument } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
+
+import { getCampaignGameLogDocument } from "./_getRef";
 
 export const removeLog = createApiFunction<
   { campaignId: string; logId: string },

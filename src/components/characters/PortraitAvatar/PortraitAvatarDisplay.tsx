@@ -1,6 +1,6 @@
-import { useState } from "react";
 import BackgroundIcon from "@mui/icons-material/Face";
 import { Box, Skeleton, Typography, TypographyVariant } from "@mui/material";
+import { useState } from "react";
 
 import { getHueFromString } from "lib/getHueFromString";
 

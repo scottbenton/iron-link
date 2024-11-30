@@ -1,12 +1,13 @@
 import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { describe, expect, it, vi } from "vitest";
+
+import { TestWrapper } from "tests/TestWrapper";
 
 import {
   DebouncedConditionMeter,
   DebouncedConditionMeterProps,
 } from "../DebouncedConditionMeter";
-import userEvent from "@testing-library/user-event";
-import { TestWrapper } from "tests/TestWrapper";
-import { describe, expect, it, vi } from "vitest";
 
 describe("DebouncedConditionMeter", () => {
   const setup = (props?: Partial<DebouncedConditionMeterProps>) => {

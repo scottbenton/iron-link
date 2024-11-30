@@ -1,5 +1,5 @@
 import { Datasworn } from "@datasworn/core";
-import { capitalize, MenuItem, TextField } from "@mui/material";
+import { MenuItem, TextField, capitalize } from "@mui/material";
 
 export interface AssetSelectValueFieldProps {
   field: Datasworn.SelectValueField;

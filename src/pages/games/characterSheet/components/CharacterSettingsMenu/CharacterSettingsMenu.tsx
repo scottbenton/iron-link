@@ -1,5 +1,3 @@
-import { useRef, useState } from "react";
-import { useTranslation } from "react-i18next";
 import CharacterIcon from "@mui/icons-material/AccountBox";
 import CharacterSettingsIcon from "@mui/icons-material/ManageAccounts";
 import StatsIcon from "@mui/icons-material/Numbers";
@@ -11,15 +9,18 @@ import {
   Menu,
   MenuItem,
 } from "@mui/material";
+import { useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
+
+import {
+  CharacterPermissionType,
+  useCampaignPermissions,
+} from "pages/games/gamePageLayout/hooks/usePermissions";
 
 import { CharacterDetailsDialog } from "./CharacterDetailsDialog";
 import { CharacterStatsDialog } from "./CharacterStatsDialog";
 import { ColorSchemeDialog } from "./ColorSchemeDialog";
 import { DeleteCharacterButton } from "./DeleteCharacterButton";
-import {
-  CharacterPermissionType,
-  useCampaignPermissions,
-} from "pages/games/gamePageLayout/hooks/usePermissions";
 
 export function CharacterSettingsMenu() {
   const [isSettingsMenuOpen, setIsSettingsMenuOpen] = useState(false);

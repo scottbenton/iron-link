@@ -1,7 +1,8 @@
-import { firestore } from "config/firebase.config";
-import { doc, DocumentReference } from "firebase/firestore";
+import { DocumentReference, doc } from "firebase/firestore";
 
 import { SettingsDocument } from "api-calls/character-campaign-settings/_character-campaign-settings.type";
+
+import { firestore } from "config/firebase.config";
 
 export function constructCampaignSettingsDocPath(campaignId: string) {
   return `/campaigns/${campaignId}/settings/settings`;

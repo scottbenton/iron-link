@@ -1,5 +1,3 @@
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
 import { Datasworn } from "@datasworn/core";
 import OracleTableIcon from "@mui/icons-material/List";
 import {
@@ -10,10 +8,14 @@ import {
   TextField,
   Tooltip,
 } from "@mui/material";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
+
+import { useRollOracleAndAddToLog } from "pages/games/hooks/useRollOracleAndAddToLog";
+
+import { useOpenDataswornDialog } from "atoms/dataswornDialog.atom";
 
 import { ListItemButtonWithSecondaryAction } from "./ListItemButtonWithSecondaryAction";
-import { useOpenDataswornDialog } from "atoms/dataswornDialog.atom";
-import { useRollOracleAndAddToLog } from "pages/games/hooks/useRollOracleAndAddToLog";
 
 export interface OracleTableSharedTextListItemProps {
   collection:

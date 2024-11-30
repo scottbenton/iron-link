@@ -1,5 +1,5 @@
-import { PropsWithChildren } from "react";
 import { Box, SxProps, Theme } from "@mui/material";
+import { PropsWithChildren } from "react";
 
 export interface OpenItemWrapperProps {
   sx?: SxProps<Theme>;

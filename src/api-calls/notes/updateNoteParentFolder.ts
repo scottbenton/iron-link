@@ -1,7 +1,8 @@
 import { updateDoc } from "firebase/firestore";
 
-import { getNoteDocument } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
+
+import { getNoteDocument } from "./_getRef";
 
 export const updateNoteParentFolder = createApiFunction<
   {

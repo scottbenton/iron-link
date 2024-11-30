@@ -1,7 +1,9 @@
+import { createApiFunction } from "api-calls/createApiFunction";
+
+import { deleteImage } from "lib/storage.lib";
+
 import { constructCharacterPortraitFolderPath } from "./_getRef";
 import { updateCharacter } from "./updateCharacter";
-import { createApiFunction } from "api-calls/createApiFunction";
-import { deleteImage } from "lib/storage.lib";
 
 export const removeCharacterPortrait = createApiFunction<
   {

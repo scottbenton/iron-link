@@ -1,8 +1,9 @@
 import { PartialWithFieldValue, updateDoc } from "firebase/firestore";
 
-import { getHomebrewNonLinearMeterDoc } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
 import { HomebrewNonLinearMeterDocument } from "api-calls/homebrew/rules/nonLinearMeters/_homebrewNonLinearMeter.type";
+
+import { getHomebrewNonLinearMeterDoc } from "./_getRef";
 
 export const updateHomebrewNonLinearMeter = createApiFunction<
   {

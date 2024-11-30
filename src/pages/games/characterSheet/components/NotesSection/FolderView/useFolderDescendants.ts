@@ -1,5 +1,6 @@
-import { NoteDocument, NoteFolder } from "api-calls/notes/_notes.type";
 import { useDerivedNotesAtom } from "pages/games/gamePageLayout/atoms/notes.atom";
+
+import { NoteDocument, NoteFolder } from "api-calls/notes/_notes.type";
 
 export interface FolderDescendants {
   folders: Record<string, NoteFolder>;

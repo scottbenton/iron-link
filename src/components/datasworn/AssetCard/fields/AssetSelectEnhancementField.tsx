@@ -1,6 +1,6 @@
-import { ReactNode } from "react";
 import { Datasworn } from "@datasworn/core";
-import { capitalize, ListSubheader, MenuItem, TextField } from "@mui/material";
+import { ListSubheader, MenuItem, TextField, capitalize } from "@mui/material";
+import { ReactNode } from "react";
 
 export interface AssetSelectEnhancementFieldProps {
   field: Datasworn.SelectEnhancementField;

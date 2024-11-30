@@ -1,9 +1,10 @@
-import { useTranslation } from "react-i18next";
 import { Datasworn } from "@datasworn/core";
 import { Box, Button } from "@mui/material";
+import { useTranslation } from "react-i18next";
+
+import { useRollOracleAndAddToLog } from "pages/games/hooks/useRollOracleAndAddToLog";
 
 import { OracleTable } from "../Oracle/OracleTable";
-import { useRollOracleAndAddToLog } from "pages/games/hooks/useRollOracleAndAddToLog";
 
 export interface MoveOraclesProps {
   move: Datasworn.Move;

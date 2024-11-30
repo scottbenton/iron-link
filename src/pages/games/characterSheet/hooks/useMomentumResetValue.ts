@@ -1,7 +1,8 @@
 import { useMemo } from "react";
 
-import { useDerivedCurrentCharacterState } from "./useDerivedCharacterState";
 import { useImpactRules } from "atoms/dataswornRules/useImpactRules";
+
+import { useDerivedCurrentCharacterState } from "./useDerivedCharacterState";
 
 export function useMomentumParameters() {
   const impacts = useDerivedCurrentCharacterState(

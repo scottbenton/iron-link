@@ -1,8 +1,10 @@
 import { SxProps, Theme } from "@mui/material";
 
-import { ClockCircle, ClockSize } from "./ClockCircle";
-import { useSetAnnouncement } from "atoms/announcement.atom";
 import { useDebouncedSync } from "hooks/useDebouncedSync";
+
+import { useSetAnnouncement } from "atoms/announcement.atom";
+
+import { ClockCircle, ClockSize } from "./ClockCircle";
 
 export interface DebouncedClockCircleProps {
   segments: number;

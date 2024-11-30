@@ -1,7 +1,8 @@
 import { onSnapshot, or, query, where } from "firebase/firestore";
 
-import { decodeWorld, getWorldCollection } from "./_getRef";
 import { World } from "api-calls/world/_world.type";
+
+import { decodeWorld, getWorldCollection } from "./_getRef";
 
 export function listenToUsersWorlds(
   uid: string,

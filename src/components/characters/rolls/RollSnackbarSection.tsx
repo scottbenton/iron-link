@@ -1,15 +1,17 @@
-import { useParams } from "react-router-dom";
-import { TransitionGroup } from "react-transition-group";
 import ClearIcon from "@mui/icons-material/Close";
 import { Box, Fab, Slide } from "@mui/material";
+import { useParams } from "react-router-dom";
+import { TransitionGroup } from "react-transition-group";
 
-import { RollSnackbar } from "./RollSnackbar";
+import { NormalRollActions } from "pages/games/characterSheet/components/GameLog/NormalRollActions";
+
 import {
   useClearAllRollSnackbars,
   useClearRollSnackbar,
   useVisibleRolls,
 } from "atoms/rollDisplay.atom";
-import { NormalRollActions } from "pages/games/characterSheet/components/GameLog/NormalRollActions";
+
+import { RollSnackbar } from "./RollSnackbar";
 
 export function RollSnackbarSection() {
   const rolls = useVisibleRolls();

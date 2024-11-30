@@ -1,9 +1,11 @@
+import MenuIcon from "@mui/icons-material/MoreHoriz";
 import { IconButton, Menu, MenuItem } from "@mui/material";
 import { useRef, useState } from "react";
-import MenuIcon from "@mui/icons-material/MoreHoriz";
-import { MoveDialog } from "../MoveDialog";
-import { useDerivedNotesAtom } from "pages/games/gamePageLayout/atoms/notes.atom";
 import { useTranslation } from "react-i18next";
+
+import { useDerivedNotesAtom } from "pages/games/gamePageLayout/atoms/notes.atom";
+
+import { MoveDialog } from "../MoveDialog";
 import { useFolderPermission } from "../NoteView/useFolderPermissions";
 
 export interface FolderActionMenuProps {

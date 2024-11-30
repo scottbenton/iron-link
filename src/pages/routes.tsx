@@ -1,8 +1,11 @@
+import { App } from "App";
 import {
+  Route,
   createBrowserRouter,
   createRoutesFromElements,
-  Route,
 } from "react-router-dom";
+
+import { Layout } from "components/Layout";
 
 import { LoginPage } from "./auth/LoginPage";
 import { SignUpPage } from "./auth/SignUpPage";
@@ -13,8 +16,6 @@ import { GameLayout } from "./games/gamePageLayout/GameLayout";
 import { GameJoinPage } from "./games/join/GameJoinPage";
 import { GameOverviewSheet } from "./games/overviewSheet/GameOverviewSheet";
 import { GameSelectPage } from "./games/selectPage/GameSelectPage";
-import { App } from "App";
-import { Layout } from "components/Layout";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(

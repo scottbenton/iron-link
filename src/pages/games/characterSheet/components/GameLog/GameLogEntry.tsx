@@ -1,15 +1,19 @@
-import { useMemo } from "react";
-import { useTranslation } from "react-i18next";
 import { Box, Typography } from "@mui/material";
 import { useAtomValue } from "jotai";
+import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 
-import { NormalRollActions } from "./NormalRollActions";
+import { RollSnackbar } from "components/characters/rolls/RollSnackbar";
+
+import { campaignCharactersAtom } from "pages/games/gamePageLayout/atoms/campaign.characters.atom";
+
+import { Roll } from "types/DieRolls.type";
+
 import { useUID } from "atoms/auth.atom";
 import { derivedAtomWithEquality } from "atoms/derivedAtomWithEquality";
 import { useUserName } from "atoms/userDetails.atom";
-import { RollSnackbar } from "components/characters/rolls/RollSnackbar";
-import { campaignCharactersAtom } from "pages/games/gamePageLayout/atoms/campaign.characters.atom";
-import { Roll } from "types/DieRolls.type";
+
+import { NormalRollActions } from "./NormalRollActions";
 
 export interface GameLogEntryProps {
   logId: string;

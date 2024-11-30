@@ -1,8 +1,9 @@
 import { Unsubscribe } from "firebase/auth";
 import { onSnapshot } from "firebase/firestore";
 
-import { getPublicNotesLoreDoc } from "./_getRef";
 import { getErrorMessage } from "lib/getErrorMessage";
+
+import { getPublicNotesLoreDoc } from "./_getRef";
 
 export function listenToLoreNotes(
   worldId: string,

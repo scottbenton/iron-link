@@ -1,11 +1,13 @@
+import { atom, useAtomValue } from "jotai";
 import { useMemo } from "react";
 import { useParams } from "react-router-dom";
-import { atom, useAtomValue } from "jotai";
 
-import { currentCampaignAtom } from "../atoms/campaign.atom";
 import { CampaignType } from "api-calls/campaign/_campaign.type";
+
 import { authAtom } from "atoms/auth.atom";
 import { derivedAtomWithEquality } from "atoms/derivedAtomWithEquality";
+
+import { currentCampaignAtom } from "../atoms/campaign.atom";
 
 const campaignPermissions = derivedAtomWithEquality(
   currentCampaignAtom,

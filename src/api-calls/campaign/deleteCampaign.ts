@@ -1,13 +1,14 @@
 import { deleteDoc, deleteField, updateDoc } from "firebase/firestore";
 
-import { getCharacterDoc } from "../character/_getRef";
-import { getCampaignDoc } from "./_getRef";
 import { deleteAllAssets } from "api-calls/assets/deleteAllAssets";
 import { getCampaignSettingsDoc } from "api-calls/character-campaign-settings/_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
 import { deleteAllLogs } from "api-calls/game-log/deleteAllLogs";
 import { deleteNotes } from "api-calls/notes/deleteNotes";
 import { deleteAllProgressTracks } from "api-calls/tracks/deleteAllProgressTracks";
+
+import { getCharacterDoc } from "../character/_getRef";
+import { getCampaignDoc } from "./_getRef";
 
 export const deleteCampaign = createApiFunction<
   { campaignId: string; characterIds: string[] },

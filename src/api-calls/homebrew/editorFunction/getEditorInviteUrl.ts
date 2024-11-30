@@ -1,5 +1,7 @@
-import { functions } from "config/firebase.config";
 import { httpsCallable } from "firebase/functions";
+
+import { functions } from "config/firebase.config";
+
 // import { constructHomebrewEditorInvitePath } from "pages/Homebrew/routes";
 
 export function getEditorInviteUrl(

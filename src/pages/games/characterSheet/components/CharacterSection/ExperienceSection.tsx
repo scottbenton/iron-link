@@ -1,12 +1,14 @@
+import { Box, Typography } from "@mui/material";
 import { useCallback } from "react";
 import { useTranslation } from "react-i18next";
-import { Box, Typography } from "@mui/material";
+
+import { DebouncedConditionMeter } from "components/datasworn/ConditonMeter";
+
+import { updateCharacter } from "api-calls/character/updateCharacter";
 
 import { useCharacterId } from "../../hooks/useCharacterId";
 import { useDerivedCurrentCharacterState } from "../../hooks/useDerivedCharacterState";
 import { useIsOwnerOfCharacter } from "../../hooks/useIsOwnerOfCharacter";
-import { updateCharacter } from "api-calls/character/updateCharacter";
-import { DebouncedConditionMeter } from "components/datasworn/ConditonMeter";
 
 export function ExperienceSection() {
   const characterId = useCharacterId();

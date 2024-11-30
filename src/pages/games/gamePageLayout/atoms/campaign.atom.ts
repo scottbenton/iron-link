@@ -1,12 +1,14 @@
-import { useCallback, useEffect } from "react";
 import { atom, useSetAtom } from "jotai";
+import { useCallback, useEffect } from "react";
 
-import { useCampaignId } from "../hooks/useCampaignId";
-import { useDerivedCampaignState } from "../hooks/useDerivedCampaignState";
+import { Track, TrackStatus } from "types/Track.type";
+
 import { AssetDocument } from "api-calls/assets/_asset.type";
 import { CampaignDocument } from "api-calls/campaign/_campaign.type";
 import { listenToProgressTracks } from "api-calls/tracks/listenToProgressTracks";
-import { Track, TrackStatus } from "types/Track.type";
+
+import { useCampaignId } from "../hooks/useCampaignId";
+import { useDerivedCampaignState } from "../hooks/useDerivedCampaignState";
 
 export interface ICurrentCampaignAtom {
   campaignId: string;

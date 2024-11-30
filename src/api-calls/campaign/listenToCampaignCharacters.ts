@@ -1,7 +1,8 @@
-import { onSnapshot, Unsubscribe } from "firebase/firestore";
+import { Unsubscribe, onSnapshot } from "firebase/firestore";
+
+import { CharacterDocument } from "api-calls/character/_character.type";
 
 import { getCharacterDoc } from "../character/_getRef";
-import { CharacterDocument } from "api-calls/character/_character.type";
 
 interface Params {
   characterIdList: string[];

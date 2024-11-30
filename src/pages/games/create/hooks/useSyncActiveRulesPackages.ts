@@ -1,12 +1,14 @@
-import { useMemo } from "react";
 import { Datasworn } from "@datasworn/core";
+import { useMemo } from "react";
 
-import { ICreateGameAtom } from "../atoms/createGame.atom";
 import { useSetDataswornTree } from "atoms/dataswornTree.atom";
+
 import {
   defaultBaseRulesets,
   defaultExpansions,
 } from "data/datasworn.packages";
+
+import { ICreateGameAtom } from "../atoms/createGame.atom";
 
 export function useSyncActiveRulesPackages(
   rulesets: ICreateGameAtom["rulesets"],

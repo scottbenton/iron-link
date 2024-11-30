@@ -1,10 +1,11 @@
 import { deleteDoc, getDocs } from "firebase/firestore";
 
+import { createApiFunction } from "api-calls/createApiFunction";
+
 import {
   getCampaignGameLogCollection,
   getCampaignGameLogDocument,
 } from "./_getRef";
-import { createApiFunction } from "api-calls/createApiFunction";
 
 function getAllLogs(campaignId: string): Promise<string[]> {
   return new Promise<string[]>((resolve, reject) => {

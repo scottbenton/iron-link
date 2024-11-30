@@ -1,13 +1,17 @@
-import { useTranslation } from "react-i18next";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { Box, Card, CardActionArea, Typography } from "@mui/material";
 import { useAtomValue } from "jotai";
+import { useTranslation } from "react-i18next";
+
+import { CampaignTypeIcon } from "assets/CampaignTypeIcon/CampaignTypeIcon";
+
+import { SectionHeading } from "components/SectionHeading";
+
+import { CampaignType } from "api-calls/campaign/_campaign.type";
+
+import { derivedAtomWithEquality } from "atoms/derivedAtomWithEquality";
 
 import { createGameAtom, useSetCreateGameAtom } from "../atoms/createGame.atom";
-import { CampaignType } from "api-calls/campaign/_campaign.type";
-import { CampaignTypeIcon } from "assets/CampaignTypeIcon/CampaignTypeIcon";
-import { derivedAtomWithEquality } from "atoms/derivedAtomWithEquality";
-import { SectionHeading } from "components/SectionHeading";
 
 const gameTypeAtom = derivedAtomWithEquality(
   createGameAtom,

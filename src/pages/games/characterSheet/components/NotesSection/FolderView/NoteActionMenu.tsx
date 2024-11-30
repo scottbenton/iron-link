@@ -1,10 +1,12 @@
-import { IconButton, Menu, MenuItem } from "@mui/material";
-import { useNotePermission } from "../NoteView/useNotePermission";
-import { useRef, useState } from "react";
 import MenuIcon from "@mui/icons-material/MoreHoriz";
-import { MoveDialog } from "../MoveDialog";
-import { useDerivedNotesAtom } from "pages/games/gamePageLayout/atoms/notes.atom";
+import { IconButton, Menu, MenuItem } from "@mui/material";
+import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
+
+import { useDerivedNotesAtom } from "pages/games/gamePageLayout/atoms/notes.atom";
+
+import { MoveDialog } from "../MoveDialog";
+import { useNotePermission } from "../NoteView/useNotePermission";
 
 export interface NoteActionMenuProps {
   noteId: string;

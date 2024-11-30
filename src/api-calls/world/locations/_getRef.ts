@@ -1,19 +1,21 @@
-import { firestore } from "config/firebase.config";
 import {
-  collection,
   CollectionReference,
-  doc,
   DocumentReference,
   Timestamp,
   UpdateData,
+  collection,
+  doc,
 } from "firebase/firestore";
+
+import { Location } from "types/Locations.type";
+
+import { firestore } from "config/firebase.config";
 
 import {
   GMLocationDocument,
   LocationDocument,
   LocationNotesDocument,
 } from "./_locations.type";
-import { Location } from "types/Locations.type";
 
 export function constructLocationsPath(worldId: string) {
   return `/worlds/${worldId}/locations`;

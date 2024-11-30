@@ -1,10 +1,11 @@
-import { firestore } from "config/firebase.config";
-import { doc, DocumentReference } from "firebase/firestore";
+import { DocumentReference, doc } from "firebase/firestore";
 
 import {
   AccessibilitySettingsDocument,
   OracleSettingsDocument,
 } from "api-calls/user/settings/_settings.type";
+
+import { firestore } from "config/firebase.config";
 
 export function constructUserAccessibilitySettingsDocPath(userId: string) {
   return `/users/${userId}/settings/accessibility`;

@@ -5,6 +5,7 @@ import {
   getCharacterDoc,
 } from "api-calls/character/_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
+
 import { replaceImage } from "lib/storage.lib";
 
 export const updateCharacterPortrait = createApiFunction<

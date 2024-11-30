@@ -1,7 +1,8 @@
 import { useEffect } from "react";
 
-import { useDerivedCurrentCharacterState } from "./useDerivedCharacterState";
 import { ColorScheme, useSetColorScheme } from "atoms/theme.atom";
+
+import { useDerivedCurrentCharacterState } from "./useDerivedCharacterState";
 
 export function useSyncCharacterColorScheme() {
   const characterTheme = useDerivedCurrentCharacterState(
