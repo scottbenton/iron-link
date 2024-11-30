@@ -27,6 +27,7 @@
     "@mui/icons-material": "^6.1.0",
     "@mui/material": "^6.1.0",
     "@mui/material-pigment-css": "^6.1.0",
+    "@mui/x-tree-view": "^7.22.1",
     "@tiptap/extension-collaboration": "^2.9.1",
     "@tiptap/extension-collaboration-cursor": "^2.9.1",
     "@tiptap/extension-link": "^2.9.1",

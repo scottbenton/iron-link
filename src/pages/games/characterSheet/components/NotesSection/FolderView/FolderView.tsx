@@ -6,11 +6,8 @@ import {
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
-import FolderIcon from "@mui/icons-material/Folder";
-import FolderSharedIcon from "@mui/icons-material/FolderShared";
-import { Card, CardActionArea, Divider, Typography } from "@mui/material";
+import { Divider, Typography } from "@mui/material";
 
-import { getItemName } from "./getFolderName";
 import { NoteItem } from "./NoteItem";
 import { FAKE_ROOT_NOTE_FOLDER_KEY } from "./rootNodeName";
 import { SortableNoteItem } from "./SortableNoteItem";
@@ -23,16 +20,15 @@ import {
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
-import { NoteDocument, ReadPermissions } from "api-calls/notes/_notes.type";
+import { NoteDocument } from "api-calls/notes/_notes.type";
 import { updateNoteOrder } from "api-calls/notes/updateNoteOrder";
-import { useUID } from "atoms/auth.atom";
 import { GridLayout } from "components/Layout";
 import {
   useDerivedNotesAtom,
   useSetOpenItem,
 } from "pages/games/gamePageLayout/atoms/notes.atom";
 import { useCampaignId } from "pages/games/gamePageLayout/hooks/useCampaignId";
-import { useCampaignPermissions } from "pages/games/gamePageLayout/hooks/usePermissions";
+import { FolderItem } from "./FolderItem";
 
 export interface FolderViewProps {
   folderId: string | undefined;
@@ -41,9 +37,7 @@ export function FolderView(props: FolderViewProps) {
   const { folderId } = props;
 
   const { t } = useTranslation();
-  const uid = useUID();
   const campaignId = useCampaignId();
-  const campaignType = useCampaignPermissions().campaignType;
 
   const subFolders = useDerivedNotesAtom(
     (notes) => {
@@ -196,40 +190,12 @@ export function FolderView(props: FolderViewProps) {
           items={subFolders}
           minWidth={200}
           renderItem={([subFolderId, subFolder]) => (
-            <Card
-              variant={"outlined"}
+            <FolderItem
               key={subFolderId}
-              sx={{ bgcolor: "background.default" }}
-            >
-              <CardActionArea
-                sx={{
-                  py: 1.5,
-                  px: 2,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "flex-start",
-                  gap: 1,
-                }}
-                onClick={() =>
-                  setOpenItem({ type: "folder", folderId: subFolderId })
-                }
-              >
-                {subFolder.readPermissions !== ReadPermissions.OnlyAuthor ? (
-                  <FolderSharedIcon color="action" />
-                ) : (
-                  <FolderIcon color="action" />
-                )}
-                <Typography>
-                  {getItemName({
-                    name: subFolder.name,
-                    id: subFolderId,
-                    uid,
-                    t,
-                    campaignType,
-                  })}
-                </Typography>
-              </CardActionArea>
-            </Card>
+              folderId={subFolderId}
+              folder={subFolder}
+              openFolder={setOpenItem}
+            />
           )}
         />
       )}
