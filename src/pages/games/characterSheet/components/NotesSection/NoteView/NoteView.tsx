@@ -1,13 +1,16 @@
 import { useCallback } from "react";
 
+import { EmptyState } from "components/Layout/EmptyState";
+import { RtcRichTextEditor } from "components/RichTextEditor";
+
+import { useListenToActiveNoteContent } from "pages/games/gamePageLayout/atoms/notes.atom";
+import { useCampaignId } from "pages/games/gamePageLayout/hooks/useCampaignId";
+
+import { updateNoteContent } from "api-calls/notes/updateNoteContent";
+
 import { NoteToolbar } from "../Layout";
 import { NoteViewToolbar } from "./NoteViewToolbar";
 import { useNotePermission } from "./useNotePermission";
-import { updateNoteContent } from "api-calls/notes/updateNoteContent";
-import { EmptyState } from "components/Layout/EmptyState";
-import { RtcRichTextEditor } from "components/RichTextEditor";
-import { useListenToActiveNoteContent } from "pages/games/gamePageLayout/atoms/notes.atom";
-import { useCampaignId } from "pages/games/gamePageLayout/hooks/useCampaignId";
 
 export interface NoteViewProps {
   openNoteId: string;

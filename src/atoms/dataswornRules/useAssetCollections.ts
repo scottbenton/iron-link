@@ -2,9 +2,10 @@ import { CollectionId, Datasworn, IdParser } from "@datasworn/core";
 import { Primary } from "@datasworn/core/dist/StringId";
 import { atom, useAtomValue } from "jotai";
 
+import { dataswornTreeAtom } from "atoms/dataswornTree.atom";
+
 import { CollectionMap } from "./collectionMap.type";
 import { getRulesetFromId } from "./getRulesetFromId";
-import { dataswornTreeAtom } from "atoms/dataswornTree.atom";
 
 export type AssetCollectionMap = CollectionMap<Datasworn.AssetCollection>;
 

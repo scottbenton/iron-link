@@ -1,7 +1,8 @@
 import { updateDoc } from "firebase/firestore";
 
-import { getNPCDoc } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
+
+import { getNPCDoc } from "./_getRef";
 
 export const updateNPCCharacterBond = createApiFunction<
   {

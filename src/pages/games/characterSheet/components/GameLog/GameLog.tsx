@@ -1,13 +1,15 @@
+import { Box, LinearProgress } from "@mui/material";
 import { useCallback, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { Box, LinearProgress } from "@mui/material";
 
-import { GameLogEntry } from "./GameLogEntry";
 import { EmptyState } from "components/Layout/EmptyState";
+
 import {
   useGameLogs,
   useLoadMoreLogs,
 } from "pages/games/gamePageLayout/atoms/gameLog.atom";
+
+import { GameLogEntry } from "./GameLogEntry";
 
 export function GameLog() {
   const { loading, error, logs, totalLogsToLoad } = useGameLogs();

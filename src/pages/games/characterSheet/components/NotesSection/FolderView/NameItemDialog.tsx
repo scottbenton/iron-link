@@ -1,6 +1,3 @@
-import { useEffect } from "react";
-import { Resolver, useForm } from "react-hook-form";
-import { useTranslation } from "react-i18next";
 import {
   Button,
   Dialog,
@@ -8,8 +5,12 @@ import {
   DialogContent,
   TextField,
 } from "@mui/material";
+import { useEffect } from "react";
+import { Resolver, useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 
 import { DialogTitleWithCloseButton } from "components/DialogTitleWithCloseButton";
+
 import { i18n } from "i18n/config";
 
 export interface NameItemDialogProps {

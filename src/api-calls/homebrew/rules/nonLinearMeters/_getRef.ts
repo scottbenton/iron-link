@@ -1,12 +1,13 @@
-import { firestore } from "config/firebase.config";
 import {
-  collection,
   CollectionReference,
-  doc,
   DocumentReference,
+  collection,
+  doc,
 } from "firebase/firestore";
 
 import { HomebrewNonLinearMeterDocument } from "api-calls/homebrew/rules/nonLinearMeters/_homebrewNonLinearMeter.type";
+
+import { firestore } from "config/firebase.config";
 
 export function constructHomebrewNonLinearMeterCollectionPath() {
   return `homebrew/homebrew/non_linear_meters`;

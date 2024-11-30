@@ -1,11 +1,13 @@
-import { useTranslation } from "react-i18next";
 import { Box, SxProps, Theme, Typography } from "@mui/material";
+import { useTranslation } from "react-i18next";
+
+import { EmptyState } from "components/Layout/EmptyState";
+import { MarkdownRenderer } from "components/MarkdownRenderer";
+
+import { useOracleRollable } from "hooks/datasworn/useOracleRollable";
 
 import { OracleButton } from "./OracleButton";
 import { OracleTable } from "./OracleTable";
-import { EmptyState } from "components/Layout/EmptyState";
-import { MarkdownRenderer } from "components/MarkdownRenderer";
-import { useOracleRollable } from "hooks/datasworn/useOracleRollable";
 
 export interface OracleProps {
   oracleId: string;

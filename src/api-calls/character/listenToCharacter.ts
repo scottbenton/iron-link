@@ -1,7 +1,8 @@
 import { onSnapshot } from "firebase/firestore";
 
-import { getCharacterDoc } from "./_getRef";
 import { CharacterDocument } from "api-calls/character/_character.type";
+
+import { getCharacterDoc } from "./_getRef";
 
 export function listenToCharacter(
   characterId: string,

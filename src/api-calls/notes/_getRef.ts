@@ -1,10 +1,11 @@
-import { firestore } from "config/firebase.config";
 import {
-  collection,
   CollectionReference,
-  doc,
   DocumentReference,
+  collection,
+  doc,
 } from "firebase/firestore";
+
+import { firestore } from "config/firebase.config";
 
 import { NoteContentDocument, NoteDocument, NoteFolder } from "./_notes.type";
 

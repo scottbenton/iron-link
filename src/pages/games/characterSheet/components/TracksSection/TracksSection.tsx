@@ -1,13 +1,14 @@
 import { Box, LinearProgress } from "@mui/material";
 
-import { TrackItem } from "./TrackItem";
-import { TracksSectionHeader } from "./TracksSectionHeader";
 import { useCampaignId } from "pages/games/gamePageLayout/hooks/useCampaignId";
 import { useDerivedCampaignState } from "pages/games/gamePageLayout/hooks/useDerivedCampaignState";
 import {
   CampaignPermissionType,
   useCampaignPermissions,
 } from "pages/games/gamePageLayout/hooks/usePermissions";
+
+import { TrackItem } from "./TrackItem";
+import { TracksSectionHeader } from "./TracksSectionHeader";
 
 export function TracksSection() {
   const campaignId = useCampaignId();

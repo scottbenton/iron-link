@@ -1,7 +1,8 @@
 import { addDoc } from "firebase/firestore";
 
-import { getNoteCollection } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
+
+import { getNoteCollection } from "./_getRef";
 
 export const addNote = createApiFunction<
   {

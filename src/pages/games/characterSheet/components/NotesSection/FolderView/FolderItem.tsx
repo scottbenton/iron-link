@@ -1,13 +1,16 @@
-import { Box, Card, CardActionArea, Typography } from "@mui/material";
-import { NoteFolder, ReadPermissions } from "api-calls/notes/_notes.type";
-import { getItemName } from "./getFolderName";
-import { useUID } from "atoms/auth.atom";
-import { useTranslation } from "react-i18next";
-import { useCampaignPermissions } from "pages/games/gamePageLayout/hooks/usePermissions";
-
 import FolderIcon from "@mui/icons-material/Folder";
 import FolderSharedIcon from "@mui/icons-material/FolderShared";
+import { Box, Card, CardActionArea, Typography } from "@mui/material";
+import { useTranslation } from "react-i18next";
+
+import { useCampaignPermissions } from "pages/games/gamePageLayout/hooks/usePermissions";
+
+import { NoteFolder, ReadPermissions } from "api-calls/notes/_notes.type";
+
+import { useUID } from "atoms/auth.atom";
+
 import { FolderActionMenu } from "./FolderActionMenu";
+import { getItemName } from "./getFolderName";
 
 export interface FolderItemProps {
   folderId: string;

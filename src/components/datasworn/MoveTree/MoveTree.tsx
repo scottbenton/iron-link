@@ -1,16 +1,17 @@
-import { useDeferredValue, useMemo, useState } from "react";
-import { useTranslation } from "react-i18next";
 import SearchIcon from "@mui/icons-material/Search";
 import { Box, Input, InputAdornment, List, ListSubheader } from "@mui/material";
+import { useDeferredValue, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 
+import { useMoves } from "atoms/dataswornRules/useMoves";
+
+import { MoveCategoryListItem } from "./MoveCategoryListItem";
 import {
   CategoryVisibilityState,
-  getMoveCategoryVisibility,
   MoveVisibilityState,
   VisibilitySettings,
+  getMoveCategoryVisibility,
 } from "./getMoveCategoryVisibility";
-import { MoveCategoryListItem } from "./MoveCategoryListItem";
-import { useMoves } from "atoms/dataswornRules/useMoves";
 
 export function MoveTree() {
   const { t } = useTranslation();

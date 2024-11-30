@@ -1,5 +1,5 @@
-import { PropsWithChildren } from "react";
 import { Breakpoint, Container, Paper, SxProps, Theme } from "@mui/material";
+import { PropsWithChildren } from "react";
 
 export interface PageContentProps extends PropsWithChildren {
   isPaper?: boolean;

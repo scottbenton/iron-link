@@ -1,9 +1,9 @@
-import React, { Suspense } from "react";
-import { I18nextProvider } from "react-i18next";
 import "@fontsource-variable/inter";
 import "@fontsource/barlow-condensed/600.css";
 import { Box, LinearProgress } from "@mui/material";
 import type { Preview } from "@storybook/react";
+import React, { Suspense } from "react";
+import { I18nextProvider } from "react-i18next";
 import {
   reactRouterParameters,
   withRouter,

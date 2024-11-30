@@ -1,7 +1,7 @@
-import { ForwardedRef, forwardRef } from "react";
 import { Alert } from "@mui/material";
 import { CustomContentProps } from "notistack";
 import { closeSnackbar } from "notistack";
+import { ForwardedRef, forwardRef } from "react";
 
 const SnackbarComponent = (
   props: CustomContentProps,

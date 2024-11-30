@@ -1,8 +1,9 @@
 import { addDoc } from "firebase/firestore";
 
-import { getHomebrewMoveCategoryCollection } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
 import { HomebrewMoveCategoryDocument } from "api-calls/homebrew/moves/categories/_homebrewMoveCategory.type";
+
+import { getHomebrewMoveCategoryCollection } from "./_getRef";
 
 export const createHomebrewMoveCategory = createApiFunction<
   { moveCategory: HomebrewMoveCategoryDocument },

@@ -1,4 +1,5 @@
 import { Nullable } from "api-calls/helpers.type";
+
 import { ColorScheme } from "atoms/theme.atom";
 
 export type StatsMap = Record<string, number>;

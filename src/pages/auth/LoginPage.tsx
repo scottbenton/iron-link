@@ -1,5 +1,6 @@
-import { AuthPage } from "pages/auth/AuthPage";
 import { Head } from "providers/HeadProvider/Head";
+
+import { AuthPage } from "pages/auth/AuthPage";
 
 export function LoginPage() {
   return (

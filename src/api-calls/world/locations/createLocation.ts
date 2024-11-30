@@ -1,7 +1,8 @@
-import { addDoc, Timestamp } from "firebase/firestore";
+import { Timestamp, addDoc } from "firebase/firestore";
+
+import { createApiFunction } from "api-calls/createApiFunction";
 
 import { getLocationCollection } from "./_getRef";
-import { createApiFunction } from "api-calls/createApiFunction";
 
 export const createLocation = createApiFunction<
   { worldId: string; shared?: boolean },

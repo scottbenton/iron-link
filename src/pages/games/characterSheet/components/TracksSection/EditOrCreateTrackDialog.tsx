@@ -1,5 +1,3 @@
-import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
 import {
   Alert,
   AlertTitle,
@@ -15,10 +13,11 @@ import {
   TextField,
 } from "@mui/material";
 import { TFunction } from "i18next";
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
-import { addProgressTrack } from "api-calls/tracks/addProgressTrack";
-import { updateProgressTrack } from "api-calls/tracks/updateProgressTrack";
 import { useCampaignId } from "pages/games/gamePageLayout/hooks/useCampaignId";
+
 import {
   Difficulty,
   ProgressTrack,
@@ -27,6 +26,9 @@ import {
   TrackStatus,
   TrackTypes,
 } from "types/Track.type";
+
+import { addProgressTrack } from "api-calls/tracks/addProgressTrack";
+import { updateProgressTrack } from "api-calls/tracks/updateProgressTrack";
 
 export interface EditOrCreateTrackDialogProps {
   open: boolean;

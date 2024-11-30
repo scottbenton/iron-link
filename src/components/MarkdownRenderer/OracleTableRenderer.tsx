@@ -1,4 +1,5 @@
 import { Datasworn } from "@datasworn/core";
+
 // import { OracleCollection } from "components/features/charactersAndCampaigns/LinkedDialog/LinkedDialogContent/OracleDialogContent/OracleCollection";
 // import { OracleRollableTable } from "components/features/charactersAndCampaigns/LinkedDialog/LinkedDialogContent/OracleDialogContent/OracleRollableTable";
 // import { OracleTableSharedResults } from "components/features/charactersAndCampaigns/LinkedDialog/LinkedDialogContent/OracleDialogContent/OracleTableSharedResults";

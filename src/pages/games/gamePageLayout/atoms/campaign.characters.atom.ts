@@ -1,8 +1,9 @@
-import { useMemo } from "react";
 import { atom, useAtom, useAtomValue, useSetAtom } from "jotai";
+import { useMemo } from "react";
 
 import { AssetDocument } from "api-calls/assets/_asset.type";
 import { CharacterDocument } from "api-calls/character/_character.type";
+
 import { derivedAtomWithEquality } from "atoms/derivedAtomWithEquality";
 
 export interface CharacterStore {

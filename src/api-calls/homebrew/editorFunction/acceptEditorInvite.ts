@@ -1,5 +1,6 @@
-import { functions } from "config/firebase.config";
 import { httpsCallable } from "firebase/functions";
+
+import { functions } from "config/firebase.config";
 
 export function acceptEditorInvite(
   homebrewCollectionId: string,

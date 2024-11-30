@@ -1,8 +1,9 @@
 import { addDoc } from "firebase/firestore";
 
-import { getHomebrewConditionMeterCollection } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
 import { HomebrewConditionMeterDocument } from "api-calls/homebrew/rules/conditionMeters/_homebrewConditionMeters.type";
+
+import { getHomebrewConditionMeterCollection } from "./_getRef";
 
 export const createHomebrewConditionMeter = createApiFunction<
   {

@@ -1,12 +1,13 @@
-import { firestore } from "config/firebase.config";
 import {
-  collection,
   CollectionReference,
-  doc,
   DocumentReference,
+  collection,
+  doc,
 } from "firebase/firestore";
 
 import { HomebrewConditionMeterDocument } from "api-calls/homebrew/rules/conditionMeters/_homebrewConditionMeters.type";
+
+import { firestore } from "config/firebase.config";
 
 export function constructHomebrewConditionMeterCollectionPath() {
   return `homebrew/homebrew/condition_meters`;

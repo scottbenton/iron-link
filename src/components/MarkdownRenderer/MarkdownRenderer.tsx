@@ -1,4 +1,3 @@
-import ReactMarkdown from "react-markdown";
 import { Datasworn, IdParser } from "@datasworn/core";
 import {
   Box,
@@ -10,11 +9,14 @@ import {
   TypographyProps,
   useTheme,
 } from "@mui/material";
+import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
-import { OracleTableRenderer } from "./OracleTableRenderer";
 import { useOpenDataswornDialog } from "atoms/dataswornDialog.atom";
+
 import { idMap } from "data/idMap";
+
+import { OracleTableRenderer } from "./OracleTableRenderer";
 
 export interface MarkdownRendererProps {
   inlineParagraph?: boolean;

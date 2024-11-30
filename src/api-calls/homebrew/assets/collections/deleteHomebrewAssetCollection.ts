@@ -1,7 +1,8 @@
 import { deleteDoc } from "firebase/firestore";
 
-import { getHomebrewAssetCollectionDoc } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
+
+import { getHomebrewAssetCollectionDoc } from "./_getRef";
 
 export const deleteHomebrewAssetCollection = createApiFunction<
   {

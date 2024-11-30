@@ -1,7 +1,9 @@
+import { useDerivedCampaignState } from "pages/games/gamePageLayout/hooks/useDerivedCampaignState";
+
+import { TrackTypes } from "types/Track.type";
+
 import { TrackClock } from "./TrackClock";
 import { TrackProgressTrack } from "./TrackProgressTrack";
-import { useDerivedCampaignState } from "pages/games/gamePageLayout/hooks/useDerivedCampaignState";
-import { TrackTypes } from "types/Track.type";
 
 export interface TrackItemProps {
   gameId: string;

@@ -1,14 +1,18 @@
-import { useMemo } from "react";
 import { Box, Card, CardActionArea, Typography } from "@mui/material";
+import { useMemo } from "react";
 
-import { CampaignCharacterPortraits } from "./CampaignCharacterPortraits";
-import { CampaignDocument } from "api-calls/campaign/_campaign.type";
 import { LinkComponent } from "components/LinkComponent";
+
+import { pathConfig } from "pages/pathConfig";
+
+import { CampaignDocument } from "api-calls/campaign/_campaign.type";
+
 import {
   defaultBaseRulesets,
   defaultExpansions,
 } from "data/datasworn.packages";
-import { pathConfig } from "pages/pathConfig";
+
+import { CampaignCharacterPortraits } from "./CampaignCharacterPortraits";
 
 export interface CampaignCardProps {
   campaignId: string;

@@ -1,12 +1,14 @@
-import { useEffect } from "react";
 import { Unsubscribe } from "firebase/firestore";
 import { t } from "i18next";
 import { atom, useAtom, useAtomValue } from "jotai";
+import { useEffect } from "react";
 
-import { useCurrentUserUID } from "./auth.atom";
 import { CharacterDocument } from "api-calls/character/_character.type";
 import { listenToUsersCharacters } from "api-calls/character/listenToUsersCharacters";
+
 import { getErrorMessage } from "lib/getErrorMessage";
+
+import { useCurrentUserUID } from "./auth.atom";
 
 const usersCharactersAtom = atom<{
   characters: Record<string, CharacterDocument>;

@@ -1,11 +1,13 @@
-import { useCallback, useEffect, useRef, useState } from "react";
 import { Editor } from "@tiptap/react";
-import { firebaseAuth } from "config/firebase.config";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { WebrtcProvider } from "y-webrtc";
 import * as Y from "yjs";
 
-import { RtcEditorComponent } from "./RtcEditorComponent";
 import { useCreateRefFrom } from "hooks/useCreateRefFrom";
+
+import { firebaseAuth } from "config/firebase.config";
+
+import { RtcEditorComponent } from "./RtcEditorComponent";
 
 export interface RtcRichTextEditorProps {
   id: string;

@@ -1,8 +1,9 @@
 import { setDoc, updateDoc } from "firebase/firestore";
 
-import { getCampaignSettingsDoc, getCharacterSettingsDoc } from "./_getRef";
 import { SettingsDocument } from "api-calls/character-campaign-settings/_character-campaign-settings.type";
 import { createApiFunction } from "api-calls/createApiFunction";
+
+import { getCampaignSettingsDoc, getCharacterSettingsDoc } from "./_getRef";
 
 export const updateSettings = createApiFunction<
   {

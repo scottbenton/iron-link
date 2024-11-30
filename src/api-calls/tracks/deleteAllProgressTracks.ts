@@ -1,8 +1,9 @@
 import { getDocs } from "firebase/firestore";
 
+import { createApiFunction } from "api-calls/createApiFunction";
+
 import { getCampaignTracksCollection } from "./_getRef";
 import { removeProgressTrack } from "./removeProgressTrack";
-import { createApiFunction } from "api-calls/createApiFunction";
 
 function getAllProgressTracks(gameId: string): Promise<string[]> {
   return new Promise<string[]>((resolve, reject) => {

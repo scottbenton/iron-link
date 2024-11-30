@@ -1,12 +1,13 @@
-import { firestore } from "config/firebase.config";
 import {
-  collection,
   CollectionReference,
-  doc,
   DocumentReference,
+  collection,
+  doc,
 } from "firebase/firestore";
 
 import { HomebrewStatDocument } from "api-calls/homebrew/rules/stats/_homebrewStat.type";
+
+import { firestore } from "config/firebase.config";
 
 export function constructHomebrewStatsCollectionPath() {
   return `homebrew/homebrew/stats`;

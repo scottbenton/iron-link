@@ -5,8 +5,9 @@ import SignInIcon from "@mui/icons-material/Person";
 import SignUpIcon from "@mui/icons-material/PersonAddAlt1";
 import WorldsIcon from "@mui/icons-material/TravelExplore";
 
-import { i18n } from "i18n/config";
 import { pathConfig } from "pages/pathConfig";
+
+import { i18n } from "i18n/config";
 
 export interface NavRouteConfig {
   Logo: typeof CharacterIcon;

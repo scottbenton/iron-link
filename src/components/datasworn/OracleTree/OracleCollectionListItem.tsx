@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Datasworn } from "@datasworn/core";
 import ChevronIcon from "@mui/icons-material/ChevronRight";
 import {
@@ -9,13 +8,14 @@ import {
   ListItemText,
 } from "@mui/material";
 import { ListItemIcon } from "@mui/material";
+import { useState } from "react";
 
+import { OracleListItem } from "./OracleListItem";
+import { OracleTableSharedTextListItem } from "./OracleTableSharedTextListItem";
 import {
   CollectionVisibilityState,
   VisibilitySettings,
 } from "./getOracleCollectionVisiblity";
-import { OracleListItem } from "./OracleListItem";
-import { OracleTableSharedTextListItem } from "./OracleTableSharedTextListItem";
 
 export interface OracleCollectionListItemProps {
   oracleCollectionId: string;

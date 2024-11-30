@@ -1,11 +1,12 @@
+import { ConfirmProvider } from "material-ui-confirm";
 import { useTranslation } from "react-i18next";
 import { RouterProvider } from "react-router-dom";
-import { ConfirmProvider } from "material-ui-confirm";
+
+import { router } from "pages/routes";
 
 import { HeadProvider } from "./HeadProvider";
 import { SnackbarProvider } from "./SnackbarProvider";
 import { ThemeProvider } from "./ThemeProvider";
-import { router } from "pages/routes";
 
 export function Providers() {
   const { t } = useTranslation();

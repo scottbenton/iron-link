@@ -1,7 +1,8 @@
 import { arrayRemove, arrayUnion, setDoc } from "firebase/firestore";
 
-import { getCampaignSettingsDoc, getCharacterSettingsDoc } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
+
+import { getCampaignSettingsDoc, getCharacterSettingsDoc } from "./_getRef";
 
 export const showOrHideCustomMove = createApiFunction<
   {

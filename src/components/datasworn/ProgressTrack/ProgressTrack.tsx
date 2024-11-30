@@ -1,20 +1,22 @@
-import { useEffect, useId, useState } from "react";
-import { useTranslation } from "react-i18next";
 import AddIcon from "@mui/icons-material/Add";
 import MinusIcon from "@mui/icons-material/Remove";
 import {
   Box,
-  capitalize,
   Chip,
   IconButton,
   Link,
   Typography,
+  capitalize,
 } from "@mui/material";
 import { TFunction } from "i18next";
+import { useEffect, useId, useState } from "react";
+import { useTranslation } from "react-i18next";
+
+import { Difficulty, TrackStatus } from "types/Track.type";
+
+import { useSetAnnouncement } from "atoms/announcement.atom";
 
 import { ProgressTrackTick } from "./ProgressTrackTick";
-import { useSetAnnouncement } from "atoms/announcement.atom";
-import { Difficulty, TrackStatus } from "types/Track.type";
 
 export interface ProgressTrackProps {
   difficulty?: Difficulty;

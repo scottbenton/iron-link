@@ -1,8 +1,9 @@
 import { UpdateData, updateDoc } from "firebase/firestore";
 
-import { getUsersDoc } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
 import { UserDocument } from "api-calls/user/_user.type";
+
+import { getUsersDoc } from "./_getRef";
 
 export const updateUserDocNestedFields = createApiFunction<
   { uid: string; user: UpdateData<UserDocument> },

@@ -1,5 +1,3 @@
-import { useCallback, useState } from "react";
-import { useTranslation } from "react-i18next";
 import DeleteIcon from "@mui/icons-material/Delete";
 import RenameIcon from "@mui/icons-material/DriveFileRenameOutline";
 import BoldIcon from "@mui/icons-material/FormatBold";
@@ -18,18 +16,22 @@ import {
 } from "@mui/material";
 import { Editor } from "@tiptap/react";
 import { useConfirm } from "material-ui-confirm";
+import { useCallback, useState } from "react";
+import { useTranslation } from "react-i18next";
 
-import { NameItemDialog } from "../FolderView/NameItemDialog";
-import { ShareButton } from "../ShareButton";
-import { TextTypeDropdown } from "./TextTypeDropdown";
-import { NotePermissions, useNotePermission } from "./useNotePermission";
-import { removeNote } from "api-calls/notes/removeNote";
-import { updateNote } from "api-calls/notes/updateNote";
 import {
   useDerivedNotesAtom,
   useSetOpenItem,
 } from "pages/games/gamePageLayout/atoms/notes.atom";
 import { useCampaignId } from "pages/games/gamePageLayout/hooks/useCampaignId";
+
+import { removeNote } from "api-calls/notes/removeNote";
+import { updateNote } from "api-calls/notes/updateNote";
+
+import { NameItemDialog } from "../FolderView/NameItemDialog";
+import { ShareButton } from "../ShareButton";
+import { TextTypeDropdown } from "./TextTypeDropdown";
+import { NotePermissions, useNotePermission } from "./useNotePermission";
 
 export interface NoteToolbarContentProps {
   openNoteId: string;

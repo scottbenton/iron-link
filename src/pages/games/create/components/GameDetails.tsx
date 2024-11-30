@@ -1,9 +1,10 @@
-import { useTranslation } from "react-i18next";
 import { TextField } from "@mui/material";
 import { useAtom } from "jotai";
+import { useTranslation } from "react-i18next";
+
+import { SectionHeading } from "components/SectionHeading";
 
 import { createGameAtom } from "../atoms/createGame.atom";
-import { SectionHeading } from "components/SectionHeading";
 
 export function GameDetails() {
   const { t } = useTranslation();

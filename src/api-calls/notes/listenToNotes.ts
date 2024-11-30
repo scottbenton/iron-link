@@ -1,18 +1,19 @@
 import {
-  and,
   DocumentData,
-  onSnapshot,
-  or,
   Query,
-  query,
   QuerySnapshot,
   Unsubscribe,
+  and,
+  onSnapshot,
+  or,
+  query,
   where,
 } from "firebase/firestore";
 
+import { CampaignPermissionType } from "pages/games/gamePageLayout/hooks/usePermissions";
+
 import { getNoteCollection } from "./_getRef";
 import { NoteDocument, ReadPermissions } from "./_notes.type";
-import { CampaignPermissionType } from "pages/games/gamePageLayout/hooks/usePermissions";
 
 export function listenToNotes(
   uid: string,

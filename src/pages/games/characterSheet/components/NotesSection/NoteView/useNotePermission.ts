@@ -1,11 +1,13 @@
-import { GUIDE_NOTE_FOLDER_NAME } from "api-calls/notes/_getRef";
-import { EditPermissions, NoteFolder } from "api-calls/notes/_notes.type";
-import { useUID } from "atoms/auth.atom";
 import { useDerivedNotesAtom } from "pages/games/gamePageLayout/atoms/notes.atom";
 import {
   CampaignPermissionType,
   useCampaignPermissions,
 } from "pages/games/gamePageLayout/hooks/usePermissions";
+
+import { GUIDE_NOTE_FOLDER_NAME } from "api-calls/notes/_getRef";
+import { EditPermissions, NoteFolder } from "api-calls/notes/_notes.type";
+
+import { useUID } from "atoms/auth.atom";
 
 export interface NotePermissions {
   canChangePermissions: boolean;

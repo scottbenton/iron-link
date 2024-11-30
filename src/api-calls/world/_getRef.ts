@@ -1,11 +1,12 @@
-import { firestore } from "config/firebase.config";
 import {
   Bytes,
-  collection,
   CollectionReference,
-  doc,
   DocumentReference,
+  collection,
+  doc,
 } from "firebase/firestore";
+
+import { firestore } from "config/firebase.config";
 
 import { World, WorldDocument } from "./_world.type";
 

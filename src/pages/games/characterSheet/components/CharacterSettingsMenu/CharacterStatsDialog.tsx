@@ -1,13 +1,16 @@
+import { Button, Dialog, DialogActions, DialogContent } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Button, Dialog, DialogActions, DialogContent } from "@mui/material";
+
+import { DialogTitleWithCloseButton } from "components/DialogTitleWithCloseButton";
+import { ConditionMeter } from "components/datasworn/ConditonMeter";
+
+import { updateCharacter } from "api-calls/character/updateCharacter";
+
+import { useStatRules } from "atoms/dataswornRules/useStatRules";
 
 import { useCharacterId } from "../../hooks/useCharacterId";
 import { useDerivedCurrentCharacterState } from "../../hooks/useDerivedCharacterState";
-import { updateCharacter } from "api-calls/character/updateCharacter";
-import { useStatRules } from "atoms/dataswornRules/useStatRules";
-import { ConditionMeter } from "components/datasworn/ConditonMeter";
-import { DialogTitleWithCloseButton } from "components/DialogTitleWithCloseButton";
 
 export interface CharacterStatsDialogProps {
   open: boolean;

@@ -1,9 +1,11 @@
 import { Unsubscribe } from "firebase/auth";
 import { onSnapshot } from "firebase/firestore";
 
-import { getPrivateDetailsLocationDoc } from "./_getRef";
-import { getErrorMessage } from "lib/getErrorMessage";
 import { GMLocation } from "types/Locations.type";
+
+import { getErrorMessage } from "lib/getErrorMessage";
+
+import { getPrivateDetailsLocationDoc } from "./_getRef";
 
 export function listenToLocationGMProperties(
   worldId: string,

@@ -1,10 +1,12 @@
-import { useTranslation } from "react-i18next";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { Box, ButtonBase, ThemeProvider, Typography } from "@mui/material";
+import { useTranslation } from "react-i18next";
+
+import { getTheme } from "providers/ThemeProvider/themes/themeConfig";
+
+import { ColorScheme } from "atoms/theme.atom";
 
 import { IronLinkLogo } from "./Layout/IronLinkLogo";
-import { ColorScheme } from "atoms/theme.atom";
-import { getTheme } from "providers/ThemeProvider/themes/themeConfig";
 
 export interface ColorSchemeSelectorProps {
   selectedColorScheme: ColorScheme;

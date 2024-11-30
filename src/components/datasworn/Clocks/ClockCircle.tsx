@@ -1,5 +1,5 @@
-import { PropsWithChildren } from "react";
 import { Box, ButtonBase, SxProps, Theme, useTheme } from "@mui/material";
+import { PropsWithChildren } from "react";
 
 import { ClockSegment } from "./ClockSegment";
 

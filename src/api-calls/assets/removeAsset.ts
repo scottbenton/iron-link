@@ -1,7 +1,8 @@
 import { deleteDoc } from "firebase/firestore";
 
-import { getCampaignAssetDoc, getCharacterAssetDoc } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
+
+import { getCampaignAssetDoc, getCharacterAssetDoc } from "./_getRef";
 
 export const removeAsset = createApiFunction<
   {

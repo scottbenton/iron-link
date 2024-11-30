@@ -1,12 +1,13 @@
-import { firestore } from "config/firebase.config";
 import {
-  collection,
   CollectionReference,
-  doc,
   DocumentReference,
+  collection,
+  doc,
 } from "firebase/firestore";
 
 import { HomebrewImpactCategoryDocument } from "api-calls/homebrew/rules/impacts/_homebrewImpacts.type";
+
+import { firestore } from "config/firebase.config";
 
 export function constructHomebrewImpactsCollectionPath() {
   return `homebrew/homebrew/impacts`;

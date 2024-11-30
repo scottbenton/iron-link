@@ -1,8 +1,9 @@
 import { addDoc } from "firebase/firestore";
 
-import { getHomebrewStatsCollection } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
 import { HomebrewStatDocument } from "api-calls/homebrew/rules/stats/_homebrewStat.type";
+
+import { getHomebrewStatsCollection } from "./_getRef";
 
 export const createHomebrewStat = createApiFunction<
   {

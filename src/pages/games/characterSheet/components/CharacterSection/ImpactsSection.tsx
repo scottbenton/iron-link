@@ -1,9 +1,6 @@
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
 import EditIcon from "@mui/icons-material/Edit";
 import {
   Box,
-  capitalize,
   Card,
   Checkbox,
   Dialog,
@@ -12,16 +9,22 @@ import {
   FormControlLabel,
   IconButton,
   Typography,
+  capitalize,
 } from "@mui/material";
 import { Button } from "@mui/material";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
+
+import { DialogTitleWithCloseButton } from "components/DialogTitleWithCloseButton";
+import { GridLayout } from "components/Layout";
+
+import { updateCharacter } from "api-calls/character/updateCharacter";
+
+import { useImpactRules } from "atoms/dataswornRules/useImpactRules";
 
 import { useCharacterId } from "../../hooks/useCharacterId";
 import { useDerivedCurrentCharacterState } from "../../hooks/useDerivedCharacterState";
 import { useIsOwnerOfCharacter } from "../../hooks/useIsOwnerOfCharacter";
-import { updateCharacter } from "api-calls/character/updateCharacter";
-import { useImpactRules } from "atoms/dataswornRules/useImpactRules";
-import { DialogTitleWithCloseButton } from "components/DialogTitleWithCloseButton";
-import { GridLayout } from "components/Layout";
 
 export function ImpactsSection() {
   const characterId = useCharacterId();

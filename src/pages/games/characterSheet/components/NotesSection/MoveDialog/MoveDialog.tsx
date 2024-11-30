@@ -5,27 +5,32 @@ import {
   DialogContent,
   Typography,
 } from "@mui/material";
-import { DialogTitleWithCloseButton } from "components/DialogTitleWithCloseButton";
-import { useCallback, useState } from "react";
 import { SimpleTreeView, TreeItem } from "@mui/x-tree-view";
+import { useCallback, useState } from "react";
+import { useTranslation } from "react-i18next";
+
+import { DialogTitleWithCloseButton } from "components/DialogTitleWithCloseButton";
+
 import { useDerivedNotesAtom } from "pages/games/gamePageLayout/atoms/notes.atom";
-import { EditPermissions, NoteFolder } from "api-calls/notes/_notes.type";
-import { useUID } from "atoms/auth.atom";
+import { useCampaignId } from "pages/games/gamePageLayout/hooks/useCampaignId";
 import {
   CampaignPermissionType,
   useCampaignPermissions,
 } from "pages/games/gamePageLayout/hooks/usePermissions";
-import { MoveTreeItem } from "./MoveTreeItem";
-import { FAKE_ROOT_NOTE_FOLDER_KEY } from "../FolderView/rootNodeName";
-import { getItemName } from "../FolderView/getFolderName";
-import { useTranslation } from "react-i18next";
+
 import { GUIDE_NOTE_FOLDER_NAME } from "api-calls/notes/_getRef";
-import { updateNotePermissions } from "api-calls/notes/updateNotePermissions";
-import { useCampaignId } from "pages/games/gamePageLayout/hooks/useCampaignId";
-import { updateNoteFolderPermissions } from "api-calls/notes/updateNoteFolderPermissions";
-import { useFolderDescendants } from "../FolderView/useFolderDescendants";
+import { EditPermissions, NoteFolder } from "api-calls/notes/_notes.type";
 import { updateNote } from "api-calls/notes/updateNote";
 import { updateNoteFolder } from "api-calls/notes/updateNoteFolder";
+import { updateNoteFolderPermissions } from "api-calls/notes/updateNoteFolderPermissions";
+import { updateNotePermissions } from "api-calls/notes/updateNotePermissions";
+
+import { useUID } from "atoms/auth.atom";
+
+import { getItemName } from "../FolderView/getFolderName";
+import { FAKE_ROOT_NOTE_FOLDER_KEY } from "../FolderView/rootNodeName";
+import { useFolderDescendants } from "../FolderView/useFolderDescendants";
+import { MoveTreeItem } from "./MoveTreeItem";
 
 export interface MoveDialogProps {
   open: boolean;

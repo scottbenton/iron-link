@@ -1,15 +1,18 @@
-import { firebaseAuth } from "config/firebase.config";
 import { deleteDoc } from "firebase/firestore";
+
+import { deleteAllAssets } from "api-calls/assets/deleteAllAssets";
+import { removeCharacterFromCampaign } from "api-calls/campaign/removeCharacterFromCampaign";
+import { getCharacterSettingsDoc } from "api-calls/character-campaign-settings/_getRef";
+import { createApiFunction } from "api-calls/createApiFunction";
+
+import { firebaseAuth } from "config/firebase.config";
+
+import { deleteImage } from "lib/storage.lib";
 
 import {
   constructCharacterPortraitFolderPath,
   getCharacterDoc,
 } from "./_getRef";
-import { deleteAllAssets } from "api-calls/assets/deleteAllAssets";
-import { removeCharacterFromCampaign } from "api-calls/campaign/removeCharacterFromCampaign";
-import { getCharacterSettingsDoc } from "api-calls/character-campaign-settings/_getRef";
-import { createApiFunction } from "api-calls/createApiFunction";
-import { deleteImage } from "lib/storage.lib";
 
 export const deleteCharacter = createApiFunction<
   {

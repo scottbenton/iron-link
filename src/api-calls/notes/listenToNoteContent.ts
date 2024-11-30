@@ -1,4 +1,4 @@
-import { onSnapshot, Unsubscribe } from "firebase/firestore";
+import { Unsubscribe, onSnapshot } from "firebase/firestore";
 
 import { getNoteContentDocument } from "api-calls/notes/_getRef";
 

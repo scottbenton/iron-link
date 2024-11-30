@@ -1,5 +1,3 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
 import AccountIcon from "@mui/icons-material/Person";
 import {
   Alert,
@@ -12,13 +10,19 @@ import {
   Typography,
 } from "@mui/material";
 import { FirebaseError } from "firebase/app";
+import { useState } from "react";
+import { Link } from "react-router-dom";
 
 import { GoogleIcon } from "assets/GoogleIcon";
+
+import { useSnackbar } from "providers/SnackbarProvider/useSnackbar";
+
 import { PageContent, PageHeader } from "components/Layout";
+
+import { pathConfig } from "pages/pathConfig";
+
 import { loginWithGoogle, sendMagicEmailLink } from "lib/auth.lib";
 import { getErrorMessage } from "lib/getErrorMessage";
-import { pathConfig } from "pages/pathConfig";
-import { useSnackbar } from "providers/SnackbarProvider/useSnackbar";
 
 export interface AuthPageProps {
   isLoginPage: boolean;

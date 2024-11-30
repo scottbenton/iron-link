@@ -1,10 +1,12 @@
 import { Datasworn } from "@datasworn/core";
 import { fireEvent, render, screen, within } from "@testing-library/react";
+import { MockedFunction, beforeEach, describe, expect, it, vi } from "vitest";
+
+import { useRollStatAndAddToLog } from "pages/games/hooks/useRollStatAndAddToLog";
+
+import { TestWrapper } from "tests/TestWrapper";
 
 import { AssetControl, AssetControlProps } from "../AssetControl";
-import { useRollStatAndAddToLog } from "pages/games/hooks/useRollStatAndAddToLog";
-import { TestWrapper } from "tests/TestWrapper";
-import { beforeEach, describe, expect, it, MockedFunction, vi } from "vitest";
 
 const mockRollStat = vi.fn();
 const mockUseRollStat = useRollStatAndAddToLog as MockedFunction<

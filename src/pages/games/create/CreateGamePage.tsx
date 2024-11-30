@@ -1,15 +1,29 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
 import { Alert, Box, Button, Step, StepLabel, Stepper } from "@mui/material";
 import { TFunction } from "i18next";
 import { useAtomValue } from "jotai";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
+
+import { GradientButton } from "components/GradientButton";
+import { PageContent, PageHeader } from "components/Layout";
+
+import { pathConfig } from "pages/pathConfig";
+
+import { addAsset } from "api-calls/assets/addAsset";
+import { CampaignType } from "api-calls/campaign/_campaign.type";
+import { addCharacterToCampaign } from "api-calls/campaign/addCharacterToCampaign";
+import { createCampaign } from "api-calls/campaign/createCampaign";
+import { createCharacterAndUploadPortrait } from "api-calls/character/createCharacter";
+
+import { useAuthAtom } from "atoms/auth.atom";
+import { derivedAtomWithEquality } from "atoms/derivedAtomWithEquality";
 
 import { useCreateCharacterAtom } from "./atoms/createCharacter.atom";
 import {
+  ICreateGameAtom,
   createGameAtom,
   defaultState,
-  ICreateGameAtom,
   useSetCreateGameAtom,
 } from "./atoms/createGame.atom";
 import { ChooseGameType } from "./components/ChooseGameType";
@@ -17,16 +31,6 @@ import { CreateCharacter } from "./components/CreateCharacter";
 import { GameDetails } from "./components/GameDetails";
 import { RulesetExpansionSection } from "./components/RulesetExpansionSection";
 import { useSyncActiveRulesPackages } from "./hooks/useSyncActiveRulesPackages";
-import { addAsset } from "api-calls/assets/addAsset";
-import { CampaignType } from "api-calls/campaign/_campaign.type";
-import { addCharacterToCampaign } from "api-calls/campaign/addCharacterToCampaign";
-import { createCampaign } from "api-calls/campaign/createCampaign";
-import { createCharacterAndUploadPortrait } from "api-calls/character/createCharacter";
-import { useAuthAtom } from "atoms/auth.atom";
-import { derivedAtomWithEquality } from "atoms/derivedAtomWithEquality";
-import { GradientButton } from "components/GradientButton";
-import { PageContent, PageHeader } from "components/Layout";
-import { pathConfig } from "pages/pathConfig";
 
 interface StepConfig {
   label: string;

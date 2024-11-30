@@ -1,14 +1,15 @@
-import React, { useCallback } from "react";
-import { useTranslation } from "react-i18next";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { IconButton, Tooltip } from "@mui/material";
 import { useConfirm } from "material-ui-confirm";
+import React, { useCallback } from "react";
+import { useTranslation } from "react-i18next";
+
+import { AssetCard } from "components/datasworn/AssetCard";
 
 import { AssetDocument } from "api-calls/assets/_asset.type";
 import { removeAsset } from "api-calls/assets/removeAsset";
 import { updateAsset } from "api-calls/assets/updateAsset";
 import { updateAssetCheckbox } from "api-calls/assets/updateAssetCheckbox";
-import { AssetCard } from "components/datasworn/AssetCard";
 
 export interface AssetsSectionCardProps {
   doesUserOwnCharacter: boolean;

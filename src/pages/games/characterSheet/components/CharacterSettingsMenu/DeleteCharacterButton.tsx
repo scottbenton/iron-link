@@ -1,17 +1,19 @@
-import { useCallback } from "react";
-import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { ListItemIcon, ListItemText, MenuItem } from "@mui/material";
 import { useConfirm } from "material-ui-confirm";
+import { useCallback } from "react";
+import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 
-import { useCharacterId } from "../../hooks/useCharacterId";
-import { useDerivedCharacterState } from "../../hooks/useDerivedCharacterState";
-import { deleteCampaign } from "api-calls/campaign/deleteCampaign";
-import { deleteCharacter } from "api-calls/character/deleteCharacter";
 import { useCampaignId } from "pages/games/gamePageLayout/hooks/useCampaignId";
 import { useDerivedCampaignDocumentState } from "pages/games/gamePageLayout/hooks/useDerivedCampaignState";
 import { pathConfig } from "pages/pathConfig";
+
+import { deleteCampaign } from "api-calls/campaign/deleteCampaign";
+import { deleteCharacter } from "api-calls/character/deleteCharacter";
+
+import { useCharacterId } from "../../hooks/useCharacterId";
+import { useDerivedCharacterState } from "../../hooks/useDerivedCharacterState";
 
 export interface DeleteCharacterButtonProps {
   closeMenu: () => void;

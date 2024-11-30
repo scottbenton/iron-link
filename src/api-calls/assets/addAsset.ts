@@ -1,11 +1,12 @@
 import { addDoc } from "firebase/firestore";
 
+import { AssetDocument } from "api-calls/assets/_asset.type";
+import { createApiFunction } from "api-calls/createApiFunction";
+
 import {
   getCampaignAssetCollection,
   getCharacterAssetCollection,
 } from "./_getRef";
-import { AssetDocument } from "api-calls/assets/_asset.type";
-import { createApiFunction } from "api-calls/createApiFunction";
 
 interface AddAssetParams {
   campaignId?: string;

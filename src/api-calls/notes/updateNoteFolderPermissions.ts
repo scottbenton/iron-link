@@ -1,5 +1,8 @@
-import { firestore } from "config/firebase.config";
 import { runTransaction } from "firebase/firestore";
+
+import { createApiFunction } from "api-calls/createApiFunction";
+
+import { firestore } from "config/firebase.config";
 
 import { getNoteDocument, getNoteFolderDocument } from "./_getRef";
 import {
@@ -8,7 +11,6 @@ import {
   NoteFolder,
   ReadPermissions,
 } from "./_notes.type";
-import { createApiFunction } from "api-calls/createApiFunction";
 
 interface PermissionGroup {
   readPermissions: ReadPermissions;

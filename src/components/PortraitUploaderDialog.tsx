@@ -1,5 +1,3 @@
-import { ChangeEventHandler, useState } from "react";
-import AvatarEditor from "react-avatar-editor";
 import CloseIcon from "@mui/icons-material/Close";
 import ZoomInIcon from "@mui/icons-material/ZoomIn";
 import ZoomOutIcon from "@mui/icons-material/ZoomOut";
@@ -13,9 +11,12 @@ import {
   DialogTitle,
   IconButton,
 } from "@mui/material";
+import { ChangeEventHandler, useState } from "react";
+import AvatarEditor from "react-avatar-editor";
+
+import { useSnackbar } from "providers/SnackbarProvider/useSnackbar";
 
 import { MAX_FILE_SIZE, MAX_FILE_SIZE_LABEL } from "lib/storage.lib";
-import { useSnackbar } from "providers/SnackbarProvider/useSnackbar";
 
 export interface PortraitUploaderDialogProps {
   open: boolean;

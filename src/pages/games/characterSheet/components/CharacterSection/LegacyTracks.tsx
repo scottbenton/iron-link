@@ -1,12 +1,15 @@
-import { useCallback } from "react";
 import { Box, Typography } from "@mui/material";
+import { useCallback } from "react";
+
+import { DebouncedProgressTrack } from "components/datasworn/ProgressTrack";
+
+import { updateCharacter } from "api-calls/character/updateCharacter";
+
+import { useSpecialTrackRules } from "atoms/dataswornRules/useSpecialTrackRules";
 
 import { useCharacterId } from "../../hooks/useCharacterId";
 import { useDerivedCurrentCharacterState } from "../../hooks/useDerivedCharacterState";
 import { useIsOwnerOfCharacter } from "../../hooks/useIsOwnerOfCharacter";
-import { updateCharacter } from "api-calls/character/updateCharacter";
-import { useSpecialTrackRules } from "atoms/dataswornRules/useSpecialTrackRules";
-import { DebouncedProgressTrack } from "components/datasworn/ProgressTrack";
 
 export function LegacyTracks() {
   const characterId = useCharacterId();

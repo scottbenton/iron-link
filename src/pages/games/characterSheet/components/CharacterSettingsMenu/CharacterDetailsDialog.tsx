@@ -1,6 +1,3 @@
-import { ChangeEventHandler, useCallback, useEffect, useState } from "react";
-import AvatarEditor from "react-avatar-editor";
-import { useTranslation } from "react-i18next";
 import ZoomInIcon from "@mui/icons-material/ZoomIn";
 import ZoomOutIcon from "@mui/icons-material/ZoomOut";
 import {
@@ -12,16 +9,24 @@ import {
   DialogContent,
   TextField,
 } from "@mui/material";
+import { ChangeEventHandler, useCallback, useEffect, useState } from "react";
+import AvatarEditor from "react-avatar-editor";
+import { useTranslation } from "react-i18next";
 
-import { useCharacterId } from "../../hooks/useCharacterId";
-import { useDerivedCurrentCharacterState } from "../../hooks/useDerivedCharacterState";
+import { useSnackbar } from "providers/SnackbarProvider";
+
+import { DialogTitleWithCloseButton } from "components/DialogTitleWithCloseButton";
+
 import { removeCharacterPortrait } from "api-calls/character/removeCharacterPortrait";
 import { updateCharacter } from "api-calls/character/updateCharacter";
 import { updateCharacterPortrait } from "api-calls/character/updateCharacterPortrait";
+
 import { useCharacterPortrait } from "atoms/characterPortraits.atom";
-import { DialogTitleWithCloseButton } from "components/DialogTitleWithCloseButton";
+
 import { MAX_FILE_SIZE, MAX_FILE_SIZE_LABEL } from "lib/storage.lib";
-import { useSnackbar } from "providers/SnackbarProvider";
+
+import { useCharacterId } from "../../hooks/useCharacterId";
+import { useDerivedCurrentCharacterState } from "../../hooks/useDerivedCharacterState";
 
 export interface CharacterDetailsDialogProps {
   open: boolean;

@@ -1,14 +1,17 @@
-import { useTranslation } from "react-i18next";
-import { useLocation, useParams } from "react-router-dom";
 import { Tab, Tabs } from "@mui/material";
 import { useAtomValue } from "jotai";
+import { useTranslation } from "react-i18next";
+import { useLocation, useParams } from "react-router-dom";
+
+import { LinkComponent } from "components/LinkComponent";
+
+import { pathConfig } from "pages/pathConfig";
+
+import { useAuthAtom } from "atoms/auth.atom";
+import { derivedAtomWithEquality } from "atoms/derivedAtomWithEquality";
 
 import { currentCampaignAtom } from "../atoms/campaign.atom";
 import { campaignCharactersAtom } from "../atoms/campaign.characters.atom";
-import { useAuthAtom } from "atoms/auth.atom";
-import { derivedAtomWithEquality } from "atoms/derivedAtomWithEquality";
-import { LinkComponent } from "components/LinkComponent";
-import { pathConfig } from "pages/pathConfig";
 
 const campaignCharacterList = derivedAtomWithEquality(
   currentCampaignAtom,

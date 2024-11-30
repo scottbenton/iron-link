@@ -1,8 +1,9 @@
 import { PartialWithFieldValue, updateDoc } from "firebase/firestore";
 
-import { getHomebrewOracleCollectionDoc } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
 import { HomebrewOracleCollectionDocument } from "api-calls/homebrew/oracles/collections/_homebrewOracleCollection.type";
+
+import { getHomebrewOracleCollectionDoc } from "./_getRef";
 
 export const updateHomebrewOracleCollection = createApiFunction<
   {

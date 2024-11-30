@@ -1,11 +1,12 @@
-import { useCallback, useState } from "react";
-import { useTranslation } from "react-i18next";
 import { Button, Checkbox, FormControlLabel } from "@mui/material";
 import { Box } from "@mui/material";
+import { useCallback, useState } from "react";
+import { useTranslation } from "react-i18next";
+
+import { AssetCardDialog } from "components/datasworn/AssetCardDialog/AssetCardDialog";
 
 import { AssetDocument } from "api-calls/assets/_asset.type";
 import { addAsset } from "api-calls/assets/addAsset";
-import { AssetCardDialog } from "components/datasworn/AssetCardDialog/AssetCardDialog";
 
 export interface AssetsSectionHeaderProps {
   campaignId: string;

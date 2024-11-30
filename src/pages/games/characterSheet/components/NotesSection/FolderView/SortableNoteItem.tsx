@@ -1,10 +1,11 @@
 import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 import DragOrderIcon from "@mui/icons-material/DragIndicator";
 import { Box, Card } from "@mui/material";
 
-import { NoteItemContent } from "./NoteItem";
-import { CSS } from "@dnd-kit/utilities";
 import { NoteDocument } from "api-calls/notes/_notes.type";
+
+import { NoteItemContent } from "./NoteItem";
 
 export interface SortableNoteItemProps {
   id: string;

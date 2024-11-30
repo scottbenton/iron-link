@@ -1,12 +1,13 @@
-import { firestore } from "config/firebase.config";
 import {
-  collection,
   CollectionReference,
-  doc,
   DocumentReference,
+  collection,
+  doc,
 } from "firebase/firestore";
 
 import { HomebrewMoveCategoryDocument } from "api-calls/homebrew/moves/categories/_homebrewMoveCategory.type";
+
+import { firestore } from "config/firebase.config";
 
 export function constructHomebrewMoveCategoryCollectionPath() {
   return `homebrew/homebrew/move_categories`;

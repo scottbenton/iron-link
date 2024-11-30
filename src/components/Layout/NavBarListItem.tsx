@@ -5,8 +5,9 @@ import {
   ListItemText,
 } from "@mui/material";
 
-import { NavRouteConfig } from "./navRoutes";
 import { LinkComponent } from "components/LinkComponent";
+
+import { NavRouteConfig } from "./navRoutes";
 
 export function NavBarListItem(props: NavRouteConfig) {
   const { title, Logo, href } = props;

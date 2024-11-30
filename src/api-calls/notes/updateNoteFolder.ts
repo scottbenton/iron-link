@@ -1,8 +1,9 @@
 import { PartialWithFieldValue, updateDoc } from "firebase/firestore";
 
+import { createApiFunction } from "api-calls/createApiFunction";
+
 import { getNoteFolderDocument } from "./_getRef";
 import { NoteFolder } from "./_notes.type";
-import { createApiFunction } from "api-calls/createApiFunction";
 
 export const updateNoteFolder = createApiFunction<
   {

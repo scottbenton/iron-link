@@ -1,4 +1,3 @@
-import React, { PropsWithChildren } from "react";
 import {
   Box,
   Breakpoint,
@@ -8,6 +7,7 @@ import {
   Theme,
   Typography,
 } from "@mui/material";
+import React, { PropsWithChildren } from "react";
 
 export interface PageHeaderProps extends PropsWithChildren {
   label?: string | React.ReactNode;

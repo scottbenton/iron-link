@@ -1,6 +1,6 @@
-import { firebaseAuth } from "../config/firebase.config";
 import {
   GoogleAuthProvider,
+  User,
   isSignInWithEmailLink,
   onAuthStateChanged,
   sendSignInLinkToEmail,
@@ -9,13 +9,15 @@ import {
   signInWithPopup,
   signOut,
   updateProfile,
-  User,
 } from "firebase/auth";
 
-import { getErrorMessage } from "./getErrorMessage";
+import { pathConfig } from "pages/pathConfig";
+
 import { UserDocument } from "api-calls/user/_user.type";
 import { updateUserDoc } from "api-calls/user/updateUserDoc";
-import { pathConfig } from "pages/pathConfig";
+
+import { firebaseAuth } from "../config/firebase.config";
+import { getErrorMessage } from "./getErrorMessage";
 
 const googleAuthProvider = new GoogleAuthProvider();
 

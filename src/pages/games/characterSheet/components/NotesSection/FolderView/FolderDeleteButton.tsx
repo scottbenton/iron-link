@@ -1,12 +1,14 @@
-import { useTranslation } from "react-i18next";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { IconButton, Tooltip } from "@mui/material";
 import { useConfirm } from "material-ui-confirm";
+import { useTranslation } from "react-i18next";
 
-import { useFolderDescendants } from "./useFolderDescendants";
-import { removeNoteFolderTransaction } from "api-calls/notes/removeNoteFolderTransaction";
 import { useSetOpenItem } from "pages/games/gamePageLayout/atoms/notes.atom";
 import { useCampaignId } from "pages/games/gamePageLayout/hooks/useCampaignId";
+
+import { removeNoteFolderTransaction } from "api-calls/notes/removeNoteFolderTransaction";
+
+import { useFolderDescendants } from "./useFolderDescendants";
 
 export interface FolderDeleteButtonProps {
   name: string;

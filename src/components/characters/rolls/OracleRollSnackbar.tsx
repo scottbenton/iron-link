@@ -1,6 +1,8 @@
-import { RollContainer, RollResult, RollTitle, RollValues } from "./common";
-import { useOracleRollable } from "hooks/datasworn/useOracleRollable";
 import { OracleTableRoll } from "types/DieRolls.type";
+
+import { useOracleRollable } from "hooks/datasworn/useOracleRollable";
+
+import { RollContainer, RollResult, RollTitle, RollValues } from "./common";
 
 export interface OracleRollSnackbarProps {
   rollId: string | undefined;

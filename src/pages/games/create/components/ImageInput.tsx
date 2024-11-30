@@ -1,12 +1,13 @@
-import { useEffect, useState } from "react";
 import { ButtonBase } from "@mui/material";
+import { useEffect, useState } from "react";
+
+import { PortraitUploaderDialog } from "components/PortraitUploaderDialog";
+import { PortraitAvatarDisplay } from "components/characters/PortraitAvatar";
 
 import {
   ICreateCharacterAtom,
   useCreateCharacterAtom,
 } from "../atoms/createCharacter.atom";
-import { PortraitAvatarDisplay } from "components/characters/PortraitAvatar";
-import { PortraitUploaderDialog } from "components/PortraitUploaderDialog";
 
 export interface ImageInputProps {
   value: ICreateCharacterAtom["portrait"];

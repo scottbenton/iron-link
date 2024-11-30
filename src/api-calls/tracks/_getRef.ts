@@ -1,14 +1,16 @@
-import { firestore } from "config/firebase.config";
 import {
-  collection,
   CollectionReference,
-  doc,
   DocumentReference,
   Timestamp,
+  collection,
+  doc,
 } from "firebase/firestore";
 
-import { TrackDocument } from "./_track.type";
 import { Track } from "types/Track.type";
+
+import { firestore } from "config/firebase.config";
+
+import { TrackDocument } from "./_track.type";
 
 export function constructCampaignTracksCollection(campaignId: string) {
   return `/campaigns/${campaignId}/tracks`;

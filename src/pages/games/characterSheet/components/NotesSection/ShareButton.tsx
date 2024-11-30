@@ -1,5 +1,3 @@
-import { useEffect, useMemo, useState } from "react";
-import { useTranslation } from "react-i18next";
 import ShareIcon from "@mui/icons-material/Share";
 import {
   Box,
@@ -15,17 +13,23 @@ import {
   RadioGroup,
   Typography,
 } from "@mui/material";
+import { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 
-import { getItemName } from "./FolderView/getFolderName";
-import { useFolderDescendants } from "./FolderView/useFolderDescendants";
+import { DialogTitleWithCloseButton } from "components/DialogTitleWithCloseButton";
+
+import { useCampaignId } from "pages/games/gamePageLayout/hooks/useCampaignId";
+import { useCampaignPermissions } from "pages/games/gamePageLayout/hooks/usePermissions";
+
 import { CampaignType } from "api-calls/campaign/_campaign.type";
 import { EditPermissions, ReadPermissions } from "api-calls/notes/_notes.type";
 import { updateNoteFolderPermissions } from "api-calls/notes/updateNoteFolderPermissions";
 import { updateNotePermissions } from "api-calls/notes/updateNotePermissions";
+
 import { useUID } from "atoms/auth.atom";
-import { DialogTitleWithCloseButton } from "components/DialogTitleWithCloseButton";
-import { useCampaignId } from "pages/games/gamePageLayout/hooks/useCampaignId";
-import { useCampaignPermissions } from "pages/games/gamePageLayout/hooks/usePermissions";
+
+import { getItemName } from "./FolderView/getFolderName";
+import { useFolderDescendants } from "./FolderView/useFolderDescendants";
 
 interface PermissionOption {
   label: string;

@@ -1,16 +1,19 @@
+import { Box, Dialog, DialogContent, Skeleton } from "@mui/material";
 import { useEffect, useState, useTransition } from "react";
 import { useTranslation } from "react-i18next";
-import { Box, Dialog, DialogContent, Skeleton } from "@mui/material";
 
-import { AssetCollectionSidebar } from "./AssetCollectionSidebar";
-import { AssetList } from "./AssetList";
+import { DialogTitleWithCloseButton } from "components/DialogTitleWithCloseButton";
+import { GridLayout } from "components/Layout";
+
 import { AssetDocument } from "api-calls/assets/_asset.type";
+
 import {
   RootAssetCollections,
   useAssets,
 } from "atoms/dataswornRules/useAssets";
-import { DialogTitleWithCloseButton } from "components/DialogTitleWithCloseButton";
-import { GridLayout } from "components/Layout";
+
+import { AssetCollectionSidebar } from "./AssetCollectionSidebar";
+import { AssetList } from "./AssetList";
 
 export interface AssetCardDialogProps {
   open: boolean;

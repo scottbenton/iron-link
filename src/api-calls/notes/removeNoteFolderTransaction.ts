@@ -1,8 +1,10 @@
-import { firestore } from "config/firebase.config";
 import { runTransaction } from "firebase/firestore";
 
-import { getNoteContentDocument, getNoteFolderDocument } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
+
+import { firestore } from "config/firebase.config";
+
+import { getNoteContentDocument, getNoteFolderDocument } from "./_getRef";
 
 export const removeNoteFolderTransaction = createApiFunction<
   {

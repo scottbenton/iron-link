@@ -1,13 +1,14 @@
-import { useMemo, useState } from "react";
 import { Box } from "@mui/material";
+import { useMemo, useState } from "react";
+
+import { useCampaignId } from "pages/games/gamePageLayout/hooks/useCampaignId";
+import { useDerivedCampaignState } from "pages/games/gamePageLayout/hooks/useDerivedCampaignState";
 
 import { useCharacterId } from "../../hooks/useCharacterId";
 import { useDerivedCurrentCharacterState } from "../../hooks/useDerivedCharacterState";
 import { useIsOwnerOfCharacter } from "../../hooks/useIsOwnerOfCharacter";
 import { AssetSectionHeader } from "./AssetSectionHeader";
 import { AssetsSectionCard } from "./AssetsSectionCard";
-import { useCampaignId } from "pages/games/gamePageLayout/hooks/useCampaignId";
-import { useDerivedCampaignState } from "pages/games/gamePageLayout/hooks/useDerivedCampaignState";
 
 export function AssetsSection() {
   const characterId = useCharacterId();

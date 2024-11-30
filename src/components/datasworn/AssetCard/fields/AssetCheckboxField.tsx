@@ -1,5 +1,5 @@
 import { Datasworn } from "@datasworn/core";
-import { capitalize, Checkbox, FormControlLabel } from "@mui/material";
+import { Checkbox, FormControlLabel, capitalize } from "@mui/material";
 
 export interface AssetCheckboxFieldProps {
   field: Datasworn.AssetCheckboxField | Datasworn.AssetCardFlipField;

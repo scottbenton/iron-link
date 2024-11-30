@@ -1,5 +1,5 @@
-import { PropsWithChildren } from "react";
 import { Box } from "@mui/material";
+import { PropsWithChildren } from "react";
 
 export interface ContainedTabPanelProps extends PropsWithChildren {
   isVisible: boolean;

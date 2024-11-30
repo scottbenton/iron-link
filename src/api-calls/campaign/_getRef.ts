@@ -1,12 +1,13 @@
-import { firestore } from "config/firebase.config";
 import {
-  collection,
   CollectionReference,
-  doc,
   DocumentReference,
+  collection,
+  doc,
 } from "firebase/firestore";
 
 import { CampaignDocument } from "api-calls/campaign/_campaign.type";
+
+import { firestore } from "config/firebase.config";
 
 export function constructCampaignCollectionPath() {
   return `/campaigns`;

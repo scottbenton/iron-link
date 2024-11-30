@@ -1,9 +1,10 @@
 import ExampleIcon from "@mui/icons-material/Casino";
 import { render, screen } from "@testing-library/react";
+import { describe, expect, it, vi } from "vitest";
+
+import { TestWrapper } from "tests/TestWrapper";
 
 import { ConditionMeter, ConditionMeterProps } from "../ConditionMeter";
-import { TestWrapper } from "tests/TestWrapper";
-import { describe, expect, it, vi } from "vitest";
 
 describe("ConditionMeter", () => {
   const setup = (props?: Partial<ConditionMeterProps>) => {

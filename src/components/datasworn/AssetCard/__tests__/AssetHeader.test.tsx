@@ -1,8 +1,9 @@
 import { render } from "@testing-library/react";
+import { Mock, describe, expect, it, vi } from "vitest";
+
+import { getIsLocalEnvironment } from "config/environment.config";
 
 import { AssetHeader, AssetHeaderProps } from "../AssetHeader";
-import { getIsLocalEnvironment } from "config/environment.config";
-import { describe, expect, it, Mock, vi } from "vitest";
 
 vi.mock("config/environment.config", () => ({
   getIsLocalEnvironment: vi.fn(),

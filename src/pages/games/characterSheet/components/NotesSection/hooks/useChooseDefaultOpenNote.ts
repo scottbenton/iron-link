@@ -1,10 +1,5 @@
 import { useEffect } from "react";
 
-import { CampaignType } from "api-calls/campaign/_campaign.type";
-import { GUIDE_NOTE_FOLDER_NAME } from "api-calls/notes/_getRef";
-import { EditPermissions, ReadPermissions } from "api-calls/notes/_notes.type";
-import { addFolder } from "api-calls/notes/addFolder";
-import { useUID } from "atoms/auth.atom";
 import {
   useDerivedNotesAtom,
   useSetOpenItem,
@@ -14,6 +9,13 @@ import {
   CampaignPermissionType,
   useCampaignPermissions,
 } from "pages/games/gamePageLayout/hooks/usePermissions";
+
+import { CampaignType } from "api-calls/campaign/_campaign.type";
+import { GUIDE_NOTE_FOLDER_NAME } from "api-calls/notes/_getRef";
+import { EditPermissions, ReadPermissions } from "api-calls/notes/_notes.type";
+import { addFolder } from "api-calls/notes/addFolder";
+
+import { useUID } from "atoms/auth.atom";
 
 export function useChooseDefaultOpenNote() {
   const isSomethingOpen = useDerivedNotesAtom(

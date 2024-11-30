@@ -1,4 +1,3 @@
-import { useRef, useState } from "react";
 import BackspaceIcon from "@mui/icons-material/Backspace";
 import RerollIcon from "@mui/icons-material/Casino";
 import CopyIcon from "@mui/icons-material/CopyAll";
@@ -11,24 +10,30 @@ import {
   Menu,
   MenuItem,
 } from "@mui/material";
+import { useRef, useState } from "react";
 
-import { useCharacterIdOptional } from "../../hooks/useCharacterId";
-import { useDerivedCharacterState } from "../../hooks/useDerivedCharacterState";
-import { useMomentumParameters } from "../../hooks/useMomentumResetValue";
-import { convertRollToClipboard } from "./clipboardFormatter";
-import { DieRerollDialog } from "./DieRerollDialog";
-import { updateCharacter } from "api-calls/character/updateCharacter";
-import { removeLog } from "api-calls/game-log/removeLog";
-import { updateLog } from "api-calls/game-log/updateLog";
-import { useUID } from "atoms/auth.atom";
-import { useDataswornTree } from "atoms/dataswornTree.atom";
+import { useSnackbar } from "providers/SnackbarProvider";
+
 import { useCampaignId } from "pages/games/gamePageLayout/hooks/useCampaignId";
 import {
   CampaignPermissionType,
   useCampaignPermissions,
 } from "pages/games/gamePageLayout/hooks/usePermissions";
-import { useSnackbar } from "providers/SnackbarProvider";
+
 import { Roll, RollResult, RollType } from "types/DieRolls.type";
+
+import { updateCharacter } from "api-calls/character/updateCharacter";
+import { removeLog } from "api-calls/game-log/removeLog";
+import { updateLog } from "api-calls/game-log/updateLog";
+
+import { useUID } from "atoms/auth.atom";
+import { useDataswornTree } from "atoms/dataswornTree.atom";
+
+import { useCharacterIdOptional } from "../../hooks/useCharacterId";
+import { useDerivedCharacterState } from "../../hooks/useDerivedCharacterState";
+import { useMomentumParameters } from "../../hooks/useMomentumResetValue";
+import { DieRerollDialog } from "./DieRerollDialog";
+import { convertRollToClipboard } from "./clipboardFormatter";
 
 export interface NormalRollActionsProps {
   rollId: string;

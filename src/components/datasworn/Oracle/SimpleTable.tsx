@@ -1,5 +1,5 @@
-import { ReactNode } from "react";
 import { Box, Typography, TypographyProps } from "@mui/material";
+import { ReactNode } from "react";
 
 export interface SimpleTableColumnDefinition<T> {
   label: string;

@@ -1,12 +1,13 @@
-import { firestore } from "config/firebase.config";
 import {
-  collection,
   CollectionReference,
-  doc,
   DocumentReference,
+  collection,
+  doc,
 } from "firebase/firestore";
 
 import { HomebrewOracleCollectionDocument } from "api-calls/homebrew/oracles/collections/_homebrewOracleCollection.type";
+
+import { firestore } from "config/firebase.config";
 
 export function constructHomebrewOracleCollectionCollectionPath() {
   return `homebrew/homebrew/oracle_collections`;

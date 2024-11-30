@@ -1,9 +1,21 @@
-import { useEffect } from "react";
-import { useTranslation } from "react-i18next";
-import { useParams } from "react-router-dom";
 import { Datasworn } from "@datasworn/core";
 import { Unsubscribe } from "firebase/firestore";
 import { useAtomValue } from "jotai";
+import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
+import { useParams } from "react-router-dom";
+
+import { listenToAssets } from "api-calls/assets/listenToAssets";
+import { listenToCampaign } from "api-calls/campaign/listenToCampaign";
+import { listenToCharacter } from "api-calls/character/listenToCharacter";
+
+import { useDataswornTreeSetter } from "atoms/dataswornTree.atom";
+import { derivedAtomWithEquality } from "atoms/derivedAtomWithEquality";
+
+import {
+  defaultBaseRulesets,
+  defaultExpansions,
+} from "data/datasworn.packages";
 
 import {
   currentCampaignAtom,
@@ -14,15 +26,6 @@ import {
 import { useSetCampaignCharacters } from "../atoms/campaign.characters.atom";
 import { useListenToLogs } from "../atoms/gameLog.atom";
 import { useSyncNotes } from "../atoms/notes.atom";
-import { listenToAssets } from "api-calls/assets/listenToAssets";
-import { listenToCampaign } from "api-calls/campaign/listenToCampaign";
-import { listenToCharacter } from "api-calls/character/listenToCharacter";
-import { useDataswornTreeSetter } from "atoms/dataswornTree.atom";
-import { derivedAtomWithEquality } from "atoms/derivedAtomWithEquality";
-import {
-  defaultBaseRulesets,
-  defaultExpansions,
-} from "data/datasworn.packages";
 
 const expansionsAndRulesetsAtom = derivedAtomWithEquality(
   currentCampaignAtom,

@@ -1,7 +1,8 @@
 import { onSnapshot } from "firebase/firestore";
 
-import { decodeWorld, getWorldDoc } from "./_getRef";
 import { World } from "api-calls/world/_world.type";
+
+import { decodeWorld, getWorldDoc } from "./_getRef";
 
 export function listenToWorld(
   worldId: string,

@@ -1,8 +1,9 @@
 import { TFunction } from "i18next";
 
-import { FAKE_ROOT_NOTE_FOLDER_KEY } from "./rootNodeName";
 import { CampaignType } from "api-calls/campaign/_campaign.type";
 import { GUIDE_NOTE_FOLDER_NAME } from "api-calls/notes/_getRef";
+
+import { FAKE_ROOT_NOTE_FOLDER_KEY } from "./rootNodeName";
 
 export function getItemName(params: {
   name: string;

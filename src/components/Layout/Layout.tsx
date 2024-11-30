@@ -1,15 +1,17 @@
-import { Outlet } from "react-router-dom";
 import { Box, LinearProgress } from "@mui/material";
+import { Outlet } from "react-router-dom";
+
+import { RollSnackbarSection } from "components/characters/rolls/RollSnackbarSection";
+import { DataswornDialog } from "components/datasworn/DataswornDialog";
+
+import { AuthState, useAuthAtom } from "atoms/auth.atom";
 
 import { LayoutPathListener } from "./LayoutPathListener";
 import { LiveRegion } from "./LiveRegion";
 import { NavBar } from "./NavBar";
 import { NavRail } from "./NavRail";
-import { authenticatedNavRoutes, unauthenticatedNavRoutes } from "./navRoutes";
 import { SkipToContentButton } from "./SkipToContentButton";
-import { AuthState, useAuthAtom } from "atoms/auth.atom";
-import { RollSnackbarSection } from "components/characters/rolls/RollSnackbarSection";
-import { DataswornDialog } from "components/datasworn/DataswornDialog";
+import { authenticatedNavRoutes, unauthenticatedNavRoutes } from "./navRoutes";
 
 export function Layout() {
   const authStatus = useAuthAtom()[0].status;

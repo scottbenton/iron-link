@@ -1,8 +1,10 @@
 import { AvatarGroup } from "@mui/material";
 
-import { CampaignCharacterPortrait } from "./CampaignCharacterPortrait";
 import { CampaignDocument } from "api-calls/campaign/_campaign.type";
+
 import { useAuthAtom } from "atoms/auth.atom";
+
+import { CampaignCharacterPortrait } from "./CampaignCharacterPortrait";
 
 export interface CampaignCharacterPortraitsProps {
   campaignCharacters: CampaignDocument["characters"];

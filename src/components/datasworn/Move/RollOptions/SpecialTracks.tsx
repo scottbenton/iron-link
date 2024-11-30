@@ -1,10 +1,13 @@
-import { useTranslation } from "react-i18next";
 import { Box, Button, Stack } from "@mui/material";
+import { useTranslation } from "react-i18next";
+
+import { ProgressTrack } from "components/datasworn/ProgressTrack";
+
+import { useRollCompleteSpecialTrack } from "pages/games/hooks/useRollCompleteSpecialTrack";
+
+import { useSpecialTrackRules } from "atoms/dataswornRules/useSpecialTrackRules";
 
 import { CharacterRollOptionState } from "./common.types";
-import { useSpecialTrackRules } from "atoms/dataswornRules/useSpecialTrackRules";
-import { ProgressTrack } from "components/datasworn/ProgressTrack";
-import { useRollCompleteSpecialTrack } from "pages/games/hooks/useRollCompleteSpecialTrack";
 
 export interface SpecialTracksProps {
   moveId: string;

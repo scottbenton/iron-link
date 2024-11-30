@@ -1,12 +1,13 @@
-import { firestore } from "config/firebase.config";
 import {
-  collection,
   CollectionReference,
-  doc,
   DocumentReference,
+  collection,
+  doc,
 } from "firebase/firestore";
 
 import { HomebrewLegacyTrackDocument } from "api-calls/homebrew/rules/legacyTracks/_homebrewLegacyTrack.type";
+
+import { firestore } from "config/firebase.config";
 
 export function constructHomebrewLegacyTracksCollectionPath() {
   return `homebrew/homebrew/legacy_tracks`;

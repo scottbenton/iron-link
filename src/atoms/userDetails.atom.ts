@@ -1,9 +1,10 @@
+import { atom, useAtomValue, useSetAtom } from "jotai";
 import { useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { atom, useAtomValue, useSetAtom } from "jotai";
+
+import { getUserDoc } from "api-calls/user/getUserDoc";
 
 import { derivedAtomWithEquality } from "./derivedAtomWithEquality";
-import { getUserDoc } from "api-calls/user/getUserDoc";
 
 type UserDetailsAtom = Record<
   string,
