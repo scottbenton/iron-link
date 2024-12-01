@@ -9,9 +9,10 @@ import { campaignCharactersAtom } from "pages/games/gamePageLayout/atoms/campaig
 
 import { Roll } from "types/DieRolls.type";
 
-import { useUID } from "atoms/auth.atom";
 import { derivedAtomWithEquality } from "atoms/derivedAtomWithEquality";
 import { useUserName } from "atoms/userDetails.atom";
+
+import { useUID } from "stores/auth.store";
 
 import { NormalRollActions } from "./NormalRollActions";
 

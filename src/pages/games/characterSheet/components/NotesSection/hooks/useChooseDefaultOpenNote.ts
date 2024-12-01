@@ -15,7 +15,7 @@ import { GUIDE_NOTE_FOLDER_NAME } from "api-calls/notes/_getRef";
 import { EditPermissions, ReadPermissions } from "api-calls/notes/_notes.type";
 import { addFolder } from "api-calls/notes/addFolder";
 
-import { useUID } from "atoms/auth.atom";
+import { useUID } from "stores/auth.store";
 
 export function useChooseDefaultOpenNote() {
   const isSomethingOpen = useDerivedNotesAtom(

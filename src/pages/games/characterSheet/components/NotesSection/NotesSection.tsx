@@ -2,7 +2,7 @@ import { LinearProgress } from "@mui/material";
 
 import { useDerivedNotesAtom } from "pages/games/gamePageLayout/atoms/notes.atom";
 
-import { useUID } from "atoms/auth.atom";
+import { useUID } from "stores/auth.store";
 
 import { DefaultNoteChooser } from "./DefaultNoteChooser";
 import { FolderView, FolderViewToolbar } from "./FolderView";

@@ -7,7 +7,7 @@ import { useCampaignPermissions } from "pages/games/gamePageLayout/hooks/usePerm
 
 import { NoteFolder, ReadPermissions } from "api-calls/notes/_notes.type";
 
-import { useUID } from "atoms/auth.atom";
+import { useUID } from "stores/auth.store";
 
 import { FolderActionMenu } from "./FolderActionMenu";
 import { getItemName } from "./getFolderName";

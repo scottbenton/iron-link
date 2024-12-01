@@ -10,8 +10,9 @@ import { useRollOracle } from "hooks/useRollOracle";
 
 import { addRoll } from "api-calls/game-log/addRoll";
 
-import { useUID } from "atoms/auth.atom";
 import { useAddRollSnackbar } from "atoms/rollDisplay.atom";
+
+import { useUID } from "stores/auth.store";
 
 import { createId } from "lib/id.lib";
 

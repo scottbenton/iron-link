@@ -6,9 +6,9 @@ import { useEffect } from "react";
 import { CharacterDocument } from "api-calls/character/_character.type";
 import { listenToUsersCharacters } from "api-calls/character/listenToUsersCharacters";
 
-import { getErrorMessage } from "lib/getErrorMessage";
+import { useUID } from "stores/auth.store";
 
-import { useCurrentUserUID } from "./auth.atom";
+import { getErrorMessage } from "lib/getErrorMessage";
 
 const usersCharactersAtom = atom<{
   characters: Record<string, CharacterDocument>;
@@ -24,7 +24,7 @@ export function useUsersCharacters() {
 }
 
 export function useSyncUsersCharacters() {
-  const uid = useCurrentUserUID();
+  const uid = useUID();
   const [, setUsersCharacters] = useAtom(usersCharactersAtom);
 
   useEffect(() => {

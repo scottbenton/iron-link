@@ -2,7 +2,7 @@ import { AvatarGroup } from "@mui/material";
 
 import { CampaignDocument } from "api-calls/campaign/_campaign.type";
 
-import { useAuthAtom } from "atoms/auth.atom";
+import { useUID } from "stores/auth.store";
 
 import { CampaignCharacterPortrait } from "./CampaignCharacterPortrait";
 
@@ -15,7 +15,7 @@ export function CampaignCharacterPortraits(
 ) {
   const { campaignCharacters } = props;
 
-  const uid = useAuthAtom()[0].uid;
+  const uid = useUID();
 
   // Sort users from the current player to the front, then as they were
   const sortedCampaignCharacters = campaignCharacters.sort((a, b) => {

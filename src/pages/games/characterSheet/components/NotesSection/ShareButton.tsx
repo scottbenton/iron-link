@@ -26,7 +26,7 @@ import { EditPermissions, ReadPermissions } from "api-calls/notes/_notes.type";
 import { updateNoteFolderPermissions } from "api-calls/notes/updateNoteFolderPermissions";
 import { updateNotePermissions } from "api-calls/notes/updateNotePermissions";
 
-import { useUID } from "atoms/auth.atom";
+import { useUID } from "stores/auth.store";
 
 import { getItemName } from "./FolderView/getFolderName";
 import { useFolderDescendants } from "./FolderView/useFolderDescendants";

@@ -11,9 +11,10 @@ import { getMove } from "hooks/datasworn/useMove";
 import { addRoll } from "api-calls/game-log/addRoll";
 
 import { useSetAnnouncement } from "atoms/announcement.atom";
-import { useAuthAtom } from "atoms/auth.atom";
 import { useDataswornTree } from "atoms/dataswornTree.atom";
 import { useAddRollSnackbar } from "atoms/rollDisplay.atom";
+
+import { useUID } from "stores/auth.store";
 
 import { createId } from "lib/id.lib";
 
@@ -29,7 +30,7 @@ interface StatRollConfig {
 }
 
 export function useRollStatAndAddToLog() {
-  const uid = useAuthAtom()[0].uid;
+  const uid = useUID();
   const { characterId, campaignId } = useParams<{
     characterId?: string;
     campaignId?: string;

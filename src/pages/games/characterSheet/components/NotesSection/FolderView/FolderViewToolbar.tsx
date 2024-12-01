@@ -12,7 +12,7 @@ import { addFolder } from "api-calls/notes/addFolder";
 import { addNote } from "api-calls/notes/addNote";
 import { updateNoteFolder } from "api-calls/notes/updateNoteFolder";
 
-import { useUID } from "atoms/auth.atom";
+import { useUID } from "stores/auth.store";
 
 import { NoteToolbar } from "../Layout";
 import { useFolderPermission } from "../NoteView/useFolderPermissions";

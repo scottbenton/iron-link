@@ -8,9 +8,9 @@ import { listenToUsersCampaigns } from "api-calls/campaign/listenToUsersCampaign
 import { CharacterDocument } from "api-calls/character/_character.type";
 import { getCharacter } from "api-calls/character/getCharacter";
 
-import { getErrorMessage } from "lib/getErrorMessage";
+import { useUID } from "stores/auth.store";
 
-import { useCurrentUserUID } from "./auth.atom";
+import { getErrorMessage } from "lib/getErrorMessage";
 
 interface CampaignCharacterPortraitSettingsEntry {
   shouldLoad: boolean;
@@ -37,7 +37,7 @@ export function useUsersCampaigns() {
 }
 
 export function useSyncUsersCampaigns() {
-  const uid = useCurrentUserUID();
+  const uid = useUID();
   const [campaigns, setUsersCampaigns] = useAtom(usersCampaignsAtom);
   const { campaignCharacterPortraitSettings } = campaigns;
 

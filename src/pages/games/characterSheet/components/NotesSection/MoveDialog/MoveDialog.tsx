@@ -25,7 +25,7 @@ import { updateNoteFolder } from "api-calls/notes/updateNoteFolder";
 import { updateNoteFolderPermissions } from "api-calls/notes/updateNoteFolderPermissions";
 import { updateNotePermissions } from "api-calls/notes/updateNotePermissions";
 
-import { useUID } from "atoms/auth.atom";
+import { useUID } from "stores/auth.store";
 
 import { getItemName } from "../FolderView/getFolderName";
 import { FAKE_ROOT_NOTE_FOLDER_KEY } from "../FolderView/rootNodeName";

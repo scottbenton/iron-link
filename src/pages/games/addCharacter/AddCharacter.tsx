@@ -11,7 +11,7 @@ import { addAsset } from "api-calls/assets/addAsset";
 import { addCharacterToCampaign } from "api-calls/campaign/addCharacterToCampaign";
 import { createCharacterAndUploadPortrait } from "api-calls/character/createCharacter";
 
-import { useAuthAtom } from "atoms/auth.atom";
+import { useUID } from "stores/auth.store";
 
 import { useCreateCharacterAtom } from "../create/atoms/createCharacter.atom";
 import { CreateCharacter } from "../create/components/CreateCharacter";
@@ -22,7 +22,7 @@ export function AddCharacter() {
 
   const [error, setError] = useState<string | undefined>(undefined);
 
-  const uid = useAuthAtom()[0].uid;
+  const uid = useUID();
 
   const [characterValue, , resetCharacter] = useCreateCharacterAtom();
   const navigate = useNavigate();

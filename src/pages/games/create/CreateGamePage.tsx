@@ -16,8 +16,9 @@ import { addCharacterToCampaign } from "api-calls/campaign/addCharacterToCampaig
 import { createCampaign } from "api-calls/campaign/createCampaign";
 import { createCharacterAndUploadPortrait } from "api-calls/character/createCharacter";
 
-import { useAuthAtom } from "atoms/auth.atom";
 import { derivedAtomWithEquality } from "atoms/derivedAtomWithEquality";
+
+import { useUID } from "stores/auth.store";
 
 import { useCreateCharacterAtom } from "./atoms/createCharacter.atom";
 import {
@@ -99,7 +100,7 @@ const derivedSteps = (t: TFunction) =>
 export function CreateGamePage() {
   const { t } = useTranslation();
 
-  const uid = useAuthAtom()[0].uid;
+  const uid = useUID();
 
   const createGameValue = useAtomValue(createGameAtom);
   const setCreateGameAtom = useSetCreateGameAtom();

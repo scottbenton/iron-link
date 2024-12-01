@@ -14,7 +14,7 @@ import { signOut } from "firebase/auth";
 import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { AuthState, useAuthStatus } from "atoms/auth.atom";
+import { AuthStatus, useAuthStatus } from "stores/auth.store";
 
 import { firebaseAuth } from "config/firebase.config";
 
@@ -58,7 +58,7 @@ export function AppSettingsMenu() {
             ? t("iron-link.dark-mode", "Dark Mode")
             : t("iron-link.light-mode", "Light Mode")}
         </MenuItem>
-        {status === AuthState.Authenticated && (
+        {status === AuthStatus.Authenticated && (
           <MenuItem
             onClick={() => {
               setOpen(false);

@@ -4,8 +4,9 @@ import { useParams } from "react-router-dom";
 
 import { CampaignType } from "api-calls/campaign/_campaign.type";
 
-import { authAtom } from "atoms/auth.atom";
 import { derivedAtomWithEquality } from "atoms/derivedAtomWithEquality";
+
+import { useUID } from "stores/auth.store";
 
 import { currentCampaignAtom } from "../atoms/campaign.atom";
 
@@ -35,28 +36,28 @@ export enum CampaignPermissionType {
 export function useCampaignPermissions() {
   const { characterId } = useParams<{ characterId?: string }>();
 
+  const currentUserId = useUID();
   const { campaignType, campaignPermission, permissionsByCharacter } =
     useAtomValue(
       useMemo(
         () =>
           atom((get) => {
-            const currentUserUid = get(authAtom).uid;
             const { players, gmIds, campaignType, characters } =
               get(campaignPermissions);
 
-            const isUserInCampaign = players.includes(currentUserUid);
+            const isUserInCampaign = players.includes(currentUserId);
             const isUserGuide =
               (isUserInCampaign &&
                 (campaignType === CampaignType.Solo ||
                   campaignType === CampaignType.Coop)) ||
-              gmIds.includes(currentUserUid);
+              gmIds.includes(currentUserId);
 
             const characterPermissions: Record<
               string,
               CharacterPermissionType
             > = {};
             characters.forEach(({ characterId, uid }) => {
-              if (currentUserUid === uid) {
+              if (currentUserId === uid) {
                 characterPermissions[characterId] =
                   CharacterPermissionType.Owner;
               } else if (isUserGuide) {
@@ -81,7 +82,7 @@ export function useCampaignPermissions() {
               permissionsByCharacter: characterPermissions,
             };
           }),
-        [],
+        [currentUserId],
       ),
     );
 

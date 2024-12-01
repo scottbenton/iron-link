@@ -10,8 +10,9 @@ import {
 import { addRoll } from "api-calls/game-log/addRoll";
 
 import { useSetAnnouncement } from "atoms/announcement.atom";
-import { useUID } from "atoms/auth.atom";
 import { useAddRollSnackbar } from "atoms/rollDisplay.atom";
+
+import { useUID } from "stores/auth.store";
 
 import { getRollResultLabel } from "data/rollResultLabel";
 

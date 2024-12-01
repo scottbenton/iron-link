@@ -7,7 +7,7 @@ import {
 import { GUIDE_NOTE_FOLDER_NAME } from "api-calls/notes/_getRef";
 import { EditPermissions, NoteFolder } from "api-calls/notes/_notes.type";
 
-import { useUID } from "atoms/auth.atom";
+import { useUID } from "stores/auth.store";
 
 export interface FolderPermissions {
   isInGuideFolder: boolean;

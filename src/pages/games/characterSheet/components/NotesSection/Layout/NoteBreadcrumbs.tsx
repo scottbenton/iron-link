@@ -12,7 +12,7 @@ import {
 
 import { GUIDE_NOTE_FOLDER_NAME } from "api-calls/notes/_getRef";
 
-import { useUID } from "atoms/auth.atom";
+import { useUID } from "stores/auth.store";
 
 import { getItemName } from "../FolderView/getFolderName";
 import { FAKE_ROOT_NOTE_FOLDER_KEY } from "../FolderView/rootNodeName";

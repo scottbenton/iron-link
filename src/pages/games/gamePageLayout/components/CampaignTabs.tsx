@@ -7,8 +7,9 @@ import { LinkComponent } from "components/LinkComponent";
 
 import { pathConfig } from "pages/pathConfig";
 
-import { useAuthAtom } from "atoms/auth.atom";
 import { derivedAtomWithEquality } from "atoms/derivedAtomWithEquality";
+
+import { useUID } from "stores/auth.store";
 
 import { currentCampaignAtom } from "../atoms/campaign.atom";
 import { campaignCharactersAtom } from "../atoms/campaign.characters.atom";
@@ -42,7 +43,7 @@ export function CampaignTabs() {
   const characterList = useAtomValue(campaignCharacterList);
   const names = useAtomValue(characterNames);
 
-  const uid = useAuthAtom()[0].uid;
+  const uid = useUID();
 
   // Sort users characters to the front
   const sortedCharacterList = characterList.sort((a, b) => {

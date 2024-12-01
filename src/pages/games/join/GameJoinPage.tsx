@@ -13,13 +13,13 @@ import { CampaignDocument } from "api-calls/campaign/_campaign.type";
 import { addUserToCampaign } from "api-calls/campaign/addUserToCampaign";
 import { getCampaign } from "api-calls/campaign/getCampaign";
 
-import { useAuthAtom } from "atoms/auth.atom";
+import { useUID } from "stores/auth.store";
 
 export function GameJoinPage() {
   const { t } = useTranslation();
 
   const { campaignId } = useParams<{ campaignId: string }>();
-  const uid = useAuthAtom()[0].uid;
+  const uid = useUID();
 
   const navigate = useNavigate();
 

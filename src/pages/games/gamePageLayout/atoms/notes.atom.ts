@@ -15,8 +15,9 @@ import { listenToNoteContent } from "api-calls/notes/listenToNoteContent";
 import { listenToNoteFolders } from "api-calls/notes/listenToNoteFolders";
 import { listenToNotes } from "api-calls/notes/listenToNotes";
 
-import { useUID } from "atoms/auth.atom";
 import { derivedAtomWithEquality } from "atoms/derivedAtomWithEquality";
+
+import { useUID } from "stores/auth.store";
 
 import { useCampaignId } from "../hooks/useCampaignId";
 import { useDerivedCampaignState } from "../hooks/useDerivedCampaignState";
