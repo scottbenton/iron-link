@@ -79,7 +79,7 @@ export function NoteBreadcrumbs() {
           ? store.folders.folders[parentFolderId]
           : undefined;
 
-        if (parentFolderId && !parentFolder) {
+        if (parentFolderId && !parentFolder && uid) {
           item = { type: "folder", folderId: uid };
         } else if (parentFolderId && parentFolder) {
           item = { type: "folder", folderId: parentFolderId };

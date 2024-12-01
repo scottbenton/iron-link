@@ -30,7 +30,9 @@ interface StatRollConfig {
 }
 
 export function useRollStatAndAddToLog() {
-  const uid = useUID();
+  // TODO - remove ?? "" and handle the case where there is no UID
+  const uid = useUID() ?? "";
+
   const { characterId, campaignId } = useParams<{
     characterId?: string;
     campaignId?: string;

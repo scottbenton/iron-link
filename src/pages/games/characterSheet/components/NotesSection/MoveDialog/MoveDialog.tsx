@@ -240,7 +240,7 @@ export function MoveDialog(props: MoveDialogProps) {
 
 function getTreeFromFolders(
   folders: Record<string, NoteFolder>,
-  uid: string,
+  uid: string | undefined,
   isGuide: boolean,
 ) {
   const rootNodes: string[] = [];

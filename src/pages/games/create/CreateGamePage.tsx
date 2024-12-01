@@ -137,6 +137,9 @@ export function CreateGamePage() {
       return;
     }
 
+    if (!uid) {
+      return;
+    }
     // Create campaign
     createCampaign({
       uid,
@@ -207,6 +210,10 @@ export function CreateGamePage() {
     createGameValue.rulesets,
     createGameValue.expansions,
   );
+
+  if (!uid) {
+    return null;
+  }
 
   return (
     <>

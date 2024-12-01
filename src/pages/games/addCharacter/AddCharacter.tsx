@@ -28,6 +28,8 @@ export function AddCharacter() {
   const navigate = useNavigate();
 
   const handleCreate = useCallback(() => {
+    if (!uid) return;
+
     const { name, stats, characterAssets, gameAssets, portrait } =
       characterValue;
 
@@ -86,7 +88,7 @@ export function AddCharacter() {
     // Create campaign & character, then link them
   }, [characterValue, uid, t, navigate, resetCharacter, campaignId]);
 
-  if (!campaignId) {
+  if (!campaignId || !uid) {
     return null;
   }
 

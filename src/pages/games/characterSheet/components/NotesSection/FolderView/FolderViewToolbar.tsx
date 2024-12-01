@@ -76,25 +76,29 @@ export function FolderViewToolbar(props: FolderViewToolbarProps) {
   if (!folder || folderId === FAKE_ROOT_NOTE_FOLDER_KEY) return null;
 
   const createFolder = (name: string) => {
-    addFolder({
-      uid,
-      campaignId,
-      parentFolderId: folderId,
-      name,
-      order: 1,
-      readPermissions: folder.readPermissions,
-      editPermissions: folder.editPermissions,
-    }).catch(() => {});
+    if (uid) {
+      addFolder({
+        uid,
+        campaignId,
+        parentFolderId: folderId,
+        name,
+        order: 1,
+        readPermissions: folder.readPermissions,
+        editPermissions: folder.editPermissions,
+      }).catch(() => {});
+    }
   };
 
   const createNote = (name: string) => {
-    addNote({
-      uid,
-      campaignId,
-      parentFolderId: folderId,
-      title: name,
-      order: nextNoteOrder,
-    }).catch(() => {});
+    if (uid) {
+      addNote({
+        uid,
+        campaignId,
+        parentFolderId: folderId,
+        title: name,
+        order: nextNoteOrder,
+      }).catch(() => {});
+    }
   };
 
   const renameCurrentFolder = (name: string) => {

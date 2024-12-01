@@ -93,7 +93,7 @@ export function useSetOpenItem() {
 }
 
 export function useSyncNotes() {
-  const uid = useUID();
+  const uid = useUID() ?? "";
   const campaignId = useCampaignId();
 
   const campaignLoading = useDerivedCampaignState((state) => state.loading);

@@ -64,9 +64,8 @@ export const useAuthStore = createWithEqualityFn<AuthState & AuthActions>()(
   shallow,
 );
 
-// TODO - make the return optional and deal with that mess
 export function useUID() {
-  return useAuthStore((state) => state.user?.uid ?? "");
+  return useAuthStore((state) => state.user?.uid);
 }
 
 export function useAuthStatus() {

@@ -30,13 +30,14 @@ const derivedCampaignState = derivedAtomWithEquality(
 );
 
 const derivedCampaignCharacterState = (
-  uid: string,
+  uid: string | undefined,
   currentCharacterId?: string,
 ) =>
   derivedAtomWithEquality(campaignCharactersAtom, (state) => {
     const characterData: Record<string, CharacterRollOptionState> = {};
     Object.entries(state).forEach(([characterId, characterState]) => {
       if (
+        uid &&
         uid === characterState.characterDocument.data?.uid &&
         (!currentCharacterId || characterId === currentCharacterId)
       ) {

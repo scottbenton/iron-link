@@ -34,6 +34,7 @@ export function useChooseDefaultOpenNote() {
     // If our folders have loaded and we are not a viewer, lets make sure we've created our default folders
     if (
       !folderState.loading &&
+      uid &&
       campaignPermission !== CampaignPermissionType.Viewer
     ) {
       const userFolder = folderState.folders[uid];
@@ -84,14 +85,15 @@ export function useChooseDefaultOpenNote() {
           return;
         }
       }
-
-      const userFolder = folderState.folders[uid];
-      if (userFolder) {
-        setOpenItem({
-          type: "folder",
-          folderId: uid,
-        });
-        return;
+      if (uid) {
+        const userFolder = folderState.folders[uid];
+        if (userFolder) {
+          setOpenItem({
+            type: "folder",
+            folderId: uid,
+          });
+          return;
+        }
       }
     }
   }, [isSomethingOpen, folderState, campaignPermission, uid, setOpenItem]);

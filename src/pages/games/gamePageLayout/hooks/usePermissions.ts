@@ -45,12 +45,15 @@ export function useCampaignPermissions() {
             const { players, gmIds, campaignType, characters } =
               get(campaignPermissions);
 
-            const isUserInCampaign = players.includes(currentUserId);
-            const isUserGuide =
-              (isUserInCampaign &&
-                (campaignType === CampaignType.Solo ||
-                  campaignType === CampaignType.Coop)) ||
-              gmIds.includes(currentUserId);
+            const isUserInCampaign = currentUserId
+              ? players.includes(currentUserId)
+              : false;
+            const isUserGuide = currentUserId
+              ? (isUserInCampaign &&
+                  (campaignType === CampaignType.Solo ||
+                    campaignType === CampaignType.Coop)) ||
+                gmIds.includes(currentUserId)
+              : false;
 
             const characterPermissions: Record<
               string,

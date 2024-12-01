@@ -25,7 +25,8 @@ import { getRoll } from "./useRollStatAndAddToLog";
 
 export function useRollCompleteSpecialTrack() {
   const { t } = useTranslation();
-  const uid = useUID();
+  // TODO - remove ?? "" and handle the case where there is no UID
+  const uid = useUID() ?? "";
 
   const campaignId = useCampaignId();
 

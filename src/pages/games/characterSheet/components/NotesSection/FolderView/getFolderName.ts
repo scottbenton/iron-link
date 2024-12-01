@@ -8,7 +8,7 @@ import { FAKE_ROOT_NOTE_FOLDER_KEY } from "./rootNodeName";
 export function getItemName(params: {
   name: string;
   id: string;
-  uid: string;
+  uid: string | undefined;
   t: TFunction;
   campaignType: CampaignType;
 }): string {

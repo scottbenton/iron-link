@@ -19,7 +19,8 @@ import { createId } from "lib/id.lib";
 import { useDerivedCharacterState } from "../characterSheet/hooks/useDerivedCharacterState";
 
 export function useRollOracleAndAddToLog() {
-  const uid = useUID();
+  // TODO - remove ?? "" and handle the case where there is no UID
+  const uid = useUID() ?? "";
   const { characterId, campaignId } = useParams<{
     characterId?: string;
     campaignId?: string;
