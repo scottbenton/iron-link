@@ -7,7 +7,7 @@ import { MarkdownRenderer } from "components/MarkdownRenderer";
 
 import { AssetDocument } from "api-calls/assets/_asset.type";
 
-import { AssetMap } from "atoms/dataswornRules/useAssets";
+import { AssetMap } from "stores/dataswornTree.store";
 
 import { AssetCard } from "../AssetCard/AssetCard";
 

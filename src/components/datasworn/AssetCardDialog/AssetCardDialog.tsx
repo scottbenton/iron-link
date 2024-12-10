@@ -5,12 +5,9 @@ import { useTranslation } from "react-i18next";
 import { DialogTitleWithCloseButton } from "components/DialogTitleWithCloseButton";
 import { GridLayout } from "components/Layout";
 
-import { AssetDocument } from "api-calls/assets/_asset.type";
+import { RootAssetCollections, useAssets } from "stores/dataswornTree.store";
 
-import {
-  RootAssetCollections,
-  useAssets,
-} from "atoms/dataswornRules/useAssets";
+import { IAsset } from "services/asset.service";
 
 import { AssetCollectionSidebar } from "./AssetCollectionSidebar";
 import { AssetList } from "./AssetList";
@@ -18,7 +15,7 @@ import { AssetList } from "./AssetList";
 export interface AssetCardDialogProps {
   open: boolean;
   handleClose: () => void;
-  handleAssetSelection: (asset: Omit<AssetDocument, "order">) => void;
+  handleAssetSelection: (asset: Omit<IAsset, "order">) => void;
 }
 export function AssetCardDialog(props: AssetCardDialogProps) {
   const { open, handleClose, handleAssetSelection } = props;

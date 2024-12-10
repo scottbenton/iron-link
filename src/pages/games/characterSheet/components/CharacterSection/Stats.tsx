@@ -10,7 +10,7 @@ import { useRollStatAndAddToLog } from "pages/games/hooks/useRollStatAndAddToLog
 
 import { updateCharacter } from "api-calls/character/updateCharacter";
 
-import { useStatRules } from "atoms/dataswornRules/useStatRules";
+import { useStatRules } from "stores/dataswornTree.store.ts";
 
 import { DEFAULT_MOMENTUM } from "../../../../../data/constants.ts";
 import { useCharacterId } from "../../hooks/useCharacterId";

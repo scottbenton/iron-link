@@ -8,8 +8,9 @@ import {
   useCampaignPermissions,
 } from "pages/games/gamePageLayout/hooks/usePermissions";
 
-import { InitiativeStatus } from "api-calls/character/_character.type";
 import { updateCharacter } from "api-calls/character/updateCharacter";
+
+import { InitiativeStatus } from "repositories/character.repository";
 
 import { useCharacterId } from "../../hooks/useCharacterId";
 import { useDerivedCurrentCharacterState } from "../../hooks/useDerivedCharacterState";

@@ -21,7 +21,7 @@ import { removeCharacterPortrait } from "api-calls/character/removeCharacterPort
 import { updateCharacter } from "api-calls/character/updateCharacter";
 import { updateCharacterPortrait } from "api-calls/character/updateCharacterPortrait";
 
-import { useCharacterPortrait } from "atoms/characterPortraits.atom";
+import { useCharacterPortrait } from "stores/character.store";
 
 import { MAX_FILE_SIZE, MAX_FILE_SIZE_LABEL } from "lib/storage.lib";
 

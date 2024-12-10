@@ -7,13 +7,15 @@ import {
 import { getCampaignCollection } from "api-calls/campaign/_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
 
+import { ExpansionConfig, RulesetConfig } from "repositories/game.repository";
+
 export const createCampaign = createApiFunction<
   {
     uid: string;
     campaignName: string;
     campaignType: CampaignType;
-    rulesets: Record<string, boolean>;
-    expansions: Record<string, Record<string, boolean>>;
+    rulesets: RulesetConfig;
+    expansions: ExpansionConfig;
   },
   string
 >((params) => {

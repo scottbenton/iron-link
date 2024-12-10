@@ -2,12 +2,13 @@ import { UpdateData, updateDoc } from "firebase/firestore";
 
 import { createApiFunction } from "api-calls/createApiFunction";
 
-import { CharacterDocument } from "./_character.type";
+import { CharacterDTO } from "repositories/character.repository";
+
 import { getCharacterDoc } from "./_getRef";
 
 interface Params {
   characterId: string;
-  character: UpdateData<CharacterDocument>;
+  character: UpdateData<CharacterDTO>;
 }
 
 export const updateCharacter = createApiFunction<Params, void>((params) => {

@@ -4,18 +4,16 @@ import { PropsWithChildren } from "react";
 
 import { DialogTitleWithCloseButton } from "components/DialogTitleWithCloseButton";
 
-import {
-  useCloseDataswornDialog,
-  useDataswornDialogState,
-  usePrevDataswornDialog,
-} from "atoms/dataswornDialog.atom";
+import { useAppState } from "stores/appState.store";
 
 export function DataswornDialogTitle(props: PropsWithChildren) {
   const { children } = props;
 
-  const { previousIds } = useDataswornDialogState();
-  const handleClose = useCloseDataswornDialog();
-  const handleGoToPreviousItem = usePrevDataswornDialog();
+  const previousIds = useAppState((state) => state.prevDataswornDialog);
+  const handleClose = useAppState((state) => state.closeDataswornDialog);
+  const handleGoToPreviousItem = useAppState(
+    (state) => state.prevDataswornDialog,
+  );
 
   return (
     <DialogTitleWithCloseButton

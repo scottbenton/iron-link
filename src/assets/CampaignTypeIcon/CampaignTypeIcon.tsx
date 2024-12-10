@@ -1,23 +1,23 @@
 import { SvgIconProps } from "@mui/material";
 
-import { CampaignType } from "api-calls/campaign/_campaign.type";
+import { GameType } from "repositories/game.repository";
 
 import { CoopIcon } from "./CoopIcon";
 import { GuidedIcon } from "./GuidedIcon";
 import { SoloIcon } from "./SoloIcon";
 
-export interface CampaignTypeIconProps extends SvgIconProps {
-  campaignType: CampaignType;
+export interface GameTypeIconProps extends SvgIconProps {
+  gameType: GameType;
 }
-export function CampaignTypeIcon(props: CampaignTypeIconProps) {
-  const { campaignType, ...rest } = props;
+export function GameTypeIcon(props: GameTypeIconProps) {
+  const { gameType, ...rest } = props;
 
-  switch (campaignType) {
-    case CampaignType.Solo:
+  switch (gameType) {
+    case GameType.Solo:
       return <SoloIcon {...rest} />;
-    case CampaignType.Coop:
+    case GameType.Coop:
       return <CoopIcon {...rest} />;
-    case CampaignType.Guided:
+    case GameType.Guided:
       return <GuidedIcon {...rest} />;
     default:
       return null;

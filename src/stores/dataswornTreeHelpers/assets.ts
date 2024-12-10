@@ -1,17 +1,13 @@
 import { CollectionId, Datasworn, IdParser } from "@datasworn/core";
 import { Primary } from "@datasworn/core/dist/StringId";
-import { atom, useAtomValue } from "jotai";
 
-import { dataswornTreeAtom } from "atoms/dataswornTree.atom";
+import {
+  AssetCollectionMap,
+  AssetMap,
+  RootAssetCollections,
+} from "stores/dataswornTree.store";
 
 import { getRulesetFromId } from "./getRulesetFromId";
-
-export type RootAssetCollections = Record<
-  string,
-  { title: string; rootAssets: string[] }
->;
-export type AssetCollectionMap = Record<string, Datasworn.AssetCollection>;
-export type AssetMap = Record<string, Datasworn.Asset>;
 
 function parseAssetCollection(
   collection: Datasworn.AssetCollection,
@@ -80,9 +76,11 @@ function parseAssetCollection(
   });
 }
 
-const assetsAtom = atom((get) => {
-  const trees = get(dataswornTreeAtom);
-
+export function parseAssets(trees: Record<string, Datasworn.RulesPackage>): {
+  assetCollectionMap: AssetCollectionMap;
+  assetMap: AssetMap;
+  rootAssetCollections: RootAssetCollections;
+} {
   IdParser.tree = trees;
   const rootAssetCollectionsMap = CollectionId.getMatches(
     "asset_collection:*/*",
@@ -123,8 +121,4 @@ const assetsAtom = atom((get) => {
   });
 
   return { rootAssetCollections, assetCollectionMap, assetMap };
-});
-
-export function useAssets() {
-  return useAtomValue(assetsAtom);
 }

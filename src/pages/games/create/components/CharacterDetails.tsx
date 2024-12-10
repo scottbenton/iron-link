@@ -1,5 +1,4 @@
 import { Box } from "@mui/material";
-import { useAtomValue } from "jotai";
 import { useMemo } from "react";
 
 import {
@@ -7,11 +6,11 @@ import {
   OracleTextFieldOracleConfig,
 } from "components/datasworn/OracleTextField";
 
-import { dataswornTreeAtom } from "atoms/dataswornTree.atom";
+import { useCreateCharacterStore } from "stores/createCharacter.store";
+import { useDataswornTree } from "stores/dataswornTree.store";
 
 import { ironswornId, starforgedId } from "data/datasworn.packages";
 
-import { useCreateCharacterAtom } from "../atoms/createCharacter.atom";
 import { ImageInput } from "./ImageInput";
 
 const nameOracles: Record<string, OracleTextFieldOracleConfig> = {
@@ -31,10 +30,15 @@ const nameOracles: Record<string, OracleTextFieldOracleConfig> = {
 };
 
 export function CharacterDetails() {
-  const [character, setCharacter] = useCreateCharacterAtom();
-  const rulesets = useAtomValue(dataswornTreeAtom);
+  const name = useCreateCharacterStore((store) => store.characterName);
+  const portrait = useCreateCharacterStore((store) => store.portrait);
 
-  const { name, portrait } = character;
+  const setName = useCreateCharacterStore((store) => store.setCharacterName);
+  const setPortrait = useCreateCharacterStore(
+    (store) => store.setPortraitSettings,
+  );
+
+  const rulesets = useDataswornTree();
 
   const activeNameOracles = useMemo(() => {
     const oracles: OracleTextFieldOracleConfig = {
@@ -52,10 +56,9 @@ export function CharacterDetails() {
   return (
     <Box display={"flex"} alignItems={"center"} mt={1}>
       <ImageInput
+        characterName={name}
         value={portrait}
-        onChange={(value) =>
-          setCharacter((prev) => ({ ...prev, portrait: value }))
-        }
+        onChange={setPortrait}
       />
       <OracleTextField
         oracleConfig={activeNameOracles}
@@ -63,7 +66,7 @@ export function CharacterDetails() {
         fullWidth
         color={"primary"}
         value={name}
-        onChange={(value) => setCharacter((prev) => ({ ...prev, name: value }))}
+        onChange={setName}
         sx={{ maxWidth: 350, ml: 2 }}
       />
     </Box>

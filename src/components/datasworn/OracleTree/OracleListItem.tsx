@@ -9,7 +9,7 @@ import {
 } from "pages/games/gamePageLayout/hooks/usePermissions";
 import { useRollOracleAndAddToLog } from "pages/games/hooks/useRollOracleAndAddToLog";
 
-import { useOpenDataswornDialog } from "atoms/dataswornDialog.atom";
+import { useOpenDataswornDialog } from "stores/appState.store";
 
 import { ListItemButtonWithSecondaryAction } from "./ListItemButtonWithSecondaryAction";
 import {

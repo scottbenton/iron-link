@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 
-import { useImpactRules } from "atoms/dataswornRules/useImpactRules";
+import { useImpactRules } from "stores/dataswornTree.store";
 
 import { useDerivedCurrentCharacterState } from "./useDerivedCharacterState";
 

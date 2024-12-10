@@ -20,7 +20,7 @@ import { GridLayout } from "components/Layout";
 
 import { updateCharacter } from "api-calls/character/updateCharacter";
 
-import { useImpactRules } from "atoms/dataswornRules/useImpactRules";
+import { useImpactRules } from "stores/dataswornTree.store";
 
 import { useCharacterId } from "../../hooks/useCharacterId";
 import { useDerivedCurrentCharacterState } from "../../hooks/useDerivedCharacterState";

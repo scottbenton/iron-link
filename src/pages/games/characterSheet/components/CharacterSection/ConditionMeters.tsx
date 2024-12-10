@@ -11,7 +11,7 @@ import { useDerivedCampaignDocumentState } from "pages/games/gamePageLayout/hook
 import { updateCampaign } from "api-calls/campaign/updateCampaign";
 import { updateCharacter } from "api-calls/character/updateCharacter";
 
-import { useConditionMeterRules } from "atoms/dataswornRules/useConditionMeterRules";
+import { useConditionMeterRules } from "stores/dataswornTree.store.ts";
 
 import { momentumTrack } from "data/defaultTracks";
 

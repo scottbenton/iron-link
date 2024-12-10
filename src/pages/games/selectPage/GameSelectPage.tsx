@@ -6,13 +6,15 @@ import { GridLayout } from "components/Layout/GridLayout";
 
 import { pathConfig } from "pages/pathConfig";
 
-import { useUsersCampaigns } from "atoms/users.campaigns";
+import { useLoadUsersGames, useUsersGames } from "stores/users.games.store";
 
-import { CampaignCard } from "./CampaignCard";
+import { GameCard } from "./GameCard";
 
 export function GameSelectPage() {
   const { t } = useTranslation();
-  const campaignState = useUsersCampaigns();
+
+  useLoadUsersGames();
+  const gameState = useUsersGames();
 
   return (
     <>
@@ -26,12 +28,19 @@ export function GameSelectPage() {
       />
       <PageContent>
         <GridLayout
-          items={Object.entries(campaignState.campaigns)}
-          renderItem={([campaignId, campaign]) => (
-            <CampaignCard campaignId={campaignId} campaign={campaign} />
+          items={Object.entries(gameState.games)}
+          renderItem={([gameId, game]) => (
+            <GameCard gameId={gameId} game={game} />
           )}
-          loading={campaignState.loading}
-          error={campaignState.error}
+          loading={gameState.loading}
+          error={
+            gameState.error
+              ? t(
+                  "game.list.error-loading-games",
+                  "Failed to load your games. Please try again later.",
+                )
+              : undefined
+          }
           emptyStateMessage={t("game.list.no-games-found", "No games found")}
           emptyStateAction={
             <GradientButton href={pathConfig.gameCreate}>

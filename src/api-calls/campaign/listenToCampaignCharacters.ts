@@ -1,12 +1,12 @@
 import { Unsubscribe, onSnapshot } from "firebase/firestore";
 
-import { CharacterDocument } from "api-calls/character/_character.type";
+import { CharacterDTO } from "repositories/character.repository";
 
 import { getCharacterDoc } from "../character/_getRef";
 
 interface Params {
   characterIdList: string[];
-  onDocChange: (id: string, character?: CharacterDocument) => void;
+  onDocChange: (id: string, character?: CharacterDTO) => void;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onError: (error: any) => void;
 }

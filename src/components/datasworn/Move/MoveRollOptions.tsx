@@ -7,10 +7,10 @@ import { useParams } from "react-router-dom";
 import { currentCampaignAtom } from "pages/games/gamePageLayout/atoms/campaign.atom";
 import { campaignCharactersAtom } from "pages/games/gamePageLayout/atoms/campaign.characters.atom";
 
-import { useDataswornTree } from "atoms/dataswornTree.atom";
 import { derivedAtomWithEquality } from "atoms/derivedAtomWithEquality";
 
 import { useUID } from "stores/auth.store";
+import { useDataswornTree } from "stores/dataswornTree.store";
 
 import { AssetEnhancements } from "./AssetEnhancements";
 import {

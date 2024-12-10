@@ -1,7 +1,7 @@
 import {
   OracleCollectionMap,
   OracleRollableMap,
-} from "atoms/dataswornRules/useOracles";
+} from "stores/dataswornTree.store";
 
 export enum CollectionVisibilityState {
   All,

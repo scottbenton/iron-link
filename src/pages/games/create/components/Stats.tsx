@@ -3,13 +3,12 @@ import { useTranslation } from "react-i18next";
 
 import { ConditionMeter } from "components/datasworn/ConditonMeter";
 
-import { useStatRules } from "atoms/dataswornRules/useStatRules";
-
-import { useCreateCharacterAtom } from "../atoms/createCharacter.atom";
+import { useCreateCharacterStore } from "stores/createCharacter.store";
+import { useStatRules } from "stores/dataswornTree.store";
 
 export function Stats() {
-  const [character, setCharacter] = useCreateCharacterAtom();
-  const { stats: statValues } = character;
+  const statValues = useCreateCharacterStore((store) => store.stats);
+  const setStat = useCreateCharacterStore((store) => store.setStat);
 
   const { t } = useTranslation();
   const stats = useStatRules();
@@ -39,13 +38,7 @@ export function Stats() {
             defaultValue={0}
             value={statValues[statKey] ?? 0}
             onChange={(newValue) => {
-              setCharacter((prev) => ({
-                ...prev,
-                stats: {
-                  ...prev.stats,
-                  [statKey]: newValue,
-                },
-              }));
+              setStat(statKey, newValue);
             }}
           />
         ))}

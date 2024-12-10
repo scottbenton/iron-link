@@ -1,44 +1,37 @@
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { Box, Card, CardActionArea, Typography } from "@mui/material";
-import { useAtomValue } from "jotai";
 import { useTranslation } from "react-i18next";
 
-import { CampaignTypeIcon } from "assets/CampaignTypeIcon/CampaignTypeIcon";
+import { GameTypeIcon } from "assets/CampaignTypeIcon/CampaignTypeIcon";
 
 import { SectionHeading } from "components/SectionHeading";
 
-import { CampaignType } from "api-calls/campaign/_campaign.type";
+import { useCreateGameStore } from "stores/createGame.store";
 
-import { derivedAtomWithEquality } from "atoms/derivedAtomWithEquality";
-
-import { createGameAtom, useSetCreateGameAtom } from "../atoms/createGame.atom";
-
-const gameTypeAtom = derivedAtomWithEquality(
-  createGameAtom,
-  (state) => state.gameType,
-);
+import { GameType } from "repositories/game.repository";
 
 export function ChooseGameType() {
   const { t } = useTranslation();
-  const gameType = useAtomValue(gameTypeAtom);
-  const setCreateGame = useSetCreateGameAtom();
 
-  const labels: Record<CampaignType, string> = {
-    [CampaignType.Solo]: t("game.type-solo", "Solo"),
-    [CampaignType.Coop]: t("game.type-coop", "Co-op"),
-    [CampaignType.Guided]: t("game.type-guided", "Guided"),
+  const gameType = useCreateGameStore((store) => store.gameType);
+  const setGameType = useCreateGameStore((store) => store.setGameType);
+
+  const labels: Record<GameType, string> = {
+    [GameType.Solo]: t("game.type-solo", "Solo"),
+    [GameType.Coop]: t("game.type-coop", "Co-op"),
+    [GameType.Guided]: t("game.type-guided", "Guided"),
   };
 
-  const descriptions: Record<CampaignType, string> = {
-    [CampaignType.Solo]: t(
+  const descriptions: Record<GameType, string> = {
+    [GameType.Solo]: t(
       "game.type.solo-description",
       "One player, playing one or more characters.",
     ),
-    [CampaignType.Coop]: t(
+    [GameType.Coop]: t(
       "game.type.coop-description",
       "Two or more players, all playing characters.",
     ),
-    [CampaignType.Guided]: t(
+    [GameType.Guided]: t(
       "game.type.guided-desciption",
       "One player takes the role of guide, with the rest playing characters.",
     ),
@@ -62,12 +55,10 @@ export function ChooseGameType() {
         gridTemplateColumns="repeat(auto-fill, minmax(200px, 1fr))"
         gap={2}
       >
-        {Object.values(CampaignType).map((type) => (
+        {Object.values(GameType).map((type) => (
           <Card key={type} variant="outlined">
             <CardActionArea
-              onClick={() =>
-                setCreateGame((prev) => ({ ...prev, gameType: type }))
-              }
+              onClick={() => setGameType(type)}
               sx={{
                 p: 2,
                 height: "100%",
@@ -92,7 +83,7 @@ export function ChooseGameType() {
                     bgcolor="primary.main"
                     color="primary.contrastText"
                   >
-                    <CampaignTypeIcon
+                    <GameTypeIcon
                       sx={(theme) => ({
                         width: 32,
                         height: 32,
@@ -101,7 +92,7 @@ export function ChooseGameType() {
                         stroke: theme.palette.common.white,
                         color: theme.palette.common.white,
                       })}
-                      campaignType={type}
+                      gameType={type}
                     />
                   </Box>
                   <Typography

@@ -5,24 +5,24 @@ import { LinkComponent } from "components/LinkComponent";
 
 import { pathConfig } from "pages/pathConfig";
 
-import { CampaignDocument } from "api-calls/campaign/_campaign.type";
-
 import {
   defaultBaseRulesets,
   defaultExpansions,
 } from "data/datasworn.packages";
 
-import { CampaignCharacterPortraits } from "./CampaignCharacterPortraits";
+import { IGame } from "services/game.service";
 
-export interface CampaignCardProps {
-  campaignId: string;
-  campaign: CampaignDocument;
+import { CampaignCharacterPortraits } from "./GameCharacterPortraits";
+
+export interface GameCardProps {
+  gameId: string;
+  game: IGame;
 }
 
-export function CampaignCard(props: CampaignCardProps) {
-  const { campaignId, campaign } = props;
+export function GameCard(props: GameCardProps) {
+  const { gameId, game } = props;
 
-  const { rulesets, expansions } = campaign;
+  const { rulesets, expansions } = game;
 
   const rulesPackageString = useMemo(() => {
     const packageNames: string[] = [];
@@ -59,23 +59,21 @@ export function CampaignCard(props: CampaignCardProps) {
           overflow: "visible",
         }}
         LinkComponent={LinkComponent}
-        href={pathConfig.game(campaignId)}
+        href={pathConfig.game(gameId)}
       >
         <Box
           display="flex"
           alignItems="center"
-          gap={campaign.characters.length > 0 ? 2 : 0}
+          gap={game.characters.length > 0 ? 2 : 0}
         >
-          <CampaignCharacterPortraits
-            campaignCharacters={campaign.characters}
-          />
+          <CampaignCharacterPortraits gameCharacters={game.characters} />
           <div>
             <Typography
               variant={"h5"}
               fontFamily={(theme) => theme.typography.fontFamilyTitle}
               textTransform="uppercase"
             >
-              {campaign.name}
+              {game.name}
             </Typography>
             <Typography
               color="text.secondary"

@@ -1,6 +1,7 @@
 import { AssetDocument } from "api-calls/assets/_asset.type";
 import { CampaignDocument } from "api-calls/campaign/_campaign.type";
-import { CharacterDocument } from "api-calls/character/_character.type";
+
+import { CharacterDTO } from "repositories/character.repository";
 
 export interface CampaignRollOptionState {
   conditionMeters: CampaignDocument["conditionMeters"];
@@ -9,10 +10,10 @@ export interface CampaignRollOptionState {
 
 export interface CharacterRollOptionState {
   name: string;
-  stats: CharacterDocument["stats"];
-  conditionMeters: CharacterDocument["conditionMeters"];
-  adds: CharacterDocument["adds"];
-  momentum: CharacterDocument["momentum"];
+  stats: CharacterDTO["stats"];
+  conditionMeters: CharacterDTO["conditionMeters"];
+  adds: CharacterDTO["adds"];
+  momentum: CharacterDTO["momentum"];
   assets: Record<string, AssetDocument>;
-  specialTracks: CharacterDocument["specialTracks"];
+  specialTracks: CharacterDTO["specialTracks"];
 }

@@ -3,7 +3,7 @@ import { Box, Input, InputAdornment, List, ListSubheader } from "@mui/material";
 import { useDeferredValue, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { useMoves } from "atoms/dataswornRules/useMoves";
+import { useMoves } from "stores/dataswornTree.store";
 
 import { MoveCategoryListItem } from "./MoveCategoryListItem";
 import {

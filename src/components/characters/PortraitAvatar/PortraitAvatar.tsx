@@ -6,7 +6,7 @@ import {
 import {
   useCharacterPortrait,
   useLoadCharacterPortrait,
-} from "atoms/characterPortraits.atom";
+} from "stores/character.store";
 
 export interface PortraitAvatarProps {
   characterId: string;

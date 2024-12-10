@@ -2,13 +2,14 @@ import { atom, useAtom, useAtomValue, useSetAtom } from "jotai";
 import { useMemo } from "react";
 
 import { AssetDocument } from "api-calls/assets/_asset.type";
-import { CharacterDocument } from "api-calls/character/_character.type";
 
 import { derivedAtomWithEquality } from "atoms/derivedAtomWithEquality";
 
+import { CharacterDTO } from "repositories/character.repository";
+
 export interface CharacterStore {
   characterDocument: {
-    data?: CharacterDocument;
+    data?: CharacterDTO;
     loading: boolean;
     error?: string;
   };

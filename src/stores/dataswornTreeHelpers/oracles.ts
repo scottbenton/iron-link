@@ -1,19 +1,13 @@
 import { CollectionId, Datasworn, IdParser } from "@datasworn/core";
 import { Primary } from "@datasworn/core/dist/StringId";
-import { atom, useAtomValue } from "jotai";
 
-import { useActiveAssetOracleCollections } from "components/datasworn/hooks/useActiveAssetOracleCollections";
-
-import { dataswornTreeAtom } from "atoms/dataswornTree.atom";
+import {
+  OracleCollectionMap,
+  OracleRollableMap,
+  RootOracleCollections,
+} from "stores/dataswornTree.store";
 
 import { getRulesetFromId } from "./getRulesetFromId";
-
-export type RootOracleCollections = Record<
-  string,
-  { title: string; rootOracles: string[] }
->;
-export type OracleCollectionMap = Record<string, Datasworn.OracleCollection>;
-export type OracleRollableMap = Record<string, Datasworn.OracleRollable>;
 
 function parseOracleCollection(
   collection: Datasworn.OracleCollection,
@@ -102,9 +96,11 @@ function parseOracleCollection(
   }
 }
 
-const oraclesAtom = atom((get) => {
-  const trees = get(dataswornTreeAtom);
-
+export function parseOracles(trees: Record<string, Datasworn.RulesPackage>): {
+  oracleCollectionMap: OracleCollectionMap;
+  oracleRollableMap: OracleRollableMap;
+  rootOracleCollections: RootOracleCollections;
+} {
   IdParser.tree = trees;
   const rootOracleCollectionsMap = CollectionId.getMatches(
     "oracle_collection:*/*",
@@ -143,53 +139,6 @@ const oraclesAtom = atom((get) => {
       }
     });
   });
-
-  return { rootOracleCollections, oracleCollectionMap, oracleRollableMap };
-});
-
-export function useOracles() {
-  const assetOracleCollections = useActiveAssetOracleCollections();
-  const { rootOracleCollections, oracleCollectionMap, oracleRollableMap } =
-    useAtomValue(oraclesAtom);
-
-  if (Object.keys(assetOracleCollections).length > 0) {
-    const rootOracleCollectionsWithAssetCollections = {
-      ...rootOracleCollections,
-    };
-    let oracleCollectionMapWithAssetCollections = {
-      ...oracleCollectionMap,
-    };
-    let oracleRollableMapWithAssetOracles = {
-      ...oracleRollableMap,
-    };
-
-    Object.entries(assetOracleCollections).forEach(
-      ([rulesetId, assetOracleCollection]) => {
-        rootOracleCollectionsWithAssetCollections[rulesetId] = {
-          ...rootOracleCollectionsWithAssetCollections[rulesetId],
-          rootOracles: [
-            ...rootOracleCollectionsWithAssetCollections[rulesetId].rootOracles,
-            assetOracleCollection._id,
-          ],
-        };
-        oracleCollectionMapWithAssetCollections = {
-          ...oracleCollectionMapWithAssetCollections,
-          [assetOracleCollection._id]: assetOracleCollection,
-        };
-
-        oracleRollableMapWithAssetOracles = {
-          ...oracleRollableMapWithAssetOracles,
-          ...assetOracleCollection.contents,
-        };
-      },
-    );
-
-    return {
-      rootOracleCollections: rootOracleCollectionsWithAssetCollections,
-      oracleCollectionMap: oracleCollectionMapWithAssetCollections,
-      oracleRollableMap: oracleRollableMapWithAssetOracles,
-    };
-  }
 
   return { rootOracleCollections, oracleCollectionMap, oracleRollableMap };
 }

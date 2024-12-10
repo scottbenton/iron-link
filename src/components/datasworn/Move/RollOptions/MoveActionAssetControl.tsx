@@ -8,7 +8,7 @@ import { Stat } from "components/datasworn/Stat";
 
 import { useRollStatAndAddToLog } from "pages/games/hooks/useRollStatAndAddToLog";
 
-import { useDataswornTree } from "atoms/dataswornTree.atom";
+import { useDataswornTree } from "stores/dataswornTree.store";
 
 import {
   CampaignRollOptionState,

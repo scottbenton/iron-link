@@ -45,9 +45,9 @@ export class UserService {
   private static convertUserDTOToUser(userDTO: UserDTO): IUser {
     return {
       displayName: userDTO.displayName,
-      photoURL: userDTO.photoURL,
-      hidePhoto: userDTO.hidePhoto,
-      appVersion: userDTO.appVersion,
+      photoURL: userDTO.photoURL ?? undefined,
+      hidePhoto: userDTO.hidePhoto ?? undefined,
+      appVersion: userDTO.appVersion ?? undefined,
     };
   }
 }

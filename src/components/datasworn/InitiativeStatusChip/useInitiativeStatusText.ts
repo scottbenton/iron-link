@@ -1,10 +1,10 @@
 import { useTranslation } from "react-i18next";
 
-import { InitiativeStatus } from "api-calls/character/_character.type";
-
-import { useDataswornTree } from "atoms/dataswornTree.atom";
+import { useDataswornTree } from "stores/dataswornTree.store";
 
 import { starforgedId } from "data/datasworn.packages";
+
+import { InitiativeStatus } from "repositories/character.repository";
 
 export function useInitiativeStatusText(shortVariants?: boolean) {
   const { t } = useTranslation();

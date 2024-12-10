@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 
 import { getTheme } from "providers/ThemeProvider/themes/themeConfig";
 
-import { ColorScheme } from "atoms/theme.atom";
+import { ColorScheme } from "repositories/shared.types";
 
 import { IronLinkLogo } from "./Layout/IronLinkLogo";
 

@@ -13,7 +13,7 @@ import { useTranslation } from "react-i18next";
 
 import { useRollOracleAndAddToLog } from "pages/games/hooks/useRollOracleAndAddToLog";
 
-import { useOpenDataswornDialog } from "atoms/dataswornDialog.atom";
+import { useOpenDataswornDialog } from "stores/appState.store";
 
 import { ListItemButtonWithSecondaryAction } from "./ListItemButtonWithSecondaryAction";
 

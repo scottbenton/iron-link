@@ -16,8 +16,8 @@ import { getOracleCollection } from "hooks/datasworn/useOracleCollection";
 import { getOracleRollable } from "hooks/datasworn/useOracleRollable";
 import { useRollOracle } from "hooks/useRollOracle";
 
-import { useSetAnnouncement } from "atoms/announcement.atom";
-import { useDataswornTree } from "atoms/dataswornTree.atom";
+import { useSetAnnouncement } from "stores/appState.store";
+import { useDataswornTree } from "stores/dataswornTree.store";
 
 export type OracleTextFieldOracleConfig = {
   tableIds: (string | OracleTextFieldOracleConfig)[];

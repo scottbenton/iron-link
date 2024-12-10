@@ -3,6 +3,8 @@ import { FirebaseError } from "firebase/app";
 export enum StorageErrorCodes {
   NotFound = "NOT_FOUND",
   PermissionDenied = "PERMISSION_DENIED",
+  Unauthenticated = "UNAUTHENTICATED",
+  FileFailedToUpload = "FILE_FAILED_TO_UPLOAD",
   Unknown = "UNKNOWN",
 }
 
@@ -31,6 +33,18 @@ export class NotFoundError extends StorageError {
 export class PermissionDeniedError extends StorageError {
   constructor(message: string, originalMessage?: string) {
     super(message, StorageErrorCodes.PermissionDenied, originalMessage);
+  }
+}
+
+export class UnauthenticatedError extends StorageError {
+  constructor(message: string, originalMessage?: string) {
+    super(message, StorageErrorCodes.Unauthenticated, originalMessage);
+  }
+}
+
+export class FileFailedToUploadError extends StorageError {
+  constructor(message: string, originalMessage?: string) {
+    super(message, StorageErrorCodes.FileFailedToUpload, originalMessage);
   }
 }
 

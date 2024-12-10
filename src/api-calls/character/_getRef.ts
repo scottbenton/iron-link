@@ -7,7 +7,7 @@ import {
 
 import { firestore } from "config/firebase.config";
 
-import { CharacterDocument } from "./_character.type";
+import { CharacterDTO } from "repositories/character.repository";
 
 export function constructCharacterCollectionPath() {
   return `/characters`;
@@ -32,12 +32,12 @@ export function getCharacterCollection() {
   return collection(
     firestore,
     constructCharacterCollectionPath(),
-  ) as CollectionReference<CharacterDocument>;
+  ) as CollectionReference<CharacterDTO>;
 }
 
 export function getCharacterDoc(characterId: string) {
   return doc(
     firestore,
     constructCharacterDocPath(characterId),
-  ) as DocumentReference<CharacterDocument>;
+  ) as DocumentReference<CharacterDTO>;
 }

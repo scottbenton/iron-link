@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 
-import { ColorScheme, useSetColorScheme } from "atoms/theme.atom";
+import { useSetColorScheme } from "stores/appState.store";
+
+import { ColorScheme } from "repositories/shared.types";
 
 import { useDerivedCurrentCharacterState } from "./useDerivedCharacterState";
 

@@ -5,7 +5,7 @@ import { DebouncedProgressTrack } from "components/datasworn/ProgressTrack";
 
 import { updateCharacter } from "api-calls/character/updateCharacter";
 
-import { useSpecialTrackRules } from "atoms/dataswornRules/useSpecialTrackRules";
+import { useSpecialTrackRules } from "stores/dataswornTree.store";
 
 import { useCharacterId } from "../../hooks/useCharacterId";
 import { useDerivedCurrentCharacterState } from "../../hooks/useDerivedCharacterState";

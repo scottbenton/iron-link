@@ -26,9 +26,8 @@ import { updateCharacter } from "api-calls/character/updateCharacter";
 import { removeLog } from "api-calls/game-log/removeLog";
 import { updateLog } from "api-calls/game-log/updateLog";
 
-import { useDataswornTree } from "atoms/dataswornTree.atom";
-
 import { useUID } from "stores/auth.store";
+import { useDataswornTree } from "stores/dataswornTree.store";
 
 import { useCharacterIdOptional } from "../../hooks/useCharacterId";
 import { useDerivedCharacterState } from "../../hooks/useDerivedCharacterState";

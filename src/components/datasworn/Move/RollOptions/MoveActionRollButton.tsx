@@ -6,8 +6,10 @@ import { Stat } from "components/datasworn/Stat";
 
 import { useRollStatAndAddToLog } from "pages/games/hooks/useRollStatAndAddToLog";
 
-import { useConditionMeterRules } from "atoms/dataswornRules/useConditionMeterRules";
-import { useStatRules } from "atoms/dataswornRules/useStatRules";
+import {
+  useConditionMeterRules,
+  useStatRules,
+} from "stores/dataswornTree.store";
 
 import { MoveActionAssetControl } from "./MoveActionAssetControl";
 import {

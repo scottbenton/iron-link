@@ -1,10 +1,11 @@
 import { Datasworn } from "@datasworn/core";
-import { atom, useAtomValue } from "jotai";
 
-import { dataswornTreeAtom } from "atoms/dataswornTree.atom";
-
-const impactRulesAtom = atom((get) => {
-  const trees = get(dataswornTreeAtom);
+export function parseImpactRules(
+  trees: Record<string, Datasworn.RulesPackage>,
+): {
+  impactCategories: Record<string, Datasworn.ImpactCategory>;
+  impacts: Record<string, Datasworn.ImpactRule>;
+} {
   let impactCategories: Record<string, Datasworn.ImpactCategory> = {};
   let impacts: Record<string, Datasworn.ImpactRule> = {};
 
@@ -14,12 +15,9 @@ const impactRulesAtom = atom((get) => {
       impacts = { ...impacts, ...(impactCategory.contents ?? {}) };
     });
   });
+
   return {
     impactCategories,
     impacts,
   };
-});
-
-export function useImpactRules() {
-  return useAtomValue(impactRulesAtom);
 }

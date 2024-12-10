@@ -18,7 +18,7 @@ import {
 import { removeProgressTrack } from "api-calls/tracks/removeProgressTrack";
 import { updateProgressTrack } from "api-calls/tracks/updateProgressTrack";
 
-import { useSetAnnouncement } from "atoms/announcement.atom";
+import { useSetAnnouncement } from "stores/appState.store";
 
 import { useIsOwnerOfCharacter } from "../../hooks/useIsOwnerOfCharacter";
 import { EditOrCreateTrackDialog } from "./EditOrCreateTrackDialog";

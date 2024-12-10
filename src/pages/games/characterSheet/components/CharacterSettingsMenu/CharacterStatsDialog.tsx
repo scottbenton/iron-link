@@ -7,7 +7,7 @@ import { ConditionMeter } from "components/datasworn/ConditonMeter";
 
 import { updateCharacter } from "api-calls/character/updateCharacter";
 
-import { useStatRules } from "atoms/dataswornRules/useStatRules";
+import { useStatRules } from "stores/dataswornTree.store";
 
 import { useCharacterId } from "../../hooks/useCharacterId";
 import { useDerivedCurrentCharacterState } from "../../hooks/useDerivedCharacterState";

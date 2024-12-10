@@ -9,8 +9,9 @@ import { listenToAssets } from "api-calls/assets/listenToAssets";
 import { listenToCampaign } from "api-calls/campaign/listenToCampaign";
 import { listenToCharacter } from "api-calls/character/listenToCharacter";
 
-import { useDataswornTreeSetter } from "atoms/dataswornTree.atom";
 import { derivedAtomWithEquality } from "atoms/derivedAtomWithEquality";
+
+import { useSetDataswornTree } from "stores/dataswornTree.store";
 
 import {
   defaultBaseRulesets,
@@ -47,7 +48,7 @@ export function useSyncCampaign() {
   const setCurrentCampaign = useSetCurrentCampaignAtom();
   const setCurrentCampaignCharacters = useSetCampaignCharacters();
 
-  const setDataswornTree = useDataswornTreeSetter();
+  const setDataswornTree = useSetDataswornTree();
 
   const campaignRulesPackages = useAtomValue(expansionsAndRulesetsAtom);
   const campaignCharacters = useAtomValue(charactersAtom);

@@ -23,7 +23,7 @@ import { AskTheOracle, Clock, TrackStatus } from "types/Track.type";
 import { removeProgressTrack } from "api-calls/tracks/removeProgressTrack";
 import { updateProgressTrack } from "api-calls/tracks/updateProgressTrack";
 
-import { useSetAnnouncement } from "atoms/announcement.atom";
+import { useSetAnnouncement } from "stores/appState.store";
 
 import { askTheOracleEnumMap } from "data/askTheOracle";
 

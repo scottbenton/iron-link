@@ -3,7 +3,7 @@ import { useCallback } from "react";
 
 import { OracleTableRoll, RollType } from "types/DieRolls.type";
 
-import { useDataswornTree } from "atoms/dataswornTree.atom";
+import { useDataswornTree } from "stores/dataswornTree.store";
 
 import { rollDie } from "lib/rollDie";
 

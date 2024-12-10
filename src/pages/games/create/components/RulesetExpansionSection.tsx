@@ -1,50 +1,17 @@
-import { useAtomValue } from "jotai";
 import { useTranslation } from "react-i18next";
 
 import { SectionHeading } from "components/SectionHeading";
 import { RulesPackageSelector } from "components/datasworn/RulesPackageSelector";
 
-import { derivedAtomWithEquality } from "atoms/derivedAtomWithEquality";
-
-import { createGameAtom, useSetCreateGameAtom } from "../atoms/createGame.atom";
-
-const rulesPackages = derivedAtomWithEquality(createGameAtom, (atom) => ({
-  rulesets: atom.rulesets,
-  expansions: atom.expansions,
-}));
+import { useCreateGameStore } from "stores/createGame.store";
 
 export function RulesetExpansionSection() {
   const { t } = useTranslation();
 
-  const setCreateGame = useSetCreateGameAtom();
-  const { rulesets, expansions } = useAtomValue(rulesPackages);
-
-  const handleRulesetChange = (rulesetKey: string, isActive: boolean) => {
-    setCreateGame((prev) => ({
-      ...prev,
-      rulesets: {
-        ...prev.rulesets,
-        [rulesetKey]: isActive,
-      },
-    }));
-  };
-
-  const handleExpansionChange = (
-    rulesetKey: string,
-    expansionKey: string,
-    isActive: boolean,
-  ) => {
-    setCreateGame((prev) => ({
-      ...prev,
-      expansions: {
-        ...prev.expansions,
-        [rulesetKey]: {
-          ...prev.expansions[rulesetKey],
-          [expansionKey]: isActive,
-        },
-      },
-    }));
-  };
+  const rulesets = useCreateGameStore((store) => store.rulesets);
+  const toggleRuleset = useCreateGameStore((store) => store.toggleRuleset);
+  const expansions = useCreateGameStore((store) => store.expansions);
+  const toggleExpansion = useCreateGameStore((store) => store.toggleExpansion);
 
   return (
     <>
@@ -56,8 +23,8 @@ export function RulesetExpansionSection() {
         sx={{ mt: 1 }}
         activeRulesetConfig={rulesets}
         activeExpansionConfig={expansions}
-        onRulesetChange={handleRulesetChange}
-        onExpansionChange={handleExpansionChange}
+        onRulesetChange={toggleRuleset}
+        onExpansionChange={toggleExpansion}
       />
     </>
   );

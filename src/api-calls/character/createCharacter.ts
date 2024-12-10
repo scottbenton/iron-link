@@ -1,13 +1,12 @@
 import { addDoc } from "firebase/firestore";
 
 import { AssetDocument } from "api-calls/assets/_asset.type";
-import {
-  CharacterDocument,
-  StatsMap,
-} from "api-calls/character/_character.type";
 import { createApiFunction } from "api-calls/createApiFunction";
 
 import { momentumTrack } from "data/defaultTracks";
+
+import { CharacterDTO } from "repositories/character.repository";
+import { StatsMap } from "repositories/character.repository";
 
 import { getCharacterAssetCollection } from "../assets/_getRef";
 import { getCharacterCollection } from "./_getRef";
@@ -25,7 +24,7 @@ export const createCharacter = createApiFunction<
 >((params) => {
   return new Promise((resolve, reject) => {
     const { uid, name, stats, assets, campaignId } = params;
-    const character: CharacterDocument = {
+    const character: CharacterDTO = {
       uid: uid,
       name: name,
       stats: stats,

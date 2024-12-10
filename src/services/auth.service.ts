@@ -2,6 +2,8 @@ import { onAuthStateChanged } from "firebase/auth";
 
 import { firebaseAuth } from "config/firebase.config";
 
+import { UnauthenticatedError } from "repositories/errors/storageErrors";
+
 export interface AuthenticatedUser {
   uid: string;
   displayName: string;
@@ -37,5 +39,13 @@ export class AuthService {
   public static getCurrentUserId(): string | null {
     const user = firebaseAuth.currentUser;
     return user ? user.uid : null;
+  }
+
+  public static getCurrentUserIdOrThrow(): string {
+    const uid = this.getCurrentUserId();
+    if (!uid) {
+      throw new UnauthenticatedError("User is not authenticated");
+    }
+    return uid;
   }
 }

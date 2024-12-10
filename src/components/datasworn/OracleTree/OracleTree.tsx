@@ -3,7 +3,7 @@ import { Box, Input, InputAdornment, List, ListSubheader } from "@mui/material";
 import { useDeferredValue, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { useOracles } from "atoms/dataswornRules/useOracles";
+import { useOracles } from "stores/dataswornTree.store";
 
 import { AskTheOracleButtons } from "./AskTheOracleButtons";
 import { OracleCollectionListItem } from "./OracleCollectionListItem";

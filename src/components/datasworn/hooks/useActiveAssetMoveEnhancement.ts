@@ -4,7 +4,7 @@ import { useMemo } from "react";
 
 import { getAsset } from "hooks/datasworn/useAsset";
 
-import { useDataswornTree } from "atoms/dataswornTree.atom";
+import { useDataswornTree } from "stores/dataswornTree.store";
 
 import { useActiveAssets } from "./useActiveAssets";
 

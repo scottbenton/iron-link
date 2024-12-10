@@ -4,8 +4,8 @@ import { useTranslation } from "react-i18next";
 
 import { getAsset } from "hooks/datasworn/useAsset";
 
-import { getRulesetFromId } from "atoms/dataswornRules/getRulesetFromId";
-import { useDataswornTree } from "atoms/dataswornTree.atom";
+import { useDataswornTree } from "stores/dataswornTree.store";
+import { getRulesetFromId } from "stores/dataswornTreeHelpers/getRulesetFromId";
 
 import { source } from "data/askTheOracle";
 

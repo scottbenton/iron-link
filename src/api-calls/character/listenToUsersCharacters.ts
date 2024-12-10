@@ -1,13 +1,13 @@
 import { onSnapshot, query, where } from "firebase/firestore";
 
-import { CharacterDocument } from "api-calls/character/_character.type";
+import { CharacterDTO } from "repositories/character.repository";
 
 import { getCharacterCollection } from "./_getRef";
 
 export function listenToUsersCharacters(
   uid: string,
   dataHandler: {
-    onDocChange: (id: string, data: CharacterDocument) => void;
+    onDocChange: (id: string, data: CharacterDTO) => void;
     onDocRemove: (id: string) => void;
     onLoaded: () => void;
   },

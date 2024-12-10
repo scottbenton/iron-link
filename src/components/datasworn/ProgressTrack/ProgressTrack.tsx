@@ -14,7 +14,7 @@ import { useTranslation } from "react-i18next";
 
 import { Difficulty, TrackStatus } from "types/Track.type";
 
-import { useSetAnnouncement } from "atoms/announcement.atom";
+import { useSetAnnouncement } from "stores/appState.store";
 
 import { ProgressTrackTick } from "./ProgressTrackTick";
 

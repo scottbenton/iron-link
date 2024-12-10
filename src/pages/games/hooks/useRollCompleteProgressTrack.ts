@@ -6,9 +6,9 @@ import { TrackTypes } from "types/Track.type";
 
 import { addRoll } from "api-calls/game-log/addRoll";
 
-import { useSetAnnouncement } from "atoms/announcement.atom";
 import { useAddRollSnackbar } from "atoms/rollDisplay.atom";
 
+import { useSetAnnouncement } from "stores/appState.store";
 import { useUID } from "stores/auth.store";
 
 import { getRollResultLabel } from "data/rollResultLabel";

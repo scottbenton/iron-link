@@ -128,7 +128,6 @@ export function MoveDialog(props: MoveDialogProps) {
       // We can just move the item
       if (type === "note") {
         // Get the order to put the note last in the next list
-        console.debug(selectedParentFolderOrder + 1);
         promises.push(
           updateNote({
             campaignId,

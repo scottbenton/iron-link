@@ -7,7 +7,7 @@ import { DialogTitleWithCloseButton } from "components/DialogTitleWithCloseButto
 
 import { updateCharacter } from "api-calls/character/updateCharacter";
 
-import { ColorScheme } from "atoms/theme.atom";
+import { ColorScheme } from "repositories/shared.types";
 
 import { useCharacterId } from "../../hooks/useCharacterId";
 import { useDerivedCurrentCharacterState } from "../../hooks/useDerivedCharacterState";

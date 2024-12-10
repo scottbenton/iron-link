@@ -16,9 +16,9 @@ import {
 
 export interface UserDTO {
   displayName: string;
-  photoURL?: string;
-  hidePhoto?: boolean;
-  appVersion?: string;
+  photoURL: string | null;
+  hidePhoto: boolean | null;
+  appVersion: string | null;
 }
 
 export class UserRepository {

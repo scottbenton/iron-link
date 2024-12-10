@@ -5,7 +5,7 @@ service cloud.firestore {
     	allow read: if true;
       allow create: if request.auth.uid != null;
 	    allow write, delete: if request.auth.uid == resource.data.uid;
-  	  allow update: if request.resource.data.diff(resource.data).affectedKeys().hasOnly(["campaignId", "worldId", "initiativeStatus"])     
+  	  allow update: if request.resource.data.diff(resource.data).affectedKeys().hasOnly(["gameId", "worldId", "initiativeStatus"])     
 
       function checkIsOwner() {
       	let character = get(/databases/$(database)/documents/characters/$(characterId)).data;
@@ -22,7 +22,7 @@ service cloud.firestore {
         allow write, delete: if checkIsOwner();
       }
     }
-    match /campaigns/{campaignId} {
+    match /games/{gameId} {
     	allow read, write, delete: if request.auth.uid != null;
         
     	match /{document=**} {

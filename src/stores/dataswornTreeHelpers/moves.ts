@@ -1,19 +1,13 @@
 import { CollectionId, Datasworn, IdParser } from "@datasworn/core";
 import { Primary } from "@datasworn/core/dist/StringId";
-import { atom, useAtomValue } from "jotai";
 
-import { useActiveAssetMoveCategories } from "components/datasworn/hooks/useActiveAssetMoveCategories";
-
-import { dataswornTreeAtom } from "atoms/dataswornTree.atom";
+import {
+  MoveCategoryMap,
+  MoveMap,
+  RootMoveCategories,
+} from "stores/dataswornTree.store";
 
 import { getRulesetFromId } from "./getRulesetFromId";
-
-export type RootMoveCategories = Record<
-  string,
-  { title: string; rootMoves: string[] }
->;
-export type MoveCategoryMap = Record<string, Datasworn.MoveCategory>;
-export type MoveMap = Record<string, Datasworn.Move>;
 
 function parseMoveCategory(
   category: Datasworn.MoveCategory,
@@ -73,9 +67,11 @@ function parseMoveCategory(
   }
 }
 
-const movesAtom = atom((get) => {
-  const trees = get(dataswornTreeAtom);
-
+export function parseMoves(trees: Record<string, Datasworn.RulesPackage>): {
+  rootMoveCategories: RootMoveCategories;
+  moveCategoryMap: MoveCategoryMap;
+  moveMap: MoveMap;
+} {
   IdParser.tree = trees;
   const rootMoveCategoriesMap = CollectionId.getMatches(
     "move_category:*/*",
@@ -108,52 +104,6 @@ const movesAtom = atom((get) => {
       }
     });
   });
-
-  return { rootMoveCategories, moveCategoryMap, moveMap };
-});
-
-export function useMoves() {
-  const assetMoveCategories = useActiveAssetMoveCategories();
-  const { rootMoveCategories, moveCategoryMap, moveMap } =
-    useAtomValue(movesAtom);
-
-  if (Object.keys(assetMoveCategories).length > 0) {
-    const rootMoveCategoriesWithAssetCategories = {
-      ...rootMoveCategories,
-    };
-    let moveCategoryMapWithAssetCategories = {
-      ...moveCategoryMap,
-    };
-    let moveMapWithAssetMoves = {
-      ...moveMap,
-    };
-
-    Object.entries(assetMoveCategories).forEach(
-      ([rulesetId, assetMoveCategory]) => {
-        rootMoveCategoriesWithAssetCategories[rulesetId] = {
-          ...rootMoveCategoriesWithAssetCategories[rulesetId],
-          rootMoves: [
-            ...rootMoveCategoriesWithAssetCategories[rulesetId].rootMoves,
-            assetMoveCategory._id,
-          ],
-        };
-        moveCategoryMapWithAssetCategories = {
-          ...moveCategoryMapWithAssetCategories,
-          [assetMoveCategory._id]: assetMoveCategory,
-        };
-        moveMapWithAssetMoves = {
-          ...moveMapWithAssetMoves,
-          ...assetMoveCategory.contents,
-        };
-      },
-    );
-
-    return {
-      rootMoveCategories: rootMoveCategoriesWithAssetCategories,
-      moveCategoryMap: moveCategoryMapWithAssetCategories,
-      moveMap: moveMapWithAssetMoves,
-    };
-  }
 
   return { rootMoveCategories, moveCategoryMap, moveMap };
 }

@@ -1,6 +1,6 @@
 import { LegacyTrack } from "types/LegacyTrack.type";
 
-import { ColorScheme } from "atoms/theme.atom";
+import { ColorScheme } from "repositories/shared.types";
 
 export enum CampaignType {
   Solo = "solo",
