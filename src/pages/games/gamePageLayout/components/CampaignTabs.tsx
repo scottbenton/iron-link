@@ -1,60 +1,45 @@
 import { Tab, Tabs } from "@mui/material";
-import { useAtomValue } from "jotai";
 import { useTranslation } from "react-i18next";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 import { LinkComponent } from "components/LinkComponent";
 
+import { useCharacterIdOptional } from "pages/games/characterSheet/hooks/useCharacterId";
 import { pathConfig } from "pages/pathConfig";
 
-import { derivedAtomWithEquality } from "atoms/derivedAtomWithEquality";
-
 import { useUID } from "stores/auth.store";
+import { useGameCharactersStore } from "stores/gameCharacters.store";
 
-import { currentCampaignAtom } from "../atoms/campaign.atom";
-import { campaignCharactersAtom } from "../atoms/campaign.characters.atom";
-
-const campaignCharacterList = derivedAtomWithEquality(
-  currentCampaignAtom,
-  (atom) => atom.campaign?.characters ?? [],
-);
-const characterNames = derivedAtomWithEquality(
-  campaignCharactersAtom,
-  (atom) => {
-    const names: Record<string, string | undefined> = {};
-    Object.entries(atom).forEach(([characterId, characterState]) => {
-      names[characterId] = characterState.characterDocument.data?.name;
-    });
-    return names;
-  },
-);
+import { useGameId } from "../hooks/useGameId";
 
 export function CampaignTabs() {
-  const { campaignId, characterId } = useParams<{
-    campaignId: string;
-    characterId?: string;
-  }>();
+  const gameId = useGameId();
+  const characterId = useCharacterIdOptional();
+  const uid = useUID();
+
   const { t } = useTranslation();
   const { pathname } = useLocation();
   const isOnCharacterCreatePage = pathname.match(
     /\/games\/[^/]*\/create[/]?$/i,
   );
 
-  const characterList = useAtomValue(campaignCharacterList);
-  const names = useAtomValue(characterNames);
-
-  const uid = useUID();
-
-  // Sort users characters to the front
-  const sortedCharacterList = characterList.sort((a, b) => {
-    if (a.uid !== b.uid) {
-      if (a.uid === uid) return -1;
-      if (b.uid === uid) return 1;
-    }
-    return 0;
+  const sortedGameCharacters = useGameCharactersStore((store) => {
+    return Object.entries(store.characters)
+      .map(([key, value]) => {
+        return {
+          id: key,
+          name: value.name,
+          uid: value.uid,
+        };
+      })
+      .sort((a, b) => {
+        if (a.uid !== b.uid) {
+          if (a.uid === uid) return -1;
+          if (b.uid === uid) return 1;
+        }
+        return a.name.localeCompare(b.name);
+      });
   });
-
-  if (!campaignId) return null;
 
   return (
     <Tabs
@@ -67,22 +52,22 @@ export function CampaignTabs() {
     >
       <Tab
         LinkComponent={LinkComponent}
-        href={pathConfig.game(campaignId)}
+        href={pathConfig.game(gameId)}
         value={"overview"}
         label={t("game.layout.overview", "Overview")}
       />
-      {sortedCharacterList.map((character) => (
+      {sortedGameCharacters.map((character) => (
         <Tab
           LinkComponent={LinkComponent}
-          href={pathConfig.gameCharacter(campaignId, character.characterId)}
-          key={character.characterId}
-          value={character.characterId}
-          label={names[character.characterId] ?? t("common.loading", "Loading")}
+          href={pathConfig.gameCharacter(gameId, character.id)}
+          key={character.id}
+          value={character.id}
+          label={character.name ?? t("common.loading", "Loading")}
         />
       ))}
       <Tab
         LinkComponent={LinkComponent}
-        href={pathConfig.gameCharacterCreate(campaignId)}
+        href={pathConfig.gameCharacterCreate(gameId)}
         value={"create-character"}
         label={t("game.layout.add-character", "Add Character")}
       />

@@ -10,14 +10,14 @@ import {
 } from "./_getRef";
 
 export const addRoll = createApiFunction<
-  { roll: Roll; campaignId: string; rollId: string },
+  { roll: Roll; gameId: string; rollId: string },
   void
 >((params) => {
-  const { campaignId, rollId, roll } = params;
+  const { gameId, rollId, roll } = params;
 
   return new Promise((resolve, reject) => {
     setDoc(
-      getCampaignGameLogDocument(campaignId, rollId),
+      getCampaignGameLogDocument(gameId, rollId),
       convertRollToGameLogDocument(roll),
     )
       .then(() => {

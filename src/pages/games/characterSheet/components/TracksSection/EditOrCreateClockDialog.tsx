@@ -18,7 +18,7 @@ import { useTranslation } from "react-i18next";
 import { DialogTitleWithCloseButton } from "components/DialogTitleWithCloseButton";
 import { ClockCircle } from "components/datasworn/Clocks/ClockCircle";
 
-import { useCampaignId } from "pages/games/gamePageLayout/hooks/useCampaignId";
+import { useGameId } from "pages/games/gamePageLayout/hooks/useGameId";
 
 import { Clock, TrackStatus, TrackTypes } from "types/Track.type";
 
@@ -37,7 +37,7 @@ export function EditOrCreateClockDialog(props: EditOrCreateClockDialogProps) {
   const { open, handleClose, initialClock } = props;
 
   const { t } = useTranslation();
-  const campaignId = useCampaignId();
+  const campaignId = useGameId();
 
   const [error, setError] = useState<string>();
   const [loading, setLoading] = useState(false);

@@ -14,11 +14,8 @@ import { useRef, useState } from "react";
 
 import { useSnackbar } from "providers/SnackbarProvider";
 
-import { useCampaignId } from "pages/games/gamePageLayout/hooks/useCampaignId";
-import {
-  CampaignPermissionType,
-  useCampaignPermissions,
-} from "pages/games/gamePageLayout/hooks/usePermissions";
+import { useGameId } from "pages/games/gamePageLayout/hooks/useGameId";
+import { useCampaignPermissions } from "pages/games/gamePageLayout/hooks/usePermissions";
 
 import { Roll, RollResult, RollType } from "types/DieRolls.type";
 
@@ -28,6 +25,7 @@ import { updateLog } from "api-calls/game-log/updateLog";
 
 import { useUID } from "stores/auth.store";
 import { useDataswornTree } from "stores/dataswornTree.store";
+import { GamePermission } from "stores/game.store";
 
 import { useCharacterIdOptional } from "../../hooks/useCharacterId";
 import { useDerivedCharacterState } from "../../hooks/useDerivedCharacterState";
@@ -66,7 +64,7 @@ export function NormalRollActions(props: NormalRollActionsProps) {
   const { rollId, roll } = props;
 
   const uid = useUID();
-  const campaignId = useCampaignId();
+  const campaignId = useGameId();
   const currentCharacterId = useCharacterIdOptional();
   const momentum = useDerivedCharacterState(
     currentCharacterId,
@@ -75,8 +73,7 @@ export function NormalRollActions(props: NormalRollActionsProps) {
   const momentumResetValue = useMomentumParameters().resetValue;
 
   const canDeleteLogs =
-    useCampaignPermissions().campaignPermission ===
-    CampaignPermissionType.Guide;
+    useCampaignPermissions().gamePermission === GamePermission.Guide;
 
   let isMomentumBurnUseful = false;
   if (roll.type === RollType.Stat && roll.momentumBurned === null) {

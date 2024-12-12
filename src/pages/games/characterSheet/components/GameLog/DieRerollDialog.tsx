@@ -18,7 +18,7 @@ import { useSnackbar } from "providers/SnackbarProvider";
 import { DialogTitleWithCloseButton } from "components/DialogTitleWithCloseButton";
 import { RollSnackbar } from "components/characters/rolls/RollSnackbar";
 
-import { useCampaignId } from "pages/games/gamePageLayout/hooks/useCampaignId";
+import { useGameId } from "pages/games/gamePageLayout/hooks/useGameId.ts";
 import { getRoll } from "pages/games/hooks/useRollStatAndAddToLog";
 
 import { RollResult, StatRoll } from "types/DieRolls.type";
@@ -42,7 +42,7 @@ export function DieRerollDialog(props: DieRerollDialogProps) {
   const { open, handleClose, roll, rollId } = props;
 
   const { t } = useTranslation();
-  const campaignId = useCampaignId();
+  const campaignId = useGameId();
   const characterId = useCharacterIdOptional();
   const momentum = useDerivedCharacterState(
     characterId,

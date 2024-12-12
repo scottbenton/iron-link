@@ -1,9 +1,13 @@
 // Rolls, announcements, datasworn dialog, themes
+import deepEqual from "fast-deep-equal";
 import { immer } from "zustand/middleware/immer";
 import { createWithEqualityFn } from "zustand/traditional";
-import { shallow } from "zustand/vanilla/shallow";
+
+import { Roll } from "types/DieRolls.type";
 
 import { ColorScheme } from "repositories/shared.types";
+
+export type VisibleRoll = { id?: string; roll: Roll };
 
 interface AppStateState {
   announcement: string | null;
@@ -12,6 +16,9 @@ interface AppStateState {
     openId?: string;
     previousIds: string[];
   };
+
+  visibleRolls: VisibleRoll[];
+
   colorScheme: ColorScheme;
 }
 
@@ -23,6 +30,11 @@ interface AppStateActions {
   prevDataswornDialog: () => void;
 
   setColorScheme: (colorScheme: ColorScheme) => void;
+
+  addRoll: (rollId: string | undefined, roll: Roll) => void;
+  updateRollIfPresent: (rollId: string, roll: Roll) => void;
+  clearRoll: (index: number) => void;
+  clearAllRolls: () => void;
 }
 
 export const useAppState = createWithEqualityFn<
@@ -34,6 +46,7 @@ export const useAppState = createWithEqualityFn<
       isOpen: false,
       previousIds: [],
     },
+    visibleRolls: [],
     colorScheme: ColorScheme.Default,
 
     setAnnouncement: (announcement) => set({ announcement }),
@@ -69,8 +82,36 @@ export const useAppState = createWithEqualityFn<
         state.colorScheme = colorScheme;
       });
     },
+    addRoll: (rollId, roll) => {
+      set((state) => {
+        state.visibleRolls.push({ id: rollId, roll });
+        if (state.visibleRolls.length > 3) {
+          state.visibleRolls.splice(0, 1);
+        }
+      });
+    },
+    clearRoll: (index) => {
+      set((state) => {
+        state.visibleRolls.splice(index, 1);
+      });
+    },
+    clearAllRolls: () => {
+      set((state) => {
+        state.visibleRolls = [];
+      });
+    },
+    updateRollIfPresent: (rollId, roll) => {
+      set((state) => {
+        const rollIndex = state.visibleRolls.findIndex(
+          ({ id }) => id === rollId,
+        );
+        if (rollIndex >= 0) {
+          state.visibleRolls[rollIndex].roll = roll;
+        }
+      });
+    },
   })),
-  shallow,
+  deepEqual,
 );
 
 export function useAnnouncement() {
@@ -87,4 +128,8 @@ export function useOpenDataswornDialog() {
 
 export function useSetColorScheme() {
   return useAppState((state) => state.setColorScheme);
+}
+
+export function useAddRollSnackbar() {
+  return useAppState((state) => state.addRoll);
 }

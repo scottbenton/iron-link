@@ -5,14 +5,12 @@ import {
   useDerivedNotesAtom,
   useSetOpenItem,
 } from "pages/games/gamePageLayout/atoms/notes.atom";
-import {
-  CampaignPermissionType,
-  useCampaignPermissions,
-} from "pages/games/gamePageLayout/hooks/usePermissions";
+import { useCampaignPermissions } from "pages/games/gamePageLayout/hooks/usePermissions";
 
 import { GUIDE_NOTE_FOLDER_NAME } from "api-calls/notes/_getRef";
 
 import { useUID } from "stores/auth.store";
+import { GamePermission } from "stores/game.store";
 
 import { getItemName } from "../FolderView/getFolderName";
 import { FAKE_ROOT_NOTE_FOLDER_KEY } from "../FolderView/rootNodeName";
@@ -30,7 +28,8 @@ export function NoteBreadcrumbs() {
 
   const setOpenItem = useSetOpenItem();
 
-  const { campaignType, campaignPermission } = useCampaignPermissions();
+  const { gameType: campaignType, gamePermission: campaignPermission } =
+    useCampaignPermissions();
   const hasCampaignNoteChildren = useDerivedNotesAtom(
     (store) =>
       Object.values(store.notes.notes).some(
@@ -43,8 +42,7 @@ export function NoteBreadcrumbs() {
 
   let hasAccessToMoreThanOneTopLevelFolder = false;
   if (
-    (campaignPermission === CampaignPermissionType.Guide &&
-      campaignType !== "solo") ||
+    (campaignPermission === GamePermission.Guide && campaignType !== "solo") ||
     hasCampaignNoteChildren
   ) {
     hasAccessToMoreThanOneTopLevelFolder = true;

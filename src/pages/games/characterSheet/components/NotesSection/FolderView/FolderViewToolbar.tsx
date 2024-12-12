@@ -6,7 +6,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { useDerivedNotesAtom } from "pages/games/gamePageLayout/atoms/notes.atom";
-import { useCampaignId } from "pages/games/gamePageLayout/hooks/useCampaignId";
+import { useGameId } from "pages/games/gamePageLayout/hooks/useGameId";
 
 import { addFolder } from "api-calls/notes/addFolder";
 import { addNote } from "api-calls/notes/addNote";
@@ -30,7 +30,7 @@ export function FolderViewToolbar(props: FolderViewToolbarProps) {
   const { t } = useTranslation();
 
   const uid = useUID();
-  const campaignId = useCampaignId();
+  const campaignId = useGameId();
 
   const folder = useDerivedNotesAtom(
     (notes) => {

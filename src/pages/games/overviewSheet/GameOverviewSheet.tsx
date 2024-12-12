@@ -6,12 +6,12 @@ import { useSnackbar } from "providers/SnackbarProvider";
 import { pathConfig } from "pages/pathConfig";
 
 import { ReferenceSidebarContents } from "../characterSheet/components/ReferenceSidebarContents";
-import { useCampaignId } from "../gamePageLayout/hooks/useCampaignId";
+import { useGameId } from "../gamePageLayout/hooks/useGameId";
 import { useCampaignPermissions } from "../gamePageLayout/hooks/usePermissions";
 
 export function GameOverviewSheet() {
-  const campaignId = useCampaignId();
-  const { campaignType } = useCampaignPermissions();
+  const campaignId = useGameId();
+  const { gameType: campaignType } = useCampaignPermissions();
   const { t } = useTranslation();
 
   const { success } = useSnackbar();

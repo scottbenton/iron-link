@@ -4,11 +4,8 @@ import {
   useDerivedNotesAtom,
   useSetOpenItem,
 } from "pages/games/gamePageLayout/atoms/notes.atom";
-import { useCampaignId } from "pages/games/gamePageLayout/hooks/useCampaignId";
-import {
-  CampaignPermissionType,
-  useCampaignPermissions,
-} from "pages/games/gamePageLayout/hooks/usePermissions";
+import { useGameId } from "pages/games/gamePageLayout/hooks/useGameId";
+import { useCampaignPermissions } from "pages/games/gamePageLayout/hooks/usePermissions";
 
 import { CampaignType } from "api-calls/campaign/_campaign.type";
 import { GUIDE_NOTE_FOLDER_NAME } from "api-calls/notes/_getRef";
@@ -16,6 +13,7 @@ import { EditPermissions, ReadPermissions } from "api-calls/notes/_notes.type";
 import { addFolder } from "api-calls/notes/addFolder";
 
 import { useUID } from "stores/auth.store";
+import { GamePermission } from "stores/game.store";
 
 export function useChooseDefaultOpenNote() {
   const isSomethingOpen = useDerivedNotesAtom(
@@ -23,10 +21,11 @@ export function useChooseDefaultOpenNote() {
   );
 
   const folderState = useDerivedNotesAtom((notes) => notes.folders);
-  const campaignId = useCampaignId();
+  const campaignId = useGameId();
   const uid = useUID();
 
-  const { campaignPermission, campaignType } = useCampaignPermissions();
+  const { gamePermission: campaignPermission, gameType: campaignType } =
+    useCampaignPermissions();
 
   const setOpenItem = useSetOpenItem();
 
@@ -35,7 +34,7 @@ export function useChooseDefaultOpenNote() {
     if (
       !folderState.loading &&
       uid &&
-      campaignPermission !== CampaignPermissionType.Viewer
+      campaignPermission !== GamePermission.Viewer
     ) {
       const userFolder = folderState.folders[uid];
       if (!userFolder) {
@@ -52,7 +51,7 @@ export function useChooseDefaultOpenNote() {
       }
       if (
         campaignType !== CampaignType.Solo &&
-        campaignPermission === CampaignPermissionType.Guide &&
+        campaignPermission === GamePermission.Guide &&
         !folderState.folders[GUIDE_NOTE_FOLDER_NAME]
       ) {
         addFolder({
@@ -71,11 +70,11 @@ export function useChooseDefaultOpenNote() {
 
   useEffect(() => {
     if (!isSomethingOpen && !folderState.loading) {
-      if (campaignPermission === CampaignPermissionType.Viewer) {
+      if (campaignPermission === GamePermission.Viewer) {
         return;
       }
 
-      if (campaignPermission === CampaignPermissionType.Guide) {
+      if (campaignPermission === GamePermission.Guide) {
         const guideFolder = folderState.folders[GUIDE_NOTE_FOLDER_NAME];
         if (guideFolder) {
           setOpenItem({

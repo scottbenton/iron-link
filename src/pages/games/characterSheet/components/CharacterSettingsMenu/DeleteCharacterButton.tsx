@@ -5,15 +5,13 @@ import { useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
-import { useCampaignId } from "pages/games/gamePageLayout/hooks/useCampaignId";
-import { useDerivedCampaignDocumentState } from "pages/games/gamePageLayout/hooks/useDerivedCampaignState";
+import { useGameId } from "pages/games/gamePageLayout/hooks/useGameId";
 import { pathConfig } from "pages/pathConfig";
 
-import { deleteCampaign } from "api-calls/campaign/deleteCampaign";
-import { deleteCharacter } from "api-calls/character/deleteCharacter";
+import { useGameStore } from "stores/game.store";
+import { useGameCharactersStore } from "stores/gameCharacters.store";
 
 import { useCharacterId } from "../../hooks/useCharacterId";
-import { useDerivedCharacterState } from "../../hooks/useDerivedCharacterState";
 
 export interface DeleteCharacterButtonProps {
   closeMenu: () => void;
@@ -25,15 +23,16 @@ export function DeleteCharacterButton(props: DeleteCharacterButtonProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const campaignId = useCampaignId();
+  const gameId = useGameId();
   const characterId = useCharacterId();
-  const portraitFilename = useDerivedCharacterState(
-    characterId,
-    (store) => store?.characterDocument.data?.profileImage?.filename,
+  const hasMoreThanOneCharacter = useGameCharactersStore(
+    (store) => Object.keys(store.characters).length > 1,
   );
-  const campaignCharacters = useDerivedCampaignDocumentState(
-    (state) => state?.characters,
+
+  const deleteCharacter = useGameCharactersStore(
+    (state) => state.deleteCharacter,
   );
+  const deleteGame = useGameStore((state) => state.deleteGame);
 
   const confirm = useConfirm();
   const handleDeleteCharacter = useCallback(() => {
@@ -50,21 +49,14 @@ export function DeleteCharacterButton(props: DeleteCharacterButtonProps) {
     })
       .then(() => {
         closeMenu();
-        if (Array.isArray(campaignCharacters)) {
-          const alsoDeleteCampaign = campaignCharacters.length === 1;
-          navigate(
-            alsoDeleteCampaign
-              ? pathConfig.gameSelect
-              : pathConfig.game(campaignId),
-          );
-          deleteCharacter({
-            characterId,
-            campaignId: alsoDeleteCampaign ? undefined : campaignId,
-            portraitFilename,
-          });
-          if (alsoDeleteCampaign) {
-            deleteCampaign({ campaignId, characterIds: [] }).catch(() => {});
-          }
+        navigate(
+          !hasMoreThanOneCharacter
+            ? pathConfig.gameSelect
+            : pathConfig.game(gameId),
+        );
+        deleteCharacter(characterId);
+        if (!hasMoreThanOneCharacter) {
+          deleteGame(gameId).catch(() => {});
         }
       })
       .catch(() => {
@@ -73,12 +65,13 @@ export function DeleteCharacterButton(props: DeleteCharacterButtonProps) {
   }, [
     confirm,
     t,
-    campaignCharacters,
-    campaignId,
+    gameId,
     characterId,
-    portraitFilename,
     navigate,
     closeMenu,
+    deleteCharacter,
+    deleteGame,
+    hasMoreThanOneCharacter,
   ]);
 
   return (

@@ -6,9 +6,7 @@ import { TrackTypes } from "types/Track.type";
 
 import { addRoll } from "api-calls/game-log/addRoll";
 
-import { useAddRollSnackbar } from "atoms/rollDisplay.atom";
-
-import { useSetAnnouncement } from "stores/appState.store";
+import { useAddRollSnackbar, useSetAnnouncement } from "stores/appState.store";
 import { useUID } from "stores/auth.store";
 
 import { getRollResultLabel } from "data/rollResultLabel";
@@ -18,7 +16,7 @@ import { createId } from "lib/id.lib";
 import { getTrackTypeLabel } from "../characterSheet/components/TracksSection/common";
 import { useCharacterIdOptional } from "../characterSheet/hooks/useCharacterId";
 import { useIsOwnerOfCharacter } from "../characterSheet/hooks/useIsOwnerOfCharacter";
-import { useCampaignId } from "../gamePageLayout/hooks/useCampaignId";
+import { useGameId } from "../gamePageLayout/hooks/useGameId";
 import { getRoll } from "./useRollStatAndAddToLog";
 
 export function useRollCompleteProgressTrack() {
@@ -26,7 +24,7 @@ export function useRollCompleteProgressTrack() {
   // TODO - remove ?? "" and handle the case where there is no UID
   const uid = useUID() ?? "";
 
-  const campaignId = useCampaignId();
+  const gameId = useGameId();
 
   const characterId = useCharacterIdOptional();
   const isCharacterOwner = useIsOwnerOfCharacter();
@@ -70,7 +68,7 @@ export function useRollCompleteProgressTrack() {
 
       addRollToScreen(rollId, trackProgressRoll);
       addRoll({
-        campaignId,
+        gameId,
         rollId,
         roll: trackProgressRoll,
       }).catch(() => {});
@@ -92,15 +90,7 @@ export function useRollCompleteProgressTrack() {
 
       return result;
     },
-    [
-      announce,
-      addRollToScreen,
-      campaignId,
-      characterId,
-      uid,
-      isCharacterOwner,
-      t,
-    ],
+    [announce, addRollToScreen, gameId, characterId, uid, isCharacterOwner, t],
   );
 
   return rollProgressTrack;

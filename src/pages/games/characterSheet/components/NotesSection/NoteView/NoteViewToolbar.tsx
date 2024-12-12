@@ -23,7 +23,7 @@ import {
   useDerivedNotesAtom,
   useSetOpenItem,
 } from "pages/games/gamePageLayout/atoms/notes.atom";
-import { useCampaignId } from "pages/games/gamePageLayout/hooks/useCampaignId";
+import { useGameId } from "pages/games/gamePageLayout/hooks/useGameId";
 
 import { removeNote } from "api-calls/notes/removeNote";
 import { updateNote } from "api-calls/notes/updateNote";
@@ -43,7 +43,7 @@ export function NoteViewToolbar(props: NoteToolbarContentProps) {
   const { openNoteId, editor, permissions } = props;
 
   const { t } = useTranslation();
-  const campaignId = useCampaignId();
+  const campaignId = useGameId();
 
   const setOpenNote = useSetOpenItem();
   const note = useDerivedNotesAtom(

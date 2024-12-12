@@ -5,38 +5,50 @@ import { useTranslation } from "react-i18next";
 
 import { DebouncedConditionMeter } from "components/datasworn/ConditonMeter";
 
-import { useCampaignId } from "pages/games/gamePageLayout/hooks/useCampaignId";
-import { useDerivedCampaignDocumentState } from "pages/games/gamePageLayout/hooks/useDerivedCampaignState";
-
-import { updateCampaign } from "api-calls/campaign/updateCampaign";
-import { updateCharacter } from "api-calls/character/updateCharacter";
+import { useGameId } from "pages/games/gamePageLayout/hooks/useGameId.ts";
 
 import { useConditionMeterRules } from "stores/dataswornTree.store.ts";
+import { useGameStore } from "stores/game.store.ts";
+import {
+  useGameCharacter,
+  useGameCharactersStore,
+} from "stores/gameCharacters.store.ts";
 
 import { momentumTrack } from "data/defaultTracks";
 
 import { DEFAULT_MOMENTUM } from "../../../../../data/constants.ts";
 import { useCharacterId } from "../../hooks/useCharacterId";
-import { useDerivedCurrentCharacterState } from "../../hooks/useDerivedCharacterState";
 import { useIsOwnerOfCharacter } from "../../hooks/useIsOwnerOfCharacter";
 import { useMomentumParameters } from "../../hooks/useMomentumResetValue";
 import { SingleConditionMeter } from "./SingleConditionMeter";
 
 export function ConditionMeters() {
-  const campaignId = useCampaignId();
+  const gameId = useGameId();
   const characterId = useCharacterId();
   const isCharacterOwner = useIsOwnerOfCharacter();
 
-  const campaignConditionMeterValues = useDerivedCampaignDocumentState(
-    (campaign) => campaign?.conditionMeters ?? {},
+  const gameConditionMeterValues = useGameStore(
+    (store) => store.game?.conditionMeters ?? {},
   );
-  const { conditionMeterValues, momentum, adds } =
-    useDerivedCurrentCharacterState((character) => ({
-      conditionMeterValues:
-        character?.characterDocument.data?.conditionMeters ?? {},
-      momentum: character?.characterDocument.data?.momentum ?? DEFAULT_MOMENTUM,
-      adds: character?.characterDocument.data?.adds ?? 0,
-    }));
+  const updateGameConditionMeter = useGameStore(
+    (store) => store.updateConditionMeter,
+  );
+
+  const conditionMeterValues = useGameCharacter(
+    (character) => character?.conditionMeters ?? {},
+  );
+  const updateCharacterConditionMeter = useGameCharactersStore(
+    (store) => store.updateCharacterConditionMeterValue,
+  );
+
+  const momentum = useGameCharacter(
+    (character) => character?.momentum ?? DEFAULT_MOMENTUM,
+  );
+  const updateCharacterMomentum = useGameCharactersStore(
+    (store) => store.updateCharacterMomentum,
+  );
+
+  const adds = useGameCharacter((character) => character?.adds ?? 0);
 
   const { resetValue, max } = useMomentumParameters();
 
@@ -46,34 +58,28 @@ export function ConditionMeters() {
 
   const handleConditionMeterChange = useCallback(
     (key: string, value: number, isShared: boolean) => {
-      if (campaignId && isShared) {
-        updateCampaign({
-          campaignId,
-          campaign: {
-            [`conditionMeters.${key}`]: value,
-          },
-        }).catch(() => {});
+      if (isShared) {
+        updateGameConditionMeter(gameId, key, value).catch(() => {});
       }
       if (characterId && !isShared) {
-        updateCharacter({
-          characterId,
-          character: { [`conditionMeters.${key}`]: value },
-        }).catch(() => {});
+        updateCharacterConditionMeter(characterId, key, value).catch(() => {});
       }
     },
-    [campaignId, characterId],
+    [
+      gameId,
+      characterId,
+      updateGameConditionMeter,
+      updateCharacterConditionMeter,
+    ],
   );
 
   const handleMomentumChange = useCallback(
     (value: number) => {
       if (characterId) {
-        updateCharacter({
-          characterId,
-          character: { momentum: value },
-        }).catch(() => {});
+        updateCharacterMomentum(characterId, value).catch(() => {});
       }
     },
-    [characterId],
+    [characterId, updateCharacterMomentum],
   );
 
   return (
@@ -93,7 +99,7 @@ export function ConditionMeters() {
             rule={rule}
             value={
               rule.shared
-                ? campaignConditionMeterValues[key]
+                ? gameConditionMeterValues[key]
                 : conditionMeterValues[key]
             }
             onChange={handleConditionMeterChange}

@@ -9,7 +9,7 @@ import {
   DialogContent,
   TextField,
 } from "@mui/material";
-import { ChangeEventHandler, useCallback, useEffect, useState } from "react";
+import { ChangeEventHandler, useEffect, useState } from "react";
 import AvatarEditor from "react-avatar-editor";
 import { useTranslation } from "react-i18next";
 
@@ -17,16 +17,15 @@ import { useSnackbar } from "providers/SnackbarProvider";
 
 import { DialogTitleWithCloseButton } from "components/DialogTitleWithCloseButton";
 
-import { removeCharacterPortrait } from "api-calls/character/removeCharacterPortrait";
-import { updateCharacter } from "api-calls/character/updateCharacter";
-import { updateCharacterPortrait } from "api-calls/character/updateCharacterPortrait";
-
 import { useCharacterPortrait } from "stores/character.store";
+import {
+  useGameCharacter,
+  useGameCharactersStore,
+} from "stores/gameCharacters.store";
 
 import { MAX_FILE_SIZE, MAX_FILE_SIZE_LABEL } from "lib/storage.lib";
 
 import { useCharacterId } from "../../hooks/useCharacterId";
-import { useDerivedCurrentCharacterState } from "../../hooks/useDerivedCharacterState";
 
 export interface CharacterDetailsDialogProps {
   open: boolean;
@@ -41,18 +40,24 @@ export function CharacterDetailsDialog(props: CharacterDetailsDialogProps) {
   const { error } = useSnackbar();
 
   const characterId = useCharacterId();
-  const { name: initialName, profileImage: initialPortraitSettings } =
-    useDerivedCurrentCharacterState(
-      useCallback(
-        (character) => ({
-          name: character?.characterDocument.data?.name ?? "",
-          profileImage: character?.characterDocument.data?.profileImage,
-        }),
-        [],
-      ),
-    );
+
+  const initialName = useGameCharacter((character) => character?.name ?? "");
+  const initialPortraitSettings = useGameCharacter(
+    (character) => character?.profileImage,
+  );
+
+  const updateCharacterName = useGameCharactersStore(
+    (state) => state.updateCharacterName,
+  );
+  const updateCharacterPortrait = useGameCharactersStore(
+    (state) => state.updateCharacterPortrait,
+  );
+  const removeCharacterPortrait = useGameCharactersStore(
+    (state) => state.removeCharacterPortrait,
+  );
 
   const initialFileUrl = useCharacterPortrait(characterId ?? "").url;
+  console.debug(initialFileUrl);
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -115,41 +120,23 @@ export function CharacterDetailsDialog(props: CharacterDetailsDialogProps) {
 
       const promises: Promise<unknown>[] = [];
       if (name && name !== initialName) {
-        promises.push(
-          updateCharacter({ characterId, character: { name } }).catch(() => {}),
-        );
+        promises.push(updateCharacterName(characterId, name));
       }
       if (
-        file &&
-        (scale !== initialPortraitSettings?.scale ||
-          position !== initialPortraitSettings?.position)
+        file !== initialFileUrl ||
+        scale !== initialPortraitSettings?.scale ||
+        position !== initialPortraitSettings?.position
       ) {
-        if (file !== initialFileUrl && typeof file !== "string") {
-          promises.push(
-            updateCharacterPortrait({
-              characterId,
-              oldPortraitFilename: initialPortraitSettings?.filename,
-              portrait: file,
-              scale,
-              position,
-            }),
-          );
-        } else {
-          promises.push(
-            updateCharacter({
-              "profileImage.position": position,
-              "profileImage.scale": scale,
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            } as any),
-          );
-        }
-      } else if (!file && initialPortraitSettings) {
         promises.push(
-          removeCharacterPortrait({
+          updateCharacterPortrait(
             characterId,
-            oldPortraitFilename: initialPortraitSettings.filename,
-          }),
+            scale,
+            position,
+            typeof file === "string" ? undefined : file,
+          ),
         );
+      } else if (!file && initialPortraitSettings) {
+        promises.push(removeCharacterPortrait(characterId));
       }
 
       Promise.all(promises)

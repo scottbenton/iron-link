@@ -1,7 +1,7 @@
+import deepEqual from "fast-deep-equal";
 import { useEffect, useRef } from "react";
 import { immer } from "zustand/middleware/immer";
 import { createWithEqualityFn } from "zustand/traditional";
-import { shallow } from "zustand/vanilla/shallow";
 
 import { StorageError, UnknownError } from "repositories/errors/storageErrors";
 
@@ -88,7 +88,7 @@ export const useUsersGames = createWithEqualityFn<
       }
     },
   })),
-  shallow,
+  deepEqual,
 );
 
 export function useLoadUsersGames() {

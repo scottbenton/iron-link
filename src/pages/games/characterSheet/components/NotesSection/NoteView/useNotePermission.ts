@@ -1,13 +1,11 @@
 import { useDerivedNotesAtom } from "pages/games/gamePageLayout/atoms/notes.atom";
-import {
-  CampaignPermissionType,
-  useCampaignPermissions,
-} from "pages/games/gamePageLayout/hooks/usePermissions";
+import { useCampaignPermissions } from "pages/games/gamePageLayout/hooks/usePermissions";
 
 import { GUIDE_NOTE_FOLDER_NAME } from "api-calls/notes/_getRef";
 import { EditPermissions, NoteFolder } from "api-calls/notes/_notes.type";
 
 import { useUID } from "stores/auth.store";
+import { GamePermission } from "stores/game.store";
 
 export interface NotePermissions {
   canChangePermissions: boolean;
@@ -60,12 +58,9 @@ export function useNotePermission(noteId: string): NotePermissions {
     });
 
   const uid = useUID();
-  const { campaignPermission } = useCampaignPermissions();
+  const { gamePermission: campaignPermission } = useCampaignPermissions();
 
-  if (
-    !writePermissions ||
-    campaignPermission === CampaignPermissionType.Viewer
-  ) {
+  if (!writePermissions || campaignPermission === GamePermission.Viewer) {
     return {
       canChangePermissions: false,
       canEdit: false,
@@ -74,7 +69,7 @@ export function useNotePermission(noteId: string): NotePermissions {
     };
   }
 
-  const isUserGuide = campaignPermission === CampaignPermissionType.Guide;
+  const isUserGuide = campaignPermission === GamePermission.Guide;
   const isUserNoteAuthor = noteAuthor === uid;
   const canChangePermissions = isNoteInGuideFolder
     ? isUserGuide

@@ -10,9 +10,7 @@ import { getMove } from "hooks/datasworn/useMove";
 
 import { addRoll } from "api-calls/game-log/addRoll";
 
-import { useAddRollSnackbar } from "atoms/rollDisplay.atom";
-
-import { useSetAnnouncement } from "stores/appState.store";
+import { useAddRollSnackbar, useSetAnnouncement } from "stores/appState.store";
 import { useUID } from "stores/auth.store";
 import { useDataswornTree } from "stores/dataswornTree.store";
 
@@ -33,9 +31,9 @@ export function useRollStatAndAddToLog() {
   // TODO - remove ?? "" and handle the case where there is no UID
   const uid = useUID() ?? "";
 
-  const { characterId, campaignId } = useParams<{
+  const { characterId, gameId } = useParams<{
     characterId?: string;
-    campaignId?: string;
+    gameId?: string;
   }>();
   const dataswornTree = useDataswornTree();
 
@@ -52,7 +50,7 @@ export function useRollStatAndAddToLog() {
         config.characterId ?? characterId,
       );
 
-      const rollId = uploadRoll(result, campaignId);
+      const rollId = uploadRoll(result, gameId);
 
       announceRoll(result, config, dataswornTree, t, announce);
 
@@ -62,7 +60,7 @@ export function useRollStatAndAddToLog() {
 
       return result;
     },
-    [dataswornTree, uid, characterId, campaignId, t, announce, addRollSnackbar],
+    [dataswornTree, uid, characterId, gameId, t, announce, addRollSnackbar],
   );
 
   return rollStat;
@@ -119,11 +117,11 @@ function getStatRollResult(
   return roll;
 }
 
-function uploadRoll(roll: StatRoll, campaignId?: string) {
+function uploadRoll(roll: StatRoll, gameId?: string) {
   const rollId = createId();
-  if (campaignId) {
+  if (gameId) {
     addRoll({
-      campaignId,
+      gameId,
       rollId,
       roll,
     }).catch(() => {});

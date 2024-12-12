@@ -1,7 +1,7 @@
+import deepEqual from "fast-deep-equal";
 import { useEffect } from "react";
 import { immer } from "zustand/middleware/immer";
 import { createWithEqualityFn } from "zustand/traditional";
-import { shallow } from "zustand/vanilla/shallow";
 
 import { CharacterService } from "services/character.service";
 
@@ -71,7 +71,7 @@ export const useCharacterStore = createWithEqualityFn<
       }
     },
   })),
-  shallow,
+  deepEqual,
 );
 
 export function useCharacterPortrait(characterId: string) {

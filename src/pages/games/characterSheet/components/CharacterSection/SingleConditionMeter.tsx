@@ -5,11 +5,10 @@ import { useTranslation } from "react-i18next";
 
 import { DebouncedConditionMeter } from "components/datasworn/ConditonMeter";
 
-import {
-  CharacterPermissionType,
-  useCampaignPermissions,
-} from "pages/games/gamePageLayout/hooks/usePermissions";
+import { useCampaignPermissions } from "pages/games/gamePageLayout/hooks/usePermissions";
 import { useRollStatAndAddToLog } from "pages/games/hooks/useRollStatAndAddToLog";
+
+import { CharacterPermissionType } from "stores/gameCharacters.store";
 
 interface SingleConditionMeterProps {
   conditionMeterKey: string;

@@ -24,7 +24,7 @@ export function FolderItem(props: FolderItemProps) {
   const { t } = useTranslation();
 
   const uid = useUID();
-  const campaignType = useCampaignPermissions().campaignType;
+  const campaignType = useCampaignPermissions().gameType;
 
   return (
     <Card

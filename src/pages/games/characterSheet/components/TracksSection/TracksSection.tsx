@@ -1,17 +1,16 @@
 import { Box, LinearProgress } from "@mui/material";
 
-import { useCampaignId } from "pages/games/gamePageLayout/hooks/useCampaignId";
 import { useDerivedCampaignState } from "pages/games/gamePageLayout/hooks/useDerivedCampaignState";
-import {
-  CampaignPermissionType,
-  useCampaignPermissions,
-} from "pages/games/gamePageLayout/hooks/usePermissions";
+import { useGameId } from "pages/games/gamePageLayout/hooks/useGameId";
+import { useCampaignPermissions } from "pages/games/gamePageLayout/hooks/usePermissions";
+
+import { GamePermission } from "stores/game.store";
 
 import { TrackItem } from "./TrackItem";
 import { TracksSectionHeader } from "./TracksSectionHeader";
 
 export function TracksSection() {
-  const campaignId = useCampaignId();
+  const campaignId = useGameId();
 
   const showCompletedTracks = useDerivedCampaignState(
     (state) => state.tracks.showCompletedTracks,
@@ -28,8 +27,7 @@ export function TracksSection() {
   );
 
   const canEdit =
-    useCampaignPermissions().campaignPermission !==
-    CampaignPermissionType.Viewer;
+    useCampaignPermissions().gamePermission !== GamePermission.Viewer;
 
   return (
     <>

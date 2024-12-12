@@ -7,8 +7,8 @@ import { AssetDocument } from "api-calls/assets/_asset.type";
 import { CampaignDocument } from "api-calls/campaign/_campaign.type";
 import { listenToProgressTracks } from "api-calls/tracks/listenToProgressTracks";
 
-import { useCampaignId } from "../hooks/useCampaignId";
 import { useDerivedCampaignState } from "../hooks/useDerivedCampaignState";
+import { useGameId } from "../hooks/useGameId";
 
 export interface ICurrentCampaignAtom {
   campaignId: string;
@@ -52,7 +52,7 @@ export function useSetCurrentCampaignAtom() {
 }
 
 export function useSyncProgressTracks() {
-  const campaignId = useCampaignId();
+  const campaignId = useGameId();
   const showCompletedTracks = useDerivedCampaignState(
     (state) => state.tracks.showCompletedTracks,
   );

@@ -19,8 +19,8 @@ import { derivedAtomWithEquality } from "atoms/derivedAtomWithEquality";
 
 import { useUID } from "stores/auth.store";
 
-import { useCampaignId } from "../hooks/useCampaignId";
 import { useDerivedCampaignState } from "../hooks/useDerivedCampaignState";
+import { useGameId } from "../hooks/useGameId";
 import { useCampaignPermissions } from "../hooks/usePermissions";
 
 export interface INotesAtom {
@@ -94,10 +94,10 @@ export function useSetOpenItem() {
 
 export function useSyncNotes() {
   const uid = useUID() ?? "";
-  const campaignId = useCampaignId();
+  const campaignId = useGameId();
 
   const campaignLoading = useDerivedCampaignState((state) => state.loading);
-  const { campaignPermission } = useCampaignPermissions();
+  const { gamePermission: campaignPermission } = useCampaignPermissions();
 
   const setNotesAtom = useSetNotesAtom();
 
@@ -205,7 +205,7 @@ export function useListenToActiveNoteContent(noteId: string) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string>();
 
-  const campaignId = useCampaignId();
+  const campaignId = useGameId();
 
   useEffect(() => {
     setLoading(true);

@@ -1,35 +1,29 @@
 import { LinearProgress } from "@mui/material";
-import { useAtomValue } from "jotai";
 import { useTranslation } from "react-i18next";
 import { Outlet, useLocation } from "react-router-dom";
 
 import { PageContent, PageHeader } from "components/Layout";
 import { EmptyState } from "components/Layout/EmptyState";
 
-import { derivedAtomWithEquality } from "atoms/derivedAtomWithEquality";
+import { useGameStore } from "stores/game.store";
 
-import { currentCampaignAtom } from "./atoms/campaign.atom";
 import { CampaignTabs } from "./components/CampaignTabs";
-import { useSyncCampaign } from "./hooks/useSyncCampaign";
-
-const campaignState = derivedAtomWithEquality(currentCampaignAtom, (atom) => ({
-  hasCampaign: !!atom.campaign,
-  loading: atom.loading,
-  error: atom.error,
-}));
+import { useSyncGame } from "./hooks/useSyncGame";
 
 export function GameLayout() {
   const { t } = useTranslation();
 
-  useSyncCampaign();
+  useSyncGame();
 
-  const { hasCampaign, error } = useAtomValue(campaignState);
+  const hasGame = useGameStore((state) => !!state.game);
+  const error = useGameStore((state) => state.error);
+
   const { pathname } = useLocation();
   const isOnCharacterCreatePage = pathname.match(
     /\/games\/[^/]*\/create[/]?$/i,
   );
 
-  if (!hasCampaign && !error) {
+  if (!hasGame && !error) {
     return <LinearProgress />;
   }
 

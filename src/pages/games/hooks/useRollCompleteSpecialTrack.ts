@@ -9,9 +9,7 @@ import {
 
 import { addRoll } from "api-calls/game-log/addRoll";
 
-import { useAddRollSnackbar } from "atoms/rollDisplay.atom";
-
-import { useSetAnnouncement } from "stores/appState.store";
+import { useAddRollSnackbar, useSetAnnouncement } from "stores/appState.store";
 import { useUID } from "stores/auth.store";
 
 import { getRollResultLabel } from "data/rollResultLabel";
@@ -20,7 +18,7 @@ import { createId } from "lib/id.lib";
 
 import { useCharacterIdOptional } from "../characterSheet/hooks/useCharacterId";
 import { useIsOwnerOfCharacter } from "../characterSheet/hooks/useIsOwnerOfCharacter";
-import { useCampaignId } from "../gamePageLayout/hooks/useCampaignId";
+import { useGameId } from "../gamePageLayout/hooks/useGameId";
 import { getRoll } from "./useRollStatAndAddToLog";
 
 export function useRollCompleteSpecialTrack() {
@@ -28,7 +26,7 @@ export function useRollCompleteSpecialTrack() {
   // TODO - remove ?? "" and handle the case where there is no UID
   const uid = useUID() ?? "";
 
-  const campaignId = useCampaignId();
+  const gameId = useGameId();
 
   const characterId = useCharacterIdOptional();
   const isCharacterOwner = useIsOwnerOfCharacter();
@@ -71,7 +69,7 @@ export function useRollCompleteSpecialTrack() {
 
       addRollToScreen(rollId, trackProgressRoll);
       addRoll({
-        campaignId,
+        gameId,
         rollId,
         roll: trackProgressRoll,
       }).catch(() => {});
@@ -92,15 +90,7 @@ export function useRollCompleteSpecialTrack() {
 
       return result;
     },
-    [
-      announce,
-      addRollToScreen,
-      campaignId,
-      characterId,
-      uid,
-      isCharacterOwner,
-      t,
-    ],
+    [announce, addRollToScreen, gameId, characterId, uid, isCharacterOwner, t],
   );
 
   return rollSpecialTrack;

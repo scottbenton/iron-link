@@ -1,8 +1,8 @@
 import { Box } from "@mui/material";
 import { useMemo, useState } from "react";
 
-import { useCampaignId } from "pages/games/gamePageLayout/hooks/useCampaignId";
 import { useDerivedCampaignState } from "pages/games/gamePageLayout/hooks/useDerivedCampaignState";
+import { useGameId } from "pages/games/gamePageLayout/hooks/useGameId";
 
 import { useCharacterId } from "../../hooks/useCharacterId";
 import { useDerivedCurrentCharacterState } from "../../hooks/useDerivedCharacterState";
@@ -12,7 +12,7 @@ import { AssetsSectionCard } from "./AssetsSectionCard";
 
 export function AssetsSection() {
   const characterId = useCharacterId();
-  const campaignId = useCampaignId();
+  const campaignId = useGameId();
 
   const characterAssets = useDerivedCurrentCharacterState(
     (character) => character?.assets?.assets ?? {},

@@ -1,7 +1,7 @@
+import deepEqual from "fast-deep-equal";
 import { useEffect } from "react";
 import { immer } from "zustand/middleware/immer";
 import { createWithEqualityFn } from "zustand/traditional";
-import { shallow } from "zustand/vanilla/shallow";
 
 import { AuthService } from "services/auth.service";
 import { UserService } from "services/user.service";
@@ -61,7 +61,7 @@ export const useAuthStore = createWithEqualityFn<AuthState & AuthActions>()(
       );
     },
   })),
-  shallow,
+  deepEqual,
 );
 
 export function useUID() {

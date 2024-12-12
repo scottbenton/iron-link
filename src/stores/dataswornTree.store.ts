@@ -1,8 +1,8 @@
 import { Datasworn } from "@datasworn/core";
+import deepEqual from "fast-deep-equal";
 import { useEffect, useMemo } from "react";
 import { immer } from "zustand/middleware/immer";
 import { createWithEqualityFn } from "zustand/traditional";
-import { shallow } from "zustand/vanilla/shallow";
 
 import { useActiveAssetMoveCategories } from "components/datasworn/hooks/useActiveAssetMoveCategories";
 import { useActiveAssetOracleCollections } from "components/datasworn/hooks/useActiveAssetOracleCollections";
@@ -123,7 +123,7 @@ export const useDataswornTreeStore = createWithEqualityFn<
       });
     },
   })),
-  shallow,
+  deepEqual,
 );
 
 export function useDataswornTree() {

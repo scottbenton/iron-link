@@ -1,6 +1,6 @@
+import deepEqual from "fast-deep-equal";
 import { immer } from "zustand/middleware/immer";
 import { createWithEqualityFn } from "zustand/traditional";
-import { shallow } from "zustand/vanilla/shallow";
 
 import {
   ExpansionConfig,
@@ -79,5 +79,5 @@ export const useCreateGameStore = createWithEqualityFn<
       });
     },
   })),
-  shallow,
+  deepEqual,
 );

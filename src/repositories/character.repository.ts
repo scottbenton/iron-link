@@ -4,15 +4,19 @@ import {
   PartialWithFieldValue,
   addDoc,
   collection,
+  deleteDoc,
   doc,
   getDoc,
   getDocs,
   onSnapshot,
   query,
+  updateDoc,
   where,
 } from "firebase/firestore";
 
 import { firestore } from "config/firebase.config";
+
+import { ICharacter } from "services/character.service";
 
 import {
   NotFoundError,
@@ -56,7 +60,7 @@ export interface CharacterDTO {
   unspentExperience: number;
   colorScheme: ColorScheme | null;
 }
-export type PartialCharacterDocument = PartialWithFieldValue<CharacterDTO>;
+export type PartialCharacterDTO = PartialWithFieldValue<CharacterDTO>;
 
 export class CharacterRepository {
   public static collectionName = "characters";
@@ -157,6 +161,41 @@ export class CharacterRepository {
     );
   }
 
+  public static listenToGameCharacters(
+    gameId: string,
+    onUpdate: (
+      changedCharacters: Record<string, ICharacter>,
+      removedCharacterIds: string[],
+    ) => void,
+    onError: (error: StorageError) => void,
+  ): () => void {
+    const queryRef = query(this.collectionRef, where("gameId", "==", gameId));
+    return onSnapshot(
+      queryRef,
+      (snapshot) => {
+        const changedCharacters: Record<string, ICharacter> = {};
+        const removedCharacterIds: string[] = [];
+        snapshot.docChanges().forEach((change) => {
+          if (change.type === "removed") {
+            removedCharacterIds.push(change.doc.id);
+          } else {
+            changedCharacters[change.doc.id] = change.doc.data() as ICharacter;
+          }
+        });
+
+        onUpdate(changedCharacters, removedCharacterIds);
+      },
+      (error) => {
+        onError(
+          convertUnknownErrorToStorageError(
+            error,
+            `Characters in game with id ${gameId} could not be loaded`,
+          ),
+        );
+      },
+    );
+  }
+
   public static async createCharacter(
     character: CharacterDTO,
   ): Promise<string> {
@@ -195,5 +234,54 @@ export class CharacterRepository {
       `${this.collectionName}/${characterId}`,
       file,
     );
+  }
+
+  public static async deleteCharacterPortrait(
+    characterId: string,
+    filename: string,
+  ): Promise<void> {
+    return StorageRepository.deleteImage(
+      `${this.collectionName}/${characterId}`,
+      filename,
+    );
+  }
+
+  public static async updateCharacter(
+    characterId: string,
+    character: PartialCharacterDTO,
+  ): Promise<void> {
+    return new Promise((resolve, reject) => {
+      updateDoc(this.getCharacterDocRef(characterId), character)
+        .then(() => {
+          resolve();
+        })
+        .catch((error) => {
+          console.error(error);
+          reject(
+            convertUnknownErrorToStorageError(
+              error,
+              `Failed to update character with id ${characterId}`,
+            ),
+          );
+        });
+    });
+  }
+
+  public static async deleteCharacter(characterId: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      deleteDoc(this.getCharacterDocRef(characterId))
+        .then(() => {
+          resolve();
+        })
+        .catch((error) => {
+          console.error(error);
+          reject(
+            convertUnknownErrorToStorageError(
+              error,
+              `Failed to remove character with id ${characterId}`,
+            ),
+          );
+        });
+    });
   }
 }

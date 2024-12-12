@@ -18,7 +18,7 @@ import { useTranslation } from "react-i18next";
 
 import { DialogTitleWithCloseButton } from "components/DialogTitleWithCloseButton";
 
-import { useCampaignId } from "pages/games/gamePageLayout/hooks/useCampaignId";
+import { useGameId } from "pages/games/gamePageLayout/hooks/useGameId";
 import { useCampaignPermissions } from "pages/games/gamePageLayout/hooks/usePermissions";
 
 import { CampaignType } from "api-calls/campaign/_campaign.type";
@@ -61,8 +61,8 @@ export function ShareButton(props: ShareButtonProps) {
 
   const { t } = useTranslation();
   const uid = useUID();
-  const campaignId = useCampaignId();
-  const campaignType = useCampaignPermissions().campaignType;
+  const campaignId = useGameId();
+  const campaignType = useCampaignPermissions().gameType;
 
   const [open, setOpen] = useState(false);
 

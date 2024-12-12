@@ -10,7 +10,7 @@ import {
   where,
 } from "firebase/firestore";
 
-import { CampaignPermissionType } from "pages/games/gamePageLayout/hooks/usePermissions";
+import { GamePermission } from "stores/game.store";
 
 import { getNoteCollection } from "./_getRef";
 import { NoteDocument, ReadPermissions } from "./_notes.type";
@@ -18,7 +18,7 @@ import { NoteDocument, ReadPermissions } from "./_notes.type";
 export function listenToNotes(
   uid: string,
   campaignId: string,
-  permissions: CampaignPermissionType,
+  permissions: GamePermission,
   accessibleParentNoteFolderIds: string[],
   onNotes: (notes: Record<string, NoteDocument>) => void,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -55,7 +55,7 @@ export function listenToNotes(
     ),
     ...parentNoteFolderQuery,
   ];
-  if (permissions === CampaignPermissionType.Player) {
+  if (permissions === GamePermission.Player) {
     noteQuery = query(
       getNoteCollection(campaignId),
       or(
@@ -66,7 +66,7 @@ export function listenToNotes(
         ),
       ),
     );
-  } else if (permissions === CampaignPermissionType.Guide) {
+  } else if (permissions === GamePermission.Guide) {
     noteQuery = query(
       getNoteCollection(campaignId),
       or(

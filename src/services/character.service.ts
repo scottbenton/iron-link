@@ -3,9 +3,10 @@ import {
   CharacterRepository,
   InitiativeStatus,
 } from "repositories/character.repository";
+import { StorageError } from "repositories/errors/storageErrors";
+import { ColorScheme } from "repositories/shared.types";
 
 import { AssetService, IAsset } from "./asset.service";
-import { GameService } from "./game.service";
 
 export type ICharacter = CharacterDTO;
 
@@ -26,6 +27,21 @@ export class CharacterService {
     gameIds: string[],
   ): Promise<Record<string, ICharacter>> {
     return await CharacterRepository.getCharactersInGames(gameIds);
+  }
+
+  public static listenToGameCharacters(
+    gameId: string,
+    onCharacterChanges: (
+      changedCharacters: Record<string, ICharacter>,
+      removedCharacterIds: string[],
+    ) => void,
+    onError: (error: StorageError) => void,
+  ): () => void {
+    return CharacterRepository.listenToGameCharacters(
+      gameId,
+      onCharacterChanges,
+      onError,
+    );
   }
 
   public static async getCharacterPortraitURL(
@@ -101,7 +117,6 @@ export class CharacterService {
       assetPromises.push(AssetService.createCharacterAsset(characterId, asset));
     });
 
-    await GameService.addCharacterToGame(gameId, uid, characterId);
     gameAssets.forEach((asset) => {
       assetPromises.push(AssetService.createGameAsset(gameId, asset));
     });
@@ -111,5 +126,145 @@ export class CharacterService {
     // Assets
 
     return characterId;
+  }
+
+  public static async removeCharacterPortrait(
+    characterId: string,
+    filename: string,
+  ): Promise<void> {
+    const promises: Promise<unknown>[] = [];
+    promises.push(
+      CharacterRepository.updateCharacter(characterId, { profileImage: null }),
+    );
+    promises.push(
+      CharacterRepository.deleteCharacterPortrait(characterId, filename),
+    );
+    await Promise.all(promises);
+  }
+
+  public static async updateCharacterName(characterId: string, name: string) {
+    return CharacterRepository.updateCharacter(characterId, { name });
+  }
+
+  public static async updateCharacterPortrait(
+    characterId: string,
+    scale: number,
+    position: { x: number; y: number },
+    oldFilename?: string,
+    newPortrait?: File,
+  ) {
+    const promises: Promise<unknown>[] = [];
+    if (oldFilename) {
+      promises.push(
+        CharacterRepository.deleteCharacterPortrait(characterId, oldFilename),
+      );
+    }
+    if (newPortrait) {
+      promises.push(
+        CharacterRepository.uploadCharacterImage(characterId, newPortrait),
+      );
+    }
+
+    promises.push(
+      CharacterRepository.updateCharacter(
+        characterId,
+        newPortrait
+          ? {
+              profileImage: {
+                filename: newPortrait.name,
+                scale,
+                position,
+              },
+            }
+          : {
+              profileImage: {
+                scale,
+                position,
+                filename: oldFilename,
+              },
+            },
+      ),
+    );
+    await Promise.all(promises);
+  }
+
+  public static async updateCharacterStats(
+    characterId: string,
+    stats: Record<string, number>,
+  ) {
+    return CharacterRepository.updateCharacter(characterId, { stats });
+  }
+
+  public static async updateCharacterColorScheme(
+    characterId: string,
+    colorScheme: ColorScheme | null,
+  ) {
+    return CharacterRepository.updateCharacter(characterId, { colorScheme });
+  }
+
+  public static async updateCharacterInitiativeStatus(
+    characterId: string,
+    initiativeStatus: InitiativeStatus,
+  ) {
+    return CharacterRepository.updateCharacter(characterId, {
+      initiativeStatus,
+    });
+  }
+
+  public static async updateAdds(
+    characterId: string,
+    adds: number,
+  ): Promise<void> {
+    return CharacterRepository.updateCharacter(characterId, { adds });
+  }
+
+  public static updateConditionMeter(
+    characterId: string,
+    conditionMeterKey: string,
+    value: number,
+  ): Promise<void> {
+    return CharacterRepository.updateCharacter(characterId, {
+      [`conditionMeters.${conditionMeterKey}`]: value,
+    });
+  }
+
+  public static updateMomentum(
+    characterId: string,
+    momentum: number,
+  ): Promise<void> {
+    return CharacterRepository.updateCharacter(characterId, { momentum });
+  }
+
+  public static updateImpact(
+    characterId: string,
+    impactKey: string,
+    checked: boolean,
+  ): Promise<void> {
+    return CharacterRepository.updateCharacter(characterId, {
+      [`debilities.${impactKey}`]: checked,
+    });
+  }
+
+  public static updateSpecialTrackValue(
+    characterId: string,
+    trackKey: string,
+    value: number,
+  ): Promise<void> {
+    return CharacterRepository.updateCharacter(characterId, {
+      [`specialTracks.${trackKey}.value`]: value,
+    });
+  }
+
+  public static updateExperience(
+    characterId: string,
+    experience: number,
+  ): Promise<void> {
+    return CharacterRepository.updateCharacter(characterId, {
+      unspentExperience: experience,
+    });
+  }
+
+  public static async deleteCharacter(characterId: string): Promise<void> {
+    return CharacterRepository.deleteCharacter(characterId);
   }
 }

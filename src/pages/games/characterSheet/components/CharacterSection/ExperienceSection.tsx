@@ -4,32 +4,32 @@ import { useTranslation } from "react-i18next";
 
 import { DebouncedConditionMeter } from "components/datasworn/ConditonMeter";
 
-import { updateCharacter } from "api-calls/character/updateCharacter";
+import {
+  useGameCharacter,
+  useGameCharactersStore,
+} from "stores/gameCharacters.store";
 
 import { useCharacterId } from "../../hooks/useCharacterId";
-import { useDerivedCurrentCharacterState } from "../../hooks/useDerivedCharacterState";
 import { useIsOwnerOfCharacter } from "../../hooks/useIsOwnerOfCharacter";
 
 export function ExperienceSection() {
   const characterId = useCharacterId();
   const isCharacterOwner = useIsOwnerOfCharacter();
 
-  const unspentExperience = useDerivedCurrentCharacterState(
-    (character) => character?.characterDocument.data?.unspentExperience ?? 0,
+  const unspentExperience = useGameCharacter(
+    (character) => character?.unspentExperience ?? 0,
+  );
+  const updateExperience = useGameCharactersStore(
+    (store) => store.updateExperience,
   );
 
   const { t } = useTranslation();
 
   const handleExperienceChange = useCallback(
     (value: number) => {
-      if (characterId) {
-        updateCharacter({
-          characterId,
-          character: { unspentExperience: value },
-        }).catch(() => {});
-      }
+      updateExperience(characterId, value).catch(() => {});
     },
-    [characterId],
+    [characterId, updateExperience],
   );
 
   return (

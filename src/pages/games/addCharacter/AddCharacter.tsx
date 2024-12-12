@@ -1,7 +1,7 @@
 import { Alert, Box } from "@mui/material";
 import { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import { GradientButton } from "components/GradientButton";
 
@@ -11,9 +11,10 @@ import { useUID } from "stores/auth.store";
 import { useCreateCharacterStore } from "stores/createCharacter.store";
 
 import { CreateCharacter } from "../create/components/CreateCharacter";
+import { useGameId } from "../gamePageLayout/hooks/useGameId";
 
 export function AddCharacter() {
-  const { campaignId } = useParams<{ campaignId: string }>();
+  const gameId = useGameId();
   const { t } = useTranslation();
 
   const [error, setError] = useState<string | undefined>(undefined);
@@ -29,24 +30,19 @@ export function AddCharacter() {
   const handleCreate = useCallback(() => {
     if (!uid) return;
 
-    if (!campaignId) {
-      setError(t("character.no-game-found-error", "No game found"));
-      return;
-    }
-
-    createCharacter(campaignId)
+    createCharacter(gameId)
       .then((characterId) => {
         resetCharacter();
-        navigate(pathConfig.gameCharacter(campaignId, characterId));
+        navigate(pathConfig.gameCharacter(gameId, characterId));
       })
       .catch(() => {
         setError(
           t("character.error-creating-character", "Error creating character"),
         );
       });
-  }, [uid, t, navigate, campaignId, createCharacter, resetCharacter]);
+  }, [uid, t, navigate, gameId, createCharacter, resetCharacter]);
 
-  if (!campaignId || !uid) {
+  if (!uid) {
     return null;
   }
 

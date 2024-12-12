@@ -16,7 +16,7 @@ import { TFunction } from "i18next";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { useCampaignId } from "pages/games/gamePageLayout/hooks/useCampaignId";
+import { useGameId } from "pages/games/gamePageLayout/hooks/useGameId";
 
 import {
   Difficulty,
@@ -49,7 +49,7 @@ export function EditOrCreateTrackDialog(props: EditOrCreateTrackDialogProps) {
   );
   const [resetProgress, setResetProgress] = useState(false);
 
-  const campaignId = useCampaignId();
+  const campaignId = useGameId();
 
   useEffect(() => {
     setTrack(initialTrack?.track ?? { type: trackType });

@@ -11,12 +11,11 @@ import { useCallback, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { useSetCurrentCampaignAtom } from "pages/games/gamePageLayout/atoms/campaign.atom";
-import {
-  CampaignPermissionType,
-  useCampaignPermissions,
-} from "pages/games/gamePageLayout/hooks/usePermissions";
+import { useCampaignPermissions } from "pages/games/gamePageLayout/hooks/usePermissions";
 
 import { TrackSectionProgressTracks, TrackTypes } from "types/Track.type";
+
+import { GamePermission } from "stores/game.store";
 
 import { EditOrCreateClockDialog } from "./EditOrCreateClockDialog";
 import { EditOrCreateTrackDialog } from "./EditOrCreateTrackDialog";
@@ -67,8 +66,7 @@ export function TracksSectionHeader(props: TracksSectionHeaderProps) {
   };
 
   const isPlayer =
-    useCampaignPermissions().campaignPermission !==
-    CampaignPermissionType.Viewer;
+    useCampaignPermissions().gamePermission !== GamePermission.Viewer;
 
   return (
     <Box

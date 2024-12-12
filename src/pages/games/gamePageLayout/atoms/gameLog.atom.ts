@@ -5,14 +5,13 @@ import { Roll } from "types/DieRolls.type";
 
 import { listenToLogs } from "api-calls/game-log/listenToLogs";
 
-import { rollDisplayAtom } from "atoms/rollDisplay.atom";
 import { useDerivedAtomState } from "atoms/useDerivedAtomState";
 
-import { useCampaignId } from "../hooks/useCampaignId";
-import {
-  CampaignPermissionType,
-  useCampaignPermissions,
-} from "../hooks/usePermissions";
+import { useAppState } from "stores/appState.store";
+import { GamePermission } from "stores/game.store";
+
+import { useGameId } from "../hooks/useGameId";
+import { useCampaignPermissions } from "../hooks/usePermissions";
 
 const DEFAULT_AMOUNT_TO_LOAD = 20;
 const LOAD_MORE_AMOUNT = 20;
@@ -49,13 +48,12 @@ export function useListenToLogs() {
     gameLogAtom,
     (state) => state.totalLogsToLoad,
   );
-  const campaignId = useCampaignId();
+  const campaignId = useGameId();
   const isGuide =
-    useCampaignPermissions().campaignPermission ===
-    CampaignPermissionType.Guide;
+    useCampaignPermissions().gamePermission === GamePermission.Guide;
 
   const setGameLogState = useSetAtom(gameLogAtom);
-  const setRollDisplayRolls = useSetAtom(rollDisplayAtom);
+  const updateRollIfPresent = useAppState((state) => state.updateRollIfPresent);
 
   useEffect(() => {
     const unsubscribe = listenToLogs({
@@ -69,18 +67,7 @@ export function useListenToLogs() {
           newState.logs[logId] = log;
           return newState;
         });
-        setRollDisplayRolls((displayRolls) => {
-          const rollIndex = displayRolls.findIndex(({ id }) => id === logId);
-          if (rollIndex >= 0) {
-            const next = [...displayRolls];
-            next[rollIndex] = {
-              id: logId,
-              roll: log,
-            };
-            return next;
-          }
-          return displayRolls;
-        });
+        updateRollIfPresent(logId, log);
       },
       removeLog: (logId) => {
         setGameLogState((state) => {
@@ -109,7 +96,7 @@ export function useListenToLogs() {
     setGameLogState,
     isGuide,
     campaignId,
-    setRollDisplayRolls,
+    updateRollIfPresent,
   ]);
 
   useEffect(() => {

@@ -3,17 +3,19 @@ import { useTranslation } from "react-i18next";
 
 import { EmptyState } from "components/Layout/EmptyState";
 
+import {
+  useGameCharacter,
+  useGameCharactersStore,
+} from "stores/gameCharacters.store";
+
 import { CharacterSidebarContents } from "./components/CharacterSidebarContents";
 import { NotesSection } from "./components/NotesSection";
 import { ReferenceSidebarContents } from "./components/ReferenceSidebarContents";
-import { useDerivedCurrentCharacterState } from "./hooks/useDerivedCharacterState";
 import { useSyncCharacterColorScheme } from "./hooks/useSyncCharacterColorScheme";
 
 export function CharacterSheetPage() {
-  const { hasCharacter, error } = useDerivedCurrentCharacterState((store) => ({
-    hasCharacter: !!store?.characterDocument?.data,
-    error: store?.characterDocument?.error,
-  }));
+  const hasCharacter = useGameCharacter((character) => !!character);
+  const error = useGameCharactersStore((state) => state.error);
 
   const { t } = useTranslation();
   useSyncCharacterColorScheme();

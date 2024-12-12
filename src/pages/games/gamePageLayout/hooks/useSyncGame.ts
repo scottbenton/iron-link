@@ -1,4 +1,3 @@
-import { Datasworn } from "@datasworn/core";
 import { Unsubscribe } from "firebase/firestore";
 import { useAtomValue } from "jotai";
 import { useEffect } from "react";
@@ -6,17 +5,11 @@ import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 
 import { listenToAssets } from "api-calls/assets/listenToAssets";
-import { listenToCampaign } from "api-calls/campaign/listenToCampaign";
-import { listenToCharacter } from "api-calls/character/listenToCharacter";
 
 import { derivedAtomWithEquality } from "atoms/derivedAtomWithEquality";
 
-import { useSetDataswornTree } from "stores/dataswornTree.store";
-
-import {
-  defaultBaseRulesets,
-  defaultExpansions,
-} from "data/datasworn.packages";
+import { useListenToGame } from "stores/game.store";
+import { useListenToGameCharacters } from "stores/gameCharacters.store";
 
 import {
   currentCampaignAtom,
@@ -28,61 +21,31 @@ import { useSetCampaignCharacters } from "../atoms/campaign.characters.atom";
 import { useListenToLogs } from "../atoms/gameLog.atom";
 import { useSyncNotes } from "../atoms/notes.atom";
 
-const expansionsAndRulesetsAtom = derivedAtomWithEquality(
-  currentCampaignAtom,
-  (atom) => ({
-    rulesets: atom.campaign?.rulesets ?? {},
-    expansions: atom.campaign?.expansions ?? {},
-  }),
-);
-
 const charactersAtom = derivedAtomWithEquality(
   currentCampaignAtom,
   (atom) => atom.campaign?.characters ?? [],
 );
 
-export function useSyncCampaign() {
+export function useSyncGame() {
   const { t } = useTranslation();
 
-  const { campaignId } = useParams<{ campaignId: string }>();
+  const { gameId } = useParams<{ gameId: string }>();
+
+  useListenToGame(gameId);
+  useListenToGameCharacters(gameId);
+
   const setCurrentCampaign = useSetCurrentCampaignAtom();
   const setCurrentCampaignCharacters = useSetCampaignCharacters();
 
-  const setDataswornTree = useSetDataswornTree();
-
-  const campaignRulesPackages = useAtomValue(expansionsAndRulesetsAtom);
   const campaignCharacters = useAtomValue(charactersAtom);
 
   useEffect(() => {
     const unsubscribes: Unsubscribe[] = [];
-    if (campaignId) {
-      unsubscribes.push(
-        listenToCampaign(
-          campaignId,
-          (campaign) => {
-            setCurrentCampaign((prev) => ({
-              ...prev,
-              campaignId,
-              campaign,
-              loading: false,
-            }));
-          },
-          (error) => {
-            console.error(error);
-            setCurrentCampaign((prev) => ({
-              ...prev,
-              campaignId,
-              campaign: null,
-              loading: false,
-              error: t("game.load-failure", "Error loading game"),
-            }));
-          },
-        ),
-      );
+    if (gameId) {
       unsubscribes.push(
         listenToAssets(
           undefined,
-          campaignId,
+          gameId,
           (assets) => {
             setCurrentCampaign((prev) => ({
               ...prev,
@@ -112,64 +75,12 @@ export function useSyncCampaign() {
       unsubscribes.forEach((unsubscribe) => unsubscribe());
       setCurrentCampaign(defaultCurrentCampaignAtom);
     };
-  }, [campaignId, t, setCurrentCampaign]);
-
-  useEffect(() => {
-    // Set rules packages
-    const dataswornTree: Record<string, Datasworn.RulesPackage> = {};
-    Object.entries(campaignRulesPackages.rulesets)
-      .filter(([, value]) => value)
-      .forEach(([key]) => {
-        dataswornTree[key] = defaultBaseRulesets[key];
-        Object.entries(campaignRulesPackages.expansions[key] ?? {})
-          .filter(([, value]) => value)
-          .forEach(([expansionId]) => {
-            dataswornTree[expansionId] = defaultExpansions[key]?.[expansionId];
-          });
-      });
-    setDataswornTree(dataswornTree);
-
-    return () => {
-      setDataswornTree({});
-    };
-  }, [campaignRulesPackages, setDataswornTree]);
+  }, [gameId, t, setCurrentCampaign]);
 
   useEffect(() => {
     const unsubscribes: Unsubscribe[] = [];
 
     campaignCharacters.forEach(({ characterId }) => {
-      unsubscribes.push(
-        listenToCharacter(
-          characterId,
-          (character) => {
-            setCurrentCampaignCharacters((characters) => ({
-              ...characters,
-              [characterId]: {
-                ...characters[characterId],
-                characterDocument: {
-                  data: character,
-                  loading: false,
-                  error: undefined,
-                },
-              },
-            }));
-          },
-          (error) => {
-            console.error(error);
-            setCurrentCampaignCharacters((characters) => ({
-              ...characters,
-              [characterId]: {
-                ...characters[characterId],
-                characterDocument: {
-                  ...characters[characterId].characterDocument,
-                  loading: false,
-                  error: t("character.load-failure", "Error loading character"),
-                },
-              },
-            }));
-          },
-        ),
-      );
       unsubscribes.push(
         listenToAssets(
           characterId,
@@ -213,7 +124,7 @@ export function useSyncCampaign() {
     return () => {
       setCurrentCampaignCharacters({});
     };
-  }, [campaignId, setCurrentCampaignCharacters]);
+  }, [gameId, setCurrentCampaignCharacters]);
 
   useListenToLogs();
   useSyncProgressTracks();

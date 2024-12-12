@@ -3,7 +3,6 @@ import {
   DocumentReference,
   PartialWithFieldValue,
   addDoc,
-  arrayUnion,
   collection,
   deleteDoc,
   doc,
@@ -37,7 +36,6 @@ export type ExpansionConfig = Record<string, Record<string, boolean>>;
 export interface GameDTO {
   name: string;
   playerIds: string[];
-  characters: { uid: string; characterId: string }[];
   guideIds: string[];
   worldId: string | null;
   conditionMeters: Record<string, number>;
@@ -165,7 +163,7 @@ export class GameRepostiory {
     });
   }
 
-  public static async removeGame(gameId: string): Promise<void> {
+  public static async deleteGame(gameId: string): Promise<void> {
     return new Promise<void>((res, reject) => {
       deleteDoc(this.getDocRef(gameId))
         .then(() => {
@@ -191,31 +189,6 @@ export class GameRepostiory {
         .catch((err) => {
           reject(
             convertUnknownErrorToStorageError(err, `Failed to create new game`),
-          );
-        });
-    });
-  }
-
-  public static async addCharacterToGame(
-    gameId: string,
-    ownerId: string,
-    characterId: string,
-  ): Promise<void> {
-    return new Promise((resolve, reject) => {
-      updateDoc(this.getDocRef(gameId), {
-        characters: arrayUnion({
-          uid: ownerId,
-          characterId,
-        }),
-      })
-        .then(resolve)
-        .catch((error) => {
-          console.error(error);
-          reject(
-            convertUnknownErrorToStorageError(
-              error,
-              `Failed to add character to game with id ${gameId}`,
-            ),
           );
         });
     });

@@ -10,7 +10,7 @@ import {
   where,
 } from "firebase/firestore";
 
-import { CampaignPermissionType } from "pages/games/gamePageLayout/hooks/usePermissions";
+import { GamePermission } from "stores/game.store";
 
 import { getNoteFolderCollection } from "./_getRef";
 import { NoteFolder, ReadPermissions } from "./_notes.type";
@@ -18,7 +18,7 @@ import { NoteFolder, ReadPermissions } from "./_notes.type";
 export function listenToNoteFolders(
   uid: string,
   campaignId: string,
-  permissions: CampaignPermissionType,
+  permissions: GamePermission,
   onNoteFolders: (folders: Record<string, NoteFolder>) => void,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onError: (error: any) => void,
@@ -39,12 +39,12 @@ export function listenToNoteFolders(
       where("creator", "==", uid),
     ),
   ];
-  if (permissions === CampaignPermissionType.Player) {
+  if (permissions === GamePermission.Player) {
     noteFolderQuery = query(
       getNoteFolderCollection(campaignId),
       or(...basePlayerPermissions),
     );
-  } else if (permissions === CampaignPermissionType.Guide) {
+  } else if (permissions === GamePermission.Guide) {
     noteFolderQuery = query(
       getNoteFolderCollection(campaignId),
       or(

@@ -23,7 +23,7 @@ import {
   useDerivedNotesAtom,
   useSetOpenItem,
 } from "pages/games/gamePageLayout/atoms/notes.atom";
-import { useCampaignId } from "pages/games/gamePageLayout/hooks/useCampaignId";
+import { useGameId } from "pages/games/gamePageLayout/hooks/useGameId";
 
 import { NoteDocument } from "api-calls/notes/_notes.type";
 import { updateNoteOrder } from "api-calls/notes/updateNoteOrder";
@@ -40,7 +40,7 @@ export function FolderView(props: FolderViewProps) {
   const { folderId } = props;
 
   const { t } = useTranslation();
-  const campaignId = useCampaignId();
+  const campaignId = useGameId();
 
   const subFolders = useDerivedNotesAtom(
     (notes) => {

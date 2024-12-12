@@ -4,7 +4,7 @@ import { useConfirm } from "material-ui-confirm";
 import { useTranslation } from "react-i18next";
 
 import { useSetOpenItem } from "pages/games/gamePageLayout/atoms/notes.atom";
-import { useCampaignId } from "pages/games/gamePageLayout/hooks/useCampaignId";
+import { useGameId } from "pages/games/gamePageLayout/hooks/useGameId";
 
 import { removeNoteFolderTransaction } from "api-calls/notes/removeNoteFolderTransaction";
 
@@ -21,7 +21,7 @@ export function FolderDeleteButton(props: FolderDeleteButtonProps) {
   const { t } = useTranslation();
   const confirm = useConfirm();
 
-  const campaignId = useCampaignId();
+  const campaignId = useGameId();
   const descendants = useFolderDescendants(folderId);
 
   const setOpenFolder = useSetOpenItem();

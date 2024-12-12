@@ -12,11 +12,8 @@ import { useTranslation } from "react-i18next";
 import { DialogTitleWithCloseButton } from "components/DialogTitleWithCloseButton";
 
 import { useDerivedNotesAtom } from "pages/games/gamePageLayout/atoms/notes.atom";
-import { useCampaignId } from "pages/games/gamePageLayout/hooks/useCampaignId";
-import {
-  CampaignPermissionType,
-  useCampaignPermissions,
-} from "pages/games/gamePageLayout/hooks/usePermissions";
+import { useGameId } from "pages/games/gamePageLayout/hooks/useGameId";
+import { useCampaignPermissions } from "pages/games/gamePageLayout/hooks/usePermissions";
 
 import { GUIDE_NOTE_FOLDER_NAME } from "api-calls/notes/_getRef";
 import { EditPermissions, NoteFolder } from "api-calls/notes/_notes.type";
@@ -26,6 +23,7 @@ import { updateNoteFolderPermissions } from "api-calls/notes/updateNoteFolderPer
 import { updateNotePermissions } from "api-calls/notes/updateNotePermissions";
 
 import { useUID } from "stores/auth.store";
+import { GamePermission } from "stores/game.store";
 
 import { getItemName } from "../FolderView/getFolderName";
 import { FAKE_ROOT_NOTE_FOLDER_KEY } from "../FolderView/rootNodeName";
@@ -62,13 +60,14 @@ export function MoveDialog(props: MoveDialogProps) {
   });
 
   const uid = useUID();
-  const campaignId = useCampaignId();
-  const { campaignType, campaignPermission } = useCampaignPermissions();
+  const campaignId = useGameId();
+  const { gameType: campaignType, gamePermission: campaignPermission } =
+    useCampaignPermissions();
 
   const descendants = useFolderDescendants(type === "folder" ? id : undefined);
   const [isMoveLoading, setIsMoveLoading] = useState(false);
 
-  const isGuide = campaignPermission === CampaignPermissionType.Guide;
+  const isGuide = campaignPermission === GamePermission.Guide;
 
   const folders = useDerivedNotesAtom((notes) => notes.folders.folders);
 

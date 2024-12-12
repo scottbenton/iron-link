@@ -1,6 +1,6 @@
+import deepEqual from "fast-deep-equal";
 import { immer } from "zustand/middleware/immer";
 import { createWithEqualityFn } from "zustand/traditional";
-import { shallow } from "zustand/vanilla/shallow";
 
 import { i18n } from "i18n/config";
 
@@ -201,5 +201,5 @@ export const useCreateCharacterStore = createWithEqualityFn<
       });
     },
   })),
-  shallow,
+  deepEqual,
 );

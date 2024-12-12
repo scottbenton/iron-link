@@ -4,7 +4,7 @@ import { EmptyState } from "components/Layout/EmptyState";
 import { RtcRichTextEditor } from "components/RichTextEditor";
 
 import { useListenToActiveNoteContent } from "pages/games/gamePageLayout/atoms/notes.atom";
-import { useCampaignId } from "pages/games/gamePageLayout/hooks/useCampaignId";
+import { useGameId } from "pages/games/gamePageLayout/hooks/useGameId";
 
 import { updateNoteContent } from "api-calls/notes/updateNoteContent";
 
@@ -19,7 +19,7 @@ export interface NoteViewProps {
 export function NoteView(props: NoteViewProps) {
   const { openNoteId } = props;
 
-  const campaignId = useCampaignId();
+  const campaignId = useGameId();
 
   const { noteContent, loading, error } =
     useListenToActiveNoteContent(openNoteId);

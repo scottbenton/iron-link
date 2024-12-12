@@ -26,7 +26,6 @@ export class GameService {
       name: gameName,
       playerIds: [uid],
       worldId: null,
-      characters: [],
       guideIds: [],
       conditionMeters: {},
       specialTracks: {},
@@ -89,26 +88,6 @@ export class GameService {
     });
   }
 
-  public static async addCharacter(
-    gameId: string,
-    uid: string,
-    characterId: string,
-  ): Promise<void> {
-    await GameRepostiory.updateGame(gameId, {
-      characters: arrayUnion({ uid, characterId }),
-    });
-  }
-
-  public static async removeCharacter(
-    gameId: string,
-    uid: string,
-    characterId: string,
-  ): Promise<void> {
-    await GameRepostiory.updateGame(gameId, {
-      characters: arrayRemove({ uid, characterId }),
-    });
-  }
-
   public static async addGuide(gameId: string, guideId: string): Promise<void> {
     await GameRepostiory.updateGame(gameId, { guideIds: arrayUnion(guideId) });
   }
@@ -166,15 +145,11 @@ export class GameService {
     await GameRepostiory.updateGame(gameId, { colorScheme });
   }
 
-  public static addCharacterToGame(
-    gameId: string,
-    ownerId: string,
-    characterId: string,
-  ) {
-    return GameRepostiory.addCharacterToGame(gameId, ownerId, characterId);
-  }
-
   private static convertGameDTOToGame(gameDTO: GameDTO): IGame {
     return gameDTO;
+  }
+
+  public static deleteGame(gameId: string): Promise<void> {
+    return GameRepostiory.deleteGame(gameId);
   }
 }

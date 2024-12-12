@@ -1,8 +1,8 @@
+import deepEqual from "fast-deep-equal";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { immer } from "zustand/middleware/immer";
 import { createWithEqualityFn } from "zustand/traditional";
-import { shallow } from "zustand/vanilla/shallow";
 
 import { UserService } from "services/user.service";
 
@@ -51,7 +51,7 @@ export const useUsersStore = createWithEqualityFn<
       }
     },
   })),
-  shallow,
+  deepEqual,
 );
 
 export function useLoadUserDetails(uid: string) {

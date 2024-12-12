@@ -12,10 +12,9 @@ import {
 import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import {
-  CharacterPermissionType,
-  useCampaignPermissions,
-} from "pages/games/gamePageLayout/hooks/usePermissions";
+import { useCampaignPermissions } from "pages/games/gamePageLayout/hooks/usePermissions";
+
+import { CharacterPermissionType } from "stores/gameCharacters.store";
 
 import { CharacterDetailsDialog } from "./CharacterDetailsDialog";
 import { CharacterStatsDialog } from "./CharacterStatsDialog";
