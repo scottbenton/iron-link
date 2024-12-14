@@ -20,24 +20,25 @@ import { ClockCircle } from "components/datasworn/Clocks/ClockCircle";
 
 import { useGameId } from "pages/games/gamePageLayout/hooks/useGameId";
 
-import { Clock, TrackStatus, TrackTypes } from "types/Track.type";
+import { useTracksStore } from "stores/tracks.store";
 
-import { addProgressTrack } from "api-calls/tracks/addProgressTrack";
-import { updateProgressTrack } from "api-calls/tracks/updateProgressTrack";
+import { TrackStatus, TrackTypes } from "repositories/tracks.repository";
+
+import { IClock } from "services/tracks.service";
 
 const segmentOptions = [4, 6, 8, 10];
 
 export interface EditOrCreateClockDialogProps {
   open: boolean;
   handleClose: () => void;
-  initialClock?: { clockId: string; clock: Clock };
+  initialClock?: { clockId: string; clock: IClock };
 }
 
 export function EditOrCreateClockDialog(props: EditOrCreateClockDialogProps) {
   const { open, handleClose, initialClock } = props;
 
   const { t } = useTranslation();
-  const campaignId = useGameId();
+  const gameId = useGameId();
 
   const [error, setError] = useState<string>();
   const [loading, setLoading] = useState(false);
@@ -65,6 +66,8 @@ export function EditOrCreateClockDialog(props: EditOrCreateClockDialogProps) {
     handleClose();
   };
 
+  const addTrack = useTracksStore((store) => store.addTrack);
+  const updateTrack = useTracksStore((store) => store.setTrack);
   const handleSubmit = () => {
     if (!title) {
       setError(
@@ -84,7 +87,7 @@ export function EditOrCreateClockDialog(props: EditOrCreateClockDialogProps) {
       return;
     }
 
-    const clock: Clock = {
+    const clock: IClock = {
       createdDate: new Date(),
       status: TrackStatus.Active,
       type: TrackTypes.Clock,
@@ -98,11 +101,7 @@ export function EditOrCreateClockDialog(props: EditOrCreateClockDialogProps) {
     setLoading(true);
 
     if (initialClock) {
-      updateProgressTrack({
-        gameId: campaignId,
-        trackId: initialClock.clockId,
-        track: clock,
-      })
+      updateTrack(gameId, initialClock.clockId, clock)
         .then(() => {
           handleDialogClose();
         })
@@ -116,7 +115,7 @@ export function EditOrCreateClockDialog(props: EditOrCreateClockDialogProps) {
           );
         });
     } else {
-      addProgressTrack({ gameId: campaignId, track: clock })
+      addTrack(gameId, clock)
         .then(() => {
           handleDialogClose();
         })

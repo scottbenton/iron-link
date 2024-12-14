@@ -1,6 +1,5 @@
 import {
   CollectionReference,
-  DocumentReference,
   PartialWithFieldValue,
   addDoc,
   collection,
@@ -13,7 +12,10 @@ import {
 import { firestore } from "config/firebase.config";
 
 import { CharacterRepository } from "./character.repository";
-import { convertUnknownErrorToStorageError } from "./errors/storageErrors";
+import {
+  StorageError,
+  convertUnknownErrorToStorageError,
+} from "./errors/storageErrors";
 import { GameRepostiory } from "./game.repository";
 
 export interface AssetDTO {
@@ -39,15 +41,6 @@ export class AssetRepository {
       this.getCharacterAssetCollectionName(characterId),
     ) as CollectionReference<AssetDTO>;
   }
-  private static getCharacterAssetCollectionDocRef(
-    characterId: string,
-    assetId: string,
-  ) {
-    return doc(
-      firestore,
-      `${this.getCharacterAssetCollectionName(characterId)}/${assetId}`,
-    ) as DocumentReference<AssetDTO>;
-  }
 
   public static getGameAssetCollectionName(gameId: string): string {
     return `${GameRepostiory.collectionName}/${gameId}/${this.collectionName}`;
@@ -57,12 +50,6 @@ export class AssetRepository {
       firestore,
       this.getGameAssetCollectionName(gameId),
     ) as CollectionReference<AssetDTO>;
-  }
-  private static getGameAssetCollectionDocRef(gameId: string, assetId: string) {
-    return doc(
-      firestore,
-      `${this.getGameAssetCollectionName(gameId)}/${assetId}`,
-    ) as DocumentReference<AssetDTO>;
   }
 
   public static async createCharacterAsset(
@@ -110,7 +97,7 @@ export class AssetRepository {
   private static listenToAssets(
     collectionRef: CollectionReference<AssetDTO>,
     onAssets: (assets: Record<string, AssetDTO>) => void,
-    onError: (error: Error) => void,
+    onError: (error: StorageError) => void,
   ): () => void {
     return onSnapshot(
       collectionRef,
@@ -134,7 +121,7 @@ export class AssetRepository {
   public static listenToCharacterAssets(
     characterId: string,
     onAssets: (assets: Record<string, AssetDTO>) => void,
-    onError: (error: Error) => void,
+    onError: (error: StorageError) => void,
   ): () => void {
     return this.listenToAssets(
       this.getCharacterAssetCollectionRef(characterId),
@@ -146,7 +133,7 @@ export class AssetRepository {
   public static listenToGameAssets(
     gameId: string,
     onAssets: (assets: Record<string, AssetDTO>) => void,
-    onError: (error: Error) => void,
+    onError: (error: StorageError) => void,
   ): () => void {
     return this.listenToAssets(
       this.getGameAssetCollectionRef(gameId),

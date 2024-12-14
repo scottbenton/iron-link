@@ -1,11 +1,11 @@
 import { Datasworn, IdParser } from "@datasworn/core";
 import { Primary } from "@datasworn/core/dist/StringId";
 
-import { TrackTypes } from "types/Track.type";
-
 import { getAsset } from "hooks/datasworn/useAsset";
 
 import { AssetDocument } from "api-calls/assets/_asset.type";
+
+import { TrackTypes } from "repositories/tracks.repository";
 
 import {
   CampaignRollOptionState,

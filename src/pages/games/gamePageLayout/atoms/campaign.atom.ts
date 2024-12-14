@@ -1,11 +1,13 @@
 import { atom, useSetAtom } from "jotai";
 import { useCallback, useEffect } from "react";
 
-import { Track, TrackStatus } from "types/Track.type";
-
 import { AssetDocument } from "api-calls/assets/_asset.type";
 import { CampaignDocument } from "api-calls/campaign/_campaign.type";
 import { listenToProgressTracks } from "api-calls/tracks/listenToProgressTracks";
+
+import { TrackStatus } from "repositories/tracks.repository";
+
+import { ITrack } from "services/tracks.service";
 
 import { useDerivedCampaignState } from "../hooks/useDerivedCampaignState";
 import { useGameId } from "../hooks/useGameId";
@@ -22,7 +24,7 @@ export interface ICurrentCampaignAtom {
   };
   tracks: {
     loading: boolean;
-    tracks: Record<string, Track>;
+    tracks: Record<string, ITrack>;
     showCompletedTracks: boolean;
     error?: string;
   };

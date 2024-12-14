@@ -7,7 +7,7 @@ import { EmptyState } from "components/Layout/EmptyState";
 
 import { useGameStore } from "stores/game.store";
 
-import { CampaignTabs } from "./components/CampaignTabs";
+import { GameTabs } from "./components/GameTabs";
 import { useSyncGame } from "./hooks/useSyncGame";
 
 export function GameLayout() {
@@ -40,7 +40,7 @@ export function GameLayout() {
         disablePadding
         sx={(theme) => ({ borderBottom: `1px solid ${theme.palette.divider}` })}
       >
-        <CampaignTabs />
+        <GameTabs />
       </PageHeader>
       <PageContent
         viewHeight={isOnCharacterCreatePage ? "min-full" : "max-full"}

@@ -1,4 +1,4 @@
-import { TrackTypes } from "types/Track.type";
+import { TrackTypes } from "repositories/tracks.repository";
 
 export enum RollResult {
   StrongHit = "strong_hit",

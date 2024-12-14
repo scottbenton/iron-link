@@ -1,24 +1,20 @@
 import { PortraitAvatar } from "components/characters/PortraitAvatar";
 
-import { useUsersGames } from "stores/users.games.store";
+import { GameCharacterDisplayDetails } from "stores/users.games.store";
 
 export interface GameCharacterPortraitProps {
   characterId: string;
+  characterDetails: GameCharacterDisplayDetails;
 }
 
 export function GameCharacterPortrait(props: GameCharacterPortraitProps) {
-  const { characterId } = props;
-  const characterPortraitSettings = useUsersGames(
-    (store) => store.characterDisplayDetails[characterId],
-  );
+  const { characterId, characterDetails } = props;
 
   return (
     <PortraitAvatar
       characterId={characterId}
-      portraitSettings={
-        characterPortraitSettings?.profileImageSettings ?? undefined
-      }
-      name={characterPortraitSettings?.name}
+      portraitSettings={characterDetails.profileImageSettings ?? undefined}
+      name={characterDetails.name}
       size={"small"}
     />
   );

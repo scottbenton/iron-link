@@ -6,9 +6,9 @@ import {
   doc,
 } from "firebase/firestore";
 
-import { Track } from "types/Track.type";
-
 import { firestore } from "config/firebase.config";
+
+import { ITrack } from "services/tracks.service";
 
 import { TrackDocument } from "./_track.type";
 
@@ -35,7 +35,7 @@ export function getCampaignTracksDoc(campaignId: string, trackId: string) {
   ) as DocumentReference<TrackDocument>;
 }
 
-export function convertToDatabase(track: Track): TrackDocument {
+export function convertToDatabase(track: ITrack): TrackDocument {
   const { createdDate, ...rest } = track;
 
   return {
@@ -44,7 +44,7 @@ export function convertToDatabase(track: Track): TrackDocument {
   } as TrackDocument;
 }
 
-export function convertFromDatabase(track: TrackDocument): Track {
+export function convertFromDatabase(track: TrackDocument): ITrack {
   const { createdTimestamp, ...rest } = track;
 
   return {

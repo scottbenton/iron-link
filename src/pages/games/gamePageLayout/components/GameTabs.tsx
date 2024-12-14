@@ -12,7 +12,7 @@ import { useGameCharactersStore } from "stores/gameCharacters.store";
 
 import { useGameId } from "../hooks/useGameId";
 
-export function CampaignTabs() {
+export function GameTabs() {
   const gameId = useGameId();
   const characterId = useCharacterIdOptional();
   const uid = useUID();
@@ -22,6 +22,8 @@ export function CampaignTabs() {
   const isOnCharacterCreatePage = pathname.match(
     /\/games\/[^/]*\/create[/]?$/i,
   );
+
+  const areCharactersLoading = useGameCharactersStore((store) => store.loading);
 
   const sortedGameCharacters = useGameCharactersStore((store) => {
     return Object.entries(store.characters)
@@ -40,6 +42,10 @@ export function CampaignTabs() {
         return a.name.localeCompare(b.name);
       });
   });
+
+  if (areCharactersLoading) {
+    return null;
+  }
 
   return (
     <Tabs

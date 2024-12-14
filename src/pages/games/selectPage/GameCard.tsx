@@ -5,6 +5,8 @@ import { LinkComponent } from "components/LinkComponent";
 
 import { pathConfig } from "pages/pathConfig";
 
+import { useUsersGames } from "stores/users.games.store";
+
 import {
   defaultBaseRulesets,
   defaultExpansions,
@@ -12,7 +14,7 @@ import {
 
 import { IGame } from "services/game.service";
 
-import { CampaignCharacterPortraits } from "./GameCharacterPortraits";
+import { GameCharacterPortraits } from "./GameCharacterPortraits";
 
 export interface GameCardProps {
   gameId: string;
@@ -23,6 +25,10 @@ export function GameCard(props: GameCardProps) {
   const { gameId, game } = props;
 
   const { rulesets, expansions } = game;
+
+  const gameCharacters = useUsersGames(
+    (store) => store.characterDisplayDetails[gameId] ?? {},
+  );
 
   const rulesPackageString = useMemo(() => {
     const packageNames: string[] = [];
@@ -64,9 +70,9 @@ export function GameCard(props: GameCardProps) {
         <Box
           display="flex"
           alignItems="center"
-          gap={game.characters.length > 0 ? 2 : 0}
+          gap={Object.keys(gameCharacters).length > 0 ? 2 : 0}
         >
-          <CampaignCharacterPortraits gameCharacters={game.characters} />
+          <GameCharacterPortraits gameCharacterDetails={gameCharacters} />
           <div>
             <Typography
               variant={"h5"}

@@ -1,8 +1,8 @@
 import { updateDoc } from "firebase/firestore";
 
-import { Track } from "types/Track.type";
-
 import { createApiFunction } from "api-calls/createApiFunction";
+
+import { ITrack } from "services/tracks.service";
 
 import { getCampaignTracksDoc } from "./_getRef";
 
@@ -10,7 +10,7 @@ export const updateProgressTrack = createApiFunction<
   {
     gameId: string;
     trackId: string;
-    track: Partial<Track>;
+    track: Partial<ITrack>;
   },
   void
 >((params) => {

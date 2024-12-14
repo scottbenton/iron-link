@@ -1,6 +1,6 @@
 import { TFunction } from "i18next";
 
-import { TrackTypes } from "types/Track.type";
+import { TrackTypes } from "repositories/tracks.repository";
 
 export function getTrackTypeLabel(type: TrackTypes, t: TFunction): string {
   switch (type) {

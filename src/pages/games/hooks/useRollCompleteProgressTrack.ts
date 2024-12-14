@@ -2,7 +2,6 @@ import { useCallback } from "react";
 import { useTranslation } from "react-i18next";
 
 import { RollResult, RollType, TrackProgressRoll } from "types/DieRolls.type";
-import { TrackTypes } from "types/Track.type";
 
 import { addRoll } from "api-calls/game-log/addRoll";
 
@@ -12,6 +11,8 @@ import { useUID } from "stores/auth.store";
 import { getRollResultLabel } from "data/rollResultLabel";
 
 import { createId } from "lib/id.lib";
+
+import { TrackTypes } from "repositories/tracks.repository";
 
 import { getTrackTypeLabel } from "../characterSheet/components/TracksSection/common";
 import { useCharacterIdOptional } from "../characterSheet/hooks/useCharacterId";

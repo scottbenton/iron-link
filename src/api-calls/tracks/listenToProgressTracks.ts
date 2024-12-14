@@ -1,13 +1,13 @@
 import { Unsubscribe, onSnapshot, query, where } from "firebase/firestore";
 
-import { Track } from "types/Track.type";
+import { ITrack } from "services/tracks.service";
 
 import { convertFromDatabase, getCampaignTracksCollection } from "./_getRef";
 
 export function listenToProgressTracks(
   gameId: string,
   status: string,
-  addOrUpdateTracks: (tracks: Record<string, Track>) => void,
+  addOrUpdateTracks: (tracks: Record<string, ITrack>) => void,
   removeTrack: (trackId: string) => void,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onError: (error: any) => void,
@@ -20,7 +20,7 @@ export function listenToProgressTracks(
   return onSnapshot(
     q,
     (snapshot) => {
-      const addOrUpdateChanges: { [trackId: string]: Track } = {};
+      const addOrUpdateChanges: { [trackId: string]: ITrack } = {};
 
       snapshot.docChanges().forEach((change) => {
         if (change.type === "removed") {

@@ -14,11 +14,15 @@ export interface GameCharacterDisplayDetails {
   name: string;
   profileImageSettings: ICharacter["profileImage"];
   profileImageURL: string | null;
+  uid: string;
 }
 
 interface UsersGamesState {
   games: Record<string, IGame>;
-  characterDisplayDetails: Record<string, GameCharacterDisplayDetails>;
+  characterDisplayDetails: Record<
+    string,
+    Record<string, GameCharacterDisplayDetails>
+  >;
   loading: boolean;
   error?: StorageError;
 }
@@ -68,16 +72,21 @@ export const useUsersGames = createWithEqualityFn<
         const portraitURLs = Object.fromEntries(resolvedEntries);
 
         set((state) => {
-          state.characterDisplayDetails = Object.fromEntries(
-            Object.entries(characterMap).map(([characterId, character]) => [
-              characterId,
-              {
-                name: character.name,
-                profileImageSettings: character.profileImage,
-                profileImageURL: portraitURLs[characterId] || null,
-              },
-            ]),
-          );
+          const characterDisplayDetails: UsersGamesState["characterDisplayDetails"] =
+            {};
+
+          Object.entries(characterMap).forEach(([characterId, character]) => {
+            if (!characterDisplayDetails[character.gameId]) {
+              characterDisplayDetails[character.gameId] = {};
+            }
+            characterDisplayDetails[character.gameId][characterId] = {
+              name: character.name,
+              profileImageSettings: character.profileImage,
+              profileImageURL: portraitURLs[characterId] ?? null,
+              uid: character.uid,
+            };
+          });
+          state.characterDisplayDetails = characterDisplayDetails;
         });
       } catch (e) {
         console.error(e);

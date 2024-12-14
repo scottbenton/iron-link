@@ -6,7 +6,7 @@ import { ProgressTrack } from "components/datasworn/ProgressTrack";
 import { useDerivedCampaignState } from "pages/games/gamePageLayout/hooks/useDerivedCampaignState";
 import { useRollCompleteProgressTrack } from "pages/games/hooks/useRollCompleteProgressTrack";
 
-import { TrackStatus, TrackTypes } from "types/Track.type";
+import { TrackStatus, TrackTypes } from "repositories/tracks.repository";
 
 export interface ProgressRollsProps {
   trackType: TrackTypes;

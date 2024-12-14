@@ -1,39 +1,41 @@
 import { AvatarGroup } from "@mui/material";
 
 import { useUID } from "stores/auth.store";
-
-import { IGame } from "services/game.service";
+import { GameCharacterDisplayDetails } from "stores/users.games.store";
 
 import { GameCharacterPortrait } from "./GameCharacterPortrait";
 
 export interface GameCharacterPortraitsProps {
-  gameCharacters: IGame["characters"];
+  gameCharacterDetails: Record<string, GameCharacterDisplayDetails>;
 }
 
-export function CampaignCharacterPortraits(props: GameCharacterPortraitsProps) {
-  const { gameCharacters } = props;
+export function GameCharacterPortraits(props: GameCharacterPortraitsProps) {
+  const { gameCharacterDetails } = props;
 
   const uid = useUID();
 
   // Sort users from the current player to the front, then as they were
-  const sortedCampaignCharacters = gameCharacters.sort((a, b) => {
-    if (a.uid !== b.uid) {
-      if (a.uid === uid) {
-        return -1;
+  const sortedCampaignCharacters = Object.entries(gameCharacterDetails).sort(
+    ([, a], [, b]) => {
+      if (a.uid !== b.uid) {
+        if (a.uid === uid) {
+          return -1;
+        }
+        if (b.uid === uid) {
+          return 1;
+        }
       }
-      if (b.uid === uid) {
-        return 1;
-      }
-    }
-    return 0;
-  });
+      return a.name.localeCompare(b.name);
+    },
+  );
 
   return (
     <AvatarGroup max={4}>
-      {sortedCampaignCharacters.map((character) => (
+      {sortedCampaignCharacters.map(([characterId, characterDetails]) => (
         <GameCharacterPortrait
-          key={character.characterId}
-          characterId={character.characterId}
+          key={characterId}
+          characterId={characterId}
+          characterDetails={characterDetails}
         />
       ))}
     </AvatarGroup>

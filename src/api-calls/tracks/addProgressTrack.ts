@@ -1,15 +1,15 @@
 import { addDoc } from "firebase/firestore";
 
-import { Track } from "types/Track.type";
-
 import { createApiFunction } from "api-calls/createApiFunction";
+
+import { ITrack } from "services/tracks.service";
 
 import { convertToDatabase, getCampaignTracksCollection } from "./_getRef";
 
 export const addProgressTrack = createApiFunction<
   {
     gameId: string;
-    track: Track;
+    track: ITrack;
   },
   void
 >((params) => {

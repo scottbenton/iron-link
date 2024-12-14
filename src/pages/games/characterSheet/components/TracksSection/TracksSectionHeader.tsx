@@ -7,15 +7,18 @@ import {
   Menu,
   MenuItem,
 } from "@mui/material";
-import { useCallback, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { useSetCurrentCampaignAtom } from "pages/games/gamePageLayout/atoms/campaign.atom";
 import { useCampaignPermissions } from "pages/games/gamePageLayout/hooks/usePermissions";
 
-import { TrackSectionProgressTracks, TrackTypes } from "types/Track.type";
-
 import { GamePermission } from "stores/game.store";
+import { useTracksStore } from "stores/tracks.store";
+
+import {
+  TrackSectionProgressTracks,
+  TrackTypes,
+} from "repositories/tracks.repository";
 
 import { EditOrCreateClockDialog } from "./EditOrCreateClockDialog";
 import { EditOrCreateTrackDialog } from "./EditOrCreateTrackDialog";
@@ -29,19 +32,8 @@ export function TracksSectionHeader(props: TracksSectionHeaderProps) {
   const { showCompletedTracks } = props;
   const { t } = useTranslation();
 
-  const setCurrentCampaign = useSetCurrentCampaignAtom();
-
-  const toggleShowCompletedTracks = useCallback(
-    (showCompletedTracks: boolean) => {
-      setCurrentCampaign((prev) => ({
-        ...prev,
-        tracks: {
-          ...prev.tracks,
-          showCompletedTracks,
-        },
-      }));
-    },
-    [setCurrentCampaign],
+  const setShowCompletedTracks = useTracksStore(
+    (store) => store.setShowCompletedTracks,
   );
 
   const [isAddMenuOpen, setIsAddMenuOpen] = useState(false);
@@ -89,7 +81,7 @@ export function TracksSectionHeader(props: TracksSectionHeaderProps) {
         control={
           <Checkbox
             checked={showCompletedTracks}
-            onChange={(_, checked) => toggleShowCompletedTracks(checked)}
+            onChange={(_, checked) => setShowCompletedTracks(checked)}
           />
         }
       />

@@ -1,17 +1,21 @@
 import { Timestamp } from "firebase/firestore";
 
-import { Clock, ProgressTrack, SceneChallenge } from "types/Track.type";
+import {
+  IClock,
+  IProgressTrack,
+  ISceneChallenge,
+} from "services/tracks.service";
 
 export interface ProgressTrackDocument
-  extends Omit<ProgressTrack, "createdDate"> {
+  extends Omit<IProgressTrack, "createdDate"> {
   createdTimestamp: Timestamp;
 }
-export interface ClockDocument extends Omit<Clock, "createdDate"> {
+export interface ClockDocument extends Omit<IClock, "createdDate"> {
   createdTimestamp: Timestamp;
 }
 
 export interface SceneChallengeDocument
-  extends Omit<SceneChallenge, "createdDate"> {
+  extends Omit<ISceneChallenge, "createdDate"> {
   createdTimestamp: Timestamp;
 }
 

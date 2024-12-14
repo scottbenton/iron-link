@@ -5,12 +5,13 @@ import { useTranslation } from "react-i18next";
 
 import { AssetCardDialog } from "components/datasworn/AssetCardDialog/AssetCardDialog";
 
-import { AssetDocument } from "api-calls/assets/_asset.type";
-import { addAsset } from "api-calls/assets/addAsset";
+import { useAssetsStore } from "stores/assets.store";
+
+import { IAsset } from "services/asset.service";
 
 export interface AssetsSectionHeaderProps {
-  campaignId: string;
-  characterId: string;
+  gameId: string;
+  characterId: string | undefined;
   showAllAbilities: boolean;
   setShowAllAbilities: (showAllAbilities: boolean) => void;
   lastSharedAssetOrder: number;
@@ -20,7 +21,7 @@ export interface AssetsSectionHeaderProps {
 
 export function AssetSectionHeader(props: AssetsSectionHeaderProps) {
   const {
-    campaignId,
+    gameId,
     characterId,
     showAllAbilities,
     setShowAllAbilities,
@@ -32,21 +33,25 @@ export function AssetSectionHeader(props: AssetsSectionHeaderProps) {
 
   const [isAssetDialogOpen, setIsAssetDialogOpen] = useState(false);
 
+  const addAsset = useAssetsStore((store) => store.addAsset);
+
   const handleAssetSelection = useCallback(
-    (assetDocument: Omit<AssetDocument, "order">) => {
+    (assetDocument: Omit<IAsset, "order">) => {
       setIsAssetDialogOpen(false);
-      addAsset({
-        characterId: assetDocument.shared ? undefined : characterId,
-        campaignId: assetDocument.shared ? campaignId : undefined,
-        asset: {
-          ...assetDocument,
-          order: assetDocument.shared
-            ? lastSharedAssetOrder + 1
-            : lastCharacterAssetOrder + 1,
-        },
+      addAsset(gameId, characterId, {
+        ...assetDocument,
+        order: assetDocument.shared
+          ? lastSharedAssetOrder + 1
+          : lastCharacterAssetOrder + 1,
       });
     },
-    [characterId, campaignId, lastCharacterAssetOrder, lastSharedAssetOrder],
+    [
+      characterId,
+      gameId,
+      lastCharacterAssetOrder,
+      lastSharedAssetOrder,
+      addAsset,
+    ],
   );
 
   return (

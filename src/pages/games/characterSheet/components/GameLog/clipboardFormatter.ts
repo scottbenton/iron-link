@@ -8,11 +8,12 @@ import {
   StatRoll,
   TrackProgressRoll,
 } from "types/DieRolls.type";
-import { TrackTypes } from "types/Track.type";
 
 import { getMove } from "hooks/datasworn/useMove";
 
 import { getRollResultLabel } from "data/rollResultLabel";
+
+import { TrackTypes } from "repositories/tracks.repository";
 
 export function formatQuote(contents: string) {
   return `<blockquote>${contents}</blockquote>`;
