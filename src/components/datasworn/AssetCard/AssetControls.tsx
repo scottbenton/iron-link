@@ -1,7 +1,7 @@
 import { Datasworn } from "@datasworn/core";
 import { Stack } from "@mui/material";
 
-import { AssetDocument } from "api-calls/assets/_asset.type";
+import { IAsset } from "services/asset.service";
 
 import { AssetControl } from "./AssetControl";
 
@@ -12,7 +12,7 @@ export interface AssetControlsProps {
         Datasworn.AssetControlField | Datasworn.AssetAbilityControlField
       >
     | undefined;
-  assetDocument?: AssetDocument;
+  assetDocument?: IAsset;
   spacing?: number;
   onControlChange?: (
     controlKey: string,

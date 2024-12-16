@@ -17,7 +17,7 @@ export function useActiveAssetOracleCollections(): Record<
 > {
   const { t } = useTranslation();
 
-  const { characterAssetDocuments, campaignAssetDocuments } = useActiveAssets();
+  const { characterAssets, gameAssets } = useActiveAssets();
 
   const tree = useDataswornTree();
 
@@ -27,8 +27,8 @@ export function useActiveAssetOracleCollections(): Record<
       Record<string, Datasworn.EmbeddedOracleRollable>
     > = {};
     Object.values({
-      ...characterAssetDocuments,
-      ...campaignAssetDocuments,
+      ...characterAssets,
+      ...gameAssets,
     }).forEach((assetDocument) => {
       const asset = getAsset(assetDocument.id, tree);
       if (!asset) return;
@@ -50,7 +50,7 @@ export function useActiveAssetOracleCollections(): Record<
       });
     });
     return oracles;
-  }, [characterAssetDocuments, campaignAssetDocuments, tree]);
+  }, [characterAssets, gameAssets, tree]);
 
   const assetOracleCollections = useMemo(() => {
     if (Object.keys(activeAssetOracles).length === 0) return {};

@@ -7,11 +7,11 @@ import { pathConfig } from "pages/pathConfig";
 
 import { ReferenceSidebarContents } from "../characterSheet/components/ReferenceSidebarContents";
 import { useGameId } from "../gamePageLayout/hooks/useGameId";
-import { useCampaignPermissions } from "../gamePageLayout/hooks/usePermissions";
+import { useGamePermissions } from "../gamePageLayout/hooks/usePermissions";
 
 export function GameOverviewSheet() {
   const campaignId = useGameId();
-  const { gameType: campaignType } = useCampaignPermissions();
+  const { gameType } = useGamePermissions();
   const { t } = useTranslation();
 
   const { success } = useSnackbar();
@@ -27,7 +27,7 @@ export function GameOverviewSheet() {
   return (
     <Box display="flex">
       <Box mt={2}>
-        <Typography>{campaignType}</Typography>
+        <Typography>{gameType}</Typography>
         <Button onClick={handleCopy}>
           {t("game.copy-invite-link", "Copy Invite Link")}
         </Button>

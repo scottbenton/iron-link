@@ -2,7 +2,7 @@ import { Datasworn } from "@datasworn/core";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
-import { AssetDocument } from "api-calls/assets/_asset.type";
+import { IAsset } from "services/asset.service";
 
 import { AssetAbilities } from "../AssetAbilities";
 
@@ -13,7 +13,7 @@ describe("AssetAbilities", () => {
     { _id: "3", name: "Ability 3", text: "Description 3", enabled: false },
   ];
 
-  const mockAssetDocument: AssetDocument = {
+  const mockAssetDocument: IAsset = {
     id: "1",
     enabledAbilities: {
       0: true,

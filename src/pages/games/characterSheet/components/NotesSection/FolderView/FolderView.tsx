@@ -19,14 +19,11 @@ import { useTranslation } from "react-i18next";
 
 import { GridLayout } from "components/Layout";
 
-import {
-  useDerivedNotesAtom,
-  useSetOpenItem,
-} from "pages/games/gamePageLayout/atoms/notes.atom";
 import { useGameId } from "pages/games/gamePageLayout/hooks/useGameId";
 
-import { NoteDocument } from "api-calls/notes/_notes.type";
-import { updateNoteOrder } from "api-calls/notes/updateNoteOrder";
+import { useNotesStore } from "stores/notes.store";
+
+import { INote } from "services/notes.service";
 
 import { FolderItem } from "./FolderItem";
 import { NoteItem } from "./NoteItem";
@@ -40,75 +37,69 @@ export function FolderView(props: FolderViewProps) {
   const { folderId } = props;
 
   const { t } = useTranslation();
-  const campaignId = useGameId();
+  const gameId = useGameId();
 
-  const subFolders = useDerivedNotesAtom(
-    (notes) => {
-      if (!folderId) {
-        return Object.entries(notes.folders.folders).filter(([, folder]) => {
-          const parentId = folder.parentFolderId;
-          if (parentId === null) {
-            return false;
-          }
-          if (!notes.folders.folders[parentId]) {
-            return true;
-          }
+  const subFolders = useNotesStore((state) => {
+    if (!folderId) {
+      return Object.entries(state.folderState.folders).filter(([, folder]) => {
+        const parentId = folder.parentFolderId;
+        if (parentId === null) {
           return false;
-        });
-      }
-      if (folderId === FAKE_ROOT_NOTE_FOLDER_KEY) {
-        return Object.entries(notes.folders.folders)
-          .filter(
-            ([fid, folder]) =>
-              fid !== FAKE_ROOT_NOTE_FOLDER_KEY && !folder.parentFolderId,
-          )
-          .sort(([, a], [, b]) => a.name.localeCompare(b.name));
-      }
-      return Object.entries(notes.folders.folders)
-        .filter(([, folder]) => folder.parentFolderId === folderId)
+        }
+        if (!state.folderState.folders[parentId]) {
+          return true;
+        }
+        return false;
+      });
+    }
+    if (folderId === FAKE_ROOT_NOTE_FOLDER_KEY) {
+      return Object.entries(state.folderState.folders)
+        .filter(
+          ([fid, folder]) =>
+            fid !== FAKE_ROOT_NOTE_FOLDER_KEY && !folder.parentFolderId,
+        )
         .sort(([, a], [, b]) => a.name.localeCompare(b.name));
-    },
-    [folderId],
-  );
+    }
+    return Object.entries(state.folderState.folders)
+      .filter(([, folder]) => folder.parentFolderId === folderId)
+      .sort(([, a], [, b]) => a.name.localeCompare(b.name));
+  });
 
-  const { sortedNoteIds, noteMap } = useDerivedNotesAtom(
-    (notes) => {
-      const sortedNoteIds: string[] = [];
-      const noteMap: Record<string, NoteDocument> = {};
+  const { sortedNoteIds, noteMap } = useNotesStore((state) => {
+    const sortedNoteIds: string[] = [];
+    const noteMap: Record<string, INote> = {};
 
-      if (!folderId) {
-        Object.entries(notes.notes.notes).forEach(([noteId, note]) => {
-          const parentFolderId = note.parentFolderId;
-          const parentFolder = notes.folders.folders[parentFolderId];
-          if (!parentFolder) {
-            sortedNoteIds.push(noteId);
-            noteMap[noteId] = note;
-          }
-        });
-      } else {
-        Object.entries(notes.notes.notes).forEach(([noteId, note]) => {
-          if (note.parentFolderId === folderId) {
-            sortedNoteIds.push(noteId);
-            noteMap[noteId] = note;
-          }
-        });
-      }
-
-      sortedNoteIds.sort((a, b) => {
-        if (folderId) {
-          return noteMap[a].order - noteMap[b].order;
-        } else {
-          return noteMap[a].title.localeCompare(noteMap[b].title);
+    if (!folderId) {
+      Object.entries(state.noteState.notes).forEach(([noteId, note]) => {
+        const parentFolderId = note.parentFolderId;
+        const parentFolder = state.folderState.folders[parentFolderId];
+        if (!parentFolder) {
+          sortedNoteIds.push(noteId);
+          noteMap[noteId] = note;
         }
       });
+    } else {
+      Object.entries(state.noteState.notes).forEach(([noteId, note]) => {
+        if (note.parentFolderId === folderId) {
+          sortedNoteIds.push(noteId);
+          noteMap[noteId] = note;
+        }
+      });
+    }
 
-      return {
-        sortedNoteIds,
-        noteMap,
-      };
-    },
-    [folderId],
-  );
+    sortedNoteIds.sort((a, b) => {
+      if (folderId) {
+        return noteMap[a].order - noteMap[b].order;
+      } else {
+        return noteMap[a].title.localeCompare(noteMap[b].title);
+      }
+    });
+
+    return {
+      sortedNoteIds,
+      noteMap,
+    };
+  });
 
   // localally sorted nodes allows us to show updates immediately
   const [localSortedNodes, setLocalSortedNodes] = useState(sortedNoteIds);
@@ -116,8 +107,9 @@ export function FolderView(props: FolderViewProps) {
     setLocalSortedNodes(sortedNoteIds);
   }, [sortedNoteIds]);
 
-  const setOpenItem = useSetOpenItem();
+  const setOpenItem = useNotesStore((state) => state.setOpenItem);
 
+  const updateNoteOrder = useNotesStore((state) => state.updateNoteOrder);
   const handleDragEnd = useCallback(
     (event: DragEndEvent) => {
       const activeId = event.active.id as string;
@@ -158,14 +150,10 @@ export function FolderView(props: FolderViewProps) {
           return arrayMove(prev, activeIndex, overIndex);
         });
 
-        updateNoteOrder({
-          campaignId,
-          noteId: activeId,
-          order: updatedOrder,
-        });
+        updateNoteOrder(gameId, activeId, updatedOrder);
       }
     },
-    [campaignId, noteMap, localSortedNodes],
+    [gameId, noteMap, localSortedNodes, updateNoteOrder],
   );
 
   const sensors = useSensors(

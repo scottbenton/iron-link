@@ -5,39 +5,51 @@ import { useTranslation } from "react-i18next";
 
 import { DebouncedConditionMeter } from "components/datasworn/ConditonMeter";
 
-import { updateCharacter } from "api-calls/character/updateCharacter";
+import { useGameCharactersStore } from "stores/gameCharacters.store";
+
+import { IAsset } from "services/asset.service";
 
 import { MoveActionRollButton } from "./MoveActionRollButton";
 import { MoveActionRollChip } from "./MoveActionRollChip";
-import {
-  CampaignRollOptionState,
-  CharacterRollOptionState,
-} from "./common.types";
+import { CharacterRollOptionState } from "./common.types";
 
 export interface ActionRollsProps {
   moveId: string;
   actionRolls: Datasworn.RollableValue[];
-  character?: { id: string; data: CharacterRollOptionState };
-  campaignData: CampaignRollOptionState;
+  character?: {
+    id: string;
+    data: CharacterRollOptionState;
+    assets: Record<string, IAsset>;
+  };
+  gameAssets: Record<string, IAsset>;
+  gameConditionMeters: Record<string, number>;
   sx?: SxProps<Theme>;
   includeAdds?: boolean;
 }
 
 export function ActionRolls(props: ActionRollsProps) {
-  const { moveId, actionRolls, character, campaignData, sx, includeAdds } =
-    props;
+  const {
+    moveId,
+    actionRolls,
+    character,
+    gameAssets,
+    gameConditionMeters,
+    sx,
+    includeAdds,
+  } = props;
   const { t } = useTranslation();
   const characterId = character?.id;
+
+  const updateAdds = useGameCharactersStore(
+    (store) => store.updateCharacterAdds,
+  );
   const handleAddsChange = useCallback(
     (newAdds: number) => {
       if (characterId) {
-        updateCharacter({
-          characterId,
-          character: { adds: newAdds },
-        }).catch(() => {});
+        updateAdds(characterId, newAdds).catch(() => {});
       }
     },
-    [characterId],
+    [characterId, updateAdds],
   );
   return (
     <Box display="flex" flexWrap="wrap" gap={1} sx={sx}>
@@ -49,7 +61,9 @@ export function ActionRolls(props: ActionRollsProps) {
               key={index}
               characterId={character.id}
               characterData={character.data}
-              campaignData={campaignData}
+              characterAssets={character.assets}
+              gameAssets={gameAssets}
+              gameConditionMeters={gameConditionMeters}
               moveId={moveId}
             />
           ) : (

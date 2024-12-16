@@ -2,7 +2,7 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { Box, Card, CardActionArea, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
-import { GameTypeIcon } from "assets/CampaignTypeIcon/CampaignTypeIcon";
+import { GameTypeIcon } from "assets/GameTypeIcon";
 
 import { SectionHeading } from "components/SectionHeading";
 

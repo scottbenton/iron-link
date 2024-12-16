@@ -3,7 +3,7 @@ import { Box, Typography } from "@mui/material";
 import { PortraitAvatar } from "components/characters/PortraitAvatar";
 import { InitiativeStatusChip } from "components/datasworn/InitiativeStatusChip";
 
-import { useCampaignPermissions } from "pages/games/gamePageLayout/hooks/usePermissions";
+import { useGamePermissions } from "pages/games/gamePageLayout/hooks/usePermissions";
 
 import {
   CharacterPermissionType,
@@ -18,8 +18,7 @@ import { useCharacterId } from "../../hooks/useCharacterId";
 export function CharacterDetails() {
   const characterId = useCharacterId();
   const isCharacterOwner =
-    useCampaignPermissions().characterPermission ===
-    CharacterPermissionType.Owner;
+    useGamePermissions().characterPermission === CharacterPermissionType.Owner;
 
   const name = useGameCharacter((character) => character?.name ?? "");
   const initiativeStatus = useGameCharacter(

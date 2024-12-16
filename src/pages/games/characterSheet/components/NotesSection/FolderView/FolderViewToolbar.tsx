@@ -5,14 +5,10 @@ import { Box, Button, IconButton, Tooltip } from "@mui/material";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { useDerivedNotesAtom } from "pages/games/gamePageLayout/atoms/notes.atom";
 import { useGameId } from "pages/games/gamePageLayout/hooks/useGameId";
 
-import { addFolder } from "api-calls/notes/addFolder";
-import { addNote } from "api-calls/notes/addNote";
-import { updateNoteFolder } from "api-calls/notes/updateNoteFolder";
-
 import { useUID } from "stores/auth.store";
+import { useNotesStore } from "stores/notes.store";
 
 import { NoteToolbar } from "../Layout";
 import { useFolderPermission } from "../NoteView/useFolderPermissions";
@@ -30,37 +26,26 @@ export function FolderViewToolbar(props: FolderViewToolbarProps) {
   const { t } = useTranslation();
 
   const uid = useUID();
-  const campaignId = useGameId();
+  const gameId = useGameId();
 
-  const folder = useDerivedNotesAtom(
-    (notes) => {
-      return notes.folders.folders[folderId];
-    },
-    [folderId],
-  );
+  const folder = useNotesStore((store) => store.folderState.folders[folderId]);
   const parentFolderId = folder?.parentFolderId;
 
-  const parentFolder = useDerivedNotesAtom(
-    (notes) => {
-      return parentFolderId ? notes.folders.folders[parentFolderId] : undefined;
-    },
-    [parentFolderId],
+  const parentFolder = useNotesStore((store) =>
+    parentFolderId ? store.folderState.folders[parentFolderId] : undefined,
   );
 
-  const nextNoteOrder = useDerivedNotesAtom(
-    (atom) => {
-      let highestOrder = Number.MIN_VALUE;
-      Object.values(atom.notes.notes).forEach((note) => {
-        if (note.parentFolderId === folderId) {
-          if (note.order > highestOrder) {
-            highestOrder = note.order;
-          }
+  const nextNoteOrder = useNotesStore((store) => {
+    let highestOrder = Number.MIN_VALUE;
+    Object.values(store.noteState.notes).forEach((note) => {
+      if (note.parentFolderId === folderId) {
+        if (note.order > highestOrder) {
+          highestOrder = note.order;
         }
-      });
-      return highestOrder + 1;
-    },
-    [folderId],
-  );
+      }
+    });
+    return highestOrder + 1;
+  });
 
   const isImmutableFolder = !folder?.parentFolderId;
 
@@ -72,43 +57,35 @@ export function FolderViewToolbar(props: FolderViewToolbarProps) {
 
   const { canEdit, canDelete, isInGuideFolder } = useFolderPermission(folderId);
 
+  const addFolder = useNotesStore((store) => store.createFolder);
+  const addNote = useNotesStore((store) => store.createNote);
+  const updateNoteFolderName = useNotesStore((store) => store.updateFolderName);
+
   // Something's gone wrong, lets stop before we break things
   if (!folder || folderId === FAKE_ROOT_NOTE_FOLDER_KEY) return null;
 
   const createFolder = (name: string) => {
     if (uid) {
-      addFolder({
+      addFolder(
         uid,
-        campaignId,
-        parentFolderId: folderId,
+        gameId,
+        folderId,
         name,
-        order: 1,
-        readPermissions: folder.readPermissions,
-        editPermissions: folder.editPermissions,
-      }).catch(() => {});
+        1,
+        folder.readPermissions,
+        folder.editPermissions,
+      ).catch(() => {});
     }
   };
 
   const createNote = (name: string) => {
     if (uid) {
-      addNote({
-        uid,
-        campaignId,
-        parentFolderId: folderId,
-        title: name,
-        order: nextNoteOrder,
-      }).catch(() => {});
+      addNote(uid, gameId, folderId, name, nextNoteOrder).catch(() => {});
     }
   };
 
   const renameCurrentFolder = (name: string) => {
-    updateNoteFolder({
-      campaignId,
-      folderId,
-      noteFolder: {
-        name,
-      },
-    }).catch(() => {});
+    updateNoteFolderName(gameId, folderId, name).catch(() => {});
   };
 
   return (

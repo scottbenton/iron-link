@@ -3,11 +3,11 @@ import { Box, Checkbox, Stack, Typography } from "@mui/material";
 
 import { MarkdownRenderer } from "components/MarkdownRenderer";
 
-import { AssetDocument } from "api-calls/assets/_asset.type";
+import { IAsset } from "services/asset.service";
 
 export interface AssetAbilitiesProps {
   abilities: Datasworn.AssetAbility[];
-  assetDocument?: AssetDocument;
+  assetDocument?: IAsset;
   onAbilityToggle?: (abilityIndex: number, checked: boolean) => void;
   hideUnavailableAbilities?: boolean;
 }

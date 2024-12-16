@@ -11,18 +11,19 @@ import {
   useStatRules,
 } from "stores/dataswornTree.store";
 
+import { IAsset } from "services/asset.service";
+
 import { MoveActionAssetControl } from "./MoveActionAssetControl";
-import {
-  CampaignRollOptionState,
-  CharacterRollOptionState,
-} from "./common.types";
+import { CharacterRollOptionState } from "./common.types";
 
 export interface MoveActionRollButtonProps {
   moveId: string;
   disabled?: boolean;
   rollOption: Datasworn.RollableValue;
   characterData: CharacterRollOptionState;
-  campaignData: CampaignRollOptionState;
+  characterAssets: Record<string, IAsset>;
+  gameAssets: Record<string, IAsset>;
+  gameConditionMeters: Record<string, number>;
   characterId: string;
 }
 
@@ -32,7 +33,7 @@ export function MoveActionRollButton(props: MoveActionRollButtonProps) {
     rollOption,
     disabled,
     characterData,
-    campaignData,
+    gameConditionMeters,
     characterId,
   } = props;
   const { t } = useTranslation();
@@ -75,7 +76,7 @@ export function MoveActionRollButton(props: MoveActionRollButtonProps) {
     const conditionMeterRule = conditionMeters[rollOption.condition_meter];
     const currentValue =
       (conditionMeterRule.shared
-        ? campaignData?.conditionMeters?.[rollOption.condition_meter]
+        ? gameConditionMeters[rollOption.condition_meter]
         : characterData.conditionMeters?.[rollOption.condition_meter]) ??
       conditionMeterRule.value;
 

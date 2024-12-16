@@ -10,17 +10,17 @@ import { useRollStatAndAddToLog } from "pages/games/hooks/useRollStatAndAddToLog
 
 import { useDataswornTree } from "stores/dataswornTree.store";
 
-import {
-  CampaignRollOptionState,
-  CharacterRollOptionState,
-} from "./common.types";
+import { IAsset } from "services/asset.service";
+
+import { CharacterRollOptionState } from "./common.types";
 
 export interface MoveActionAssetControlProps {
   moveId: string;
   disabled?: boolean;
   rollOption: Datasworn.AssetControlValueRef;
   characterData: CharacterRollOptionState;
-  campaignData: CampaignRollOptionState;
+  characterAssets: Record<string, IAsset>;
+  gameAssets: Record<string, IAsset>;
   characterId: string;
 }
 
@@ -30,15 +30,13 @@ export function MoveActionAssetControl(props: MoveActionAssetControlProps) {
     rollOption,
     disabled,
     characterData,
-    campaignData,
+    characterAssets,
+    gameAssets,
     characterId,
   } = props;
 
   const { t } = useTranslation();
   const tree = useDataswornTree();
-
-  const characterAssets = characterData.assets;
-  const campaignAssets = campaignData.assets;
 
   const rollStat = useRollStatAndAddToLog();
 
@@ -55,7 +53,7 @@ export function MoveActionAssetControl(props: MoveActionAssetControlProps) {
       const matches = IdParser.getMatches(assetWildcard as Primary, tree);
       matches.forEach((asset) => {
         if (asset.type === "asset") {
-          Object.entries({ ...characterAssets, ...campaignAssets }).forEach(
+          Object.entries({ ...characterAssets, ...gameAssets }).forEach(
             ([assetDocumentId, assetDocument]) => {
               const control = asset.controls?.[rollOption.control];
               if (control && assetDocument.id === asset._id) {
@@ -88,7 +86,7 @@ export function MoveActionAssetControl(props: MoveActionAssetControlProps) {
     });
 
     return actualAssetValues;
-  }, [campaignAssets, characterAssets, rollOption, tree, t]);
+  }, [gameAssets, characterAssets, rollOption, tree, t]);
 
   return (
     <>

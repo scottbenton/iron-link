@@ -1,8 +1,7 @@
 import { LinearProgress } from "@mui/material";
 
-import { useDerivedNotesAtom } from "pages/games/gamePageLayout/atoms/notes.atom";
-
 import { useUID } from "stores/auth.store";
+import { useNotesStore } from "stores/notes.store";
 
 import { DefaultNoteChooser } from "./DefaultNoteChooser";
 import { FolderView, FolderViewToolbar } from "./FolderView";
@@ -10,15 +9,15 @@ import { OpenItemWrapper } from "./Layout";
 import { NoteView } from "./NoteView";
 
 export function NotesSection() {
-  const areAnyNotesLoading = useDerivedNotesAtom((notes) => {
-    return notes.notes.loading || notes.folders.loading;
-  });
+  const areBasicNotesLoading = useNotesStore(
+    (store) => store.folderState.loading || store.noteState.loading,
+  );
 
   const uid = useUID();
 
-  const openItem = useDerivedNotesAtom((notes) => notes.openItem);
+  const openItem = useNotesStore((store) => store.openItem);
 
-  if (areAnyNotesLoading) {
+  if (areBasicNotesLoading) {
     return <LinearProgress />;
   }
 

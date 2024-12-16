@@ -3,14 +3,11 @@ import { Primary } from "@datasworn/core/dist/StringId";
 
 import { getAsset } from "hooks/datasworn/useAsset";
 
-import { AssetDocument } from "api-calls/assets/_asset.type";
-
 import { TrackTypes } from "repositories/tracks.repository";
 
-import {
-  CampaignRollOptionState,
-  CharacterRollOptionState,
-} from "./common.types";
+import { IAsset } from "services/asset.service";
+
+import { CharacterRollOptionState } from "./common.types";
 
 interface ActionRollGroups {
   stats: Record<string, Datasworn.RollableValue>;
@@ -27,8 +24,9 @@ interface RollOptionGroup {
 
 export function extractRollOptions(
   move: Datasworn.Move,
-  campaignRollOptionState: CampaignRollOptionState,
+  gameAssets: Record<string, IAsset>,
   characterRollOptionStates: Record<string, CharacterRollOptionState>,
+  characterAssets: Record<string, Record<string, IAsset>>,
   tree: Record<string, Datasworn.RulesPackage>,
 ): {
   sharedEnhancements: AssetEnhancements;
@@ -37,13 +35,13 @@ export function extractRollOptions(
 } {
   const validSharedActionRolls = extractValidActionRollOptions(
     move,
-    campaignRollOptionState.assets,
+    gameAssets,
     undefined,
     tree,
   );
   const sharedAssetEnhancements = getEnhancementsFromAssets(
     move._id,
-    campaignRollOptionState.assets,
+    gameAssets,
     tree,
   );
   const specialTrackConditions = getSpecialTrackConditions(move);
@@ -51,9 +49,10 @@ export function extractRollOptions(
   const characterOptions: Record<string, RollOptionGroup> = {};
   Object.entries(characterRollOptionStates).forEach(
     ([characterId, character]) => {
+      const assets = characterAssets[characterId] ?? {};
       const validActionRolls = extractValidActionRollOptions(
         move,
-        character.assets,
+        assets,
         character,
         tree,
       );
@@ -76,11 +75,7 @@ export function extractRollOptions(
         },
       };
 
-      const enhancements = getEnhancementsFromAssets(
-        move._id,
-        character.assets,
-        tree,
-      );
+      const enhancements = getEnhancementsFromAssets(move._id, assets, tree);
 
       Object.values({ ...sharedAssetEnhancements, ...enhancements }).forEach(
         (assetEnhancement) => {
@@ -136,7 +131,7 @@ export type AssetEnhancements = Record<
 
 function getEnhancementsFromAssets(
   moveId: string,
-  assetDocuments: Record<string, AssetDocument>,
+  assetDocuments: Record<string, IAsset>,
   tree: Record<string, Datasworn.RulesPackage>,
 ): AssetEnhancements {
   const activeAssetMoveEnhancements: Record<
@@ -264,7 +259,7 @@ function extractActionRollOptionsFromEnhancement(
 
 function extractValidActionRollOptions(
   move: Datasworn.Move,
-  assets: Record<string, AssetDocument>,
+  assets: Record<string, IAsset>,
   character: CharacterRollOptionState | undefined,
   tree: Record<string, Datasworn.RulesPackage>,
 ): ActionRollGroups {
@@ -301,7 +296,7 @@ function extractValidActionRollOptions(
 
 function canUseAssetControlRoll(
   option: Datasworn.AssetControlValueRef,
-  assets: Record<string, AssetDocument>,
+  assets: Record<string, IAsset>,
   tree: Record<string, Datasworn.RulesPackage>,
 ): boolean {
   return (

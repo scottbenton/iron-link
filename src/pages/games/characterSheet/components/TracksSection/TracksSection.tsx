@@ -1,7 +1,7 @@
 import { Box, LinearProgress } from "@mui/material";
 
 import { useGameId } from "pages/games/gamePageLayout/hooks/useGameId";
-import { useCampaignPermissions } from "pages/games/gamePageLayout/hooks/usePermissions";
+import { useGamePermissions } from "pages/games/gamePageLayout/hooks/usePermissions";
 
 import { GamePermission } from "stores/game.store";
 import { useTracksStore } from "stores/tracks.store";
@@ -34,8 +34,7 @@ export function TracksSection() {
       }),
   );
 
-  const canEdit =
-    useCampaignPermissions().gamePermission !== GamePermission.Viewer;
+  const canEdit = useGamePermissions().gamePermission !== GamePermission.Viewer;
 
   return (
     <>

@@ -23,7 +23,10 @@ import {
   useGameCharactersStore,
 } from "stores/gameCharacters.store";
 
-import { MAX_FILE_SIZE, MAX_FILE_SIZE_LABEL } from "lib/storage.lib";
+import {
+  MAX_FILE_SIZE,
+  MAX_FILE_SIZE_LABEL,
+} from "repositories/storage.repository";
 
 import { useCharacterId } from "../../hooks/useCharacterId";
 
@@ -57,7 +60,6 @@ export function CharacterDetailsDialog(props: CharacterDetailsDialogProps) {
   );
 
   const initialFileUrl = useCharacterPortrait(characterId ?? "").url;
-  console.debug(initialFileUrl);
 
   const [isLoading, setIsLoading] = useState(false);
 

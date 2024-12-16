@@ -12,7 +12,7 @@ import {
 import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { useCampaignPermissions } from "pages/games/gamePageLayout/hooks/usePermissions";
+import { useGamePermissions } from "pages/games/gamePageLayout/hooks/usePermissions";
 
 import { CharacterPermissionType } from "stores/gameCharacters.store";
 
@@ -25,8 +25,7 @@ export function CharacterSettingsMenu() {
   const [isSettingsMenuOpen, setIsSettingsMenuOpen] = useState(false);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const isCharacterOwner =
-    useCampaignPermissions().characterPermission ===
-    CharacterPermissionType.Owner;
+    useGamePermissions().characterPermission === CharacterPermissionType.Owner;
 
   const { t } = useTranslation();
 

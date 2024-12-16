@@ -1,16 +1,11 @@
 import { Breadcrumbs, Link, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
-import {
-  useDerivedNotesAtom,
-  useSetOpenItem,
-} from "pages/games/gamePageLayout/atoms/notes.atom";
-import { useCampaignPermissions } from "pages/games/gamePageLayout/hooks/usePermissions";
-
-import { GUIDE_NOTE_FOLDER_NAME } from "api-calls/notes/_getRef";
+import { useGamePermissions } from "pages/games/gamePageLayout/hooks/usePermissions";
 
 import { useUID } from "stores/auth.store";
 import { GamePermission } from "stores/game.store";
+import { GUIDE_NOTE_FOLDER_NAME, useNotesStore } from "stores/notes.store";
 
 import { getItemName } from "../FolderView/getFolderName";
 import { FAKE_ROOT_NOTE_FOLDER_KEY } from "../FolderView/rootNodeName";
@@ -26,78 +21,74 @@ export function NoteBreadcrumbs() {
 
   const uid = useUID();
 
-  const setOpenItem = useSetOpenItem();
+  const setOpenItem = useNotesStore((store) => store.setOpenItem);
 
-  const { gameType: campaignType, gamePermission: campaignPermission } =
-    useCampaignPermissions();
-  const hasCampaignNoteChildren = useDerivedNotesAtom(
+  const { gameType, gamePermission: campaignPermission } = useGamePermissions();
+  const hasCampaignNoteChildren = useNotesStore(
     (store) =>
-      Object.values(store.notes.notes).some(
+      Object.values(store.noteState.notes).some(
         (note) => note.parentFolderId === GUIDE_NOTE_FOLDER_NAME,
       ) ||
-      Object.values(store.folders.folders).some(
+      Object.values(store.folderState.folders).some(
         (folder) => folder.parentFolderId === GUIDE_NOTE_FOLDER_NAME,
       ),
   );
 
   let hasAccessToMoreThanOneTopLevelFolder = false;
   if (
-    (campaignPermission === GamePermission.Guide && campaignType !== "solo") ||
+    (campaignPermission === GamePermission.Guide && gameType !== "solo") ||
     hasCampaignNoteChildren
   ) {
     hasAccessToMoreThanOneTopLevelFolder = true;
   }
 
-  const breadcrumbItems: BreadcrumbItem[] = useDerivedNotesAtom(
-    (store) => {
-      let item = store.openItem;
+  const breadcrumbItems: BreadcrumbItem[] = useNotesStore((store) => {
+    let item = store.openItem;
 
-      const breadcrumbs: BreadcrumbItem[] = [];
+    const breadcrumbs: BreadcrumbItem[] = [];
 
-      while (item) {
-        if (
-          item.type !== "folder" ||
-          item.folderId !== FAKE_ROOT_NOTE_FOLDER_KEY
-        ) {
-          breadcrumbs.push({
-            type: item.type,
-            id: item.type === "folder" ? item.folderId : item.noteId,
-            name:
-              item.type === "folder"
-                ? store.folders.folders[item.folderId]?.name
-                : store.notes.notes[item.noteId]?.title,
-          });
-        }
-
-        const parentFolderId =
-          item.type === "folder"
-            ? store.folders.folders[item.folderId]?.parentFolderId
-            : store.notes.notes[item.noteId]?.parentFolderId;
-        const parentFolder = parentFolderId
-          ? store.folders.folders[parentFolderId]
-          : undefined;
-
-        if (parentFolderId && !parentFolder && uid) {
-          item = { type: "folder", folderId: uid };
-        } else if (parentFolderId && parentFolder) {
-          item = { type: "folder", folderId: parentFolderId };
-        } else {
-          item = undefined;
-        }
-      }
-
-      if (hasAccessToMoreThanOneTopLevelFolder) {
+    while (item) {
+      if (
+        item.type !== "folder" ||
+        item.folderId !== FAKE_ROOT_NOTE_FOLDER_KEY
+      ) {
         breadcrumbs.push({
-          id: FAKE_ROOT_NOTE_FOLDER_KEY,
-          type: "folder",
-          name: FAKE_ROOT_NOTE_FOLDER_KEY,
+          type: item.type,
+          id: item.type === "folder" ? item.folderId : item.noteId,
+          name:
+            item.type === "folder"
+              ? store.folderState.folders[item.folderId]?.name
+              : store.noteState.notes[item.noteId]?.title,
         });
       }
 
-      return breadcrumbs.reverse();
-    },
-    [hasAccessToMoreThanOneTopLevelFolder],
-  );
+      const parentFolderId =
+        item.type === "folder"
+          ? store.folderState.folders[item.folderId]?.parentFolderId
+          : store.noteState.notes[item.noteId]?.parentFolderId;
+      const parentFolder = parentFolderId
+        ? store.folderState.folders[parentFolderId]
+        : undefined;
+
+      if (parentFolderId && !parentFolder && uid) {
+        item = { type: "folder", folderId: uid };
+      } else if (parentFolderId && parentFolder) {
+        item = { type: "folder", folderId: parentFolderId };
+      } else {
+        item = undefined;
+      }
+    }
+
+    if (hasAccessToMoreThanOneTopLevelFolder) {
+      breadcrumbs.push({
+        id: FAKE_ROOT_NOTE_FOLDER_KEY,
+        type: "folder",
+        name: FAKE_ROOT_NOTE_FOLDER_KEY,
+      });
+    }
+
+    return breadcrumbs.reverse();
+  });
 
   if (breadcrumbItems.length > 0) {
     return (
@@ -111,7 +102,7 @@ export function NoteBreadcrumbs() {
                   id: item.id,
                   uid,
                   t,
-                  campaignType,
+                  gameType: gameType,
                 })}
               </Typography>
             ) : (
@@ -120,14 +111,8 @@ export function NoteBreadcrumbs() {
                 component={"button"}
                 onClick={() =>
                   item.type === "folder"
-                    ? setOpenItem({
-                        type: "folder",
-                        folderId: item.id,
-                      })
-                    : setOpenItem({
-                        type: "note",
-                        noteId: item.id,
-                      })
+                    ? setOpenItem("folder", item.id)
+                    : setOpenItem("note", item.id)
                 }
                 sx={{ display: "flex" }}
                 color="textPrimary"
@@ -137,7 +122,7 @@ export function NoteBreadcrumbs() {
                   id: item.id,
                   uid,
                   t,
-                  campaignType,
+                  gameType: gameType,
                 })}
               </Link>
             ),

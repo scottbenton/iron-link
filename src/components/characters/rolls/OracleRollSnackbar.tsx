@@ -1,12 +1,12 @@
-import { OracleTableRoll } from "types/DieRolls.type";
-
 import { useOracleRollable } from "hooks/datasworn/useOracleRollable";
+
+import { IOracleTableRoll } from "services/gameLog.service";
 
 import { RollContainer, RollResult, RollTitle, RollValues } from "./common";
 
 export interface OracleRollSnackbarProps {
   rollId: string | undefined;
-  roll: OracleTableRoll;
+  roll: IOracleTableRoll;
   isExpanded: boolean;
 }
 

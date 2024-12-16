@@ -4,11 +4,11 @@ import { Box } from "@mui/material";
 import { useCallback } from "react";
 import { useTranslation } from "react-i18next";
 
-import { AssetDocument } from "api-calls/assets/_asset.type";
+import { useGameCharacter } from "stores/gameCharacters.store.ts";
+
+import { IAsset } from "services/asset.service.ts";
 
 import { DEFAULT_MOMENTUM } from "../../../data/constants.ts";
-import { useCharacterIdOptional } from "../../../pages/games/characterSheet/hooks/useCharacterId.ts";
-import { useDerivedCharacterState } from "../../../pages/games/characterSheet/hooks/useDerivedCharacterState.ts";
 import { useRollStatAndAddToLog } from "../../../pages/games/hooks/useRollStatAndAddToLog.ts";
 import { ConditionMeter } from "../ConditonMeter";
 import { AssetControls } from "./AssetControls";
@@ -20,7 +20,7 @@ import { AssetTextField } from "./fields/AssetTextField";
 
 export interface AssetControlProps {
   controlId: string;
-  assetDocument?: AssetDocument;
+  assetDocument?: IAsset;
   control: Datasworn.AssetControlField | Datasworn.AssetAbilityControlField;
   value?: boolean | string | number;
   onControlChange?: (
@@ -42,10 +42,9 @@ export function AssetControl(props: AssetControlProps) {
 
   const { t } = useTranslation();
 
-  const characterId = useCharacterIdOptional();
-  const { momentum } = useDerivedCharacterState(characterId, (character) => ({
-    momentum: character?.characterDocument.data?.momentum ?? DEFAULT_MOMENTUM,
-  }));
+  const momentum = useGameCharacter(
+    (character) => character?.momentum ?? DEFAULT_MOMENTUM,
+  );
 
   const rollConditionMeter = useRollStatAndAddToLog();
   const handleRoll = useCallback(() => {

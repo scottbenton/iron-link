@@ -7,9 +7,9 @@ import { GridLayout } from "components/Layout";
 import { AssetCard } from "components/datasworn/AssetCard";
 import { AssetCardDialog } from "components/datasworn/AssetCardDialog/AssetCardDialog";
 
-import { AssetDocument } from "api-calls/assets/_asset.type";
-
 import { useCreateCharacterStore } from "stores/createCharacter.store";
+
+import { IAsset } from "services/asset.service";
 
 export function Assets() {
   const characterAssets = useCreateCharacterStore(
@@ -77,7 +77,7 @@ export function Assets() {
 
 interface AssetGridCardProps {
   index: number;
-  assetDocument: AssetDocument;
+  assetDocument: IAsset;
 }
 
 function AssetGridCard(props: AssetGridCardProps) {

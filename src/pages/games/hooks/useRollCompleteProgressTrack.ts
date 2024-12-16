@@ -1,18 +1,19 @@
 import { useCallback } from "react";
 import { useTranslation } from "react-i18next";
 
-import { RollResult, RollType, TrackProgressRoll } from "types/DieRolls.type";
-
-import { addRoll } from "api-calls/game-log/addRoll";
-
 import { useAddRollSnackbar, useSetAnnouncement } from "stores/appState.store";
 import { useUID } from "stores/auth.store";
+import { useGameLogStore } from "stores/gameLog.store";
 
 import { getRollResultLabel } from "data/rollResultLabel";
 
 import { createId } from "lib/id.lib";
 
+import { RollType } from "repositories/shared.types";
+import { RollResult } from "repositories/shared.types";
 import { TrackTypes } from "repositories/tracks.repository";
+
+import { ITrackProgressRoll } from "services/gameLog.service";
 
 import { getTrackTypeLabel } from "../characterSheet/components/TracksSection/common";
 import { useCharacterIdOptional } from "../characterSheet/hooks/useCharacterId";
@@ -30,6 +31,7 @@ export function useRollCompleteProgressTrack() {
   const characterId = useCharacterIdOptional();
   const isCharacterOwner = useIsOwnerOfCharacter();
 
+  const addRoll = useGameLogStore((store) => store.createLog);
   const addRollToScreen = useAddRollSnackbar();
   const announce = useSetAnnouncement();
 
@@ -51,7 +53,7 @@ export function useRollCompleteProgressTrack() {
         result = RollResult.Miss;
       }
 
-      const trackProgressRoll: TrackProgressRoll = {
+      const trackProgressRoll: ITrackProgressRoll = {
         type: RollType.TrackProgress,
         rollLabel: trackLabel,
         timestamp: new Date(),
@@ -62,17 +64,13 @@ export function useRollCompleteProgressTrack() {
         result,
         characterId: isCharacterOwner ? (characterId ?? null) : null,
         uid,
-        gmsOnly: false,
+        guidesOnly: false,
         moveId,
       };
       const rollId = createId();
 
       addRollToScreen(rollId, trackProgressRoll);
-      addRoll({
-        gameId,
-        rollId,
-        roll: trackProgressRoll,
-      }).catch(() => {});
+      addRoll(gameId, rollId, trackProgressRoll).catch(() => {});
 
       announce(
         t(
@@ -91,7 +89,16 @@ export function useRollCompleteProgressTrack() {
 
       return result;
     },
-    [announce, addRollToScreen, gameId, characterId, uid, isCharacterOwner, t],
+    [
+      announce,
+      addRollToScreen,
+      gameId,
+      characterId,
+      uid,
+      isCharacterOwner,
+      t,
+      addRoll,
+    ],
   );
 
   return rollProgressTrack;

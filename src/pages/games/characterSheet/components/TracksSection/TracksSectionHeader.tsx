@@ -10,7 +10,7 @@ import {
 import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { useCampaignPermissions } from "pages/games/gamePageLayout/hooks/usePermissions";
+import { useGamePermissions } from "pages/games/gamePageLayout/hooks/usePermissions";
 
 import { GamePermission } from "stores/game.store";
 import { useTracksStore } from "stores/tracks.store";
@@ -58,7 +58,7 @@ export function TracksSectionHeader(props: TracksSectionHeaderProps) {
   };
 
   const isPlayer =
-    useCampaignPermissions().gamePermission !== GamePermission.Viewer;
+    useGamePermissions().gamePermission !== GamePermission.Viewer;
 
   return (
     <Box

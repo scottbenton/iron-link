@@ -3,11 +3,11 @@ import deepEqual from "fast-deep-equal";
 import { immer } from "zustand/middleware/immer";
 import { createWithEqualityFn } from "zustand/traditional";
 
-import { Roll } from "types/DieRolls.type";
-
 import { ColorScheme } from "repositories/shared.types";
 
-export type VisibleRoll = { id?: string; roll: Roll };
+import { IGameLog } from "services/gameLog.service";
+
+export type VisibleRoll = { id?: string; roll: IGameLog };
 
 interface AppStateState {
   announcement: string | null;
@@ -31,8 +31,8 @@ interface AppStateActions {
 
   setColorScheme: (colorScheme: ColorScheme) => void;
 
-  addRoll: (rollId: string | undefined, roll: Roll) => void;
-  updateRollIfPresent: (rollId: string, roll: Roll) => void;
+  addRoll: (rollId: string | undefined, roll: IGameLog) => void;
+  updateRollIfPresent: (rollId: string, roll: IGameLog) => void;
   clearRoll: (index: number) => void;
   clearAllRolls: () => void;
 }

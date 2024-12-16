@@ -4,18 +4,16 @@ import { useParams } from "react-router-dom";
 
 import { useSnackbar } from "providers/SnackbarProvider";
 
-import { OracleTableRoll } from "types/DieRolls.type";
-
 import { useRollOracle } from "hooks/useRollOracle";
-
-import { addRoll } from "api-calls/game-log/addRoll";
 
 import { useAddRollSnackbar } from "stores/appState.store";
 import { useUID } from "stores/auth.store";
+import { useGameCharacter } from "stores/gameCharacters.store";
+import { useGameLogStore } from "stores/gameLog.store";
 
 import { createId } from "lib/id.lib";
 
-import { useDerivedCharacterState } from "../characterSheet/hooks/useDerivedCharacterState";
+import { IOracleTableRoll } from "services/gameLog.service";
 
 export function useRollOracleAndAddToLog() {
   // TODO - remove ?? "" and handle the case where there is no UID
@@ -25,10 +23,7 @@ export function useRollOracleAndAddToLog() {
     gameId?: string;
   }>();
 
-  const characterOwner = useDerivedCharacterState(
-    characterId,
-    (character) => character?.characterDocument.data?.uid,
-  );
+  const characterOwner = useGameCharacter((character) => character?.uid);
 
   const addRollSnackbar = useAddRollSnackbar();
 
@@ -37,12 +32,13 @@ export function useRollOracleAndAddToLog() {
   const { error } = useSnackbar();
 
   const rollOracle = useRollOracle();
+  const addRoll = useGameLogStore((store) => store.createLog);
 
   const handleRollOracle = useCallback(
     (
       oracleId: string,
-      gmOnly: boolean = false,
-    ): { id: string | undefined; result: OracleTableRoll | undefined } => {
+      guidesOnly: boolean = false,
+    ): { id: string | undefined; result: IOracleTableRoll | undefined } => {
       const result = rollOracle(oracleId);
       if (result) {
         const resultWithAdditions = {
@@ -50,13 +46,11 @@ export function useRollOracleAndAddToLog() {
           uid,
           characterId:
             characterId && characterOwner === uid ? characterId : null,
-          gmOnly,
+          guidesOnly,
         };
         if (gameId) {
           const rollId = createId();
-          addRoll({ gameId, rollId, roll: resultWithAdditions }).catch(
-            () => {},
-          );
+          addRoll(gameId, rollId, resultWithAdditions).catch(() => {});
           addRollSnackbar(rollId, resultWithAdditions);
           return {
             id: rollId,
@@ -87,6 +81,7 @@ export function useRollOracleAndAddToLog() {
       t,
       addRollSnackbar,
       characterOwner,
+      addRoll,
     ],
   );
 

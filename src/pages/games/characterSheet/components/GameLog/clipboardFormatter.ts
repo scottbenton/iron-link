@@ -1,19 +1,19 @@
 import { Datasworn } from "@datasworn/core";
 
-import {
-  ClockProgressionRoll,
-  OracleTableRoll,
-  Roll,
-  RollType,
-  StatRoll,
-  TrackProgressRoll,
-} from "types/DieRolls.type";
-
 import { getMove } from "hooks/datasworn/useMove";
 
 import { getRollResultLabel } from "data/rollResultLabel";
 
+import { RollType } from "repositories/shared.types";
 import { TrackTypes } from "repositories/tracks.repository";
+
+import {
+  IClockProgressionRoll,
+  IGameLog,
+  IOracleTableRoll,
+  IStatRoll,
+  ITrackProgressRoll,
+} from "services/gameLog.service";
 
 export function formatQuote(contents: string) {
   return `<blockquote>${contents}</blockquote>`;
@@ -32,7 +32,7 @@ export function formatParagraph(contents: string) {
 }
 
 export function convertRollToClipboard(
-  roll: Roll,
+  roll: IGameLog,
   tree: Record<string, Datasworn.RulesPackage>,
 ):
   | {
@@ -89,7 +89,7 @@ interface StatRollContents {
 }
 
 export function extractStatRollContents(
-  roll: StatRoll,
+  roll: IStatRoll,
   moveName: string | undefined,
 ): StatRollContents {
   const title = moveName ? `${moveName} (${roll.rollLabel})` : roll.rollLabel;
@@ -144,7 +144,7 @@ interface OracleRollContents {
 }
 
 export function extractOracleRollContents(
-  roll: OracleTableRoll,
+  roll: IOracleTableRoll,
 ): OracleRollContents {
   const title = roll.oracleCategoryName
     ? `${roll.oracleCategoryName} / ${roll.rollLabel}`
@@ -204,7 +204,7 @@ function getTrackTypeLabel(type: TrackTypes) {
 }
 
 export function extractTrackProgressRollContents(
-  roll: TrackProgressRoll,
+  roll: ITrackProgressRoll,
 ): TrackProgressRollContents {
   const title = `${getTrackTypeLabel(roll.trackType)}: ${roll.rollLabel}`;
   const progress = roll.trackProgress + "";
@@ -252,7 +252,7 @@ interface ClockProgressionRollContents {
 }
 
 export function extractClockProgressionRollContents(
-  roll: ClockProgressionRoll,
+  roll: IClockProgressionRoll,
 ): ClockProgressionRollContents {
   const title = roll.rollLabel;
   const rollResult = roll.roll + "";

@@ -10,14 +10,14 @@ import {
 import { useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
-import { OracleTableRoll } from "types/DieRolls.type";
-
 import { getOracleCollection } from "hooks/datasworn/useOracleCollection";
 import { getOracleRollable } from "hooks/datasworn/useOracleRollable";
 import { useRollOracle } from "hooks/useRollOracle";
 
 import { useSetAnnouncement } from "stores/appState.store";
 import { useDataswornTree } from "stores/dataswornTree.store";
+
+import { IOracleTableRoll } from "services/gameLog.service";
 
 export type OracleTextFieldOracleConfig = {
   tableIds: (string | OracleTextFieldOracleConfig)[];
@@ -109,7 +109,7 @@ function checkIfAtLeastOneOracleExists(
 
 function rollOracle(
   oracle: string | OracleTextFieldOracleConfig | undefined,
-  getOracleResult: (oracleId: string) => OracleTableRoll | undefined,
+  getOracleResult: (oracleId: string) => IOracleTableRoll | undefined,
 ): string {
   if (!oracle) return "";
   if (typeof oracle === "string") {

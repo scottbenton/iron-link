@@ -19,14 +19,9 @@ import { useConfirm } from "material-ui-confirm";
 import { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import {
-  useDerivedNotesAtom,
-  useSetOpenItem,
-} from "pages/games/gamePageLayout/atoms/notes.atom";
 import { useGameId } from "pages/games/gamePageLayout/hooks/useGameId";
 
-import { removeNote } from "api-calls/notes/removeNote";
-import { updateNote } from "api-calls/notes/updateNote";
+import { useNotesStore } from "stores/notes.store";
 
 import { NameItemDialog } from "../FolderView/NameItemDialog";
 import { ShareButton } from "../ShareButton";
@@ -43,31 +38,25 @@ export function NoteViewToolbar(props: NoteToolbarContentProps) {
   const { openNoteId, editor, permissions } = props;
 
   const { t } = useTranslation();
-  const campaignId = useGameId();
+  const gameId = useGameId();
 
-  const setOpenNote = useSetOpenItem();
-  const note = useDerivedNotesAtom(
-    (state) => {
-      return state.notes.notes[openNoteId];
-    },
-    [openNoteId],
-  );
+  const setOpenNote = useNotesStore((store) => store.setOpenItem);
+  const note = useNotesStore((store) => {
+    return store.noteState.notes[openNoteId];
+  });
   const noteName = note.title;
   const { isInGuideFolder } = useNotePermission(openNoteId);
 
-  const parentFolderId = useDerivedNotesAtom(
-    (state) => {
-      return state.notes.notes[openNoteId].parentFolderId;
-    },
-    [openNoteId],
-  );
-  const parentFolder = useDerivedNotesAtom(
-    (state) =>
-      parentFolderId ? state.folders.folders[parentFolderId] : undefined,
-    [parentFolderId],
+  const parentFolderId = useNotesStore((store) => {
+    return store.noteState.notes[openNoteId].parentFolderId;
+  });
+  const parentFolder = useNotesStore((store) =>
+    parentFolderId ? store.folderState.folders[parentFolderId] : undefined,
   );
 
   const confirm = useConfirm();
+
+  const deleteNote = useNotesStore((store) => store.deleteNote);
   const handleDelete = useCallback(() => {
     confirm({
       title: t("notes.confirm-note-delete-title", "Delete {{noteName}}", {
@@ -80,16 +69,14 @@ export function NoteViewToolbar(props: NoteToolbarContentProps) {
       confirmationText: t("common.delete", "Delete"),
     })
       .then(() => {
-        setOpenNote({
-          type: "folder",
-          folderId: parentFolderId,
-        });
-        removeNote({ campaignId, noteId: openNoteId }).catch(() => {});
+        setOpenNote("folder", parentFolderId);
+        deleteNote(gameId, openNoteId).catch(() => {});
       })
       .catch(() => {});
   }, [
     confirm,
-    campaignId,
+    gameId,
+    deleteNote,
     openNoteId,
     t,
     setOpenNote,
@@ -101,17 +88,13 @@ export function NoteViewToolbar(props: NoteToolbarContentProps) {
   const handleRename = useCallback(() => {
     setOpenRenameDialog(true);
   }, []);
+
+  const updateNoteName = useNotesStore((store) => store.updateNoteName);
   const renameNote = useCallback(
     (noteName: string) => {
-      updateNote({
-        campaignId,
-        noteId: openNoteId,
-        note: {
-          title: noteName,
-        },
-      }).catch(() => {});
+      updateNoteName(gameId, openNoteId, noteName).catch(() => {});
     },
-    [campaignId, openNoteId],
+    [updateNoteName, gameId, openNoteId],
   );
 
   return (

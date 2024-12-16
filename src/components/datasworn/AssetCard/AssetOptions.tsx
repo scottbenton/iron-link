@@ -1,12 +1,12 @@
 import { Datasworn } from "@datasworn/core";
 import { Stack } from "@mui/material";
 
-import { AssetDocument } from "api-calls/assets/_asset.type";
+import { IAsset } from "services/asset.service";
 
 import { AssetOption } from "./AssetOption";
 
 export interface AssetOptionsProps {
-  assetDocument?: AssetDocument;
+  assetDocument?: IAsset;
   options: Record<
     string,
     Datasworn.AssetOptionField | Datasworn.AssetAbilityOptionField

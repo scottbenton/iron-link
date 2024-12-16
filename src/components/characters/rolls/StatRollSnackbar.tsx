@@ -1,16 +1,16 @@
 import { useTranslation } from "react-i18next";
 
-import { StatRoll } from "types/DieRolls.type";
-
 import { useMove } from "hooks/datasworn/useMove";
 
 import { getRollResultLabel } from "data/rollResultLabel";
+
+import { IStatRoll } from "services/gameLog.service";
 
 import { RollContainer, RollResult, RollTitle, RollValues } from "./common";
 
 export interface StatRollSnackbarProps {
   rollId: string | undefined;
-  roll: StatRoll;
+  roll: IStatRoll;
   isExpanded: boolean;
 }
 

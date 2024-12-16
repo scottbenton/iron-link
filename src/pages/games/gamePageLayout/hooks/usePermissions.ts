@@ -8,7 +8,7 @@ import {
 
 import { GameType } from "repositories/game.repository";
 
-export function useCampaignPermissions() {
+export function useGamePermissions() {
   const characterId = useCharacterIdOptional();
   const gameType = useGameStore(
     (store) => store.game?.gameType ?? GameType.Solo,

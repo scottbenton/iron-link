@@ -1,11 +1,12 @@
-import { useDerivedNotesAtom } from "pages/games/gamePageLayout/atoms/notes.atom";
-import { useCampaignPermissions } from "pages/games/gamePageLayout/hooks/usePermissions";
-
-import { GUIDE_NOTE_FOLDER_NAME } from "api-calls/notes/_getRef";
-import { EditPermissions, NoteFolder } from "api-calls/notes/_notes.type";
+import { useGamePermissions } from "pages/games/gamePageLayout/hooks/usePermissions";
 
 import { useUID } from "stores/auth.store";
 import { GamePermission } from "stores/game.store";
+import { GUIDE_NOTE_FOLDER_NAME, useNotesStore } from "stores/notes.store";
+
+import { EditPermissions } from "repositories/shared.types";
+
+import { INoteFolder } from "services/noteFolders.service";
 
 export interface NotePermissions {
   canChangePermissions: boolean;
@@ -15,9 +16,9 @@ export interface NotePermissions {
 }
 
 export function useNotePermission(noteId: string): NotePermissions {
-  const { writePermissions, noteAuthor, isNoteInGuideFolder } =
-    useDerivedNotesAtom((state) => {
-      const note = state.notes.notes[noteId];
+  const { writePermissions, noteAuthor, isNoteInGuideFolder } = useNotesStore(
+    (store) => {
+      const note = store.noteState.notes[noteId];
       if (!note) {
         return {
           isNoteInGuideFolder: false,
@@ -25,7 +26,7 @@ export function useNotePermission(noteId: string): NotePermissions {
       }
       const noteAuthor = note.creator;
 
-      const parentFolder = state.folders.folders[note.parentFolderId];
+      const parentFolder = store.folderState.folders[note.parentFolderId];
       if (!parentFolder) {
         return { noteAuthor, isNoteInGuideFolder: false };
       }
@@ -37,8 +38,8 @@ export function useNotePermission(noteId: string): NotePermissions {
           isNoteInGuideFolder = true;
           break;
         }
-        const currentFolder: NoteFolder =
-          state.folders.folders[folderIdToCheck];
+        const currentFolder: INoteFolder =
+          store.folderState.folders[folderIdToCheck];
         folderIdToCheck = currentFolder?.parentFolderId;
       }
 
@@ -55,10 +56,11 @@ export function useNotePermission(noteId: string): NotePermissions {
         noteAuthor,
         isNoteInGuideFolder,
       };
-    });
+    },
+  );
 
   const uid = useUID();
-  const { gamePermission: campaignPermission } = useCampaignPermissions();
+  const { gamePermission: campaignPermission } = useGamePermissions();
 
   if (!writePermissions || campaignPermission === GamePermission.Viewer) {
     return {

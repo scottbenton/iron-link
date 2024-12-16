@@ -3,7 +3,7 @@ import { IconButton, Menu, MenuItem } from "@mui/material";
 import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { useDerivedNotesAtom } from "pages/games/gamePageLayout/atoms/notes.atom";
+import { useNotesStore } from "stores/notes.store";
 
 import { MoveDialog } from "../MoveDialog";
 import { useNotePermission } from "../NoteView/useNotePermission";
@@ -20,8 +20,8 @@ export function NoteActionMenu(props: NoteActionMenuProps) {
   const { /**canEdit, canDelete,*/ canChangePermissions } =
     useNotePermission(noteId);
 
-  const parentFolderId = useDerivedNotesAtom(
-    (store) => store.notes.notes[noteId].parentFolderId,
+  const parentFolderId = useNotesStore(
+    (store) => store.noteState.notes[noteId].parentFolderId,
   );
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);

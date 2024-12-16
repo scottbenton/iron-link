@@ -1,24 +1,19 @@
 import { Box, Typography } from "@mui/material";
-import { useAtomValue } from "jotai";
-import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
 import { RollSnackbar } from "components/characters/rolls/RollSnackbar";
 
-import { campaignCharactersAtom } from "pages/games/gamePageLayout/atoms/campaign.characters.atom";
-
-import { Roll } from "types/DieRolls.type";
-
-import { derivedAtomWithEquality } from "atoms/derivedAtomWithEquality";
-
 import { useUID } from "stores/auth.store";
+import { useGameCharactersStore } from "stores/gameCharacters.store";
 import { useUserName } from "stores/users.store";
+
+import { IGameLog } from "services/gameLog.service";
 
 import { NormalRollActions } from "./NormalRollActions";
 
 export interface GameLogEntryProps {
   logId: string;
-  log: Roll;
+  log: IGameLog;
 }
 
 export function GameLogEntry(props: GameLogEntryProps) {
@@ -28,16 +23,8 @@ export function GameLogEntry(props: GameLogEntryProps) {
   const uid = useUID();
 
   const logCharacterId = log.characterId;
-  const logCharacterName = useAtomValue(
-    useMemo(
-      () =>
-        derivedAtomWithEquality(campaignCharactersAtom, (state) =>
-          logCharacterId
-            ? (state[logCharacterId]?.characterDocument.data?.name ?? null)
-            : undefined,
-        ),
-      [logCharacterId],
-    ),
+  const logCharacterName = useGameCharactersStore((state) =>
+    logCharacterId ? state.characters[logCharacterId].name : undefined,
   );
   const logCreatorName = useUserName(log.uid);
 

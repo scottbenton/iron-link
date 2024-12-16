@@ -1,11 +1,13 @@
 import { Datasworn } from "@datasworn/core";
 import { useCallback } from "react";
 
-import { OracleTableRoll, RollType } from "types/DieRolls.type";
-
 import { useDataswornTree } from "stores/dataswornTree.store";
 
 import { rollDie } from "lib/rollDie";
+
+import { RollType } from "repositories/shared.types";
+
+import { IOracleTableRoll } from "services/gameLog.service";
 
 import { getOracleCollection } from "./datasworn/useOracleCollection";
 import { getOracleRollable } from "./datasworn/useOracleRollable";
@@ -26,8 +28,8 @@ export function rollOracle(
   tree: Record<string, Datasworn.RulesPackage>,
   characterId: string | null,
   uid: string,
-  gmsOnly: boolean,
-): OracleTableRoll | undefined {
+  guidesOnly: boolean,
+): IOracleTableRoll | undefined {
   const oracle =
     getOracleRollable(oracleId, tree) ?? getOracleCollection(oracleId, tree);
   // We cannot roll across multiple tables like this
@@ -86,7 +88,7 @@ export function rollOracle(
                 tree,
                 characterId,
                 uid,
-                gmsOnly,
+                guidesOnly,
               );
               if (subResult) {
                 results.push(subResult.result);
@@ -111,7 +113,7 @@ export function rollOracle(
       timestamp: new Date(),
       characterId,
       uid,
-      gmsOnly,
+      guidesOnly,
       roll: rolls,
       result: resultString,
       oracleId: oracle._id,
