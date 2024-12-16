@@ -3,10 +3,9 @@ import { useCallback } from "react";
 import { EmptyState } from "components/Layout/EmptyState";
 import { RtcRichTextEditor } from "components/RichTextEditor";
 
-import { useListenToActiveNoteContent } from "pages/games/gamePageLayout/atoms/notes.atom";
-import { useCampaignId } from "pages/games/gamePageLayout/hooks/useCampaignId";
+import { useGameId } from "pages/games/gamePageLayout/hooks/useGameId";
 
-import { updateNoteContent } from "api-calls/notes/updateNoteContent";
+import { useNotesStore } from "stores/notes.store";
 
 import { NoteToolbar } from "../Layout";
 import { NoteViewToolbar } from "./NoteViewToolbar";
@@ -19,23 +18,32 @@ export interface NoteViewProps {
 export function NoteView(props: NoteViewProps) {
   const { openNoteId } = props;
 
-  const campaignId = useCampaignId();
+  const gameId = useGameId();
+  const updateNoteContent = useNotesStore((store) => store.updateNoteContent);
 
-  const { noteContent, loading, error } =
-    useListenToActiveNoteContent(openNoteId);
+  const { noteContent, loading, error } = useNotesStore((store) => {
+    if (!store.openItem || store.openItem.type === "folder") {
+      return {
+        noteContent: undefined,
+        loading: false,
+        error: "No note open",
+      };
+    } else {
+      return {
+        noteContent: store.openItem.noteContent.data?.notes,
+        loading: store.openItem.noteContent.loading,
+        error: store.openItem.noteContent.error,
+      };
+    }
+  });
 
   const notePermissions = useNotePermission(openNoteId);
 
   const handleSave = useCallback(
     (documentId: string, notes: Uint8Array, isBeaconRequest?: boolean) => {
-      return updateNoteContent({
-        campaignId,
-        noteId: documentId,
-        content: notes,
-        isBeaconRequest,
-      });
+      return updateNoteContent(gameId, documentId, notes, isBeaconRequest);
     },
-    [campaignId],
+    [gameId, updateNoteContent],
   );
 
   if (error) {
@@ -46,8 +54,8 @@ export function NoteView(props: NoteViewProps) {
     <>
       <RtcRichTextEditor
         id={openNoteId}
-        roomPrefix={`notes-${campaignId}-`}
-        documentPassword={campaignId}
+        roomPrefix={`notes-${gameId}-`}
+        documentPassword={gameId}
         Toolbar={({ editor }) => (
           <NoteToolbar>
             {notePermissions.canEdit ? (

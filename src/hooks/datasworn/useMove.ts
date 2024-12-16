@@ -1,7 +1,7 @@
 import { Datasworn, IdParser } from "@datasworn/core";
 import { useEffect, useState } from "react";
 
-import { useDataswornTree } from "atoms/dataswornTree.atom";
+import { useDataswornTree } from "stores/dataswornTree.store";
 
 export function getMove(
   moveId: string,

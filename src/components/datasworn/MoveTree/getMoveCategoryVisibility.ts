@@ -1,4 +1,4 @@
-import { MoveCategoryMap, MoveMap } from "atoms/dataswornRules/useMoves";
+import { MoveCategoryMap, MoveMap } from "stores/dataswornTree.store";
 
 export enum CategoryVisibilityState {
   All,

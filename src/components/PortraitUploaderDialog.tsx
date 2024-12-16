@@ -16,7 +16,10 @@ import AvatarEditor from "react-avatar-editor";
 
 import { useSnackbar } from "providers/SnackbarProvider/useSnackbar";
 
-import { MAX_FILE_SIZE, MAX_FILE_SIZE_LABEL } from "lib/storage.lib";
+import {
+  MAX_FILE_SIZE,
+  MAX_FILE_SIZE_LABEL,
+} from "repositories/storage.repository";
 
 export interface PortraitUploaderDialogProps {
   open: boolean;

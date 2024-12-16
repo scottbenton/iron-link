@@ -5,7 +5,7 @@ import { ProgressTrack } from "components/datasworn/ProgressTrack";
 
 import { useRollCompleteSpecialTrack } from "pages/games/hooks/useRollCompleteSpecialTrack";
 
-import { useSpecialTrackRules } from "atoms/dataswornRules/useSpecialTrackRules";
+import { useSpecialTrackRules } from "stores/dataswornTree.store";
 
 import { CharacterRollOptionState } from "./common.types";
 

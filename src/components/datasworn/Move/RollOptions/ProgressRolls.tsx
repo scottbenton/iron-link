@@ -3,10 +3,11 @@ import { useTranslation } from "react-i18next";
 
 import { ProgressTrack } from "components/datasworn/ProgressTrack";
 
-import { useDerivedCampaignState } from "pages/games/gamePageLayout/hooks/useDerivedCampaignState";
 import { useRollCompleteProgressTrack } from "pages/games/hooks/useRollCompleteProgressTrack";
 
-import { TrackStatus, TrackTypes } from "types/Track.type";
+import { useTracksStore } from "stores/tracks.store";
+
+import { TrackStatus, TrackTypes } from "repositories/tracks.repository";
 
 export interface ProgressRollsProps {
   trackType: TrackTypes;
@@ -21,8 +22,8 @@ export function ProgressRolls(props: ProgressRollsProps) {
 
   const rollTrackProgress = useRollCompleteProgressTrack();
 
-  const tracks = useDerivedCampaignState((campaign) =>
-    Object.entries(campaign.tracks.tracks)
+  const tracks = useTracksStore((store) =>
+    Object.entries(store.tracks)
       .filter(
         ([, track]) =>
           track.type === trackType && track.status === TrackStatus.Active,

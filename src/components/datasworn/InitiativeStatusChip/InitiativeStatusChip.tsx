@@ -2,7 +2,7 @@ import DropdownIcon from "@mui/icons-material/ExpandMore";
 import { Box, Chip, ChipProps, Menu, MenuItem } from "@mui/material";
 import { useState } from "react";
 
-import { InitiativeStatus } from "api-calls/character/_character.type";
+import { InitiativeStatus } from "repositories/character.repository";
 
 import { useInitiativeStatusText } from "./useInitiativeStatusText";
 

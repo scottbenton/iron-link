@@ -1,13 +1,10 @@
 import { useMemo } from "react";
 
-import { useImpactRules } from "atoms/dataswornRules/useImpactRules";
-
-import { useDerivedCurrentCharacterState } from "./useDerivedCharacterState";
+import { useImpactRules } from "stores/dataswornTree.store";
+import { useGameCharacter } from "stores/gameCharacters.store";
 
 export function useMomentumParameters() {
-  const impacts = useDerivedCurrentCharacterState(
-    (store) => store?.characterDocument.data?.debilities ?? {},
-  );
+  const impacts = useGameCharacter((character) => character?.debilities ?? {});
   const { impacts: impactRules } = useImpactRules();
 
   return useMemo(() => {

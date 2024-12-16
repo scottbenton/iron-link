@@ -5,12 +5,14 @@ import { useTranslation } from "react-i18next";
 import { ColorSchemeSelector } from "components/ColorSchemeSelector";
 import { DialogTitleWithCloseButton } from "components/DialogTitleWithCloseButton";
 
-import { updateCharacter } from "api-calls/character/updateCharacter";
+import {
+  useGameCharacter,
+  useGameCharactersStore,
+} from "stores/gameCharacters.store";
 
-import { ColorScheme } from "atoms/theme.atom";
+import { ColorScheme } from "repositories/shared.types";
 
 import { useCharacterId } from "../../hooks/useCharacterId";
-import { useDerivedCurrentCharacterState } from "../../hooks/useDerivedCharacterState";
 
 export interface ColorSchemeDialogProps {
   open: boolean;
@@ -22,8 +24,9 @@ export function ColorSchemeDialog(props: ColorSchemeDialogProps) {
   const { t } = useTranslation();
 
   const characterId = useCharacterId();
-  const colorScheme = useDerivedCurrentCharacterState(
-    (character) => character?.characterDocument.data?.colorScheme,
+  const colorScheme = useGameCharacter((character) => character?.colorScheme);
+  const updateColorScheme = useGameCharactersStore(
+    (store) => store.updateCharacterColorScheme,
   );
 
   const [localColorScheme, setLocalColorScheme] = useState(colorScheme);
@@ -33,12 +36,7 @@ export function ColorSchemeDialog(props: ColorSchemeDialogProps) {
 
   const handleSave = () => {
     if (characterId) {
-      updateCharacter({
-        characterId,
-        character: {
-          colorScheme: localColorScheme,
-        },
-      }).catch(() => {});
+      updateColorScheme(characterId, localColorScheme || null).catch(() => {});
     }
     onClose();
   };

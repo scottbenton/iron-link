@@ -12,7 +12,7 @@ import {
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
-import { useOpenDataswornDialog } from "atoms/dataswornDialog.atom";
+import { useOpenDataswornDialog } from "stores/appState.store";
 
 import { idMap } from "data/idMap";
 

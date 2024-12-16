@@ -2,7 +2,7 @@ import { SxProps, Theme } from "@mui/material";
 
 import { useDebouncedSync } from "hooks/useDebouncedSync";
 
-import { useSetAnnouncement } from "atoms/announcement.atom";
+import { useSetAnnouncement } from "stores/appState.store";
 
 import { ClockCircle, ClockSize } from "./ClockCircle";
 

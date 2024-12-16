@@ -1,24 +1,20 @@
 import ClearIcon from "@mui/icons-material/Close";
 import { Box, Fab, Slide } from "@mui/material";
-import { useParams } from "react-router-dom";
 import { TransitionGroup } from "react-transition-group";
 
 import { NormalRollActions } from "pages/games/characterSheet/components/GameLog/NormalRollActions";
+import { useGameIdOptional } from "pages/games/gamePageLayout/hooks/useGameId";
 
-import {
-  useClearAllRollSnackbars,
-  useClearRollSnackbar,
-  useVisibleRolls,
-} from "atoms/rollDisplay.atom";
+import { useAppState } from "stores/appState.store";
 
 import { RollSnackbar } from "./RollSnackbar";
 
 export function RollSnackbarSection() {
-  const rolls = useVisibleRolls();
-  const clearRoll = useClearRollSnackbar();
-  const clearRolls = useClearAllRollSnackbars();
+  const rolls = useAppState((state) => state.visibleRolls);
+  const clearRoll = useAppState((state) => state.clearRoll);
+  const clearRolls = useAppState((state) => state.clearAllRolls);
 
-  const campaignId = useParams<{ campaignId: string }>().campaignId;
+  const gameId = useGameIdOptional();
 
   return (
     <Box
@@ -50,8 +46,7 @@ export function RollSnackbarSection() {
                 isExpanded={index === array.length - 1}
                 onSnackbarClick={() => clearRoll(index)}
                 actions={
-                  campaignId &&
-                  id && <NormalRollActions rollId={id} roll={roll} />
+                  gameId && id && <NormalRollActions rollId={id} roll={roll} />
                 }
               />
             </Box>

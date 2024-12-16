@@ -7,10 +7,8 @@ import {
   ListSubheader,
 } from "@mui/material";
 
-import {
-  AssetCollectionMap,
-  RootAssetCollections,
-} from "atoms/dataswornRules/useAssets";
+import { RootAssetCollections } from "stores/dataswornTree.store";
+import { AssetCollectionMap } from "stores/dataswornTree.store";
 
 export interface AssetCollectionSidebarProps {
   collectionMap: AssetCollectionMap;

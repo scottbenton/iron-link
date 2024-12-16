@@ -7,43 +7,23 @@ import { GridLayout } from "components/Layout";
 import { AssetCard } from "components/datasworn/AssetCard";
 import { AssetCardDialog } from "components/datasworn/AssetCardDialog/AssetCardDialog";
 
-import { AssetDocument } from "api-calls/assets/_asset.type";
+import { useCreateCharacterStore } from "stores/createCharacter.store";
 
-import { useCreateCharacterAtom } from "../atoms/createCharacter.atom";
+import { IAsset } from "services/asset.service";
 
 export function Assets() {
-  const [character, setCharacter] = useCreateCharacterAtom();
+  const characterAssets = useCreateCharacterStore(
+    (store) => store.characterAssets,
+  );
+  const gameAssets = useCreateCharacterStore((store) => store.gameAssets);
+
+  const addAsset = useCreateCharacterStore((store) => store.addAsset);
+
   const { t } = useTranslation();
 
   const [isAddAssetDialogOpen, setIsAddAssetDialogOpen] = useState(false);
 
-  const handleAssetControlChange = useCallback(
-    (
-      index: number,
-      controlKey: string,
-      value: string | boolean | number,
-      shared: boolean,
-    ) => {
-      setCharacter((prev) => {
-        const newAssets = [...prev[shared ? "gameAssets" : "characterAssets"]];
-        const newAsset = {
-          ...prev[shared ? "gameAssets" : "characterAssets"][index],
-        };
-        if (!newAsset.controlValues) {
-          newAsset.controlValues = {};
-        }
-        newAsset.controlValues[controlKey] = value;
-        newAssets[index] = newAsset;
-        return { ...prev, assets: newAssets };
-      });
-    },
-    [setCharacter],
-  );
-
-  const combinedAssets = [
-    ...character.gameAssets,
-    ...character.characterAssets,
-  ];
+  const combinedAssets = [...gameAssets, ...characterAssets];
 
   return (
     <>
@@ -52,10 +32,8 @@ export function Assets() {
         items={combinedAssets}
         renderItem={(assetDocument, index) => (
           <AssetGridCard
-            index={index}
+            index={assetDocument.shared ? index : index - gameAssets.length}
             assetDocument={assetDocument}
-            setCharacter={setCharacter}
-            onAssetControlChange={handleAssetControlChange}
           />
         )}
         minWidth={300}
@@ -89,35 +67,7 @@ export function Assets() {
         open={isAddAssetDialogOpen}
         handleClose={() => setIsAddAssetDialogOpen(false)}
         handleAssetSelection={(asset) => {
-          setCharacter((prev) => {
-            const newCharacter = { ...prev };
-            if (!asset.shared) {
-              const existingAssets = newCharacter.characterAssets;
-              newCharacter.characterAssets = [
-                ...newCharacter.characterAssets,
-                {
-                  ...asset,
-                  order:
-                    existingAssets.length > 0
-                      ? existingAssets[existingAssets.length - 1].order + 1
-                      : 0,
-                },
-              ];
-            } else {
-              const existingAssets = newCharacter.gameAssets;
-              newCharacter.gameAssets = [
-                ...newCharacter.gameAssets,
-                {
-                  ...asset,
-                  order:
-                    existingAssets.length > 0
-                      ? existingAssets[existingAssets.length - 1].order + 1
-                      : 0,
-                },
-              ];
-            }
-            return newCharacter;
-          });
+          addAsset(asset, asset.shared);
           setIsAddAssetDialogOpen(false);
         }}
       />
@@ -127,27 +77,50 @@ export function Assets() {
 
 interface AssetGridCardProps {
   index: number;
-  assetDocument: AssetDocument;
-  setCharacter: ReturnType<typeof useCreateCharacterAtom>[1];
-  onAssetControlChange: (
-    index: number,
-    controlKey: string,
-    value: string | boolean | number,
-    shared: boolean,
-  ) => void;
+  assetDocument: IAsset;
 }
 
 function AssetGridCard(props: AssetGridCardProps) {
-  const { index, assetDocument, setCharacter, onAssetControlChange } = props;
+  const { index, assetDocument } = props;
   const { t } = useTranslation();
 
+  const toggleAssetAbility = useCreateCharacterStore(
+    (store) => store.toggleAssetAbility,
+  );
+  const updateAssetControl = useCreateCharacterStore(
+    (store) => store.updateAssetControl,
+  );
+  const updateAssetOption = useCreateCharacterStore(
+    (store) => store.updateAssetOption,
+  );
+  const removeAsset = useCreateCharacterStore((store) => store.removeAsset);
+
   const shared = assetDocument.shared;
+
+  const handleAssetAbilityToggle = useCallback(
+    (abilityIndex: number, checked: boolean) => {
+      toggleAssetAbility(index, abilityIndex, checked, shared);
+    },
+    [toggleAssetAbility, index, shared],
+  );
+
   const handleAssetControlChange = useCallback(
     (controlKey: string, value: string | boolean | number) => {
-      onAssetControlChange(index, controlKey, value, shared);
+      updateAssetControl(index, controlKey, value, shared);
     },
-    [onAssetControlChange, index, shared],
+    [updateAssetControl, index, shared],
   );
+
+  const handleAssetOptionChange = useCallback(
+    (optionKey: string, value: string) => {
+      updateAssetOption(index, optionKey, value, shared);
+    },
+    [updateAssetOption, index, shared],
+  );
+
+  const handleRemoveAsset = useCallback(() => {
+    removeAsset(index, shared);
+  }, [removeAsset, index, shared]);
 
   return (
     <AssetCard
@@ -156,58 +129,15 @@ function AssetGridCard(props: AssetGridCardProps) {
       headerActions={
         <IconButton
           aria-label={t("character.assets.remove-asset", "Remove Asset")}
-          onClick={() =>
-            setCharacter((prev) => {
-              if (assetDocument.shared) {
-                const newAssets = [...prev.gameAssets];
-                newAssets.splice(index, 1);
-                return { ...prev, gameAssets: newAssets };
-              } else {
-                const newAssets = [...prev.characterAssets];
-                newAssets.splice(index, 1);
-                return { ...prev, characterAssets: newAssets };
-              }
-            })
-          }
+          onClick={handleRemoveAsset}
           color="inherit"
         >
           <RemoveAssetIcon />
         </IconButton>
       }
-      onAssetAbilityToggle={(abilityIndex, checked) => {
-        setCharacter((prev) => {
-          const newAssets = [
-            ...prev[shared ? "gameAssets" : "characterAssets"],
-          ];
-
-          const newAsset = { ...newAssets[index] };
-          newAsset.enabledAbilities[abilityIndex] = checked;
-          newAssets[index] = newAsset;
-          return {
-            ...prev,
-            [shared ? "gameAssets" : "characterAssets"]: newAssets,
-          };
-        });
-      }}
+      onAssetAbilityToggle={handleAssetAbilityToggle}
       onAssetControlChange={handleAssetControlChange}
-      onAssetOptionChange={(optionKey, value) => {
-        setCharacter((prev) => {
-          const newAssets = [
-            ...prev[shared ? "gameAssets" : "characterAssets"],
-          ];
-
-          const newAsset = { ...newAssets[index] };
-          if (!newAsset.optionValues) {
-            newAsset.optionValues = {};
-          }
-          newAsset.optionValues[optionKey] = value;
-          newAssets[index] = newAsset;
-          return {
-            ...prev,
-            [shared ? "gameAssets" : "characterAssets"]: newAssets,
-          };
-        });
-      }}
+      onAssetOptionChange={handleAssetOptionChange}
       sx={{ height: "100%", width: "100%" }}
     />
   );

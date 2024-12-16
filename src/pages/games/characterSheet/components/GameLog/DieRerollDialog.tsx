@@ -18,35 +18,34 @@ import { useSnackbar } from "providers/SnackbarProvider";
 import { DialogTitleWithCloseButton } from "components/DialogTitleWithCloseButton";
 import { RollSnackbar } from "components/characters/rolls/RollSnackbar";
 
-import { useCampaignId } from "pages/games/gamePageLayout/hooks/useCampaignId";
+import { useGameId } from "pages/games/gamePageLayout/hooks/useGameId.ts";
 import { getRoll } from "pages/games/hooks/useRollStatAndAddToLog";
-
-import { RollResult, StatRoll } from "types/DieRolls.type";
 
 import { useMove } from "hooks/datasworn/useMove";
 
-import { updateLog } from "api-calls/game-log/updateLog";
+import { useGameCharacter } from "stores/gameCharacters.store.ts";
+import { useGameLogStore } from "stores/gameLog.store.ts";
+
+import { RollResult } from "repositories/shared.types.ts";
+
+import { IStatRoll } from "services/gameLog.service.ts";
 
 import { DEFAULT_MOMENTUM } from "../../../../../data/constants.ts";
-import { useCharacterIdOptional } from "../../hooks/useCharacterId";
-import { useDerivedCharacterState } from "../../hooks/useDerivedCharacterState";
 
 export interface DieRerollDialogProps {
   open: boolean;
   handleClose: () => void;
   rollId: string;
-  roll: StatRoll;
+  roll: IStatRoll;
 }
 
 export function DieRerollDialog(props: DieRerollDialogProps) {
   const { open, handleClose, roll, rollId } = props;
 
   const { t } = useTranslation();
-  const campaignId = useCampaignId();
-  const characterId = useCharacterIdOptional();
-  const momentum = useDerivedCharacterState(
-    characterId,
-    (state) => state?.characterDocument.data?.momentum ?? DEFAULT_MOMENTUM,
+  const gameId = useGameId();
+  const momentum = useGameCharacter(
+    (character) => character?.momentum ?? DEFAULT_MOMENTUM,
   );
 
   const { info } = useSnackbar();
@@ -71,7 +70,7 @@ export function DieRerollDialog(props: DieRerollDialogProps) {
   } else if (actionTotal <= challenge1 && actionTotal <= challenge2) {
     result = RollResult.Miss;
   }
-  const updatedRoll: StatRoll = {
+  const updatedRoll: IStatRoll = {
     ...roll,
     action,
     challenge1,
@@ -90,9 +89,10 @@ export function DieRerollDialog(props: DieRerollDialogProps) {
     info(`Rerolled ${dieLabel} die for a new value of ${roll}`);
   };
 
+  const setGameLog = useGameLogStore((store) => store.setGameLog);
   const handleSave = () => {
     setLoading(true);
-    updateLog({ campaignId, logId: rollId, log: updatedRoll })
+    setGameLog(gameId, rollId, updatedRoll)
       .then(() => {
         setLoading(false);
         handleClose();

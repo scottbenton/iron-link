@@ -4,9 +4,9 @@ import { useTranslation } from "react-i18next";
 
 import { useRollCompleteProgressTrack } from "pages/games/hooks/useRollCompleteProgressTrack";
 
-import { TrackTypes } from "types/Track.type";
-
 import { useMove } from "hooks/datasworn/useMove";
+
+import { TrackTypes } from "repositories/tracks.repository";
 
 export interface TrackCompletionMoveButtonProps {
   moveId: string;

@@ -4,8 +4,8 @@ import { useTranslation } from "react-i18next";
 
 import { getAsset } from "hooks/datasworn/useAsset";
 
-import { getRulesetFromId } from "atoms/dataswornRules/getRulesetFromId";
-import { useDataswornTree } from "atoms/dataswornTree.atom";
+import { useDataswornTree } from "stores/dataswornTree.store";
+import { getRulesetFromId } from "stores/dataswornTreeHelpers/getRulesetFromId";
 
 import { source } from "data/askTheOracle";
 
@@ -17,15 +17,15 @@ export function useActiveAssetMoveCategories(): Record<
 > {
   const { t } = useTranslation();
 
-  const { characterAssetDocuments, campaignAssetDocuments } = useActiveAssets();
+  const { characterAssets, gameAssets } = useActiveAssets();
 
   const tree = useDataswornTree();
 
   const activeAssetMoves = useMemo(() => {
     const moves: Record<string, Record<string, Datasworn.EmbeddedMove>> = {};
     Object.values({
-      ...characterAssetDocuments,
-      ...campaignAssetDocuments,
+      ...characterAssets,
+      ...gameAssets,
     }).forEach((assetDocument) => {
       const asset = getAsset(assetDocument.id, tree);
       if (!asset) return;
@@ -45,7 +45,7 @@ export function useActiveAssetMoveCategories(): Record<
       });
     });
     return moves;
-  }, [characterAssetDocuments, campaignAssetDocuments, tree]);
+  }, [characterAssets, gameAssets, tree]);
 
   const assetMoveCategories = useMemo(() => {
     if (Object.keys(activeAssetMoves).length === 0) return {};

@@ -4,20 +4,16 @@ import { useEffect, useState } from "react";
 import { PortraitUploaderDialog } from "components/PortraitUploaderDialog";
 import { PortraitAvatarDisplay } from "components/characters/PortraitAvatar";
 
-import {
-  ICreateCharacterAtom,
-  useCreateCharacterAtom,
-} from "../atoms/createCharacter.atom";
+import { CharacterPortraitSettings } from "stores/createCharacter.store";
 
 export interface ImageInputProps {
-  value: ICreateCharacterAtom["portrait"];
-  onChange: (value: ICreateCharacterAtom["portrait"]) => void;
+  characterName: string;
+  value: CharacterPortraitSettings;
+  onChange: (value: CharacterPortraitSettings) => void;
 }
 
 export function ImageInput(props: ImageInputProps) {
-  const { value, onChange } = props;
-
-  const name = useCreateCharacterAtom()[0].name;
+  const { characterName, value, onChange } = props;
 
   const [dialogOpen, setDialogOpen] = useState(false);
 
@@ -54,7 +50,7 @@ export function ImageInput(props: ImageInputProps) {
         <PortraitAvatarDisplay
           colorful
           size={"large"}
-          name={name}
+          name={characterName}
           portraitUrl={imageUrl}
           portraitSettings={
             value?.position && value?.scale !== undefined
@@ -71,7 +67,7 @@ export function ImageInput(props: ImageInputProps) {
         handleClose={() => setDialogOpen(false)}
         handleUpload={(image, scale, position) => {
           onChange({
-            image,
+            image: typeof image === "string" ? null : image,
             scale,
             position,
           });

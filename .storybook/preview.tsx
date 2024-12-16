@@ -10,12 +10,12 @@ import {
 } from "storybook-addon-remix-react-router";
 
 import "../src/App.css";
-import { useSetDataswornTree } from "../src/atoms/dataswornTree.atom";
 import { RollSnackbarSection } from "../src/components/characters/rolls/RollSnackbarSection";
 import { allDefaultPackages } from "../src/data/datasworn.packages";
 import { i18n } from "../src/i18n/config";
 import { SnackbarProvider } from "../src/providers/SnackbarProvider";
 import { ThemeProvider } from "../src/providers/ThemeProvider";
+import { useUpdateDataswornTree } from "../src/stores/dataswornTree.store";
 import { PreviewHeader } from "./PreviewHeader";
 
 const preview: Preview = {
@@ -33,7 +33,7 @@ const preview: Preview = {
   },
   decorators: [
     (Stories, args) => {
-      useSetDataswornTree(allDefaultPackages);
+      useUpdateDataswornTree(allDefaultPackages);
       const shouldBeCentered = args.tags.includes("centered");
       const isCard = args.tags.includes("card");
       return (

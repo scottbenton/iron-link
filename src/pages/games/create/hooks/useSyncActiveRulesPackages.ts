@@ -1,18 +1,18 @@
 import { Datasworn } from "@datasworn/core";
 import { useMemo } from "react";
 
-import { useSetDataswornTree } from "atoms/dataswornTree.atom";
+import { useUpdateDataswornTree } from "stores/dataswornTree.store";
 
 import {
   defaultBaseRulesets,
   defaultExpansions,
 } from "data/datasworn.packages";
 
-import { ICreateGameAtom } from "../atoms/createGame.atom";
+import { ExpansionConfig, RulesetConfig } from "repositories/game.repository";
 
 export function useSyncActiveRulesPackages(
-  rulesets: ICreateGameAtom["rulesets"],
-  expansions: ICreateGameAtom["expansions"],
+  rulesets: RulesetConfig,
+  expansions: ExpansionConfig,
 ) {
   const activeRulesPackages = useMemo(() => {
     const activePackages: Record<string, Datasworn.RulesPackage> = {};
@@ -33,5 +33,5 @@ export function useSyncActiveRulesPackages(
     return activePackages;
   }, [rulesets, expansions]);
 
-  useSetDataswornTree(activeRulesPackages);
+  useUpdateDataswornTree(activeRulesPackages);
 }

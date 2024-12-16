@@ -2,20 +2,23 @@ import { Datasworn } from "@datasworn/core";
 import { TFunction } from "i18next";
 import { useCallback } from "react";
 import { useTranslation } from "react-i18next";
-import { useParams } from "react-router-dom";
-
-import { RollResult, RollType, StatRoll } from "types/DieRolls.type";
 
 import { getMove } from "hooks/datasworn/useMove";
 
-import { addRoll } from "api-calls/game-log/addRoll";
-
-import { useSetAnnouncement } from "atoms/announcement.atom";
-import { useAuthAtom } from "atoms/auth.atom";
-import { useDataswornTree } from "atoms/dataswornTree.atom";
-import { useAddRollSnackbar } from "atoms/rollDisplay.atom";
+import { useAddRollSnackbar, useSetAnnouncement } from "stores/appState.store";
+import { useUID } from "stores/auth.store";
+import { useDataswornTree } from "stores/dataswornTree.store";
+import { useGameLogStore } from "stores/gameLog.store";
 
 import { createId } from "lib/id.lib";
+
+import { RollType } from "repositories/shared.types";
+import { RollResult } from "repositories/shared.types";
+
+import { IStatRoll } from "services/gameLog.service";
+
+import { useCharacterIdOptional } from "../characterSheet/hooks/useCharacterId";
+import { useGameIdOptional } from "../gamePageLayout/hooks/useGameId";
 
 interface StatRollConfig {
   statId: string;
@@ -29,11 +32,12 @@ interface StatRollConfig {
 }
 
 export function useRollStatAndAddToLog() {
-  const uid = useAuthAtom()[0].uid;
-  const { characterId, campaignId } = useParams<{
-    characterId?: string;
-    campaignId?: string;
-  }>();
+  // TODO - remove ?? "" and handle the case where there is no UID
+  const uid = useUID() ?? "";
+
+  const characterId = useCharacterIdOptional();
+  const gameId = useGameIdOptional();
+
   const dataswornTree = useDataswornTree();
 
   const { t } = useTranslation();
@@ -41,16 +45,20 @@ export function useRollStatAndAddToLog() {
   const announce = useSetAnnouncement();
   const addRollSnackbar = useAddRollSnackbar();
 
+  const addLog = useGameLogStore((store) => store.createLog);
+
   const rollStat = useCallback(
     (config: StatRollConfig) => {
+      const rollId = createId();
       const result = getStatRollResult(
         config,
         uid,
         config.characterId ?? characterId,
       );
 
-      const rollId = uploadRoll(result, campaignId);
-
+      if (gameId) {
+        addLog(gameId, rollId, result).catch(() => {});
+      }
       announceRoll(result, config, dataswornTree, t, announce);
 
       if (!config.hideSnackbar) {
@@ -59,7 +67,16 @@ export function useRollStatAndAddToLog() {
 
       return result;
     },
-    [dataswornTree, uid, characterId, campaignId, t, announce, addRollSnackbar],
+    [
+      dataswornTree,
+      uid,
+      characterId,
+      gameId,
+      t,
+      announce,
+      addRollSnackbar,
+      addLog,
+    ],
   );
 
   return rollStat;
@@ -73,7 +90,7 @@ function getStatRollResult(
   config: StatRollConfig,
   uid: string,
   characterId?: string,
-): StatRoll {
+): IStatRoll {
   const { momentum, statModifier, adds, statLabel, moveId, statId } = config;
 
   const challenge1 = getRoll(10);
@@ -93,14 +110,14 @@ function getStatRollResult(
     result = RollResult.Miss;
   }
 
-  const roll: StatRoll = {
+  const roll: IStatRoll = {
     type: RollType.Stat,
     rollLabel: statLabel,
     timestamp: new Date(),
     characterId: characterId || null,
     uid: uid,
     matchedNegativeMomentum,
-    gmsOnly: false,
+    guidesOnly: false,
     moveId: moveId ?? null,
     rolled: statId,
     action,
@@ -116,20 +133,8 @@ function getStatRollResult(
   return roll;
 }
 
-function uploadRoll(roll: StatRoll, campaignId?: string) {
-  const rollId = createId();
-  if (campaignId) {
-    addRoll({
-      campaignId,
-      rollId,
-      roll,
-    }).catch(() => {});
-  }
-  return rollId;
-}
-
 function announceRoll(
-  roll: StatRoll,
+  roll: IStatRoll,
   rollConfig: StatRollConfig,
   dataswornTree: Record<string, Datasworn.RulesPackage>,
   t: TFunction,

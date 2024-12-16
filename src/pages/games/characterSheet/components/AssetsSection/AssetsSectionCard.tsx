@@ -6,74 +6,60 @@ import { useTranslation } from "react-i18next";
 
 import { AssetCard } from "components/datasworn/AssetCard";
 
-import { AssetDocument } from "api-calls/assets/_asset.type";
-import { removeAsset } from "api-calls/assets/removeAsset";
-import { updateAsset } from "api-calls/assets/updateAsset";
-import { updateAssetCheckbox } from "api-calls/assets/updateAssetCheckbox";
+import { CharacterOrGameId } from "types/CharacterOrGameId.type";
+
+import { useAssetsStore } from "stores/assets.store";
+
+import { IAsset } from "services/asset.service";
 
 export interface AssetsSectionCardProps {
+  id: CharacterOrGameId;
   doesUserOwnCharacter: boolean;
   assetId: string;
-  assetDocument: AssetDocument;
-  characterId: string;
-  campaignId: string;
+  assetDocument: IAsset;
   showUnavailableAbilities: boolean;
 }
 
 function AssetsSectionCardUnMemoized(props: AssetsSectionCardProps) {
   const {
+    id,
     doesUserOwnCharacter,
     assetId,
     assetDocument,
-    characterId,
-    campaignId,
     showUnavailableAbilities,
   } = props;
   const { t } = useTranslation();
 
-  const shared = assetDocument.shared;
+  const toggleAssetAbility = useAssetsStore(
+    (store) => store.toggleAssetAbility,
+  );
   const handleAssetAbilityToggle = useCallback(
     (abilityIndex: number, checked: boolean) => {
-      updateAssetCheckbox({
-        characterId: shared ? undefined : characterId,
-        campaignId: shared ? campaignId : undefined,
-        assetId,
-        abilityIndex,
-        checked,
-      }).catch(() => {});
+      toggleAssetAbility(id, assetId, abilityIndex, checked).catch(() => {});
     },
-    [shared, characterId, campaignId, assetId],
+    [id, assetId, toggleAssetAbility],
   );
 
+  const updateAssetOption = useAssetsStore((store) => store.updateAssetOption);
   const handleAssetOptionChange = useCallback(
     (assetOptionKey: string, value: string) => {
-      updateAsset({
-        characterId: shared ? undefined : characterId,
-        campaignId: shared ? campaignId : undefined,
-        assetId,
-        asset: {
-          [`optionValues.${assetOptionKey}`]: value,
-        },
-      }).catch(() => {});
+      updateAssetOption(id, assetId, assetOptionKey, value).catch(() => {});
     },
-    [shared, assetId, characterId, campaignId],
+    [assetId, id, updateAssetOption],
   );
 
+  const updateAssetControl = useAssetsStore(
+    (store) => store.updateAssetControl,
+  );
   const handleAssetControlChange = useCallback(
     (controlKey: string, controlValue: boolean | string | number) => {
-      updateAsset({
-        characterId: shared ? undefined : characterId,
-        campaignId: shared ? campaignId : undefined,
-        assetId,
-        asset: {
-          [`controlValues.${controlKey}`]: controlValue,
-        },
-      }).catch(() => {});
+      updateAssetControl(id, assetId, controlKey, controlValue).catch(() => {});
     },
-    [shared, assetId, characterId, campaignId],
+    [id, assetId, updateAssetControl],
   );
 
   const confirm = useConfirm();
+  const deleteAsset = useAssetsStore((store) => store.deleteAsset);
   const handleDeleteAsset = useCallback(() => {
     confirm({
       title: t(
@@ -87,14 +73,10 @@ function AssetsSectionCardUnMemoized(props: AssetsSectionCardProps) {
       confirmationText: t("common.delete", "Delete"),
     })
       .then(() => {
-        removeAsset({
-          characterId: shared ? undefined : characterId,
-          campaignId: shared ? campaignId : undefined,
-          assetId,
-        });
+        deleteAsset(id, assetId).catch(() => {});
       })
       .catch(() => {});
-  }, [confirm, t, characterId, campaignId, shared, assetId]);
+  }, [confirm, t, id, assetId, deleteAsset]);
 
   return (
     <AssetCard

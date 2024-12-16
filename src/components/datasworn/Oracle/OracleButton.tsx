@@ -2,12 +2,12 @@ import { Button, ButtonProps } from "@mui/material";
 
 import { useRollOracleAndAddToLog } from "pages/games/hooks/useRollOracleAndAddToLog";
 
-import { OracleTableRoll } from "types/DieRolls.type";
+import { IOracleTableRoll } from "services/gameLog.service";
 
 export interface OracleButtonProps extends Omit<ButtonProps, "onClick"> {
   oracleId: string;
   gmOnly?: boolean;
-  onRoll?: (result: OracleTableRoll) => void;
+  onRoll?: (result: IOracleTableRoll) => void;
 }
 
 export function OracleButton(props: OracleButtonProps) {

@@ -3,13 +3,11 @@ import OracleTableIcon from "@mui/icons-material/List";
 import { IconButton, ListItemText, Tooltip } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
-import {
-  CampaignPermissionType,
-  useCampaignPermissions,
-} from "pages/games/gamePageLayout/hooks/usePermissions";
+import { useGamePermissions } from "pages/games/gamePageLayout/hooks/usePermissions";
 import { useRollOracleAndAddToLog } from "pages/games/hooks/useRollOracleAndAddToLog";
 
-import { useOpenDataswornDialog } from "atoms/dataswornDialog.atom";
+import { useOpenDataswornDialog } from "stores/appState.store";
+import { GamePermission } from "stores/game.store";
 
 import { ListItemButtonWithSecondaryAction } from "./ListItemButtonWithSecondaryAction";
 import {
@@ -38,9 +36,7 @@ export function OracleListItem(props: OracleListItemProps) {
   const openDialog = useOpenDataswornDialog();
 
   const rollOracle = useRollOracleAndAddToLog();
-  const isGuide =
-    useCampaignPermissions().campaignPermission ===
-    CampaignPermissionType.Guide;
+  const isGuide = useGamePermissions().gamePermission === GamePermission.Guide;
 
   let oracleVisibility = OracleVisibilityState.Visible;
   if (isSearchActive && !isFullCollectionVisible) {

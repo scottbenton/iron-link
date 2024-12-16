@@ -5,15 +5,15 @@ import { useTranslation } from "react-i18next";
 import { GridLayout } from "components/Layout";
 import { MarkdownRenderer } from "components/MarkdownRenderer";
 
-import { AssetDocument } from "api-calls/assets/_asset.type";
+import { AssetMap } from "stores/dataswornTree.store";
 
-import { AssetMap } from "atoms/dataswornRules/useAssets";
+import { IAsset } from "services/asset.service";
 
 import { AssetCard } from "../AssetCard/AssetCard";
 
 export interface AssetListProps {
   assetCollection: Datasworn.AssetCollection;
-  selectAsset: (asset: Omit<AssetDocument, "order">) => void;
+  selectAsset: (asset: Omit<IAsset, "order">) => void;
   assetMap: AssetMap;
 }
 

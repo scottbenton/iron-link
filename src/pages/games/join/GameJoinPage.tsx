@@ -1,7 +1,7 @@
 import { LinearProgress } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import { GradientButton } from "components/GradientButton";
 import { PageContent, PageHeader } from "components/Layout";
@@ -9,33 +9,33 @@ import { EmptyState } from "components/Layout/EmptyState";
 
 import { pathConfig } from "pages/pathConfig";
 
-import { CampaignDocument } from "api-calls/campaign/_campaign.type";
-import { addUserToCampaign } from "api-calls/campaign/addUserToCampaign";
-import { getCampaign } from "api-calls/campaign/getCampaign";
+import { useUID } from "stores/auth.store";
 
-import { useAuthAtom } from "atoms/auth.atom";
+import { GameService, IGame } from "services/game.service";
+
+import { useGameId } from "../gamePageLayout/hooks/useGameId";
 
 export function GameJoinPage() {
   const { t } = useTranslation();
 
-  const { campaignId } = useParams<{ campaignId: string }>();
-  const uid = useAuthAtom()[0].uid;
+  const gameId = useGameId();
+  const uid = useUID();
 
   const navigate = useNavigate();
 
-  const [campaign, setCampaign] = useState<CampaignDocument | null>(null);
+  const [campaign, setCampaign] = useState<IGame | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string>();
 
   useEffect(() => {
-    if (campaignId && uid) {
-      getCampaign(campaignId)
-        .then((campaign) => {
+    if (gameId && uid) {
+      GameService.getGame(gameId)
+        .then((game) => {
           setLoading(false);
           setError(undefined);
-          setCampaign(campaign);
-          if (campaign.users.includes(uid)) {
-            navigate(pathConfig.game(campaignId));
+          setCampaign(game);
+          if (game.playerIds.includes(uid)) {
+            navigate(pathConfig.game(gameId));
           }
         })
         .catch((err) => {
@@ -47,14 +47,14 @@ export function GameJoinPage() {
       setLoading(false);
       setError(t("game.find-failure", "Could not find game"));
     }
-  }, [campaignId, uid, t, navigate]);
+  }, [gameId, uid, t, navigate]);
 
   const addUser = () => {
-    if (campaignId && uid) {
+    if (gameId && uid) {
       // Add user to campaign
-      addUserToCampaign({ campaignId, userId: uid })
+      GameService.addPlayer(gameId, uid)
         .then(() => {
-          navigate(pathConfig.game(campaignId));
+          navigate(pathConfig.game(gameId));
         })
         .catch(() => {
           setError(t("game.join-failure", "Failed to join game"));

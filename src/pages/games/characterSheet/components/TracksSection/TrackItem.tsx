@@ -1,6 +1,6 @@
-import { useDerivedCampaignState } from "pages/games/gamePageLayout/hooks/useDerivedCampaignState";
+import { useTracksStore } from "stores/tracks.store";
 
-import { TrackTypes } from "types/Track.type";
+import { TrackTypes } from "repositories/tracks.repository";
 
 import { TrackClock } from "./TrackClock";
 import { TrackProgressTrack } from "./TrackProgressTrack";
@@ -14,9 +14,7 @@ export interface TrackItemProps {
 export function TrackItem(props: TrackItemProps) {
   const { gameId, canEdit, trackId } = props;
 
-  const track = useDerivedCampaignState(
-    (state) => state.tracks.tracks[trackId],
-  );
+  const track = useTracksStore((store) => store.tracks[trackId]);
 
   if (!track) {
     return null;

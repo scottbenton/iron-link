@@ -4,7 +4,7 @@ import { Outlet } from "react-router-dom";
 import { RollSnackbarSection } from "components/characters/rolls/RollSnackbarSection";
 import { DataswornDialog } from "components/datasworn/DataswornDialog";
 
-import { AuthState, useAuthAtom } from "atoms/auth.atom";
+import { AuthStatus, useAuthStatus } from "stores/auth.store";
 
 import { LayoutPathListener } from "./LayoutPathListener";
 import { LiveRegion } from "./LiveRegion";
@@ -14,14 +14,14 @@ import { SkipToContentButton } from "./SkipToContentButton";
 import { authenticatedNavRoutes, unauthenticatedNavRoutes } from "./navRoutes";
 
 export function Layout() {
-  const authStatus = useAuthAtom()[0].status;
+  const authStatus = useAuthStatus();
 
-  if (authStatus === AuthState.Loading) {
+  if (authStatus === AuthStatus.Loading) {
     return <LinearProgress />;
   }
 
   const routes =
-    authStatus === AuthState.Authenticated
+    authStatus === AuthStatus.Authenticated
       ? authenticatedNavRoutes
       : unauthenticatedNavRoutes;
 

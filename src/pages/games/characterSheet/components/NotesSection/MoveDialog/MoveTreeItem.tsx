@@ -1,10 +1,10 @@
 import { TreeItem } from "@mui/x-tree-view";
 
-import { NoteFolder } from "api-calls/notes/_notes.type";
+import { INoteFolder } from "services/noteFolders.service";
 
 export interface MoveTreeItemProps {
   folderId: string;
-  folders: Record<string, NoteFolder>;
+  folders: Record<string, INoteFolder>;
   tree: Record<string, string[]>;
   currentFolderId: string | undefined;
 }

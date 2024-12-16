@@ -3,33 +3,34 @@ import { useCallback } from "react";
 
 import { DebouncedProgressTrack } from "components/datasworn/ProgressTrack";
 
-import { updateCharacter } from "api-calls/character/updateCharacter";
-
-import { useSpecialTrackRules } from "atoms/dataswornRules/useSpecialTrackRules";
+import { useSpecialTrackRules } from "stores/dataswornTree.store";
+import {
+  useGameCharacter,
+  useGameCharactersStore,
+} from "stores/gameCharacters.store";
 
 import { useCharacterId } from "../../hooks/useCharacterId";
-import { useDerivedCurrentCharacterState } from "../../hooks/useDerivedCharacterState";
 import { useIsOwnerOfCharacter } from "../../hooks/useIsOwnerOfCharacter";
 
 export function LegacyTracks() {
   const characterId = useCharacterId();
   const isCharacterOwner = useIsOwnerOfCharacter();
 
-  const legacyTracks = useDerivedCurrentCharacterState(
-    (character) => character?.characterDocument.data?.specialTracks ?? {},
+  const legacyTracks = useGameCharacter(
+    (character) => character?.specialTracks ?? {},
   );
   const specialTrackRules = useSpecialTrackRules();
+  const updateSpecialTrackValue = useGameCharactersStore(
+    (store) => store.updateSpecialTrackValue,
+  );
 
   const handleProgressTrackChange = useCallback(
     (key: string, value: number) => {
       if (characterId) {
-        updateCharacter({
-          characterId,
-          character: { [`specialTracks.${key}.value`]: value },
-        }).catch(() => {});
+        updateSpecialTrackValue(characterId, key, value).catch(() => {});
       }
     },
-    [characterId],
+    [characterId, updateSpecialTrackValue],
   );
 
   return (

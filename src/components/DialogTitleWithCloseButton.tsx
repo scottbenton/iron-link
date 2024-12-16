@@ -9,7 +9,7 @@ import {
 } from "react";
 import { useTranslation } from "react-i18next";
 
-import { useAnnouncement } from "atoms/announcement.atom";
+import { useAnnouncement } from "stores/appState.store";
 
 import { ScreenReaderOnly } from "./ScreenReaderOnly";
 
@@ -22,7 +22,7 @@ export function DialogTitleWithCloseButton(
 ) {
   const { children, actions, onClose } = props;
 
-  const [announcement] = useAnnouncement();
+  const announcement = useAnnouncement();
 
   const [changedAnnouncement, setChangedAnnouncement] = useState<
     string | undefined
@@ -30,7 +30,7 @@ export function DialogTitleWithCloseButton(
   const isFirstLoadRef = useRef(true);
   useEffect(() => {
     if (!isFirstLoadRef.current) {
-      setChangedAnnouncement(announcement);
+      setChangedAnnouncement(announcement ?? undefined);
     }
     isFirstLoadRef.current = false;
   }, [announcement]);

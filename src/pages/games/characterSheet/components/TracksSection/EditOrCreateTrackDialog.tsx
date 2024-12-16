@@ -16,24 +16,23 @@ import { TFunction } from "i18next";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { useCampaignId } from "pages/games/gamePageLayout/hooks/useCampaignId";
+import { useGameId } from "pages/games/gamePageLayout/hooks/useGameId";
+
+import { useTracksStore } from "stores/tracks.store";
 
 import {
   Difficulty,
-  ProgressTrack,
-  SceneChallenge,
   TrackSectionProgressTracks,
   TrackStatus,
   TrackTypes,
-} from "types/Track.type";
+} from "repositories/tracks.repository";
 
-import { addProgressTrack } from "api-calls/tracks/addProgressTrack";
-import { updateProgressTrack } from "api-calls/tracks/updateProgressTrack";
+import { IProgressTrack, ISceneChallenge } from "services/tracks.service";
 
 export interface EditOrCreateTrackDialogProps {
   open: boolean;
   handleClose: () => void;
-  initialTrack?: { trackId: string; track: SceneChallenge | ProgressTrack };
+  initialTrack?: { trackId: string; track: ISceneChallenge | IProgressTrack };
   trackType: TrackSectionProgressTracks | TrackTypes.SceneChallenge;
 }
 
@@ -44,12 +43,12 @@ export function EditOrCreateTrackDialog(props: EditOrCreateTrackDialogProps) {
   const [error, setError] = useState<string>();
   const [loading, setLoading] = useState<boolean>(false);
 
-  const [track, setTrack] = useState<Partial<ProgressTrack | SceneChallenge>>(
+  const [track, setTrack] = useState<Partial<IProgressTrack | ISceneChallenge>>(
     initialTrack?.track ?? { type: trackType },
   );
   const [resetProgress, setResetProgress] = useState(false);
 
-  const campaignId = useCampaignId();
+  const gameId = useGameId();
 
   useEffect(() => {
     setTrack(initialTrack?.track ?? { type: trackType });
@@ -62,6 +61,8 @@ export function EditOrCreateTrackDialog(props: EditOrCreateTrackDialogProps) {
     handleClose();
   };
 
+  const addTrack = useTracksStore((store) => store.addTrack);
+  const updateTrack = useTracksStore((store) => store.setTrack);
   const handleSubmit = () => {
     const potentialError = verifyTrack(track, t);
     if (potentialError) {
@@ -69,7 +70,7 @@ export function EditOrCreateTrackDialog(props: EditOrCreateTrackDialogProps) {
       return;
     }
 
-    let trackDocument: ProgressTrack | SceneChallenge;
+    let trackDocument: IProgressTrack | ISceneChallenge;
     if (trackType === TrackTypes.SceneChallenge) {
       trackDocument = {
         createdDate: initialTrack?.track.createdDate ?? new Date(),
@@ -83,7 +84,7 @@ export function EditOrCreateTrackDialog(props: EditOrCreateTrackDialogProps) {
             ? initialTrack.track.value
             : 0,
         segmentsFilled:
-          (initialTrack?.track as SceneChallenge).segmentsFilled ?? 0,
+          (initialTrack?.track as ISceneChallenge).segmentsFilled ?? 0,
       };
     } else {
       trackDocument = {
@@ -93,7 +94,7 @@ export function EditOrCreateTrackDialog(props: EditOrCreateTrackDialogProps) {
         label: track.label ?? "",
         description: track.description ?? "",
         difficulty:
-          (track as ProgressTrack).difficulty ?? Difficulty.Troublesome,
+          (track as IProgressTrack).difficulty ?? Difficulty.Troublesome,
         value:
           initialTrack?.track.value && !resetProgress
             ? initialTrack.track.value
@@ -102,11 +103,7 @@ export function EditOrCreateTrackDialog(props: EditOrCreateTrackDialogProps) {
     }
     setLoading(true);
     if (initialTrack) {
-      updateProgressTrack({
-        gameId: campaignId,
-        trackId: initialTrack.trackId,
-        track: trackDocument,
-      })
+      updateTrack(gameId, initialTrack.trackId, trackDocument)
         .then(() => {
           handleDialogClose();
         })
@@ -120,7 +117,7 @@ export function EditOrCreateTrackDialog(props: EditOrCreateTrackDialogProps) {
           );
         });
     } else {
-      addProgressTrack({ gameId: campaignId, track: trackDocument })
+      addTrack(gameId, trackDocument)
         .then(() => {
           handleDialogClose();
         })
@@ -258,7 +255,7 @@ export function EditOrCreateTrackDialog(props: EditOrCreateTrackDialogProps) {
 }
 
 function verifyTrack(
-  track: Partial<ProgressTrack | SceneChallenge>,
+  track: Partial<IProgressTrack | ISceneChallenge>,
   t: TFunction,
 ): string | undefined {
   // track.type === TrackTypes.Clock && track.
@@ -267,7 +264,7 @@ function verifyTrack(
       "character.character-sidebar.track-label-required-error",
       "Label is required",
     );
-  } else if (!(track as ProgressTrack).difficulty) {
+  } else if (!(track as IProgressTrack).difficulty) {
     return t(
       "character.character-sidebar.track-difficulty-required-error",
       "Difficulty is required",

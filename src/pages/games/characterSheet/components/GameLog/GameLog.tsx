@@ -1,18 +1,20 @@
 import { Box, LinearProgress } from "@mui/material";
-import { useCallback, useEffect, useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
 import { EmptyState } from "components/Layout/EmptyState";
 
-import {
-  useGameLogs,
-  useLoadMoreLogs,
-} from "pages/games/gamePageLayout/atoms/gameLog.atom";
+import { useGameLogStore } from "stores/gameLog.store";
 
 import { GameLogEntry } from "./GameLogEntry";
 
 export function GameLog() {
-  const { loading, error, logs, totalLogsToLoad } = useGameLogs();
+  const loading = useGameLogStore((state) => state.loading);
+  const error = useGameLogStore((state) => state.error);
+  const logs = useGameLogStore((state) => state.logs);
+
+  const loadMoreLogs = useGameLogStore((state) => state.loadMoreLogsIfPresent);
+
   const { t } = useTranslation();
 
   const orderedLogs = useMemo(() => {
@@ -20,18 +22,6 @@ export function GameLog() {
       ([, l1], [, l2]) => l1.timestamp.getTime() - l2.timestamp.getTime(),
     );
   }, [logs]);
-
-  const logLength = orderedLogs.length;
-
-  const getLogs = useLoadMoreLogs();
-
-  const hasLogs = logLength > 0;
-  const doesLogLengthMatchLogsToLoad = logLength === totalLogsToLoad;
-  const loadMoreLogs = useCallback(() => {
-    if (hasLogs && !loading && doesLogLengthMatchLogsToLoad) {
-      getLogs();
-    }
-  }, [getLogs, hasLogs, loading, doesLogLengthMatchLogsToLoad]);
 
   useEffect(() => {
     const tabPanel = document.getElementById("tabpanel-game-log");

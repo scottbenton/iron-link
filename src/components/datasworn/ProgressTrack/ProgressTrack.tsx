@@ -12,9 +12,9 @@ import { TFunction } from "i18next";
 import { useEffect, useId, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { Difficulty, TrackStatus } from "types/Track.type";
+import { useSetAnnouncement } from "stores/appState.store";
 
-import { useSetAnnouncement } from "atoms/announcement.atom";
+import { Difficulty, TrackStatus } from "repositories/tracks.repository";
 
 import { ProgressTrackTick } from "./ProgressTrackTick";
 

@@ -8,15 +8,15 @@ import {
   Typography,
 } from "@mui/material";
 
-import { useSetOpenItem } from "pages/games/gamePageLayout/atoms/notes.atom";
+import { useNotesStore } from "stores/notes.store";
 
-import { NoteDocument } from "api-calls/notes/_notes.type";
+import { INote } from "services/notes.service";
 
 import { NoteActionMenu } from "./NoteActionMenu";
 
 export interface NoteItemProps {
   id: string;
-  note: NoteDocument;
+  note: INote;
 }
 
 export function NoteItem(props: NoteItemProps) {
@@ -34,7 +34,7 @@ export function NoteItemContent(
 ) {
   const { id, note, sx } = props;
 
-  const setOpenItem = useSetOpenItem();
+  const setOpenItem = useNotesStore((store) => store.setOpenItem);
 
   return (
     <>
@@ -50,7 +50,7 @@ export function NoteItemContent(
           },
           ...(Array.isArray(sx) ? sx : [sx]),
         ]}
-        onClick={() => setOpenItem({ type: "note", noteId: id })}
+        onClick={() => setOpenItem("note", id)}
       >
         <DocIcon sx={{ color: "primary.light" }} />
         <Typography sx={{ flexGrow: 1 }}>{note.title}</Typography>

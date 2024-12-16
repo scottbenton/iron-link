@@ -6,12 +6,12 @@ import { useSnackbar } from "providers/SnackbarProvider";
 import { pathConfig } from "pages/pathConfig";
 
 import { ReferenceSidebarContents } from "../characterSheet/components/ReferenceSidebarContents";
-import { useCampaignId } from "../gamePageLayout/hooks/useCampaignId";
-import { useCampaignPermissions } from "../gamePageLayout/hooks/usePermissions";
+import { useGameId } from "../gamePageLayout/hooks/useGameId";
+import { useGamePermissions } from "../gamePageLayout/hooks/usePermissions";
 
 export function GameOverviewSheet() {
-  const campaignId = useCampaignId();
-  const { campaignType } = useCampaignPermissions();
+  const campaignId = useGameId();
+  const { gameType } = useGamePermissions();
   const { t } = useTranslation();
 
   const { success } = useSnackbar();
@@ -27,7 +27,7 @@ export function GameOverviewSheet() {
   return (
     <Box display="flex">
       <Box mt={2}>
-        <Typography>{campaignType}</Typography>
+        <Typography>{gameType}</Typography>
         <Button onClick={handleCopy}>
           {t("game.copy-invite-link", "Copy Invite Link")}
         </Button>

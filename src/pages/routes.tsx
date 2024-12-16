@@ -27,12 +27,12 @@ export const router = createBrowserRouter(
         <Route path={"/games"}>
           <Route index element={<GameSelectPage />} />
           <Route path={"create"} element={<CreateGamePage />} />
-          <Route path={":campaignId"} element={<GameLayout />}>
+          <Route path={":gameId"} element={<GameLayout />}>
             <Route index element={<GameOverviewSheet />} />
             <Route path={"c/:characterId"} element={<CharacterSheetPage />} />
             <Route path={"create"} element={<AddCharacter />} />
           </Route>
-          <Route path={":campaignId/join"} element={<GameJoinPage />} />
+          <Route path={":gameId/join"} element={<GameJoinPage />} />
         </Route>
         <Route path={"/worlds"}>
           <Route index element={<div>Worlds</div>} />

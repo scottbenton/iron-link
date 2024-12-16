@@ -1,6 +1,6 @@
 import i18next from "i18next";
 
-import { RollResult } from "types/DieRolls.type";
+import { RollResult } from "repositories/shared.types";
 
 export function getRollResultLabel(result: RollResult) {
   let resultLabel = i18next.t("datasworn.weak-hit", "Weak Hit");

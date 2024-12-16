@@ -18,18 +18,17 @@ import { useTranslation } from "react-i18next";
 
 import { DialogTitleWithCloseButton } from "components/DialogTitleWithCloseButton";
 
-import { useCampaignId } from "pages/games/gamePageLayout/hooks/useCampaignId";
-import { useCampaignPermissions } from "pages/games/gamePageLayout/hooks/usePermissions";
+// import { useGameId } from "pages/games/gamePageLayout/hooks/useGameId";
+import { useGamePermissions } from "pages/games/gamePageLayout/hooks/usePermissions";
 
-import { CampaignType } from "api-calls/campaign/_campaign.type";
-import { EditPermissions, ReadPermissions } from "api-calls/notes/_notes.type";
-import { updateNoteFolderPermissions } from "api-calls/notes/updateNoteFolderPermissions";
-import { updateNotePermissions } from "api-calls/notes/updateNotePermissions";
+import { useUID } from "stores/auth.store";
 
-import { useUID } from "atoms/auth.atom";
+import { GameType } from "repositories/game.repository";
+import { EditPermissions, ReadPermissions } from "repositories/shared.types";
 
 import { getItemName } from "./FolderView/getFolderName";
-import { useFolderDescendants } from "./FolderView/useFolderDescendants";
+
+// import { useFolderDescendants } from "./FolderView/useFolderDescendants";
 
 interface PermissionOption {
   label: string;
@@ -61,20 +60,20 @@ export function ShareButton(props: ShareButtonProps) {
 
   const { t } = useTranslation();
   const uid = useUID();
-  const campaignId = useCampaignId();
-  const campaignType = useCampaignPermissions().campaignType;
+  // const campaignId = useGameId();
+  const gameType = useGamePermissions().gameType;
 
   const [open, setOpen] = useState(false);
 
-  const { type, id, ownerId } = item;
+  const { type, ownerId } = item;
   const {
     editPermissions: writePermissions,
     readPermissions: viewPermissions,
   } = currentPermissions;
 
-  const folderDescendants = useFolderDescendants(
-    item.type === "folder" ? item.id : undefined,
-  );
+  // const folderDescendants = useFolderDescendants(
+  //   item.type === "folder" ? item.id : undefined,
+  // );
 
   const [updatedViewPermissions, setUpdatedViewPermissions] =
     useState(viewPermissions);
@@ -121,7 +120,7 @@ export function ShareButton(props: ShareButtonProps) {
         value: ReadPermissions.OnlyAuthor,
         disabled: false,
       });
-      if (campaignType === CampaignType.Guided) {
+      if (gameType === GameType.Guided) {
         options.push({
           label: t(
             "notes.share-permissions.author-and-guides",
@@ -132,10 +131,10 @@ export function ShareButton(props: ShareButtonProps) {
         });
       }
     }
-    if (isInGMFolder && campaignType !== CampaignType.Solo) {
+    if (isInGMFolder && gameType !== GameType.Solo) {
       options.push({
         label:
-          campaignType === CampaignType.Coop
+          gameType === GameType.Coop
             ? t("notes.share-permissions.only-guides-coop", "All Players")
             : t("notes.share-permissions.only-guides", "Only Guide(s)"),
         value: ReadPermissions.OnlyGuides,
@@ -144,8 +143,8 @@ export function ShareButton(props: ShareButtonProps) {
     }
     if (
       (uid === ownerId || isInGMFolder) &&
-      campaignType !== CampaignType.Solo &&
-      (campaignType !== CampaignType.Coop || !isInGMFolder)
+      gameType !== GameType.Solo &&
+      (gameType !== GameType.Coop || !isInGMFolder)
     ) {
       options.push({
         label: t("notes.share-permissions.all-players", "All Players"),
@@ -154,7 +153,7 @@ export function ShareButton(props: ShareButtonProps) {
       });
     }
     return options;
-  }, [isInGMFolder, ownerId, t, uid, campaignType]);
+  }, [isInGMFolder, ownerId, t, uid, gameType]);
   const writeOptions = useMemo<PermissionOption[]>(() => {
     const options: PermissionOption[] = [];
 
@@ -164,7 +163,7 @@ export function ShareButton(props: ShareButtonProps) {
         value: ReadPermissions.OnlyAuthor,
         disabled: false,
       });
-      if (campaignType === CampaignType.Guided) {
+      if (gameType === GameType.Guided) {
         options.push({
           label: t(
             "notes.share-permissions.author-and-guides",
@@ -178,7 +177,7 @@ export function ShareButton(props: ShareButtonProps) {
     if (isInGMFolder) {
       options.push({
         label:
-          campaignType === CampaignType.Coop
+          gameType === GameType.Coop
             ? t("notes.share-permissions.only-guides-coop", "All Players")
             : t("notes.share-permissions.only-guides", "Only Guide(s)"),
         value: ReadPermissions.OnlyGuides,
@@ -187,8 +186,8 @@ export function ShareButton(props: ShareButtonProps) {
     }
     if (
       (uid === ownerId || isInGMFolder) &&
-      campaignType !== CampaignType.Solo &&
-      (campaignType !== CampaignType.Coop || !isInGMFolder)
+      gameType !== GameType.Solo &&
+      (gameType !== GameType.Coop || !isInGMFolder)
     ) {
       options.push({
         label: t("notes.share-permissions.all-players", "All Players"),
@@ -200,35 +199,35 @@ export function ShareButton(props: ShareButtonProps) {
       });
     }
     return options;
-  }, [isInGMFolder, ownerId, t, uid, updatedViewPermissions, campaignType]);
+  }, [isInGMFolder, ownerId, t, uid, updatedViewPermissions, gameType]);
 
   const handleShare = () => {
     setOpen(false);
 
-    if (type === "folder") {
-      updateNoteFolderPermissions({
-        campaignId,
-        folderId: id,
-        descendantFolders: folderDescendants.folders,
-        descendantNotes: folderDescendants.notes,
-        currentPermissions,
-        nextPermissions: {
-          readPermissions: updatedViewPermissions,
-          editPermissions: updatedWritePermissions,
-        },
-      })
-        .then(() => {})
-        .catch(() => {});
-    } else {
-      updateNotePermissions({
-        campaignId,
-        noteId: id,
-        readPermissions: updatedViewPermissions,
-        editPermissions: updatedWritePermissions,
-      })
-        .then(() => {})
-        .catch(() => {});
-    }
+    // if (type === "folder") {
+    //   updateNoteFolderPermissions({
+    //     campaignId,
+    //     folderId: id,
+    //     descendantFolders: folderDescendants.folders,
+    //     descendantNotes: folderDescendants.notes,
+    //     currentPermissions,
+    //     nextPermissions: {
+    //       readPermissions: updatedViewPermissions,
+    //       editPermissions: updatedWritePermissions,
+    //     },
+    //   })
+    //     .then(() => {})
+    //     .catch(() => {});
+    // } else {
+    //   updateNotePermissions({
+    //     campaignId,
+    //     noteId: id,
+    //     readPermissions: updatedViewPermissions,
+    //     editPermissions: updatedWritePermissions,
+    //   })
+    //     .then(() => {})
+    //     .catch(() => {});
+    // }
   };
 
   return (
@@ -261,7 +260,7 @@ export function ShareButton(props: ShareButtonProps) {
                         id: parentFolder.id,
                         t,
                         uid,
-                        campaignType,
+                        gameType: gameType,
                       }),
                     },
                   )}
@@ -302,7 +301,7 @@ export function ShareButton(props: ShareButtonProps) {
                         id: parentFolder.id,
                         t,
                         uid,
-                        campaignType,
+                        gameType: gameType,
                       }),
                     },
                   )}

@@ -11,21 +11,16 @@ import { useTranslation } from "react-i18next";
 
 import { DialogTitleWithCloseButton } from "components/DialogTitleWithCloseButton";
 
-import { useDerivedNotesAtom } from "pages/games/gamePageLayout/atoms/notes.atom";
-import { useCampaignId } from "pages/games/gamePageLayout/hooks/useCampaignId";
-import {
-  CampaignPermissionType,
-  useCampaignPermissions,
-} from "pages/games/gamePageLayout/hooks/usePermissions";
+import { useGameId } from "pages/games/gamePageLayout/hooks/useGameId";
+import { useGamePermissions } from "pages/games/gamePageLayout/hooks/usePermissions";
 
-import { GUIDE_NOTE_FOLDER_NAME } from "api-calls/notes/_getRef";
-import { EditPermissions, NoteFolder } from "api-calls/notes/_notes.type";
-import { updateNote } from "api-calls/notes/updateNote";
-import { updateNoteFolder } from "api-calls/notes/updateNoteFolder";
-import { updateNoteFolderPermissions } from "api-calls/notes/updateNoteFolderPermissions";
-import { updateNotePermissions } from "api-calls/notes/updateNotePermissions";
+import { useUID } from "stores/auth.store";
+import { GamePermission } from "stores/game.store";
+import { GUIDE_NOTE_FOLDER_NAME, useNotesStore } from "stores/notes.store";
 
-import { useUID } from "atoms/auth.atom";
+import { EditPermissions } from "repositories/shared.types";
+
+import { INoteFolder } from "services/noteFolders.service";
 
 import { getItemName } from "../FolderView/getFolderName";
 import { FAKE_ROOT_NOTE_FOLDER_KEY } from "../FolderView/rootNodeName";
@@ -51,9 +46,9 @@ export function MoveDialog(props: MoveDialogProps) {
   const [selectedParentFolder, setSelectedParentFolder] = useState<
     string | null
   >(parentFolderId);
-  const selectedParentFolderOrder = useDerivedNotesAtom((store) => {
+  const selectedParentFolderOrder = useNotesStore((store) => {
     let nextOrder = 0;
-    Object.values(store.notes.notes).forEach((note) => {
+    Object.values(store.noteState.notes).forEach((note) => {
       if (note.parentFolderId === selectedParentFolder) {
         nextOrder = Math.max(nextOrder, note.order);
       }
@@ -62,15 +57,15 @@ export function MoveDialog(props: MoveDialogProps) {
   });
 
   const uid = useUID();
-  const campaignId = useCampaignId();
-  const { campaignType, campaignPermission } = useCampaignPermissions();
+  const campaignId = useGameId();
+  const { gameType, gamePermission: campaignPermission } = useGamePermissions();
 
   const descendants = useFolderDescendants(type === "folder" ? id : undefined);
   const [isMoveLoading, setIsMoveLoading] = useState(false);
 
-  const isGuide = campaignPermission === CampaignPermissionType.Guide;
+  const isGuide = campaignPermission === GamePermission.Guide;
 
-  const folders = useDerivedNotesAtom((notes) => notes.folders.folders);
+  const folders = useNotesStore((notes) => notes.folderState.folders);
 
   const { rootNodes, tree } = getTreeFromFolders(folders, uid, isGuide);
 
@@ -97,58 +92,58 @@ export function MoveDialog(props: MoveDialogProps) {
       if (isCurrentNoteInGuideFolder !== isNextFolderInGuideFolder) {
         // We will need to call update permissions as well as moving
         if (type === "note") {
-          promises.push(
-            updateNotePermissions({
-              campaignId,
-              noteId: id,
-              readPermissions: null,
-              editPermissions: null,
-            }),
-          );
+          promises
+            .push
+            // updateNotePermissions({
+            //   campaignId,
+            //   noteId: id,
+            //   readPermissions: null,
+            //   editPermissions: null,
+            // }),
+            ();
         } else {
-          const folder = folders[id];
-          promises.push(
-            updateNoteFolderPermissions({
-              campaignId,
-              folderId: id,
-              currentPermissions: {
-                readPermissions: folder.readPermissions,
-                editPermissions: folder.editPermissions,
-              },
-              nextPermissions: {
-                readPermissions: newFolder.readPermissions,
-                editPermissions: newFolder.editPermissions,
-              },
-              descendantFolders: descendants.folders,
-              descendantNotes: descendants.notes,
-            }),
-          );
+          // const folder = folders[id];
+          // promises.push(
+          //   updateNoteFolderPermissions({
+          //     campaignId,
+          //     folderId: id,
+          //     currentPermissions: {
+          //       readPermissions: folder.readPermissions,
+          //       editPermissions: folder.editPermissions,
+          //     },
+          //     nextPermissions: {
+          //       readPermissions: newFolder.readPermissions,
+          //       editPermissions: newFolder.editPermissions,
+          //     },
+          //     descendantFolders: descendants.folders,
+          //     descendantNotes: descendants.notes,
+          //   }),
+          // );
         }
       }
       // We can just move the item
       if (type === "note") {
         // Get the order to put the note last in the next list
-        console.debug(selectedParentFolderOrder + 1);
-        promises.push(
-          updateNote({
-            campaignId,
-            noteId: id,
-            note: {
-              parentFolderId: newParentFolderId,
-              order: selectedParentFolderOrder + 1,
-            },
-          }),
-        );
+        // promises.push(
+        //   updateNote({
+        //     campaignId,
+        //     noteId: id,
+        //     note: {
+        //       parentFolderId: newParentFolderId,
+        //       order: selectedParentFolderOrder + 1,
+        //     },
+        //   }),
+        // );
       } else {
-        promises.push(
-          updateNoteFolder({
-            campaignId,
-            folderId: id,
-            noteFolder: {
-              parentFolderId: newParentFolderId,
-            },
-          }),
-        );
+        // promises.push(
+        //   updateNoteFolder({
+        //     campaignId,
+        //     folderId: id,
+        //     noteFolder: {
+        //       parentFolderId: newParentFolderId,
+        //     },
+        //   }),
+        // );
       }
 
       Promise.all(promises)
@@ -203,7 +198,7 @@ export function MoveDialog(props: MoveDialogProps) {
                 name: folders[folderId].name,
                 id: folderId,
                 uid,
-                campaignType,
+                gameType: gameType,
                 t,
               })}
             >
@@ -239,8 +234,8 @@ export function MoveDialog(props: MoveDialogProps) {
 }
 
 function getTreeFromFolders(
-  folders: Record<string, NoteFolder>,
-  uid: string,
+  folders: Record<string, INoteFolder>,
+  uid: string | undefined,
   isGuide: boolean,
 ) {
   const rootNodes: string[] = [];
@@ -285,7 +280,7 @@ function getTreeFromFolders(
 
 function isFolderInGuideFolder(
   folderId: string,
-  folders: Record<string, NoteFolder>,
+  folders: Record<string, INoteFolder>,
 ) {
   let currentFolder = folders[folderId];
   while (currentFolder.parentFolderId) {

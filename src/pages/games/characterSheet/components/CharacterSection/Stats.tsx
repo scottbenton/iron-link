@@ -8,23 +8,27 @@ import { Stat } from "components/datasworn/Stat";
 
 import { useRollStatAndAddToLog } from "pages/games/hooks/useRollStatAndAddToLog";
 
-import { updateCharacter } from "api-calls/character/updateCharacter";
-
-import { useStatRules } from "atoms/dataswornRules/useStatRules";
+import { useStatRules } from "stores/dataswornTree.store.ts";
+import {
+  useGameCharacter,
+  useGameCharactersStore,
+} from "stores/gameCharacters.store.ts";
 
 import { DEFAULT_MOMENTUM } from "../../../../../data/constants.ts";
 import { useCharacterId } from "../../hooks/useCharacterId";
-import { useDerivedCurrentCharacterState } from "../../hooks/useDerivedCharacterState";
 import { useIsOwnerOfCharacter } from "../../hooks/useIsOwnerOfCharacter";
 
 export function Stats() {
   const characterId = useCharacterId();
-  const { stats, adds, momentum } = useDerivedCurrentCharacterState(
-    (character) => ({
-      stats: character?.characterDocument.data?.stats ?? {},
-      adds: character?.characterDocument.data?.adds ?? 0,
-      momentum: character?.characterDocument.data?.momentum ?? DEFAULT_MOMENTUM,
-    }),
+
+  const stats = useGameCharacter((character) => character?.stats ?? {});
+  const adds = useGameCharacter((character) => character?.adds ?? 0);
+  const momentum = useGameCharacter(
+    (character) => character?.momentum ?? DEFAULT_MOMENTUM,
+  );
+
+  const updateAdds = useGameCharactersStore(
+    (store) => store.updateCharacterAdds,
   );
   const isCharacterOwner = useIsOwnerOfCharacter();
 
@@ -35,13 +39,10 @@ export function Stats() {
   const handleAddsChange = useCallback(
     (value: number) => {
       if (characterId) {
-        updateCharacter({
-          characterId,
-          character: { adds: value },
-        }).catch(() => {});
+        updateAdds(characterId, value).catch(() => {});
       }
     },
-    [characterId],
+    [characterId, updateAdds],
   );
 
   const rollStat = useRollStatAndAddToLog();

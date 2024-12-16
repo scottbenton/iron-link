@@ -14,30 +14,31 @@ import { useRef, useState } from "react";
 
 import { useSnackbar } from "providers/SnackbarProvider";
 
-import { useCampaignId } from "pages/games/gamePageLayout/hooks/useCampaignId";
+import { useGameId } from "pages/games/gamePageLayout/hooks/useGameId";
+import { useGamePermissions } from "pages/games/gamePageLayout/hooks/usePermissions";
+
+import { useUID } from "stores/auth.store";
+import { useDataswornTree } from "stores/dataswornTree.store";
+import { GamePermission } from "stores/game.store";
 import {
-  CampaignPermissionType,
-  useCampaignPermissions,
-} from "pages/games/gamePageLayout/hooks/usePermissions";
+  useGameCharacter,
+  useGameCharactersStore,
+} from "stores/gameCharacters.store";
+import { useGameLogStore } from "stores/gameLog.store";
 
-import { Roll, RollResult, RollType } from "types/DieRolls.type";
+import { RollType } from "repositories/shared.types";
+import { RollResult } from "repositories/shared.types";
 
-import { updateCharacter } from "api-calls/character/updateCharacter";
-import { removeLog } from "api-calls/game-log/removeLog";
-import { updateLog } from "api-calls/game-log/updateLog";
-
-import { useUID } from "atoms/auth.atom";
-import { useDataswornTree } from "atoms/dataswornTree.atom";
+import { IGameLog } from "services/gameLog.service";
 
 import { useCharacterIdOptional } from "../../hooks/useCharacterId";
-import { useDerivedCharacterState } from "../../hooks/useDerivedCharacterState";
 import { useMomentumParameters } from "../../hooks/useMomentumResetValue";
 import { DieRerollDialog } from "./DieRerollDialog";
 import { convertRollToClipboard } from "./clipboardFormatter";
 
 export interface NormalRollActionsProps {
   rollId: string;
-  roll: Roll;
+  roll: IGameLog;
 }
 
 async function pasteRich(rich: string, plain: string) {
@@ -66,17 +67,14 @@ export function NormalRollActions(props: NormalRollActionsProps) {
   const { rollId, roll } = props;
 
   const uid = useUID();
-  const campaignId = useCampaignId();
+  const gameId = useGameId();
   const currentCharacterId = useCharacterIdOptional();
-  const momentum = useDerivedCharacterState(
-    currentCharacterId,
-    (character) => character?.characterDocument.data?.momentum ?? 0,
-  );
+
+  const momentum = useGameCharacter((character) => character?.momentum ?? 0);
   const momentumResetValue = useMomentumParameters().resetValue;
 
   const canDeleteLogs =
-    useCampaignPermissions().campaignPermission ===
-    CampaignPermissionType.Guide;
+    useGamePermissions().gamePermission === GamePermission.Guide;
 
   let isMomentumBurnUseful = false;
   if (roll.type === RollType.Stat && roll.momentumBurned === null) {
@@ -117,6 +115,10 @@ export function NormalRollActions(props: NormalRollActionsProps) {
     }
   };
 
+  const burnMomentumOnLog = useGameLogStore((store) => store.burnMomentumOnLog);
+  const setMomentum = useGameCharactersStore(
+    (store) => store.updateCharacterMomentum,
+  );
   const handleBurnMomentum = () => {
     if (
       currentCharacterId &&
@@ -132,23 +134,8 @@ export function NormalRollActions(props: NormalRollActionsProps) {
       }
 
       const promises: Promise<unknown>[] = [];
-      promises.push(
-        updateLog({
-          campaignId,
-          logId: rollId,
-          log: {
-            ...roll,
-            momentumBurned: momentum,
-            result: newRollResult,
-          },
-        }),
-      );
-      promises.push(
-        updateCharacter({
-          characterId: currentCharacterId,
-          character: { momentum: momentumResetValue },
-        }),
-      );
+      promises.push(burnMomentumOnLog(gameId, rollId, momentum, newRollResult));
+      promises.push(setMomentum(currentCharacterId, momentumResetValue));
 
       Promise.all(promises)
         .catch(() => {})
@@ -157,6 +144,8 @@ export function NormalRollActions(props: NormalRollActionsProps) {
         });
     }
   };
+
+  const deleteLog = useGameLogStore((store) => store.deleteLog);
 
   return (
     <>
@@ -236,7 +225,7 @@ export function NormalRollActions(props: NormalRollActionsProps) {
               onClick={(evt) => {
                 evt.stopPropagation();
                 setIsMenuOpen(false);
-                removeLog({ campaignId, logId: rollId }).catch(() => {});
+                deleteLog(gameId, rollId).catch(() => {});
               }}
             >
               <ListItemIcon>

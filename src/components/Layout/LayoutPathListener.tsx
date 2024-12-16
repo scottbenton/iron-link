@@ -11,7 +11,7 @@ import {
 
 import { useContinueUrl } from "hooks/useContinueUrl";
 
-import { AuthState, useAuthStatus } from "atoms/auth.atom";
+import { AuthStatus, useAuthStatus } from "stores/auth.store";
 
 // import { sendPageViewEvent } from "lib/analytics.lib";
 import { completeMagicLinkSignupIfPresent } from "lib/auth.lib";
@@ -28,11 +28,11 @@ export function LayoutPathListener() {
     const doesOpenPathMatch = openPaths.some((path) => {
       return !!matchPath(path, pathname);
     });
-    if (!doesOpenPathMatch && authStatus === AuthState.Unauthenticated) {
+    if (!doesOpenPathMatch && authStatus === AuthStatus.Unauthenticated) {
       redirectWithContinueUrl(pathConfig.signIn, pathname);
     } else if (
       onlyUnauthenticatedPaths.includes(pathname) &&
-      authStatus === AuthState.Authenticated
+      authStatus === AuthStatus.Authenticated
     ) {
       navigateToContinueURL(pathConfig.gameSelect);
     }

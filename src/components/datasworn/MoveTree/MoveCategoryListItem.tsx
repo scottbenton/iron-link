@@ -9,7 +9,7 @@ import {
 import { ListItemIcon } from "@mui/material";
 import { useState } from "react";
 
-import { MoveCategoryMap, MoveMap } from "atoms/dataswornRules/useMoves";
+import { MoveCategoryMap, MoveMap } from "stores/dataswornTree.store";
 
 import { MoveListItem } from "./MoveListItem";
 import {

@@ -1,14 +1,23 @@
 import { TextField } from "@mui/material";
-import { useAtom } from "jotai";
+import { useCallback } from "react";
 import { useTranslation } from "react-i18next";
 
 import { SectionHeading } from "components/SectionHeading";
 
-import { createGameAtom } from "../atoms/createGame.atom";
+import { useCreateGameStore } from "stores/createGame.store";
 
 export function GameDetails() {
   const { t } = useTranslation();
-  const [gameDetails, setGameDetails] = useAtom(createGameAtom);
+
+  const gameName = useCreateGameStore((store) => store.gameName);
+  const setGameName = useCreateGameStore((store) => store.setGameName);
+
+  const handleSetGameName = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setGameName(e.target.value);
+    },
+    [setGameName],
+  );
 
   return (
     <>
@@ -19,10 +28,8 @@ export function GameDetails() {
       <TextField
         sx={{ mt: 2 }}
         label={t("game.create.game-name", "Game Name")}
-        value={gameDetails.gameName}
-        onChange={(e) =>
-          setGameDetails({ ...gameDetails, gameName: e.target.value })
-        }
+        value={gameName}
+        onChange={handleSetGameName}
       />
     </>
   );

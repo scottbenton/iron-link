@@ -3,7 +3,7 @@ import { Box, Card, Stack, SxProps, Theme, Typography } from "@mui/material";
 
 import { useAsset } from "hooks/datasworn/useAsset";
 
-import { AssetDocument } from "api-calls/assets/_asset.type";
+import { IAsset } from "services/asset.service";
 
 import { AssetAbilities } from "./AssetAbilities";
 import { AssetControls } from "./AssetControls";
@@ -13,7 +13,7 @@ import { AssetOptions } from "./AssetOptions";
 
 export interface AssetCardProps {
   assetId: string;
-  assetDocument?: AssetDocument;
+  assetDocument?: IAsset;
   headerActions?: React.ReactNode;
   actions?: React.ReactNode;
 

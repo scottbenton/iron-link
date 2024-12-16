@@ -5,12 +5,13 @@ import { useTranslation } from "react-i18next";
 import { DialogTitleWithCloseButton } from "components/DialogTitleWithCloseButton";
 import { ConditionMeter } from "components/datasworn/ConditonMeter";
 
-import { updateCharacter } from "api-calls/character/updateCharacter";
-
-import { useStatRules } from "atoms/dataswornRules/useStatRules";
+import { useStatRules } from "stores/dataswornTree.store";
+import {
+  useGameCharacter,
+  useGameCharactersStore,
+} from "stores/gameCharacters.store";
 
 import { useCharacterId } from "../../hooks/useCharacterId";
-import { useDerivedCurrentCharacterState } from "../../hooks/useDerivedCharacterState";
 
 export interface CharacterStatsDialogProps {
   open: boolean;
@@ -23,8 +24,9 @@ export function CharacterStatsDialog(props: CharacterStatsDialogProps) {
   const { t } = useTranslation();
 
   const characterId = useCharacterId();
-  const stats = useDerivedCurrentCharacterState(
-    (character) => character?.characterDocument.data?.stats ?? {},
+  const stats = useGameCharacter((character) => character?.stats ?? {});
+  const updateCharacterStats = useGameCharactersStore(
+    (store) => store.updateCharacterStats,
   );
   const statRules = useStatRules();
 
@@ -35,7 +37,7 @@ export function CharacterStatsDialog(props: CharacterStatsDialogProps) {
 
   const handleSave = () => {
     if (characterId) {
-      updateCharacter({ characterId, character: { stats: localStatValues } });
+      updateCharacterStats(characterId, localStatValues).catch(() => {});
     }
     onClose();
   };

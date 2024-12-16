@@ -1,19 +1,19 @@
 import { useTranslation } from "react-i18next";
 
-import {
-  SpecialTrackProgressRoll,
-  TrackProgressRoll,
-} from "types/DieRolls.type";
-
 import { useMove } from "hooks/datasworn/useMove";
 
 import { getRollResultLabel } from "data/rollResultLabel";
+
+import {
+  ISpecialTrackProgressRoll,
+  ITrackProgressRoll,
+} from "services/gameLog.service";
 
 import { RollContainer, RollResult, RollTitle, RollValues } from "./common";
 
 export interface TrackProgressRollSnackbarProps {
   rollId: string | undefined;
-  roll: TrackProgressRoll | SpecialTrackProgressRoll;
+  roll: ITrackProgressRoll | ISpecialTrackProgressRoll;
   isExpanded: boolean;
 }
 

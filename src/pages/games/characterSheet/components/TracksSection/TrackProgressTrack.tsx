@@ -7,18 +7,16 @@ import { useTranslation } from "react-i18next";
 import { DebouncedClockCircle } from "components/datasworn/Clocks/DebouncedClockCircle";
 import { ProgressTrack } from "components/datasworn/ProgressTrack";
 
+import { useSetAnnouncement } from "stores/appState.store";
+import { useTracksStore } from "stores/tracks.store";
+
 import {
   Difficulty,
-  ProgressTrack as IProgressTrack,
-  SceneChallenge,
   TrackStatus,
   TrackTypes,
-} from "types/Track.type";
+} from "repositories/tracks.repository";
 
-import { removeProgressTrack } from "api-calls/tracks/removeProgressTrack";
-import { updateProgressTrack } from "api-calls/tracks/updateProgressTrack";
-
-import { useSetAnnouncement } from "atoms/announcement.atom";
+import { IProgressTrack, ISceneChallenge } from "services/tracks.service";
 
 import { useIsOwnerOfCharacter } from "../../hooks/useIsOwnerOfCharacter";
 import { EditOrCreateTrackDialog } from "./EditOrCreateTrackDialog";
@@ -27,7 +25,7 @@ import { getTrackTypeLabel, trackCompletionMoveIds } from "./common";
 
 export interface TrackProgressTrackProps {
   trackId: string;
-  track: IProgressTrack | SceneChallenge;
+  track: IProgressTrack | ISceneChallenge;
   canEdit: boolean;
   gameId: string;
 }
@@ -51,15 +49,9 @@ export function TrackProgressTrack(props: TrackProgressTrackProps) {
 
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
+  const updateTrackStatus = useTracksStore((store) => store.updateTrackStatus);
   const handleStatusChange = (status: TrackStatus) => {
-    updateProgressTrack({
-      gameId,
-      trackId,
-      track: {
-        ...track,
-        status,
-      },
-    })
+    updateTrackStatus(gameId, trackId, status)
       .then(() => {
         announce(
           t(
@@ -74,6 +66,8 @@ export function TrackProgressTrack(props: TrackProgressTrackProps) {
       })
       .catch(() => {});
   };
+
+  const deleteTrack = useTracksStore((store) => store.deleteTrack);
   const handleDeleteClick = () => {
     confirm({
       description: t(
@@ -86,10 +80,7 @@ export function TrackProgressTrack(props: TrackProgressTrackProps) {
       confirmationText: t("common.delete", "Delete"),
     })
       .then(() => {
-        removeProgressTrack({
-          gameId,
-          id: trackId,
-        })
+        deleteTrack(gameId, trackId)
           .then(() => {
             announce(
               t(
@@ -105,26 +96,18 @@ export function TrackProgressTrack(props: TrackProgressTrackProps) {
       })
       .catch(() => {});
   };
+
+  const updateTrackValue = useTracksStore((store) => store.updateTrackValue);
   const handleUpdateValue = (value: number) => {
-    updateProgressTrack({
-      gameId,
-      trackId,
-      track: {
-        ...track,
-        value,
-      },
-    }).catch(() => {});
+    updateTrackValue(gameId, trackId, value).catch(() => {});
   };
+
+  const updateSceneChallengeClockFilledSegments = useTracksStore(
+    (store) => store.updateSceneChallengeClockFilledSegments,
+  );
   const handleSceneChallengeClockChange = (filledSegments: number) => {
     if (track.type === TrackTypes.SceneChallenge) {
-      updateProgressTrack({
-        gameId,
-        trackId,
-        track: {
-          ...track,
-          segmentsFilled: filledSegments,
-        },
-      })
+      updateSceneChallengeClockFilledSegments(gameId, trackId, filledSegments)
         .then(() => {
           announce(
             t(

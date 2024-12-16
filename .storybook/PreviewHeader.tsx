@@ -8,11 +8,14 @@ import {
 } from "@mui/material";
 import React from "react";
 
-import { ColorScheme, useColorScheme } from "../src/atoms/theme.atom";
+import { ColorScheme } from "../src/repositories/shared.types";
+import { useAppState } from "../src/stores/appState.store";
 
 export function PreviewHeader() {
   const { colorScheme: mode, setColorScheme: setMode } = useThemeMode();
-  const [colorScheme, setColorScheme] = useColorScheme();
+
+  const colorScheme = useAppState((state) => state.colorScheme);
+  const setColorScheme = useAppState((state) => state.setColorScheme);
 
   return (
     <Box

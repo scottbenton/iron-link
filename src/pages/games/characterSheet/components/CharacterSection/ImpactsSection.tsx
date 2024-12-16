@@ -18,22 +18,24 @@ import { useTranslation } from "react-i18next";
 import { DialogTitleWithCloseButton } from "components/DialogTitleWithCloseButton";
 import { GridLayout } from "components/Layout";
 
-import { updateCharacter } from "api-calls/character/updateCharacter";
-
-import { useImpactRules } from "atoms/dataswornRules/useImpactRules";
+import { useImpactRules } from "stores/dataswornTree.store";
+import {
+  useGameCharacter,
+  useGameCharactersStore,
+} from "stores/gameCharacters.store";
 
 import { useCharacterId } from "../../hooks/useCharacterId";
-import { useDerivedCurrentCharacterState } from "../../hooks/useDerivedCharacterState";
 import { useIsOwnerOfCharacter } from "../../hooks/useIsOwnerOfCharacter";
 
 export function ImpactsSection() {
   const characterId = useCharacterId();
   const isCharacterOwner = useIsOwnerOfCharacter();
 
-  const impacts = useDerivedCurrentCharacterState(
-    (character) => character?.characterDocument.data?.debilities ?? {},
-  );
+  const impacts = useGameCharacter((character) => character?.debilities ?? {});
   const { impactCategories, impacts: impactRules } = useImpactRules();
+  const updateImpactValue = useGameCharactersStore(
+    (store) => store.updateCharacterImpactValue,
+  );
 
   const { t } = useTranslation();
 
@@ -111,12 +113,11 @@ export function ImpactsSection() {
                             checked={impacts[impactKey]}
                             onChange={(_, checked) => {
                               if (characterId) {
-                                updateCharacter({
+                                updateImpactValue(
                                   characterId,
-                                  character: {
-                                    [`debilities.${impactKey}`]: checked,
-                                  },
-                                }).catch(() => {});
+                                  impactKey,
+                                  checked,
+                                ).catch(() => {});
                               }
                             }}
                           />

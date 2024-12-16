@@ -5,11 +5,10 @@ import { useTranslation } from "react-i18next";
 
 import { DebouncedConditionMeter } from "components/datasworn/ConditonMeter";
 
-import {
-  CharacterPermissionType,
-  useCampaignPermissions,
-} from "pages/games/gamePageLayout/hooks/usePermissions";
+import { useGamePermissions } from "pages/games/gamePageLayout/hooks/usePermissions";
 import { useRollStatAndAddToLog } from "pages/games/hooks/useRollStatAndAddToLog";
+
+import { CharacterPermissionType } from "stores/gameCharacters.store";
 
 interface SingleConditionMeterProps {
   conditionMeterKey: string;
@@ -26,8 +25,7 @@ export function SingleConditionMeter(props: SingleConditionMeterProps) {
     props;
 
   const isCharacterOwner =
-    useCampaignPermissions().characterPermission ===
-    CharacterPermissionType.Owner;
+    useGamePermissions().characterPermission === CharacterPermissionType.Owner;
 
   const { t } = useTranslation();
 

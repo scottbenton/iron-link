@@ -1,15 +1,16 @@
 import { Datasworn } from "@datasworn/core";
 import { Box, Typography } from "@mui/material";
-import { useAtomValue } from "jotai";
 import { useMemo } from "react";
-import { useParams } from "react-router-dom";
 
-import { currentCampaignAtom } from "pages/games/gamePageLayout/atoms/campaign.atom";
-import { campaignCharactersAtom } from "pages/games/gamePageLayout/atoms/campaign.characters.atom";
+import { useCharacterIdOptional } from "pages/games/characterSheet/hooks/useCharacterId";
 
-import { useUID } from "atoms/auth.atom";
-import { useDataswornTree } from "atoms/dataswornTree.atom";
-import { derivedAtomWithEquality } from "atoms/derivedAtomWithEquality";
+import { useAssetsStore } from "stores/assets.store";
+import { useUID } from "stores/auth.store";
+import { useDataswornTree } from "stores/dataswornTree.store";
+import { useGameStore } from "stores/game.store";
+import { useGameCharactersStore } from "stores/gameCharacters.store";
+
+import { IAsset } from "services/asset.service";
 
 import { AssetEnhancements } from "./AssetEnhancements";
 import {
@@ -20,40 +21,6 @@ import {
 import { SpecialTracks } from "./RollOptions/SpecialTracks";
 import { extractRollOptions } from "./RollOptions/extractRollOptions";
 
-const derivedCampaignState = derivedAtomWithEquality(
-  currentCampaignAtom,
-  (state) => ({
-    conditionMeters: state.campaign?.conditionMeters ?? {},
-    assets: state.sharedAssets.assets ?? {},
-  }),
-);
-
-const derivedCampaignCharacterState = (
-  uid: string,
-  currentCharacterId?: string,
-) =>
-  derivedAtomWithEquality(campaignCharactersAtom, (state) => {
-    const characterData: Record<string, CharacterRollOptionState> = {};
-    Object.entries(state).forEach(([characterId, characterState]) => {
-      if (
-        uid === characterState.characterDocument.data?.uid &&
-        (!currentCharacterId || characterId === currentCharacterId)
-      ) {
-        characterData[characterId] = {
-          name: characterState.characterDocument.data?.name,
-          stats: characterState.characterDocument.data?.stats,
-          conditionMeters:
-            characterState.characterDocument.data?.conditionMeters,
-          adds: characterState.characterDocument.data?.adds,
-          momentum: characterState.characterDocument.data?.momentum,
-          assets: characterState.assets?.assets ?? {},
-          specialTracks: characterState.characterDocument.data?.specialTracks,
-        };
-      }
-    });
-    return characterData;
-  });
-
 export interface MoveRollOptions {
   move: Datasworn.Move;
 }
@@ -61,21 +28,55 @@ export interface MoveRollOptions {
 export function MoveRollOptions(props: MoveRollOptions) {
   const { move } = props;
   const uid = useUID();
-  const { characterId } = useParams<{
-    characterId?: string;
-    campaignId?: string;
-  }>();
-  const characterData = useAtomValue(
-    useMemo(
-      () => derivedCampaignCharacterState(uid, characterId),
-      [uid, characterId],
-    ),
+  const optionalCharacterId = useCharacterIdOptional();
+
+  const characterData = useGameCharactersStore((store) => {
+    const characterData: Record<string, CharacterRollOptionState> = {};
+    Object.entries(store.characters).forEach(([characterId, character]) => {
+      if (
+        uid &&
+        uid === character?.uid &&
+        (!optionalCharacterId || characterId === optionalCharacterId)
+      ) {
+        characterData[characterId] = {
+          name: character?.name,
+          stats: character?.stats,
+          conditionMeters: character?.conditionMeters,
+          adds: character.adds,
+          momentum: character.momentum,
+          specialTracks: character?.specialTracks,
+        };
+      }
+    });
+    return characterData;
+  });
+
+  const characterAssets = useAssetsStore((store) => {
+    const characterAssets: Record<string, Record<string, IAsset>> = {};
+    Object.entries(store.characterAssets).forEach(([characterId, assets]) => {
+      if (characterData[characterId]) {
+        characterAssets[characterId] = assets;
+      }
+    });
+    return characterAssets;
+  });
+  const gameAssets = useAssetsStore((store) => store.gameAssets);
+  const gameConditionMeters = useGameStore(
+    (store) => store.game?.conditionMeters ?? {},
   );
+
   const dataswornTree = useDataswornTree();
-  const campaignData = useAtomValue(derivedCampaignState);
+
   const rollOptions = useMemo(
-    () => extractRollOptions(move, campaignData, characterData, dataswornTree),
-    [move, campaignData, characterData, dataswornTree],
+    () =>
+      extractRollOptions(
+        move,
+        gameAssets,
+        characterData,
+        characterAssets,
+        dataswornTree,
+      ),
+    [move, gameAssets, characterData, characterAssets, dataswornTree],
   );
 
   return (
@@ -102,7 +103,7 @@ export function MoveRollOptions(props: MoveRollOptions) {
             }
             gap={1}
           >
-            {!characterId && (
+            {!optionalCharacterId && (
               <Typography variant="overline">
                 {characterData[rollOptionCharacterId].name}
               </Typography>
@@ -125,8 +126,10 @@ export function MoveRollOptions(props: MoveRollOptions) {
                 character={{
                   id: rollOptionCharacterId,
                   data: characterData[rollOptionCharacterId],
+                  assets: characterAssets[rollOptionCharacterId] ?? {},
                 }}
-                campaignData={campaignData}
+                gameAssets={gameAssets}
+                gameConditionMeters={gameConditionMeters}
                 includeAdds
               />
             )}
