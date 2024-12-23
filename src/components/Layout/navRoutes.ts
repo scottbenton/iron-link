@@ -1,8 +1,7 @@
 import HomebrewIcon from "@mui/icons-material/Edit";
 import GamesIcon from "@mui/icons-material/Group";
 import CharacterIcon from "@mui/icons-material/Person";
-import SignInIcon from "@mui/icons-material/Person";
-import SignUpIcon from "@mui/icons-material/PersonAddAlt1";
+import AuthIcon from "@mui/icons-material/PersonAddAlt1";
 import WorldsIcon from "@mui/icons-material/TravelExplore";
 
 import { pathConfig } from "pages/pathConfig";
@@ -38,15 +37,9 @@ export const authenticatedNavRoutes: NavRouteConfig[] = [
 ];
 export const unauthenticatedNavRoutes: NavRouteConfig[] = [
   {
-    Logo: SignInIcon,
-    title: i18n.t("datasworn.sign-in", "Sign In"),
-    href: pathConfig.signIn,
-    checkIsSelected: (path) => path.startsWith(pathConfig.signIn),
-  },
-  {
-    Logo: SignUpIcon,
-    title: i18n.t("datasworn.sign-up", "Sign Up"),
-    href: pathConfig.signUp,
-    checkIsSelected: (path) => path.startsWith(pathConfig.signUp),
+    Logo: AuthIcon,
+    title: i18n.t("datasworn.authenticate", "Sign In/Up"),
+    href: pathConfig.auth,
+    checkIsSelected: (path) => path.startsWith(pathConfig.auth),
   },
 ];

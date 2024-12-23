@@ -11,17 +11,15 @@ export const pathConfig = {
   world: (worldId: string) => `/worlds/${worldId}`,
   homebrewSelect: "/homebrew",
   homebrew: (homebrewId: string) => `/homebrew/${homebrewId}`,
-  signIn: "/sign-in",
-  signUp: "/sign-up",
+  auth: '/auth',
 };
 
 // Can be accessed regardless of authentication status
 export const openPaths = [
-  pathConfig.signIn,
-  pathConfig.signUp,
+  pathConfig.auth,
   pathConfig.home,
   // Homebrew editor
 ];
 
 // Cannot be accessed while logged in
-export const onlyUnauthenticatedPaths = [pathConfig.signIn, pathConfig.signUp];
+export const onlyUnauthenticatedPaths = [pathConfig.auth];

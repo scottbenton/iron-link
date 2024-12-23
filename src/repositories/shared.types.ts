@@ -1,6 +1,5 @@
 export interface SpecialTrack {
   value: number;
-  spentExperience?: { [index: number]: boolean };
   isLegacy?: boolean;
 }
 

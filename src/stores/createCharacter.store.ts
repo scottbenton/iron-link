@@ -7,7 +7,7 @@ import { i18n } from "i18n/config";
 import { IAsset } from "services/asset.service";
 import { CharacterService } from "services/character.service";
 
-import { useAuthStore } from "./auth.store";
+import { useUID } from "./auth.store";
 
 export interface CharacterPortraitSettings {
   image: File | null;
@@ -153,7 +153,7 @@ export const useCreateCharacterStore = createWithEqualityFn<
         const { characterName, portrait, stats, characterAssets, gameAssets } =
           getState();
 
-        const uid = useAuthStore.getState().user?.uid;
+        const uid = useUID();
 
         if (!uid) {
           set((state) => {

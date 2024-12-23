@@ -4,7 +4,6 @@ import { immer } from "zustand/middleware/immer";
 import { createWithEqualityFn } from "zustand/traditional";
 
 import { AuthService } from "services/auth.service";
-import { UserService } from "services/user.service";
 
 export enum AuthStatus {
   Loading,
@@ -14,58 +13,51 @@ export enum AuthStatus {
 
 interface AuthState {
   status: AuthStatus;
-  user:
-    | {
-        uid: string;
-        displayName: string;
-      }
-    | undefined;
+  uid: string | undefined;
 }
 interface AuthActions {
   subscribeToAuthStatus: () => () => void;
+  sendOTPCodeToEmail: (email: string) => Promise<void>;
+  verifyOTPCode: (email: string, otpCode: string) => Promise<void>;
+  signOut: () => Promise<void>;
 }
 
 export const useAuthStore = createWithEqualityFn<AuthState & AuthActions>()(
   immer((set) => ({
     status: AuthStatus.Loading,
-    user: undefined,
+    uid: undefined,
 
     subscribeToAuthStatus: () => {
       return AuthService.listenToAuthState(
-        (user) => {
+        (uid) => {
           set((state) => {
             state.status = AuthStatus.Authenticated;
-            state.user = {
-              uid: user.uid,
-              displayName: user.displayName,
-            };
-          });
-          UserService.setUserNameAndPhoto(
-            user.uid,
-            user.displayName,
-            user.photoURL,
-          );
-        },
-        () => {
-          set((state) => {
-            state.status = AuthStatus.Unauthenticated;
-            state.user = undefined;
+            state.uid = uid;
           });
         },
         () => {
           set((state) => {
             state.status = AuthStatus.Unauthenticated;
-            state.user = undefined;
+            state.uid = undefined;
           });
         },
       );
+    },
+    sendOTPCodeToEmail: (email) => {
+      return AuthService.sendOTPCodeToEmail(email);
+    },
+    verifyOTPCode: (email, otpCode) => {
+      return AuthService.verifyOTPCode(email, otpCode);
+    },
+    signOut: () => {
+      return AuthService.logout();
     },
   })),
   deepEqual,
 );
 
 export function useUID() {
-  return useAuthStore((state) => state.user?.uid);
+  return useAuthStore((state) => state.uid);
 }
 
 export function useAuthStatus() {

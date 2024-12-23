@@ -28,7 +28,7 @@ interface UsersGamesState {
 }
 
 interface UsersGamesActions {
-  loadUsersGames: () => Promise<void>;
+  loadUsersGames: (uid: string) => Promise<void>;
 }
 
 export const useUsersGames = createWithEqualityFn<
@@ -39,9 +39,9 @@ export const useUsersGames = createWithEqualityFn<
     characterDisplayDetails: {},
     loading: true,
 
-    loadUsersGames: async () => {
+    loadUsersGames: async (uid) => {
       try {
-        const games = await GameService.getUsersGames();
+        const games = await GameService.getUsersGames(uid);
         set((state) => {
           state.loading = false;
           state.games = games;
@@ -107,7 +107,7 @@ export function useLoadUsersGames() {
   useEffect(() => {
     if (uid) {
       loadingRef.current = true;
-      loadUsersGames();
+      loadUsersGames(uid);
     }
   }, [uid, loadUsersGames]);
 }

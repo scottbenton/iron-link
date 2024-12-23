@@ -110,11 +110,11 @@ export const useGameStore = createWithEqualityFn<
 );
 
 export function useListenToGame(gameId: string | undefined) {
-  const uid = useUID();
+  // const uid = useUID();
 
-  const gamePlayers = useGameStore((state) => state.game?.playerIds ?? []);
-  const gameGuides = useGameStore((state) => state.game?.guideIds ?? []);
-  const gameType = useGameStore((state) => state.game?.gameType);
+  // const gamePlayers = useGameStore((state) => state.game?.playerIds ?? []);
+  // const gameGuides = useGameStore((state) => state.game?.guideIds ?? []);
+  // const gameType = useGameStore((state) => state.game?.gameType);
 
   const expansionsAndRulesets = useGameStore((store) => ({
     expansions: store.game?.expansions ?? {},
@@ -123,7 +123,7 @@ export function useListenToGame(gameId: string | undefined) {
   const setDataswornTree = useSetDataswornTree();
 
   const listenToGame = useGameStore((state) => state.listenToGame);
-  const setPermissions = useGameStore((state) => state.setPermissions);
+  // const setPermissions = useGameStore((state) => state.setPermissions);
 
   useEffect(() => {
     if (gameId) {
@@ -131,24 +131,24 @@ export function useListenToGame(gameId: string | undefined) {
     }
   }, [gameId, listenToGame]);
 
-  useEffect(() => {
-    if (gameId) {
-      if (!uid) {
-        setPermissions(GamePermission.Viewer);
-      } else if (
-        (gameType === GameType.Solo || gameType === GameType.Coop) &&
-        gamePlayers.includes(uid)
-      ) {
-        setPermissions(GamePermission.Guide);
-      } else if (gameGuides.includes(uid)) {
-        setPermissions(GamePermission.Guide);
-      } else if (gamePlayers.includes(uid)) {
-        setPermissions(GamePermission.Player);
-      } else {
-        setPermissions(GamePermission.Viewer);
-      }
-    }
-  }, [gamePlayers, gameGuides, gameId, gameType, setPermissions, uid]);
+  // useEffect(() => {
+  //   if (gameId) {
+  //     if (!uid) {
+  //       setPermissions(GamePermission.Viewer);
+  //     } else if (
+  //       (gameType === GameType.Solo || gameType === GameType.Coop) &&
+  //       gamePlayers.includes(uid)
+  //     ) {
+  //       setPermissions(GamePermission.Guide);
+  //     } else if (gameGuides.includes(uid)) {
+  //       setPermissions(GamePermission.Guide);
+  //     } else if (gamePlayers.includes(uid)) {
+  //       setPermissions(GamePermission.Player);
+  //     } else {
+  //       setPermissions(GamePermission.Viewer);
+  //     }
+  //   }
+  // }, [gamePlayers, gameGuides, gameId, gameType, setPermissions, uid]);
 
   useEffect(() => {
     const dataswornTree: Record<string, Datasworn.RulesPackage> = {};

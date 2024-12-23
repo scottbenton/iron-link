@@ -10,13 +10,12 @@ import {
   MenuItem,
   useColorScheme,
 } from "@mui/material";
-import { signOut } from "firebase/auth";
 import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { AuthStatus, useAuthStatus } from "stores/auth.store";
+import { useSnackbar } from "providers/SnackbarProvider";
 
-import { firebaseAuth } from "config/firebase.config";
+import { AuthStatus, useAuthStatus, useAuthStore } from "stores/auth.store";
 
 export function AppSettingsMenu() {
   const { t } = useTranslation();
@@ -26,6 +25,9 @@ export function AppSettingsMenu() {
   const buttonRef = useRef<HTMLButtonElement>(null);
 
   const { colorScheme, setColorScheme } = useColorScheme();
+
+  const { error } = useSnackbar();
+  const signOut = useAuthStore((state) => state.signOut);
 
   return (
     <>
@@ -62,7 +64,20 @@ export function AppSettingsMenu() {
           <MenuItem
             onClick={() => {
               setOpen(false);
-              signOut(firebaseAuth).then(() => window.location.reload());
+
+              signOut()
+                .then(() => window.location.reload())
+                .catch((e) => {
+                  error(
+                    t(
+                      "iron-link.error-signing-out",
+                      "Error signing out: {{message}}",
+                      {
+                        message: e.message,
+                      },
+                    ),
+                  );
+                });
             }}
           >
             <ListItemIcon>

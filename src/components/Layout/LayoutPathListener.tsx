@@ -1,7 +1,5 @@
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { matchPath, useLocation } from "react-router-dom";
-
-import { useSnackbar } from "providers/SnackbarProvider";
 
 import {
   onlyUnauthenticatedPaths,
@@ -13,15 +11,9 @@ import { useContinueUrl } from "hooks/useContinueUrl";
 
 import { AuthStatus, useAuthStatus } from "stores/auth.store";
 
-// import { sendPageViewEvent } from "lib/analytics.lib";
-import { completeMagicLinkSignupIfPresent } from "lib/auth.lib";
-
 export function LayoutPathListener() {
   const { pathname } = useLocation();
   const authStatus = useAuthStatus();
-  const { error } = useSnackbar();
-
-  const previousMagicLinkPathnameChecked = useRef<string>();
   const { redirectWithContinueUrl, navigateToContinueURL } = useContinueUrl();
 
   useEffect(() => {
@@ -29,7 +21,7 @@ export function LayoutPathListener() {
       return !!matchPath(path, pathname);
     });
     if (!doesOpenPathMatch && authStatus === AuthStatus.Unauthenticated) {
-      redirectWithContinueUrl(pathConfig.signIn, pathname);
+      redirectWithContinueUrl(pathConfig.auth, pathname);
     } else if (
       onlyUnauthenticatedPaths.includes(pathname) &&
       authStatus === AuthStatus.Authenticated
@@ -37,13 +29,6 @@ export function LayoutPathListener() {
       navigateToContinueURL(pathConfig.gameSelect);
     }
   }, [pathname, navigateToContinueURL, redirectWithContinueUrl, authStatus]);
-
-  useEffect(() => {
-    if (previousMagicLinkPathnameChecked.current !== pathname) {
-      previousMagicLinkPathnameChecked.current = pathname;
-      completeMagicLinkSignupIfPresent().catch((e) => error(e));
-    }
-  }, [pathname, error]);
 
   return null;
 }

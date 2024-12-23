@@ -2,7 +2,8 @@ import { Editor as TTEditor, useEditor } from "@tiptap/react";
 import { WebrtcProvider } from "y-webrtc";
 import * as Y from "yjs";
 
-import { useAuthStore } from "stores/auth.store";
+import { useUID } from "stores/auth.store";
+import { useUsersStore } from "stores/users.store";
 
 import { Editor } from "./Editor";
 import { rtcExtensions } from "./rtcExtensions";
@@ -18,10 +19,10 @@ export interface RtcRichTextEditorProps {
 export function RtcEditorComponent(props: RtcRichTextEditorProps) {
   const { provider, doc, saving, readOnly, Toolbar } = props;
 
-  const { uid, displayName } = useAuthStore((store) => ({
-    uid: store.user?.uid,
-    displayName: store.user?.displayName,
-  }));
+  const uid = useUID();
+  const displayName = useUsersStore((store) =>
+    uid ? store.users[uid]?.user?.name : undefined,
+  );
 
   const editor = useEditor(
     {

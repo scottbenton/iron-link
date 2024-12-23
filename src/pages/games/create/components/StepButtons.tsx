@@ -49,7 +49,7 @@ export function StepButtons(props: StepButtonsProps) {
       return;
     }
 
-    createGame(finalGameName)
+    createGame(uid, finalGameName)
       .then((gameId) => {
         if (gameType === GameType.Solo) {
           createCharacter(gameId)
