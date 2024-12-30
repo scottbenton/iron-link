@@ -14,7 +14,6 @@ import { useRef, useState } from "react";
 
 import { useSnackbar } from "providers/SnackbarProvider";
 
-import { useGameId } from "pages/games/gamePageLayout/hooks/useGameId";
 import { useGamePermissions } from "pages/games/gamePageLayout/hooks/usePermissions";
 
 import { useUID } from "stores/auth.store";
@@ -67,7 +66,6 @@ export function NormalRollActions(props: NormalRollActionsProps) {
   const { rollId, roll } = props;
 
   const uid = useUID();
-  const gameId = useGameId();
   const currentCharacterId = useCharacterIdOptional();
 
   const momentum = useGameCharacter((character) => character?.momentum ?? 0);
@@ -134,7 +132,7 @@ export function NormalRollActions(props: NormalRollActionsProps) {
       }
 
       const promises: Promise<unknown>[] = [];
-      promises.push(burnMomentumOnLog(gameId, rollId, momentum, newRollResult));
+      promises.push(burnMomentumOnLog(rollId, momentum, newRollResult));
       promises.push(setMomentum(currentCharacterId, momentumResetValue));
 
       Promise.all(promises)
@@ -225,7 +223,7 @@ export function NormalRollActions(props: NormalRollActionsProps) {
               onClick={(evt) => {
                 evt.stopPropagation();
                 setIsMenuOpen(false);
-                deleteLog(gameId, rollId).catch(() => {});
+                deleteLog(rollId).catch(() => {});
               }}
             >
               <ListItemIcon>

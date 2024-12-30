@@ -1,10 +1,26 @@
 import { GamePermission } from "stores/game.store";
 
 import { StorageError } from "repositories/errors/storageErrors";
-import { NoteDTO, NotesRepository } from "repositories/notes.repository";
+import { NotesRepository } from "repositories/notes.repository";
 import { EditPermissions, ReadPermissions } from "repositories/shared.types";
 
-export type INote = NoteDTO;
+export type INote = {
+    title: string;
+    order: number;
+  
+    creator: string;
+  
+    parentFolderId: string;
+  
+    // Permission sets can be null - we query folders first.
+    readPermissions: ReadPermissions | null;
+    editPermissions: EditPermissions | null;
+};
+
+export type INoteContent {
+  content: Uint8Array;
+  
+}
 
 export class NotesService {
   public static listenToGameNotes(

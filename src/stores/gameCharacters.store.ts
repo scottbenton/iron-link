@@ -168,11 +168,18 @@ export const useGameCharactersStore = createWithEqualityFn<
       conditionMeterId,
       value,
     ) => {
-      return CharacterService.updateConditionMeter(
-        characterId,
-        conditionMeterId,
-        value,
-      );
+      return new Promise((resolve, reject) => {
+        set((store) => {
+          store.characters[characterId].conditionMeters[conditionMeterId] =
+            value;
+          CharacterService.updateConditionMeters(
+            characterId,
+            store.characters[characterId].conditionMeters,
+          )
+            .then(resolve)
+            .catch(reject);
+        });
+      });
     },
     updateCharacterMomentum: (characterId, momentum) => {
       return CharacterService.updateMomentum(characterId, momentum);
@@ -181,14 +188,33 @@ export const useGameCharactersStore = createWithEqualityFn<
       return CharacterService.updateAdds(characterId, adds);
     },
     updateCharacterImpactValue: (characterId, impactKey, checked) => {
-      return CharacterService.updateImpact(characterId, impactKey, checked);
+      return new Promise((resolve, reject) => {
+        set((store) => {
+          store.characters[characterId].debilities[impactKey] = checked;
+          CharacterService.updateImpacts(
+            characterId,
+            store.characters[characterId].debilities,
+          )
+            .then(resolve)
+            .catch(reject);
+        });
+      });
     },
     updateSpecialTrackValue: (characterId, specialTrackKey, value) => {
-      return CharacterService.updateSpecialTrackValue(
-        characterId,
-        specialTrackKey,
-        value,
-      );
+      return new Promise((resolve, reject) => {
+        set((store) => {
+          store.characters[characterId].specialTracks[specialTrackKey] = {
+            ...store.characters[characterId].specialTracks[specialTrackKey],
+            value,
+          };
+          CharacterService.updateSpecialTracks(
+            characterId,
+            store.characters[characterId].specialTracks,
+          )
+            .then(resolve)
+            .catch(reject);
+        });
+      });
     },
     updateExperience: (characterId, experience) => {
       return CharacterService.updateExperience(characterId, experience);

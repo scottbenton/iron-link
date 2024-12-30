@@ -12,6 +12,7 @@ import { FAKE_ROOT_NOTE_FOLDER_KEY } from "../FolderView/rootNodeName";
 
 interface BreadcrumbItem {
   type: "folder" | "note";
+  isRootPlayerFolder?: boolean;
   id: string;
   name: string;
 }
@@ -57,7 +58,14 @@ export function NoteBreadcrumbs() {
           id: item.type === "folder" ? item.folderId : item.noteId,
           name:
             item.type === "folder"
-              ? store.folderState.folders[item.folderId]?.name
+              ? getItemName({
+                  name: store.folderState.folders[item.folderId]?.name,
+                  id: item.folderId,
+                  isRootPlayerFolder:
+                    store.folderState.folders[item.folderId]
+                      ?.isRootPlayerFolder ?? false,
+                  t,
+                })
               : store.noteState.notes[item.noteId]?.title,
         });
       }
@@ -96,15 +104,7 @@ export function NoteBreadcrumbs() {
         <Breadcrumbs>
           {breadcrumbItems.map((item, index) =>
             index === breadcrumbItems.length - 1 ? (
-              <Typography key={index}>
-                {getItemName({
-                  name: item.name,
-                  id: item.id,
-                  uid,
-                  t,
-                  gameType: gameType,
-                })}
-              </Typography>
+              <Typography key={index}>{item.name}</Typography>
             ) : (
               <Link
                 key={index}
@@ -117,13 +117,7 @@ export function NoteBreadcrumbs() {
                 sx={{ display: "flex" }}
                 color="textPrimary"
               >
-                {getItemName({
-                  name: item.name,
-                  id: item.id,
-                  uid,
-                  t,
-                  gameType: gameType,
-                })}
+                {item.name}
               </Link>
             ),
           )}

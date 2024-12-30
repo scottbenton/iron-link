@@ -3,12 +3,15 @@ import { Box, Typography } from "@mui/material";
 import { useMemo } from "react";
 
 import { useCharacterIdOptional } from "pages/games/characterSheet/hooks/useCharacterId";
+import { useGameIdOptional } from "pages/games/gamePageLayout/hooks/useGameId";
 
 import { useAssetsStore } from "stores/assets.store";
 import { useUID } from "stores/auth.store";
 import { useDataswornTree } from "stores/dataswornTree.store";
 import { useGameStore } from "stores/game.store";
 import { useGameCharactersStore } from "stores/gameCharacters.store";
+
+import { filterObject } from "lib/filterObject";
 
 import { IAsset } from "services/asset.service";
 
@@ -29,6 +32,7 @@ export function MoveRollOptions(props: MoveRollOptions) {
   const { move } = props;
   const uid = useUID();
   const optionalCharacterId = useCharacterIdOptional();
+  const optionalGameId = useGameIdOptional();
 
   const characterData = useGameCharactersStore((store) => {
     const characterData: Record<string, CharacterRollOptionState> = {};
@@ -53,14 +57,21 @@ export function MoveRollOptions(props: MoveRollOptions) {
 
   const characterAssets = useAssetsStore((store) => {
     const characterAssets: Record<string, Record<string, IAsset>> = {};
-    Object.entries(store.characterAssets).forEach(([characterId, assets]) => {
-      if (characterData[characterId]) {
-        characterAssets[characterId] = assets;
+    Object.entries(store.assets).forEach(([assetId, asset]) => {
+      if (asset.characterId && characterData[asset.characterId]) {
+        if (!characterAssets[asset.characterId]) {
+          characterAssets[asset.characterId] = {};
+        }
+        characterAssets[asset.characterId][assetId] = asset;
       }
     });
     return characterAssets;
   });
-  const gameAssets = useAssetsStore((store) => store.gameAssets);
+  const gameAssets = useAssetsStore((store) =>
+    filterObject(store.assets, (asset) =>
+      optionalGameId ? asset.gameId === optionalGameId : false,
+    ),
+  );
   const gameConditionMeters = useGameStore(
     (store) => store.game?.conditionMeters ?? {},
   );

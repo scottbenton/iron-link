@@ -226,6 +226,7 @@ export function NoteViewToolbar(props: NoteToolbarContentProps) {
               name: parentFolder.name,
               editPermissions: parentFolder.editPermissions,
               readPermissions: parentFolder.readPermissions,
+              isRootPlayerFolder: parentFolder.isRootPlayerFolder,
             }}
             isInGMFolder={isInGuideFolder}
           />

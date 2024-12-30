@@ -11,6 +11,8 @@ import { pathConfig } from "pages/pathConfig";
 
 import { useUID } from "stores/auth.store";
 
+import { GameType } from "repositories/game.repository";
+
 import { GameService } from "services/game.service";
 
 import { useGameId } from "../gamePageLayout/hooks/useGameId";
@@ -24,6 +26,7 @@ export function GameJoinPage() {
   const navigate = useNavigate();
 
   const [gameName, setGameName] = useState<string | null>(null);
+  const [gameType, setGameType] = useState<GameType | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string>();
 
@@ -34,6 +37,7 @@ export function GameJoinPage() {
           setLoading(false);
           setError(undefined);
           setGameName(game.name);
+          setGameType(game.gameType);
           if (game.isPlayer) {
             navigate(pathConfig.game(gameId));
           }
@@ -50,9 +54,9 @@ export function GameJoinPage() {
   }, [gameId, uid, t, navigate]);
 
   const addUser = () => {
-    if (gameId && uid) {
+    if (gameId && uid && gameType) {
       // Add user to campaign
-      GameService.addPlayer(gameId, uid)
+      GameService.addPlayer(gameId, gameType, uid)
         .then(() => {
           navigate(pathConfig.game(gameId));
         })

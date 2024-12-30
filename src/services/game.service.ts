@@ -1,16 +1,15 @@
-import { arrayRemove, arrayUnion } from "firebase/firestore";
-
 import {
   ExpansionConfig,
-  LegacyGameDTO,
+  GameDTO,
   GameRepostiory,
   GameType,
   RulesetConfig,
-  GameDTO,
-  GamePlayerDTO,
 } from "repositories/game.repository";
+import {
+  GamePlayerDTO,
+  GamePlayersRepository,
+} from "repositories/gamePlayers.repository";
 import { ColorScheme, SpecialTrack } from "repositories/shared.types";
-
 
 export type IGame = {
   id: string;
@@ -42,41 +41,56 @@ export class GameService {
     rulesets: Record<string, boolean>,
     expansions: Record<string, Record<string, boolean>>,
   ): Promise<string> {
-
-    const gameDTO: LegacyGameDTO = {
-      name: gameName,
-      playerIds: [uid],
-      worldId: null,
-      guideIds: [],
-      conditionMeters: {},
-      specialTracks: {},
-      gameType: gameType,
+    const gameId = await GameRepostiory.createGame(
+      gameName,
+      gameType,
       rulesets,
       expansions,
-      colorScheme: null,
-    };
+    );
 
-    return GameRepostiory.createGame(gameDTO);
+    let role: GamePlayerDTO["role"] = "player";
+
+    if (gameType === GameType.Coop) {
+      role = "guide";
+    } else if (gameType === GameType.Solo) {
+      role = "guide";
+    }
+
+    await GamePlayersRepository.addPlayerToGame(gameId, uid, role);
+
+    return gameId;
   }
 
-  public static async getGameInviteInfo(gameId: string, userId: string): Promise<{
-    name: string,
-    gameType: GameType,
-    isPlayer: boolean,
+  public static async getGameInviteInfo(
+    gameId: string,
+    userId: string,
+  ): Promise<{
+    name: string;
+    gameType: GameType;
+    isPlayer: boolean;
   }> {
-    const result = await GameRepostiory.getGameInviteInfo(gameId, userId);
+    const isPlayerInGame =
+      await GamePlayersRepository.getGamePlayerEntryIfExists(gameId, userId);
+    if (isPlayerInGame) {
+      return {
+        name: "",
+        gameType: GameType.Solo,
+        isPlayer: true,
+      };
+    }
+    const result = await GameRepostiory.getGameInviteInfo(gameId);
 
     let gameType: GameType = GameType.Solo;
-    if (result.game_type === 'co-op') {
+    if (result.game_type === "co-op") {
       gameType = GameType.Coop;
-    } else if (result.game_type === 'guided') {
+    } else if (result.game_type === "guided") {
       gameType = GameType.Guided;
     }
 
     return {
       name: result.name,
       gameType,
-      isPlayer: result.isPlayer
+      isPlayer: false,
     };
   }
 
@@ -94,13 +108,12 @@ export class GameService {
     );
   }
 
-  public static async getUsersGames(uid: string): Promise<Record<string, IGame>> {
+  public static async getUsersGames(
+    uid: string,
+  ): Promise<Record<string, IGame>> {
     const games = await GameRepostiory.getUsersGames(uid);
     return Object.fromEntries(
-      games.map((gameDTO) => [
-        gameDTO.id,
-        this.convertGameDTOToGame(gameDTO),
-      ]),
+      games.map((gameDTO) => [gameDTO.id, this.convertGameDTOToGame(gameDTO)]),
     );
   }
 
@@ -113,62 +126,54 @@ export class GameService {
 
   public static async addPlayer(
     gameId: string,
+    gameType: GameType,
     playerId: string,
   ): Promise<void> {
-    await GameRepostiory.updateGame(gameId, {
-      playerIds: arrayUnion(playerId),
-    });
+    const role = this.getDefaultPlayerRoleForGameType(gameType);
+    await GamePlayersRepository.addPlayerToGame(gameId, playerId, role);
   }
 
   public static async removePlayer(
     gameId: string,
     playerId: string,
   ): Promise<void> {
-    await GameRepostiory.updateGame(gameId, {
-      playerIds: arrayRemove(playerId),
-    });
+    await GamePlayersRepository.removePlayerFromGame(gameId, playerId);
   }
 
   public static async addGuide(gameId: string, guideId: string): Promise<void> {
-    await GameRepostiory.updateGame(gameId, { guideIds: arrayUnion(guideId) });
+    await GamePlayersRepository.updateGamePlayerRole(gameId, guideId, "guide");
   }
 
   public static async removeGuide(
     gameId: string,
     guideId: string,
   ): Promise<void> {
-    await GameRepostiory.updateGame(gameId, { guideIds: arrayRemove(guideId) });
+    await GamePlayersRepository.updateGamePlayerRole(gameId, guideId, "player");
   }
 
-  public static async setWorldId(
+  public static async updateConditionMeters(
     gameId: string,
-    worldId: string | null,
-  ): Promise<void> {
-    await GameRepostiory.updateGame(gameId, { worldId });
-  }
-
-  public static async updateConditionMeter(
-    gameId: string,
-    conditionMeterKey: string,
-    value: number,
+    updatedConditionMeters: Record<string, number>,
   ): Promise<void> {
     await GameRepostiory.updateGame(gameId, {
-      [`conditionMeters.${conditionMeterKey}`]: value,
+      condition_meter_values: updatedConditionMeters,
     });
   }
 
-  public static async updateSpecialTrackValue(
+  public static async updateSpecialTracks(
     gameId: string,
-    trackKey: string,
-    value: number,
+    specialTracks: Record<string, SpecialTrack>,
   ): Promise<void> {
     await GameRepostiory.updateGame(gameId, {
-      [`specialTracks.${trackKey}.value`]: value,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      special_track_values: specialTracks as unknown as any,
     });
   }
 
   public static async changeGameType(gameId: string, gameType: GameType) {
-    await GameRepostiory.updateGame(gameId, { gameType });
+    const role = this.getDefaultPlayerRoleForGameType(gameType);
+    await GamePlayersRepository.updateAllGamePlayerRoles(gameId, role);
+    await GameRepostiory.updateGame(gameId, { game_type: gameType });
   }
 
   public static async updateRules(
@@ -183,18 +188,14 @@ export class GameService {
     gameId: string,
     colorScheme: ColorScheme,
   ) {
-    await GameRepostiory.updateGame(gameId, { colorScheme });
-  }
-
-  private static convertLegacyGameDTOToGame(id: string, gameDTO: LegacyGameDTO): IGame {
-    return {id, ...gameDTO};
+    await GameRepostiory.updateGame(gameId, { color_scheme: colorScheme });
   }
 
   private static convertGameDTOToGame(gameDTO: GameDTO): IGame {
     let gameType = GameType.Solo;
-    if (gameDTO.game_type === 'co-op') {
+    if (gameDTO.game_type === "co-op") {
       gameType = GameType.Coop;
-    } else if (gameDTO.game_type === 'guided') {
+    } else if (gameDTO.game_type === "guided") {
       gameType = GameType.Guided;
     }
 
@@ -209,22 +210,39 @@ export class GameService {
       colorScheme = ColorScheme.Myriad;
     } else if (gameDTO.color_scheme === ColorScheme.Mystic) {
       colorScheme = ColorScheme.Mystic;
-    } 
+    }
 
     return {
       id: gameDTO.id,
       name: gameDTO.name,
       worldId: null,
-      conditionMeters: (gameDTO.condition_meter_values ?? {}) as Record<string, number>,
-      specialTracks: (gameDTO.special_track_values ?? {}) as unknown as Record<string, SpecialTrack>,
+      conditionMeters: (gameDTO.condition_meter_values ?? {}) as Record<
+        string,
+        number
+      >,
+      specialTracks: (gameDTO.special_track_values ?? {}) as unknown as Record<
+        string,
+        SpecialTrack
+      >,
       gameType,
       colorScheme,
       rulesets: gameDTO.rulesets as Record<string, boolean>,
       expansions: gameDTO.expansions as Record<string, Record<string, boolean>>,
-    }
+    };
   }
 
   public static deleteGame(gameId: string): Promise<void> {
     return GameRepostiory.deleteGame(gameId);
+  }
+
+  private static getDefaultPlayerRoleForGameType(
+    gameType: GameType,
+  ): GamePlayerDTO["role"] {
+    if (gameType === GameType.Coop) {
+      return "guide";
+    } else if (gameType === GameType.Solo) {
+      return "guide";
+    }
+    return "player";
   }
 }

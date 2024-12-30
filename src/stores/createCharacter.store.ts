@@ -4,10 +4,8 @@ import { createWithEqualityFn } from "zustand/traditional";
 
 import { i18n } from "i18n/config";
 
-import { IAsset } from "services/asset.service";
+import { AssetService, IAsset } from "services/asset.service";
 import { CharacterService } from "services/character.service";
-
-import { useUID } from "./auth.store";
 
 export interface CharacterPortraitSettings {
   image: File | null;
@@ -15,12 +13,17 @@ export interface CharacterPortraitSettings {
   scale: number;
 }
 
+export type IAssetWithoutAdditives = Omit<
+  IAsset,
+  "id" | "characterId" | "gameId"
+>;
+
 interface CreateCharacterState {
   characterName: string;
   portrait: CharacterPortraitSettings;
   stats: Record<string, number>;
-  characterAssets: IAsset[];
-  gameAssets: IAsset[];
+  characterAssets: IAssetWithoutAdditives[];
+  gameAssets: IAssetWithoutAdditives[];
   error: string | null;
 }
 
@@ -28,7 +31,10 @@ interface CreateCharacterActions {
   setCharacterName: (name: string) => void;
   setPortraitSettings: (settings: CharacterPortraitSettings) => void;
   setStat: (stat: string, value: number) => void;
-  addAsset: (asset: Omit<IAsset, "order">, shared: boolean) => void;
+  addAsset: (
+    asset: Omit<IAssetWithoutAdditives, "order">,
+    shared: boolean,
+  ) => void;
   toggleAssetAbility: (
     index: number,
     abilityIndex: number,
@@ -48,7 +54,7 @@ interface CreateCharacterActions {
     shared: boolean,
   ) => void;
   removeAsset: (index: number, shared: boolean) => void;
-  createCharacter: (gameId: string) => Promise<string>;
+  createCharacter: (gameId: string, uid: string) => Promise<string>;
   reset: () => void;
 }
 
@@ -86,7 +92,7 @@ export const useCreateCharacterStore = createWithEqualityFn<
         state.stats[stat] = value;
       });
     },
-    addAsset: (asset: Omit<IAsset, "order">, shared: boolean) => {
+    addAsset: (asset, shared) => {
       set((state) => {
         const orderedAssets = (
           shared ? state.gameAssets : state.characterAssets
@@ -148,48 +154,48 @@ export const useCreateCharacterStore = createWithEqualityFn<
         assets.splice(index, 1);
       });
     },
-    createCharacter: (gameId: string) => {
-      return new Promise((resolve, reject) => {
-        const { characterName, portrait, stats, characterAssets, gameAssets } =
-          getState();
+    createCharacter: async (gameId, uid) => {
+      const { characterName, portrait, stats, characterAssets, gameAssets } =
+        getState();
 
-        const uid = useUID();
+      if (!characterName) {
+        set((state) => {
+          state.error = i18n.t(
+            "character.no-name-entered-error",
+            "Please enter a name",
+          );
+        });
+        throw new Error("No name entered");
+      }
 
-        if (!uid) {
-          set((state) => {
-            state.error = i18n.t(
-              "character.no-user-id-error",
-              "You must be logged in to create a character.",
-            );
-          });
-          reject();
-          return;
-        }
-
-        if (!characterName) {
-          set((state) => {
-            state.error = i18n.t(
-              "character.no-name-entered-error",
-              "Please enter a name",
-            );
-          });
-          reject();
-          return;
-        }
-
-        CharacterService.createCharacterAndAddToGame({
-          uid,
-          gameId,
-          name: characterName,
-          stats,
-          profileImage: portrait,
-          characterAssets,
-          gameAssets,
-        })
-          .then(resolve)
-          .catch(reject);
+      const characterId = await CharacterService.createCharacterAndAddToGame({
+        uid,
+        gameId,
+        name: characterName,
+        stats,
+        profileImage: portrait,
       });
+
+      const gameAssetPromises = gameAssets.map((gameAsset) =>
+        AssetService.createAsset({
+          ...gameAsset,
+          gameId,
+          characterId: null,
+        }),
+      );
+      const characterAssetPromises = characterAssets.map((characterAsset) =>
+        AssetService.createAsset({
+          ...characterAsset,
+          gameId: null,
+          characterId,
+        }),
+      );
+
+      await Promise.all([...gameAssetPromises, ...characterAssetPromises]);
+
+      return characterId;
     },
+
     reset: () => {
       set((state) => {
         state.characterName = defaultCreateCharacterState.characterName;

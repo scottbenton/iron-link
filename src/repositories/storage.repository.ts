@@ -1,20 +1,19 @@
-import {
-  deleteObject,
-  getDownloadURL,
-  ref,
-  uploadBytes,
-} from "firebase/storage";
-
-import { storage } from "config/firebase.config";
+import { supabase } from "lib/supabase.lib";
 
 import { FileFailedToUploadError, UnknownError } from "./errors/storageErrors";
 
-export class StorageRepository {
-  public static async storeImage(path: string, image: File): Promise<void> {
-    return new Promise<void>((res, reject) => {
-      const imageRef = ref(storage, `${path}/${image.name}`);
+type BucketNames = "characters";
 
-      uploadBytes(imageRef, image)
+export class StorageRepository {
+  public static async storeImage(
+    bucket: BucketNames,
+    path: string,
+    image: File,
+  ): Promise<void> {
+    return new Promise<void>((res, reject) => {
+      supabase.storage
+        .from(bucket)
+        .upload(`${path}/${image.name}`, image)
         .then(() => {
           res();
         })
@@ -37,29 +36,31 @@ export class StorageRepository {
   }
 
   public static async deleteImage(
+    bucket: BucketNames,
     path: string,
     filename: string,
   ): Promise<void> {
-    const imageRef = ref(storage, `${path}/${filename}`);
-    try {
-      await deleteObject(imageRef);
-    } catch (e) {
-      console.error(e);
-      throw new UnknownError(`Failed to delete ${filename}.`);
-    }
+    return new Promise<void>((res, reject) => {
+      supabase.storage
+        .from(bucket)
+        .remove([`${path}/${filename}`])
+        .then(() => {
+          res();
+        })
+        .catch((e) => {
+          console.error(e);
+          reject(new UnknownError(`Failed to delete ${filename}.`));
+        });
+    });
   }
 
-  public static async getImageUrl(
+  public static getImageUrl(
+    bucket: BucketNames,
     path: string,
     filename: string,
-  ): Promise<string> {
-    const imageRef = ref(storage, `${path}/${filename}`);
-    try {
-      return await getDownloadURL(imageRef);
-    } catch (e) {
-      console.error(e);
-      throw new UnknownError(`Failed to get download URL for ${path}.`);
-    }
+  ): string {
+    return supabase.storage.from(bucket).getPublicUrl(`${path}/${filename}`)
+      .data.publicUrl;
   }
 }
 

@@ -1,8 +1,13 @@
 import { Datasworn } from "@datasworn/core";
 import { useCallback } from "react";
 
+import { useCharacterIdOptional } from "pages/games/characterSheet/hooks/useCharacterId";
+import { useGameIdOptional } from "pages/games/gamePageLayout/hooks/useGameId";
+
+import { useUID } from "stores/auth.store";
 import { useDataswornTree } from "stores/dataswornTree.store";
 
+import { createId } from "lib/id.lib";
 import { rollDie } from "lib/rollDie";
 
 import { RollType } from "repositories/shared.types";
@@ -14,10 +19,21 @@ import { getOracleRollable } from "./datasworn/useOracleRollable";
 
 export function useRollOracle() {
   const tree = useDataswornTree();
+  const gameId = useGameIdOptional();
+  const uid = useUID();
+  const characterId = useCharacterIdOptional();
 
   const handleRollOracle = useCallback(
-    (oracleId: string) => rollOracle(oracleId, tree, null, "uid", false),
-    [tree],
+    (oracleId: string) =>
+      rollOracle(
+        oracleId,
+        tree,
+        characterId ?? null,
+        uid ?? "",
+        gameId ?? "fake-game",
+        false,
+      ),
+    [tree, uid, characterId, gameId],
   );
 
   return handleRollOracle;
@@ -28,6 +44,7 @@ export function rollOracle(
   tree: Record<string, Datasworn.RulesPackage>,
   characterId: string | null,
   uid: string,
+  gameId: string,
   guidesOnly: boolean,
 ): IOracleTableRoll | undefined {
   const oracle =
@@ -88,6 +105,7 @@ export function rollOracle(
                 tree,
                 characterId,
                 uid,
+                gameId,
                 guidesOnly,
               );
               if (subResult) {
@@ -108,6 +126,8 @@ export function rollOracle(
 
   if (resultString && rolls !== undefined) {
     return {
+      id: createId(),
+      gameId: gameId,
       type: RollType.OracleTable,
       rollLabel: oracle.name,
       timestamp: new Date(),

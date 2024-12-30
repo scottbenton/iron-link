@@ -68,13 +68,9 @@ interface NotesStoreActions {
     order: number,
     readPermissions: ReadPermissions,
     editPermissions: EditPermissions,
-    folderId?: string,
+    isRootPlayerFolder?: boolean,
   ) => Promise<string>;
-  updateFolderName: (
-    gameId: string,
-    folderId: string,
-    name: string,
-  ) => Promise<void>;
+  updateFolderName: (folderId: string, name: string) => Promise<void>;
   // updateFolderPermissions: (
   //   gameId: string,
   //   folderId: string,
@@ -82,7 +78,7 @@ interface NotesStoreActions {
   //   editPermissions: EditPermissions,
   // ) => Promise<void>;
 
-  deleteFolder: (gameId: string, folderId: string) => Promise<void>;
+  deleteFolder: (folderId: string) => Promise<void>;
 
   createNote: (
     uid: string,
@@ -279,7 +275,7 @@ export const useNotesStore = createWithEqualityFn<
       order,
       readPermissions,
       editPermissions,
-      folderId,
+      isRootPlayerFolder,
     ) => {
       return NoteFoldersService.addFolder(
         uid,
@@ -289,11 +285,11 @@ export const useNotesStore = createWithEqualityFn<
         name,
         readPermissions,
         editPermissions,
-        folderId,
+        isRootPlayerFolder ?? false,
       );
     },
-    updateFolderName: (gameId, folderId, name) => {
-      return NoteFoldersService.updateFolderName(gameId, folderId, name);
+    updateFolderName: (folderId, name) => {
+      return NoteFoldersService.updateFolderName(folderId, name);
     },
     // updateFolderPermissions: (
     //   gameId,
@@ -303,8 +299,8 @@ export const useNotesStore = createWithEqualityFn<
     // ) => {
     //   return new Promise((resolve, reject) => {});
     // },
-    deleteFolder: (gameId, folderId) => {
-      return NoteFoldersService.deleteFolder(gameId, folderId);
+    deleteFolder: (folderId) => {
+      return NoteFoldersService.deleteFolder(folderId);
     },
 
     createNote: (uid, gameId, parentFolderId, title, order) => {
@@ -431,3 +427,12 @@ export function useListenToGameNotes(gameId: string | undefined) {
 // Query all notes where I have permission OR notes in folders where I have permission
 
 export const GUIDE_NOTE_FOLDER_NAME = "guide-notes";
+
+export function getPlayerNotesFolder(
+  playerId: string,
+  folders: Record<string, INoteFolder>,
+): INoteFolder | undefined {
+  return Object.values(folders).find(
+    (folder) => folder.creator === playerId && folder.isRootPlayerFolder,
+  );
+}

@@ -58,7 +58,7 @@ export function MoveDialog(props: MoveDialogProps) {
 
   const uid = useUID();
   const campaignId = useGameId();
-  const { gameType, gamePermission: campaignPermission } = useGamePermissions();
+  const { gamePermission: campaignPermission } = useGamePermissions();
 
   const descendants = useFolderDescendants(type === "folder" ? id : undefined);
   const [isMoveLoading, setIsMoveLoading] = useState(false);
@@ -197,8 +197,7 @@ export function MoveDialog(props: MoveDialogProps) {
               label={getItemName({
                 name: folders[folderId].name,
                 id: folderId,
-                uid,
-                gameType: gameType,
+                isRootPlayerFolder: folders[folderId].isRootPlayerFolder,
                 t,
               })}
             >

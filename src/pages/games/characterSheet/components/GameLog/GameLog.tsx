@@ -4,6 +4,10 @@ import { useTranslation } from "react-i18next";
 
 import { EmptyState } from "components/Layout/EmptyState";
 
+import { useGameId } from "pages/games/gamePageLayout/hooks/useGameId";
+import { useGamePermissions } from "pages/games/gamePageLayout/hooks/usePermissions";
+
+import { GamePermission } from "stores/game.store";
 import { useGameLogStore } from "stores/gameLog.store";
 
 import { GameLogEntry } from "./GameLogEntry";
@@ -13,6 +17,8 @@ export function GameLog() {
   const error = useGameLogStore((state) => state.error);
   const logs = useGameLogStore((state) => state.logs);
 
+  const gameId = useGameId();
+  const isGuide = useGamePermissions().gamePermission === GamePermission.Guide;
   const loadMoreLogs = useGameLogStore((state) => state.loadMoreLogsIfPresent);
 
   const { t } = useTranslation();
@@ -33,7 +39,7 @@ export function GameLog() {
         (entries) => {
           entries.forEach((entry) => {
             if (entry.isIntersecting) {
-              loadMoreLogs();
+              loadMoreLogs(gameId, isGuide);
             }
           });
         },
@@ -46,7 +52,7 @@ export function GameLog() {
         observer.disconnect();
       };
     }
-  }, [loadMoreLogs]);
+  }, [loadMoreLogs, gameId, isGuide]);
 
   return (
     <Box flexGrow={1}>

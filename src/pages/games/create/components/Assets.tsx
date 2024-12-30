@@ -7,9 +7,10 @@ import { GridLayout } from "components/Layout";
 import { AssetCard } from "components/datasworn/AssetCard";
 import { AssetCardDialog } from "components/datasworn/AssetCardDialog/AssetCardDialog";
 
-import { useCreateCharacterStore } from "stores/createCharacter.store";
-
-import { IAsset } from "services/asset.service";
+import {
+  IAssetWithoutAdditives,
+  useCreateCharacterStore,
+} from "stores/createCharacter.store";
 
 export function Assets() {
   const characterAssets = useCreateCharacterStore(
@@ -32,7 +33,10 @@ export function Assets() {
         items={combinedAssets}
         renderItem={(assetDocument, index) => (
           <AssetGridCard
-            index={assetDocument.shared ? index : index - gameAssets.length}
+            index={
+              index >= gameAssets.length ? index - gameAssets.length : index
+            }
+            shared={index < gameAssets.length}
             assetDocument={assetDocument}
           />
         )}
@@ -66,8 +70,8 @@ export function Assets() {
       <AssetCardDialog
         open={isAddAssetDialogOpen}
         handleClose={() => setIsAddAssetDialogOpen(false)}
-        handleAssetSelection={(asset) => {
-          addAsset(asset, asset.shared);
+        handleAssetSelection={(asset, shared) => {
+          addAsset(asset, shared);
           setIsAddAssetDialogOpen(false);
         }}
       />
@@ -77,11 +81,12 @@ export function Assets() {
 
 interface AssetGridCardProps {
   index: number;
-  assetDocument: IAsset;
+  assetDocument: IAssetWithoutAdditives;
+  shared: boolean;
 }
 
 function AssetGridCard(props: AssetGridCardProps) {
-  const { index, assetDocument } = props;
+  const { index, assetDocument, shared } = props;
   const { t } = useTranslation();
 
   const toggleAssetAbility = useCreateCharacterStore(
@@ -94,8 +99,6 @@ function AssetGridCard(props: AssetGridCardProps) {
     (store) => store.updateAssetOption,
   );
   const removeAsset = useCreateCharacterStore((store) => store.removeAsset);
-
-  const shared = assetDocument.shared;
 
   const handleAssetAbilityToggle = useCallback(
     (abilityIndex: number, checked: boolean) => {
@@ -124,8 +127,13 @@ function AssetGridCard(props: AssetGridCardProps) {
 
   return (
     <AssetCard
-      assetId={assetDocument.id}
-      assetDocument={assetDocument}
+      assetId={assetDocument.dataswornAssetId}
+      assetDocument={{
+        ...assetDocument,
+        id: "",
+        characterId: null,
+        gameId: null,
+      }}
       headerActions={
         <IconButton
           aria-label={t("character.assets.remove-asset", "Remove Asset")}

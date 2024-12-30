@@ -18,7 +18,6 @@ import { useSnackbar } from "providers/SnackbarProvider";
 import { DialogTitleWithCloseButton } from "components/DialogTitleWithCloseButton";
 import { RollSnackbar } from "components/characters/rolls/RollSnackbar";
 
-import { useGameId } from "pages/games/gamePageLayout/hooks/useGameId.ts";
 import { getRoll } from "pages/games/hooks/useRollStatAndAddToLog";
 
 import { useMove } from "hooks/datasworn/useMove";
@@ -43,7 +42,6 @@ export function DieRerollDialog(props: DieRerollDialogProps) {
   const { open, handleClose, roll, rollId } = props;
 
   const { t } = useTranslation();
-  const gameId = useGameId();
   const momentum = useGameCharacter(
     (character) => character?.momentum ?? DEFAULT_MOMENTUM,
   );
@@ -92,7 +90,7 @@ export function DieRerollDialog(props: DieRerollDialogProps) {
   const setGameLog = useGameLogStore((store) => store.setGameLog);
   const handleSave = () => {
     setLoading(true);
-    setGameLog(gameId, rollId, updatedRoll)
+    setGameLog(rollId, updatedRoll)
       .then(() => {
         setLoading(false);
         handleClose();

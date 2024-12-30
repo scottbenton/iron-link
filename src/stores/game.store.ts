@@ -9,12 +9,9 @@ import {
   defaultExpansions,
 } from "data/datasworn.packages";
 
-import { GameType } from "repositories/game.repository";
-
 import { IAsset } from "services/asset.service";
 import { GameService, IGame } from "services/game.service";
 
-import { useUID } from "./auth.store";
 import { useSetDataswornTree } from "./dataswornTree.store";
 
 export enum GamePermission {
@@ -100,7 +97,19 @@ export const useGameStore = createWithEqualityFn<
       });
     },
     updateConditionMeter: (gameId, conditionMeterKey, value) => {
-      return GameService.updateConditionMeter(gameId, conditionMeterKey, value);
+      return new Promise((resolve, reject) => {
+        set((state) => {
+          if (state.game?.id === gameId) {
+            state.game.conditionMeters[conditionMeterKey] = value;
+            GameService.updateConditionMeters(
+              gameId,
+              state.game.conditionMeters,
+            )
+              .then(resolve)
+              .catch(reject);
+          }
+        });
+      });
     },
     deleteGame: (gameId) => {
       return GameService.deleteGame(gameId);

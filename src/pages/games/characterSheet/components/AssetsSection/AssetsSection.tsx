@@ -5,6 +5,8 @@ import { useGameId } from "pages/games/gamePageLayout/hooks/useGameId";
 
 import { useAssetsStore } from "stores/assets.store";
 
+import { filterObject } from "lib/filterObject";
+
 import { useCharacterIdOptional } from "../../hooks/useCharacterId";
 import { useIsOwnerOfCharacter } from "../../hooks/useIsOwnerOfCharacter";
 import { AssetSectionHeader } from "./AssetSectionHeader";
@@ -16,7 +18,12 @@ export function AssetsSection() {
 
   const sortedCharacterAssets = useAssetsStore((store) => {
     return Object.entries(
-      characterId ? (store.characterAssets[characterId] ?? {}) : {},
+      characterId
+        ? filterObject(
+            store.assets,
+            (asset) => asset.characterId === characterId,
+          )
+        : {},
     ).sort(([, a], [, b]) => {
       return a.order - b.order;
     });
@@ -29,7 +36,11 @@ export function AssetsSection() {
   }, [sortedCharacterAssets]);
 
   const sortedSharedAssets = useAssetsStore((store) => {
-    return Object.entries(store.gameAssets).sort(([, a], [, b]) => {
+    return Object.entries(
+      filterObject(store.assets, (asset) =>
+        gameId ? asset.gameId === gameId : false,
+      ),
+    ).sort(([, a], [, b]) => {
       return a.order - b.order;
     });
   });
@@ -59,7 +70,6 @@ export function AssetsSection() {
         <AssetsSectionCard
           key={assetId}
           doesUserOwnCharacter={doesUserOwnCharacter}
-          id={{ type: "game", gameId }}
           assetId={assetId}
           assetDocument={asset}
           showUnavailableAbilities={showAllAbilities}
@@ -70,7 +80,6 @@ export function AssetsSection() {
           <AssetsSectionCard
             key={assetId}
             doesUserOwnCharacter={doesUserOwnCharacter}
-            id={{ type: "character", characterId }}
             assetId={assetId}
             assetDocument={asset}
             showUnavailableAbilities={showAllAbilities}

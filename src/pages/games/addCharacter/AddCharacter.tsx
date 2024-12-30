@@ -30,7 +30,7 @@ export function AddCharacter() {
   const handleCreate = useCallback(() => {
     if (!uid) return;
 
-    createCharacter(gameId)
+    createCharacter(gameId, uid)
       .then((characterId) => {
         resetCharacter();
         navigate(pathConfig.gameCharacter(gameId, characterId));

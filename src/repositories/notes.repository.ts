@@ -16,9 +16,17 @@ import {
   where,
 } from "firebase/firestore";
 
+import {
+  Tables,
+  TablesInsert,
+  TablesUpdate,
+} from "types/supabase-generated.type";
+
 import { GamePermission } from "stores/game.store";
 
 import { firestore } from "config/firebase.config";
+
+import { supabase } from "lib/supabase.lib";
 
 import {
   StorageError,
@@ -27,36 +35,14 @@ import {
 import { GameRepostiory } from "./game.repository";
 import { EditPermissions, ReadPermissions } from "./shared.types";
 
-export interface NoteDTO {
-  title: string;
-  order: number;
-
-  creator: string;
-
-  parentFolderId: string;
-
-  // Permission sets can be null - we query folders first.
-  readPermissions: ReadPermissions | null;
-  editPermissions: EditPermissions | null;
-}
+export type NoteDTO = Tables<"notes">;
+type NoteInsertDTO = TablesInsert<"notes">;
+type NoteUpdateDTO = TablesUpdate<"notes">;
 
 export type PartialNoteDTO = PartialWithFieldValue<NoteDTO>;
 
 export class NotesRepository {
-  public static collectionName = "notes";
-
-  public static getNoteCollectionName(gameId: string): string {
-    return `${GameRepostiory.collectionName}/${gameId}/${this.collectionName}`;
-  }
-  private static getNoteCollectionRef(gameId: string) {
-    return collection(
-      firestore,
-      this.getNoteCollectionName(gameId),
-    ) as CollectionReference<NoteDTO>;
-  }
-  private static getNoteDocumentRef(gameId: string, noteId: string) {
-    return doc(this.getNoteCollectionRef(gameId), noteId);
-  }
+  private static notes = () => supabase.from("notes");
 
   public static listenToNotes(
     uid: string | undefined,
@@ -69,6 +55,24 @@ export class NotesRepository {
     ) => void,
     onError: (error: StorageError) => void,
   ): () => void {
+    const query = this.notes()
+      .select(
+        `
+        id,
+        author_id,
+        parent_folder_id,
+        title,
+        read_permissions,
+        note_edit_permissions,
+        created_at,
+        note_folders(
+          game_id
+        )
+        `,
+      )
+      .eq("");
+    // Todo - make sure parentFolderGameId is equal to game ID and then go through the same permission checks as in noteFolders
+
     const parentNoteFolderQuery =
       accessibleParentNoteFolderIds.length > 0
         ? [

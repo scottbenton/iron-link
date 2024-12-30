@@ -31,13 +31,17 @@ interface UsersGamesActions {
   loadUsersGames: (uid: string) => Promise<void>;
 }
 
+const defaultValues: UsersGamesState = {
+  games: {},
+  characterDisplayDetails: {},
+  loading: true,
+};
+
 export const useUsersGames = createWithEqualityFn<
   UsersGamesState & UsersGamesActions
 >()(
   immer((set) => ({
-    games: {},
-    characterDisplayDetails: {},
-    loading: true,
+    ...defaultValues,
 
     loadUsersGames: async (uid) => {
       try {
@@ -76,15 +80,17 @@ export const useUsersGames = createWithEqualityFn<
             {};
 
           Object.entries(characterMap).forEach(([characterId, character]) => {
-            if (!characterDisplayDetails[character.gameId]) {
-              characterDisplayDetails[character.gameId] = {};
+            if (character.gameId) {
+              if (!characterDisplayDetails[character.gameId]) {
+                characterDisplayDetails[character.gameId] = {};
+              }
+              characterDisplayDetails[character.gameId][characterId] = {
+                name: character.name,
+                profileImageSettings: character.profileImage,
+                profileImageURL: portraitURLs[characterId] ?? null,
+                uid: character.uid,
+              };
             }
-            characterDisplayDetails[character.gameId][characterId] = {
-              name: character.name,
-              profileImageSettings: character.profileImage,
-              profileImageURL: portraitURLs[characterId] ?? null,
-              uid: character.uid,
-            };
           });
           state.characterDisplayDetails = characterDisplayDetails;
         });

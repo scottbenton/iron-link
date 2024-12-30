@@ -85,7 +85,7 @@ export function FolderViewToolbar(props: FolderViewToolbarProps) {
   };
 
   const renameCurrentFolder = (name: string) => {
-    updateNoteFolderName(gameId, folderId, name).catch(() => {});
+    updateNoteFolderName(folderId, name).catch(() => {});
   };
 
   return (
@@ -119,6 +119,7 @@ export function FolderViewToolbar(props: FolderViewToolbarProps) {
                 name: parentFolder.name,
                 editPermissions: parentFolder.editPermissions,
                 readPermissions: parentFolder.readPermissions,
+                isRootPlayerFolder: parentFolder.isRootPlayerFolder,
               }}
               isInGMFolder={isInGuideFolder}
             />
@@ -127,7 +128,7 @@ export function FolderViewToolbar(props: FolderViewToolbarProps) {
             <FolderDeleteButton
               parentFolderId={folder.parentFolderId}
               folderId={folderId}
-              name={folder.name}
+              name={folder.name ?? ""}
             />
           )}
 
@@ -165,7 +166,9 @@ export function FolderViewToolbar(props: FolderViewToolbarProps) {
                 ? t("notes.folder", "Folder")
                 : t("notes.note", "Note")
             }
-            name={nameItemDialogSettings.renamingCurrent ? folder.name : ""}
+            name={
+              nameItemDialogSettings.renamingCurrent ? (folder.name ?? "") : ""
+            }
             onSave={(name) => {
               if (nameItemDialogSettings.renamingCurrent) {
                 renameCurrentFolder(name);

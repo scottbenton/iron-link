@@ -5,10 +5,12 @@ import { useGamePermissions } from "pages/games/gamePageLayout/hooks/usePermissi
 
 import { useUID } from "stores/auth.store";
 import { GamePermission } from "stores/game.store";
-import { GUIDE_NOTE_FOLDER_NAME } from "stores/notes.store";
+import {
+  GUIDE_NOTE_FOLDER_NAME,
+  getPlayerNotesFolder,
+} from "stores/notes.store";
 import { useNotesStore } from "stores/notes.store";
 
-import { GameType } from "repositories/game.repository";
 import { EditPermissions, ReadPermissions } from "repositories/shared.types";
 
 export function useChooseDefaultOpenNote() {
@@ -32,7 +34,7 @@ export function useChooseDefaultOpenNote() {
       uid &&
       gamePermission !== GamePermission.Viewer
     ) {
-      const userFolder = folderState.folders[uid];
+      const userFolder = getPlayerNotesFolder(uid, folderState.folders);
       if (!userFolder) {
         addFolder(
           uid,
@@ -42,23 +44,7 @@ export function useChooseDefaultOpenNote() {
           0,
           ReadPermissions.OnlyAuthor,
           EditPermissions.OnlyAuthor,
-          uid,
-        );
-      }
-      if (
-        gameType !== GameType.Solo &&
-        gamePermission === GamePermission.Guide &&
-        !folderState.folders[GUIDE_NOTE_FOLDER_NAME]
-      ) {
-        addFolder(
-          uid,
-          gameId,
-          null,
-          GUIDE_NOTE_FOLDER_NAME,
-          0,
-          ReadPermissions.OnlyGuides,
-          EditPermissions.OnlyGuides,
-          GUIDE_NOTE_FOLDER_NAME,
+          true,
         );
       }
     }

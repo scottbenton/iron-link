@@ -17,7 +17,8 @@
     "extract:i18n": "i18next 'src/**/*.{ts,tsx}' [-oc]",
     "supabase:start": "supabase start",
     "supabase:stop": "supabase stop",
-    "supabase:gen-types": "supabase gen types typescript --local > ./src/types/supabase-generated.type.ts"
+    "supabase:gen-types": "supabase gen types typescript --local > ./src/types/supabase-generated.type.ts",
+    "supabase:create-db-script": "supabase migration new update-db"
   },
   "dependencies": {
     "@datasworn/core": "^0.1.0-0",
@@ -58,6 +59,7 @@
     "scheduler": "^0.23.2",
     "use-context-selector": "^2.0.0",
     "use-sync-external-store": "^1.2.2",
+    "uuid": "^11.0.3",
     "y-webrtc": "^10.3.0",
     "yjs": "^13.6.20",
     "zustand": "^5.0.1"

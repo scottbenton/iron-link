@@ -3,6 +3,8 @@ import { Box } from "@mui/material";
 import { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
 
+import { useSnackbar } from "providers/SnackbarProvider";
+
 import { AssetCardDialog } from "components/datasworn/AssetCardDialog/AssetCardDialog";
 
 import { useAssetsStore } from "stores/assets.store";
@@ -35,14 +37,28 @@ export function AssetSectionHeader(props: AssetsSectionHeaderProps) {
 
   const addAsset = useAssetsStore((store) => store.addAsset);
 
+  const { error } = useSnackbar();
   const handleAssetSelection = useCallback(
-    (assetDocument: Omit<IAsset, "order">) => {
+    (
+      assetDocument: Omit<IAsset, "order" | "id" | "gameId" | "characterId">,
+      shared: boolean,
+    ) => {
+      if (!shared && !characterId) {
+        error(
+          t(
+            "character.character-sidebar.shared-asset-error",
+            "Assets that are not shared can only be added to characters",
+          ),
+        );
+        setIsAssetDialogOpen(false);
+        return;
+      }
       setIsAssetDialogOpen(false);
-      addAsset(gameId, characterId, {
+      addAsset({
         ...assetDocument,
-        order: assetDocument.shared
-          ? lastSharedAssetOrder + 1
-          : lastCharacterAssetOrder + 1,
+        gameId: shared ? gameId : null,
+        characterId: !shared && characterId ? characterId : null,
+        order: shared ? lastSharedAssetOrder + 1 : lastCharacterAssetOrder + 1,
       });
     },
     [
@@ -51,6 +67,8 @@ export function AssetSectionHeader(props: AssetsSectionHeaderProps) {
       lastCharacterAssetOrder,
       lastSharedAssetOrder,
       addAsset,
+      error,
+      t,
     ],
   );
 

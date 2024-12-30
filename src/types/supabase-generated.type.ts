@@ -167,32 +167,32 @@ export type Database = {
         Row: {
           character_id: string | null
           created_at: string
-          game_id: string | null
-          guides_only: boolean | null
+          game_id: string
+          guides_only: boolean
           id: string
           log_data: Json
           type: Database["public"]["Enums"]["game_log_type"]
-          user_id: string | null
+          user_id: string
         }
         Insert: {
           character_id?: string | null
           created_at?: string
-          game_id?: string | null
-          guides_only?: boolean | null
+          game_id: string
+          guides_only?: boolean
           id?: string
           log_data?: Json
           type: Database["public"]["Enums"]["game_log_type"]
-          user_id?: string | null
+          user_id: string
         }
         Update: {
           character_id?: string | null
           created_at?: string
-          game_id?: string | null
-          guides_only?: boolean | null
+          game_id?: string
+          guides_only?: boolean
           id?: string
           log_data?: Json
           type?: Database["public"]["Enums"]["game_log_type"]
-          user_id?: string | null
+          user_id?: string
         }
         Relationships: [
           {
@@ -345,6 +345,7 @@ export type Database = {
           author_id: string
           created_at: string
           edit_permissions: Database["public"]["Enums"]["note_edit_permissions"]
+          game_id: string
           id: string
           is_root_player_folder: boolean
           name: string | null
@@ -356,6 +357,7 @@ export type Database = {
           author_id: string
           created_at?: string
           edit_permissions: Database["public"]["Enums"]["note_edit_permissions"]
+          game_id: string
           id?: string
           is_root_player_folder?: boolean
           name?: string | null
@@ -367,6 +369,7 @@ export type Database = {
           author_id?: string
           created_at?: string
           edit_permissions?: Database["public"]["Enums"]["note_edit_permissions"]
+          game_id?: string
           id?: string
           is_root_player_folder?: boolean
           name?: string | null
@@ -380,6 +383,13 @@ export type Database = {
             columns: ["author_id"]
             isOneToOne: false
             referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "note_folders_game_id_fkey"
+            columns: ["game_id"]
+            isOneToOne: false
+            referencedRelation: "games"
             referencedColumns: ["id"]
           },
           {
@@ -496,6 +506,7 @@ export type Database = {
         | "all_players"
         | "guidse_and_author"
         | "public"
+        | "guides_and_author"
       player_role: "guide" | "player"
       progress_track_difficulty:
         | "troublesome"

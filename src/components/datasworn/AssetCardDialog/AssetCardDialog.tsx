@@ -15,7 +15,10 @@ import { AssetList } from "./AssetList";
 export interface AssetCardDialogProps {
   open: boolean;
   handleClose: () => void;
-  handleAssetSelection: (asset: Omit<IAsset, "order">) => void;
+  handleAssetSelection: (
+    asset: Omit<IAsset, "order" | "id" | "characterId" | "gameId">,
+    shared: boolean,
+  ) => void;
 }
 export function AssetCardDialog(props: AssetCardDialogProps) {
   const { open, handleClose, handleAssetSelection } = props;

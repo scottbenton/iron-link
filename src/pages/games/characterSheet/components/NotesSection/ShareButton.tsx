@@ -49,9 +49,10 @@ export interface ShareButtonProps {
   isInGMFolder: boolean;
   parentFolder: {
     id: string;
-    name: string;
+    name: string | undefined;
     editPermissions: EditPermissions;
     readPermissions: ReadPermissions;
+    isRootPlayerFolder: boolean;
   };
 }
 
@@ -259,8 +260,7 @@ export function ShareButton(props: ShareButtonProps) {
                         name: parentFolder.name,
                         id: parentFolder.id,
                         t,
-                        uid,
-                        gameType: gameType,
+                        isRootPlayerFolder: parentFolder.isRootPlayerFolder,
                       }),
                     },
                   )}
@@ -300,8 +300,7 @@ export function ShareButton(props: ShareButtonProps) {
                         name: parentFolder.name,
                         id: parentFolder.id,
                         t,
-                        uid,
-                        gameType: gameType,
+                        isRootPlayerFolder: parentFolder.isRootPlayerFolder,
                       }),
                     },
                   )}

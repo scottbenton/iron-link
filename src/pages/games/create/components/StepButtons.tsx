@@ -52,7 +52,7 @@ export function StepButtons(props: StepButtonsProps) {
     createGame(uid, finalGameName)
       .then((gameId) => {
         if (gameType === GameType.Solo) {
-          createCharacter(gameId)
+          createCharacter(gameId, uid)
             .then((characterId) => {
               navigate(pathConfig.gameCharacter(gameId, characterId));
             })

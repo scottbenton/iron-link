@@ -1,217 +1,297 @@
 import {
-  CollectionReference,
-  DocumentReference,
-  PartialWithFieldValue,
-  QueryConstraint,
-  Timestamp,
-  collection,
-  deleteDoc,
-  doc,
-  limit,
-  onSnapshot,
-  orderBy,
-  query,
-  setDoc,
-  updateDoc,
-  where,
-} from "firebase/firestore";
+  Tables,
+  TablesInsert,
+  TablesUpdate,
+} from "types/supabase-generated.type";
 
-import { firestore } from "config/firebase.config";
+import { supabase } from "lib/supabase.lib";
 
 import {
   StorageError,
+  UnknownError,
   convertUnknownErrorToStorageError,
 } from "./errors/storageErrors";
-import { GameRepostiory } from "./game.repository";
-import { RollResult, RollType } from "./shared.types";
+import { RollResult } from "./shared.types";
 import { TrackTypes } from "./tracks.repository";
 
-export interface BaseRollDTO {
-  type: RollType;
-  rollLabel: string;
-  timestamp: Timestamp;
-  characterId: string | null;
-  uid: string;
-  guidesOnly: boolean;
-}
-export interface StatRollDTO extends BaseRollDTO {
-  type: RollType.Stat;
-  moveId: string | null;
-  rolled: string;
+type BaseGameLogDTO = Tables<"game_logs">;
+type StatRollGameLogDTO = Omit<BaseGameLogDTO, "log_data"> & {
+  type: "stat_roll";
+  log_data: StatRollJSONData;
+};
+type OracleRollGameLogDTO = Omit<BaseGameLogDTO, "log_data"> & {
+  type: "oracle_table_roll";
+  log_data: OracleRollJSONData;
+};
+type TrackProgressRollGameLogDTO = Omit<BaseGameLogDTO, "log_data"> & {
+  type: "track_progress_roll";
+  log_data: TrackProgressRollJSONData;
+};
+type SpecialTrackRollGameLogDTO = Omit<BaseGameLogDTO, "log_data"> & {
+  type: "special_track_progress_roll";
+  log_data: SpecialTrackRollJSONData;
+};
+type ClockProgressionRollGameLogDTO = Omit<BaseGameLogDTO, "log_data"> & {
+  type: "clock_progression_roll";
+  log_data: ClockProgressionRollJSONData;
+};
+export type GameLogDTO =
+  | StatRollGameLogDTO
+  | OracleRollGameLogDTO
+  | TrackProgressRollGameLogDTO
+  | SpecialTrackRollGameLogDTO
+  | ClockProgressionRollGameLogDTO;
+
+type BaseInsertGameLogDTO = TablesInsert<"game_logs">;
+type InsertStateGameLogDTO = Omit<BaseInsertGameLogDTO, "log_data"> & {
+  type: "stat_roll";
+  log_data: StatRollJSONData;
+};
+type InsertOracleGameLogDTO = Omit<BaseInsertGameLogDTO, "log_data"> & {
+  type: "oracle_table_roll";
+  log_data: OracleRollJSONData;
+};
+type InsertTrackProgressGameLogDTO = Omit<BaseInsertGameLogDTO, "log_data"> & {
+  type: "track_progress_roll";
+  log_data: TrackProgressRollJSONData;
+};
+type InsertSpecialTrackGameLogDTO = Omit<BaseInsertGameLogDTO, "log_data"> & {
+  type: "special_track_progress_roll";
+  log_data: SpecialTrackRollJSONData;
+};
+type InsertClockProgressionGameLogDTO = Omit<
+  BaseInsertGameLogDTO,
+  "log_data"
+> & {
+  type: "clock_progression_roll";
+  log_data: ClockProgressionRollJSONData;
+};
+type InsertGameLogDTO =
+  | InsertStateGameLogDTO
+  | InsertOracleGameLogDTO
+  | InsertTrackProgressGameLogDTO
+  | InsertSpecialTrackGameLogDTO
+  | InsertClockProgressionGameLogDTO;
+
+type BaseUpdateGameLogDTO = TablesUpdate<"game_logs">;
+type UpdateStatGameLogDTO = Omit<BaseUpdateGameLogDTO, "log_data"> & {
+  log_data?: StatRollJSONData;
+};
+type UpdateOracleGameLogDTO = Omit<BaseUpdateGameLogDTO, "log_data"> & {
+  log_data?: OracleRollJSONData;
+};
+type UpdateTrackProgressGameLogDTO = Omit<BaseUpdateGameLogDTO, "log_data"> & {
+  log_data?: TrackProgressRollJSONData;
+};
+type UpdateSpecialTrackGameLogDTO = Omit<BaseUpdateGameLogDTO, "log_data"> & {
+  log_data?: SpecialTrackRollJSONData;
+};
+type UpdateClockProgressionGameLogDTO = Omit<
+  BaseUpdateGameLogDTO,
+  "log_data"
+> & {
+  log_data?: ClockProgressionRollJSONData;
+};
+type UpdateGameLogDTO = UpdateStatGameLogDTO &
+  UpdateOracleGameLogDTO &
+  UpdateTrackProgressGameLogDTO &
+  UpdateSpecialTrackGameLogDTO &
+  UpdateClockProgressionGameLogDTO;
+
+export interface StatRollJSONData {
+  label: string;
+  move_id: string | null;
+  stat_key: string;
   action: number;
-  actionTotal: number;
-  challenge1: number;
-  challenge2: number;
+  action_total: number;
+  challenge_1: number;
+  challenge_2: number;
   modifier: number;
-  matchedNegativeMomentum: boolean;
+  matched_negative_momentum: boolean;
   adds: number;
   result: RollResult;
-  momentumBurned: number | null;
+  momentum_burned: number | null;
 }
-
-export interface OracleTableRollDTO extends BaseRollDTO {
-  type: RollType.OracleTable;
+export interface OracleRollJSONData {
   roll: number | number[];
   result: string;
-  oracleCategoryName?: string;
-  oracleId?: string;
-  match?: boolean;
+  oracle_category_name: string | null;
+  oracle_id: string;
+  match: boolean;
 }
 
-export interface TrackProgressRollDTO extends BaseRollDTO {
-  type: RollType.TrackProgress;
-  challenge1: number;
-  challenge2: number;
-  trackProgress: number;
+export interface TrackProgressRollJSONData {
+  challenge_1: number;
+  challenge_2: number;
+  track_progress: number;
   result: RollResult;
-  trackType: TrackTypes;
-  moveId?: string;
+  track_type: TrackTypes;
+  move_id: string;
 }
 
-export interface SpecialTrackProgressRollDTO extends BaseRollDTO {
-  type: RollType.SpecialTrackProgress;
-  challenge1: number;
-  challenge2: number;
-  trackProgress: number;
+export interface SpecialTrackRollJSONData {
+  challenge_1: number;
+  challenge_2: number;
+  track_progress: number;
   result: RollResult;
-  specialTrackKey: string;
-  moveId?: string;
+  special_track_key: string;
+  move_id: string;
 }
 
-export interface ClockProgressionRollDTO extends BaseRollDTO {
-  type: RollType.ClockProgression;
+export interface ClockProgressionRollJSONData {
   roll: number;
-  oracleTitle: string;
+  oracle_title: string;
   result: string;
-  oracleId?: string;
-  match?: boolean;
+  oracle_id: string;
+  match: boolean;
 }
-
-export type GameLogDTO =
-  | StatRollDTO
-  | OracleTableRollDTO
-  | TrackProgressRollDTO
-  | SpecialTrackProgressRollDTO
-  | ClockProgressionRollDTO;
-
-export type PartialGameLogDTO = PartialWithFieldValue<GameLogDTO>;
 
 export class GameLogRepository {
-  private static collectionName = "game-log";
+  private static gameLogs = () => supabase.from("game_logs");
 
-  private static getGameLogCollectionName(gameId: string): string {
-    return `${GameRepostiory.collectionName}/${gameId}/${this.collectionName}`;
-  }
-  private static getGameLogCollectionRef(gameId: string) {
-    return collection(
-      firestore,
-      this.getGameLogCollectionName(gameId),
-    ) as CollectionReference<GameLogDTO>;
-  }
-  private static getDocRef(gameId: string, logId: string) {
-    return doc(
-      firestore,
-      `${this.getGameLogCollectionName(gameId)}/${logId}`,
-    ) as DocumentReference<GameLogDTO>;
+  public static getLastNLogsInGame(
+    gameId: string,
+    isGuide: boolean,
+    n: number,
+    beforeTime?: Date,
+  ): Promise<GameLogDTO[]> {
+    return new Promise((resolve, reject) => {
+      let query = this.gameLogs()
+        .select()
+        .eq("game_id", gameId)
+        .order("created_at", { ascending: false })
+        .limit(n);
+
+      if (!isGuide) {
+        query = query.eq("guides_only", false);
+      }
+
+      if (beforeTime) {
+        query = query.lt("created_at", beforeTime);
+      }
+
+      query.then((result) => {
+        if (result.error) {
+          console.error(result.error);
+          reject(
+            convertUnknownErrorToStorageError(
+              result.error,
+              "Failed to get game logs",
+            ),
+          );
+        } else {
+          resolve(result.data as unknown as GameLogDTO[]);
+        }
+      });
+    });
   }
 
   public static listenToGameLogs(
     gameId: string,
     isGuide: boolean,
-    totalLogsToLoad: number,
-    onLogChanges: (
-      changedLogs: Record<string, GameLogDTO>,
-      deletedLogIds: string[],
-    ) => void,
+    onLogChange: (newLog: GameLogDTO, added: boolean) => void,
+    onLogDelete: (logId: string) => void,
     onError: (error: StorageError) => void,
   ): () => void {
-    const collection = this.getGameLogCollectionRef(gameId);
-    const queryConstraints: QueryConstraint[] = [
-      limit(totalLogsToLoad),
-      orderBy("timestamp", "desc"),
-    ];
-    if (!isGuide) {
-      queryConstraints.push(where("guidesOnly", "==", false));
-    }
-
-    return onSnapshot(
-      query(collection, ...queryConstraints),
-      (snapshot) => {
-        const changedLogs: Record<string, GameLogDTO> = {};
-        const deletedLogIds: string[] = [];
-        snapshot.docChanges().forEach((change) => {
-          if (change.type === "added" || change.type === "modified") {
-            changedLogs[change.doc.id] = change.doc.data() as GameLogDTO;
-          } else if (change.type === "removed") {
-            deletedLogIds.push(change.doc.id);
+    const subscription = supabase
+      .channel(`game_logs:game_id=eq.${gameId}`)
+      .on<GameLogDTO>(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "game_logs",
+          filter: `game_id=eq.${gameId}`,
+        },
+        (payload) => {
+          if (
+            payload.eventType === "INSERT" ||
+            payload.eventType === "UPDATE"
+          ) {
+            if (payload.new.guides_only && !isGuide) {
+              return;
+            }
+            onLogChange(payload.new, payload.eventType === "INSERT");
+          } else if (payload.eventType === "DELETE" && payload.old.id) {
+            onLogDelete(payload.old.id);
+          } else {
+            console.debug("Unknown event type", payload.eventType);
+            onError(new UnknownError("Failed to get game log changes"));
           }
-        });
-        onLogChanges(changedLogs, deletedLogIds);
-      },
-      (error) => {
-        console.error(error);
-        onError(
-          convertUnknownErrorToStorageError(
-            error,
-            "Failed to listen to game logs",
-          ),
-        );
-      },
-    );
+        },
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(subscription);
+    };
   }
 
-  public static async setGameLog(
-    gameId: string,
+  public static async insertGameLog(
     logId: string,
-    log: GameLogDTO,
+    log: InsertGameLogDTO,
   ): Promise<string> {
     return new Promise((resolve, reject) => {
-      setDoc(this.getDocRef(gameId, logId), log)
-        .then(() => {
-          resolve(logId);
-        })
-        .catch((e) => {
-          console.error(e);
-          reject(
-            convertUnknownErrorToStorageError(e, "Failed to create game log"),
-          );
+      this.gameLogs()
+        .upsert(log as unknown as BaseGameLogDTO)
+        .eq("id", logId)
+        .then((response) => {
+          if (response.error) {
+            console.error(response.error);
+            reject(
+              convertUnknownErrorToStorageError(
+                response.error,
+                "Failed to create game log",
+              ),
+            );
+          } else {
+            resolve(logId);
+          }
         });
     });
   }
 
   public static async updateGameLog(
-    gameId: string,
     logId: string,
-    log: PartialGameLogDTO,
+    log: UpdateGameLogDTO,
   ): Promise<void> {
     return new Promise((resolve, reject) => {
-      updateDoc(this.getDocRef(gameId, logId), log)
-        .then(() => {
-          resolve();
-        })
-        .catch((e) => {
-          console.error(e);
-          reject(
-            convertUnknownErrorToStorageError(e, "Failed to update game log"),
-          );
+      this.gameLogs()
+        .update(log as unknown as BaseGameLogDTO)
+        .eq("id", logId)
+        .then((response) => {
+          if (response.error) {
+            console.error(response.error);
+            reject(
+              convertUnknownErrorToStorageError(
+                response.error,
+                "Failed to update game log",
+              ),
+            );
+          } else {
+            resolve();
+          }
         });
     });
   }
 
-  public static async deleteGameLog(
-    gameId: string,
-    logId: string,
-  ): Promise<void> {
+  public static async deleteGameLog(logId: string): Promise<void> {
     return new Promise((resolve, reject) => {
-      deleteDoc(this.getDocRef(gameId, logId))
-        .then(() => {
-          resolve();
-        })
-        .catch((e) => {
-          console.error(e);
-          reject(
-            convertUnknownErrorToStorageError(e, "Failed to delete game log"),
-          );
+      this.gameLogs()
+        .delete()
+        .eq("id", logId)
+        .then((response) => {
+          if (response.error) {
+            console.error(response.error);
+            reject(
+              convertUnknownErrorToStorageError(
+                response.error,
+                "Failed to delete game log",
+              ),
+            );
+          } else {
+            resolve();
+          }
         });
     });
   }
