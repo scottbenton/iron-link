@@ -19,8 +19,6 @@ import { useTranslation } from "react-i18next";
 
 import { GridLayout } from "components/Layout";
 
-import { useGameId } from "pages/games/gamePageLayout/hooks/useGameId";
-
 import { useNotesStore } from "stores/notes.store";
 
 import { i18n } from "i18n/config";
@@ -41,7 +39,6 @@ export function FolderView(props: FolderViewProps) {
   const { folderId } = props;
 
   const { t } = useTranslation();
-  const gameId = useGameId();
 
   const subFolders = useNotesStore((state) => {
     if (!folderId) {
@@ -154,10 +151,10 @@ export function FolderView(props: FolderViewProps) {
           return arrayMove(prev, activeIndex, overIndex);
         });
 
-        updateNoteOrder(gameId, activeId, updatedOrder);
+        updateNoteOrder(activeId, updatedOrder);
       }
     },
-    [gameId, noteMap, localSortedNodes, updateNoteOrder],
+    [noteMap, localSortedNodes, updateNoteOrder],
   );
 
   const sensors = useSensors(

@@ -5,6 +5,7 @@ import { supabase } from "lib/supabase.lib";
 import {
   NotFoundError,
   StorageError,
+  UnknownError,
   convertUnknownErrorToStorageError,
 } from "./errors/storageErrors";
 import { ColorScheme } from "./shared.types";
@@ -90,7 +91,6 @@ export class GameRepostiory {
     // Fetch the initial state
     this.getGame(gameId).then(onGame).catch(onError);
 
-    console.debug("LISTENING TO GAME", gameId);
     const subscription = supabase
       .channel(`games:game_id=${gameId}`)
       .on<GameDTO>(
@@ -103,9 +103,9 @@ export class GameRepostiory {
         },
         (payload) => {
           if (payload.errors) {
-            console.debug(payload.errors);
+            console.error(payload.errors);
+            onError(new UnknownError("Failed to get game changes"));
           }
-          console.debug("GOT PAYLOAD", payload);
           if (
             payload.eventType === "INSERT" ||
             payload.eventType === "UPDATE"
@@ -138,7 +138,6 @@ export class GameRepostiory {
               ),
             );
           } else {
-            console.debug("RESOLVING WITH", data);
             resolve(data);
           }
         });

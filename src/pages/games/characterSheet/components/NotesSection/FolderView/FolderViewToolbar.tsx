@@ -55,7 +55,7 @@ export function FolderViewToolbar(props: FolderViewToolbarProps) {
     renamingCurrent?: boolean;
   }>({ open: false, type: "folder" });
 
-  const { canEdit, canDelete, isInGuideFolder } = useFolderPermission(folderId);
+  const { canEdit, canDelete } = useFolderPermission(folderId);
 
   const addFolder = useNotesStore((store) => store.createFolder);
   const addNote = useNotesStore((store) => store.createNote);
@@ -80,7 +80,7 @@ export function FolderViewToolbar(props: FolderViewToolbarProps) {
 
   const createNote = (name: string) => {
     if (uid) {
-      addNote(uid, gameId, folderId, name, nextNoteOrder).catch(() => {});
+      addNote(uid, folderId, name, nextNoteOrder).catch(() => {});
     }
   };
 
@@ -121,7 +121,6 @@ export function FolderViewToolbar(props: FolderViewToolbarProps) {
                 readPermissions: parentFolder.readPermissions,
                 isRootPlayerFolder: parentFolder.isRootPlayerFolder,
               }}
-              isInGMFolder={isInGuideFolder}
             />
           )}
           {!isImmutableFolder && canDelete && folder.parentFolderId && (

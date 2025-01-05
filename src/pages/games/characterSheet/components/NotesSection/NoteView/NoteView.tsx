@@ -1,3 +1,4 @@
+import { LinearProgress } from "@mui/material";
 import { useCallback } from "react";
 
 import { EmptyState } from "components/Layout/EmptyState";
@@ -30,7 +31,7 @@ export function NoteView(props: NoteViewProps) {
       };
     } else {
       return {
-        noteContent: store.openItem.noteContent.data?.notes,
+        noteContent: store.openItem.noteContent.data,
         loading: store.openItem.noteContent.loading,
         error: store.openItem.noteContent.error,
       };
@@ -40,14 +41,28 @@ export function NoteView(props: NoteViewProps) {
   const notePermissions = useNotePermission(openNoteId);
 
   const handleSave = useCallback(
-    (documentId: string, notes: Uint8Array, isBeaconRequest?: boolean) => {
-      return updateNoteContent(gameId, documentId, notes, isBeaconRequest);
+    (
+      documentId: string,
+      notes: Uint8Array,
+      noteContentString: string,
+      isBeaconRequest?: boolean,
+    ) => {
+      return updateNoteContent(
+        documentId,
+        notes,
+        noteContentString,
+        isBeaconRequest,
+      );
     },
-    [gameId, updateNoteContent],
+    [updateNoteContent],
   );
 
   if (error) {
     return <EmptyState message={error} />;
+  }
+
+  if (!noteContent) {
+    return <LinearProgress />;
   }
 
   return (
@@ -67,7 +82,7 @@ export function NoteView(props: NoteViewProps) {
             ) : undefined}
           </NoteToolbar>
         )}
-        initialValue={noteContent}
+        initialValue={noteContent?.content}
         onSave={loading || !notePermissions.canEdit ? undefined : handleSave}
       />
     </>

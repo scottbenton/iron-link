@@ -2,12 +2,82 @@ import { Tables } from "types/supabase-generated.type";
 
 import { supabase } from "lib/supabase.lib";
 
-import { convertUnknownErrorToStorageError } from "./errors/storageErrors";
+import {
+  StorageError,
+  convertUnknownErrorToStorageError,
+} from "./errors/storageErrors";
 
 export type GamePlayerDTO = Tables<"game_players">;
 
 export class GamePlayersRepository {
   public static gamePlayers = () => supabase.from("game_players");
+
+  public static listenToGamePlayers(
+    gameId: string,
+    onGamePlayers: (
+      changedPlayers: Record<string, GamePlayerDTO>,
+      removedGamePlayerIds: string[],
+    ) => void,
+    onError: (error: StorageError) => void,
+  ): () => void {
+    this.gamePlayers()
+      .select()
+      .eq("game_id", gameId)
+      .then((response) => {
+        if (response.error) {
+          console.error(response.error);
+          onError(
+            convertUnknownErrorToStorageError(
+              response.error,
+              "Failed to get game players",
+            ),
+          );
+        } else {
+          onGamePlayers(
+            Object.fromEntries(
+              response.data.map((player) => [player.user_id, player]),
+            ),
+            [],
+          );
+        }
+      });
+
+    const subscription = supabase
+      .channel(`game_players:game_id=eq.${gameId}`)
+      .on<GamePlayerDTO>(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "game_players",
+          filter: `game_id=eq.${gameId}`,
+        },
+        (payload) => {
+          if (payload.errors) {
+            console.error(payload.errors);
+            onError(
+              convertUnknownErrorToStorageError(
+                payload.errors,
+                "Failed to listen to game players",
+              ),
+            );
+          }
+          if (
+            payload.eventType === "INSERT" ||
+            payload.eventType === "UPDATE"
+          ) {
+            onGamePlayers({ [payload.new.user_id]: payload.new }, []);
+          } else if (payload.eventType === "DELETE" && payload.old.user_id) {
+            onGamePlayers({}, [payload.old.user_id]);
+          }
+        },
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(subscription);
+    };
+  }
 
   public static getGamePlayerEntryIfExists(
     gameId: string,

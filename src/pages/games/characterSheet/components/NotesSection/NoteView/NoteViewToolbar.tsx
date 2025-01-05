@@ -19,14 +19,12 @@ import { useConfirm } from "material-ui-confirm";
 import { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { useGameId } from "pages/games/gamePageLayout/hooks/useGameId";
-
 import { useNotesStore } from "stores/notes.store";
 
 import { NameItemDialog } from "../FolderView/NameItemDialog";
 import { ShareButton } from "../ShareButton";
 import { TextTypeDropdown } from "./TextTypeDropdown";
-import { NotePermissions, useNotePermission } from "./useNotePermission";
+import { NotePermissions } from "./useNotePermission";
 
 export interface NoteToolbarContentProps {
   openNoteId: string;
@@ -38,14 +36,12 @@ export function NoteViewToolbar(props: NoteToolbarContentProps) {
   const { openNoteId, editor, permissions } = props;
 
   const { t } = useTranslation();
-  const gameId = useGameId();
 
   const setOpenNote = useNotesStore((store) => store.setOpenItem);
   const note = useNotesStore((store) => {
     return store.noteState.notes[openNoteId];
   });
   const noteName = note.title;
-  const { isInGuideFolder } = useNotePermission(openNoteId);
 
   const parentFolderId = useNotesStore((store) => {
     return store.noteState.notes[openNoteId].parentFolderId;
@@ -70,12 +66,11 @@ export function NoteViewToolbar(props: NoteToolbarContentProps) {
     })
       .then(() => {
         setOpenNote("folder", parentFolderId);
-        deleteNote(gameId, openNoteId).catch(() => {});
+        deleteNote(openNoteId).catch(() => {});
       })
       .catch(() => {});
   }, [
     confirm,
-    gameId,
     deleteNote,
     openNoteId,
     t,
@@ -92,9 +87,9 @@ export function NoteViewToolbar(props: NoteToolbarContentProps) {
   const updateNoteName = useNotesStore((store) => store.updateNoteName);
   const renameNote = useCallback(
     (noteName: string) => {
-      updateNoteName(gameId, openNoteId, noteName).catch(() => {});
+      updateNoteName(openNoteId, noteName).catch(() => {});
     },
-    [updateNoteName, gameId, openNoteId],
+    [updateNoteName, openNoteId],
   );
 
   return (
@@ -228,7 +223,6 @@ export function NoteViewToolbar(props: NoteToolbarContentProps) {
               readPermissions: parentFolder.readPermissions,
               isRootPlayerFolder: parentFolder.isRootPlayerFolder,
             }}
-            isInGMFolder={isInGuideFolder}
           />
         )}
         {permissions.canDelete && (

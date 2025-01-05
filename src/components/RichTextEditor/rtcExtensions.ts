@@ -23,15 +23,19 @@ export const rtcExtensions = (params: {
     StarterKit.configure({
       history: false,
     }),
-    Collaboration.configure({ document: doc }),
-    CollaborationCursor.configure({
-      provider: provider,
-      user: {
-        name: userName ?? "Unknown User",
-        color: userColor,
-      },
-    }),
   ];
+  if (doc && provider) {
+    extensions.push(
+      Collaboration.configure({ document: doc }),
+      CollaborationCursor.configure({
+        provider: provider,
+        user: {
+          name: userName ?? "Unknown User",
+          color: userColor,
+        },
+      }),
+    );
+  }
 
   return extensions;
 };

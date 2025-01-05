@@ -132,7 +132,7 @@ export class CharacterRepository {
           } else if (payload.eventType === "DELETE" && payload.old.id) {
             onUpdate({}, [payload.old.id]);
           } else {
-            console.debug("Unknown event type", payload.eventType);
+            console.error("Unknown event type", payload.eventType);
             onError(new UnknownError("Failed to get character changes"));
           }
         },

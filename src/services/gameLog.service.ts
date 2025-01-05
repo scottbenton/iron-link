@@ -10,19 +10,10 @@ export interface IBaseRoll {
   timestamp: Date;
   gameId: string;
   characterId: string | null;
-  uid: string;
+  uid: string | null;
   guidesOnly: boolean;
 }
-/**
- * id
- * user_id
- * character_id
- * game_id
- * type
- * guides_only
- * created_at
- * log_data
- */
+
 export interface IStatRoll extends IBaseRoll {
   type: RollType.Stat;
   moveId?: string;

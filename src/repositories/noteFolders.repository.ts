@@ -47,8 +47,30 @@ export class NoteFoldersRepository {
       );
     }
 
+    query.then(({ data, error }) => {
+      if (error) {
+        onError(
+          convertUnknownErrorToStorageError(
+            error,
+            `Error fetching note folders`,
+          ),
+        );
+      } else {
+        onNoteFolderChanges(
+          data.reduce(
+            (acc, folder) => {
+              acc[folder.id] = folder;
+              return acc;
+            },
+            {} as Record<string, NoteFolderDTO>,
+          ),
+          [],
+        );
+      }
+    });
+
     const subscription = supabase
-      .channel(`note_folders:game_id=${gameId},uid=${uid}`)
+      .channel(`note_folders:game_id=${gameId}`)
       .on<NoteFolderDTO>(
         "postgres_changes",
         {
@@ -102,7 +124,8 @@ export class NoteFoldersRepository {
             }
           }
         },
-      );
+      )
+      .subscribe();
 
     return () => {
       supabase.removeChannel(subscription);

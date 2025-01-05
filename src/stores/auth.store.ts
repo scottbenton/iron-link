@@ -70,7 +70,6 @@ export function useListenToAuth() {
   );
 
   useEffect(() => {
-    console.debug("Subscribing to auth status");
     const unsubscribe = subscribeToAuthStatus();
     return unsubscribe;
   }, [subscribeToAuthStatus]);

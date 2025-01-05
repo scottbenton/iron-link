@@ -56,24 +56,18 @@ export const useUsersGames = createWithEqualityFn<
           Object.keys(games),
         );
 
-        const portraitPromises: Record<string, Promise<string>> = {};
-        Object.entries(characterMap).forEach(([characterId, character]) => {
+        const portraitURLs = Object.fromEntries(
+        Object.entries(characterMap).map(([characterId, character]) => {
           if (character.profileImage) {
-            portraitPromises[characterId] =
+            const url =
               CharacterService.getCharacterPortraitURL(
                 characterId,
                 character.profileImage.filename,
               );
+            return [characterId, url];
           }
-        });
-
-        const resolvedEntries = await Promise.all(
-          Object.entries(portraitPromises).map(async ([key, promise]) => [
-            key,
-            await promise,
-          ]),
-        );
-        const portraitURLs = Object.fromEntries(resolvedEntries);
+          return [characterId, undefined];
+        }))
 
         set((state) => {
           const characterDisplayDetails: UsersGamesState["characterDisplayDetails"] =

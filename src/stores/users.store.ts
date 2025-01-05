@@ -54,20 +54,25 @@ export const useUsersStore = createWithEqualityFn<
   deepEqual,
 );
 
-export function useLoadUserDetails(uid: string) {
+export function useLoadUserDetails(uid: string | null) {
   const loadUserDetails = useUsersStore((state) => state.loadUserDetails);
 
   useEffect(() => {
-    loadUserDetails(uid);
+    if (uid) {
+      loadUserDetails(uid);
+    }
   }, [uid, loadUserDetails]);
 }
 
-export function useUserName(uid: string) {
+export function useUserName(uid: string | null) {
   const { t } = useTranslation();
 
   useLoadUserDetails(uid);
 
   return useUsersStore((store) => {
+    if (!uid) {
+      return t("common.deleted-user", "Deleted User");
+    }
     const user = store.users[uid];
 
     if (!user || user.loading) {

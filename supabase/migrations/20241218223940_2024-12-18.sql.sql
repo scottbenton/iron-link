@@ -259,22 +259,9 @@ AS $function$
 DECLARE
     full_name text;
 BEGIN
-    -- Construct the display_name based on the presence of first_name and last_name
-    full_name := CASE
-        WHEN NEW.first_name IS NOT NULL AND NEW.last_name IS NOT NULL THEN
-            CONCAT(NEW.first_name, ' ', NEW.last_name)
-        WHEN NEW.first_name IS NOT NULL THEN
-            NEW.first_name
-        WHEN NEW.last_name IS NOT NULL THEN
-            NEW.last_name
-        ELSE
-            NULL  -- or you can set it to an empty string if preferred
-    END;
-
-    INSERT INTO public.user (id, display_name, created_at)
+    INSERT INTO public.users (id, created_at)
     VALUES (
         NEW.id,
-        full_name,  -- Use the constructed full_name
         now()
     );
     RETURN NEW;

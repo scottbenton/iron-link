@@ -69,8 +69,6 @@ export class AssetRepository {
         }
       });
 
-    console.debug("LISTENING TO ASSETS", gameId);
-
     const handlePayload: (
       payload: RealtimePostgresChangesPayload<AssetDTO>,
     ) => void = (payload) => {
@@ -78,13 +76,11 @@ export class AssetRepository {
         console.error(payload.errors);
         onError(new UnknownError("Failed to get asset changes"));
       }
-      console.debug("GOT PAYLOAD", payload);
       if (payload.eventType === "INSERT" || payload.eventType === "UPDATE") {
         onAssets({ [payload.new.id]: payload.new }, []);
       } else if (payload.eventType === "DELETE" && payload.old.id) {
         onAssets({}, [payload.old.id]);
       } else {
-        console.debug("Unknown event type", payload.eventType);
         onError(new UnknownError("Failed to get asset changes"));
       }
     };

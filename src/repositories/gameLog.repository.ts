@@ -215,7 +215,7 @@ export class GameLogRepository {
           } else if (payload.eventType === "DELETE" && payload.old.id) {
             onLogDelete(payload.old.id);
           } else {
-            console.debug("Unknown event type", payload.eventType);
+            console.error("Unknown event type", payload.eventType);
             onError(new UnknownError("Failed to get game log changes"));
           }
         },

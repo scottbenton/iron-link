@@ -1,22 +1,4 @@
 import {
-  CollectionReference,
-  DocumentData,
-  PartialWithFieldValue,
-  Query,
-  QuerySnapshot,
-  addDoc,
-  and,
-  collection,
-  deleteDoc,
-  doc,
-  onSnapshot,
-  or,
-  query,
-  updateDoc,
-  where,
-} from "firebase/firestore";
-
-import {
   Tables,
   TablesInsert,
   TablesUpdate,
@@ -24,22 +6,16 @@ import {
 
 import { GamePermission } from "stores/game.store";
 
-import { firestore } from "config/firebase.config";
-
 import { supabase } from "lib/supabase.lib";
 
 import {
   StorageError,
   convertUnknownErrorToStorageError,
 } from "./errors/storageErrors";
-import { GameRepostiory } from "./game.repository";
-import { EditPermissions, ReadPermissions } from "./shared.types";
 
 export type NoteDTO = Tables<"notes">;
 type NoteInsertDTO = TablesInsert<"notes">;
 type NoteUpdateDTO = TablesUpdate<"notes">;
-
-export type PartialNoteDTO = PartialWithFieldValue<NoteDTO>;
 
 export class NotesRepository {
   private static notes = () => supabase.from("notes");
@@ -55,6 +31,15 @@ export class NotesRepository {
     ) => void,
     onError: (error: StorageError) => void,
   ): () => void {
+    // use things up temporarily
+    console.debug(
+      uid,
+      gameId,
+      permissions,
+      accessibleParentNoteFolderIds,
+      onNoteChanges,
+      onError,
+    );
     const query = this.notes()
       .select(
         `
@@ -63,147 +48,231 @@ export class NotesRepository {
         parent_folder_id,
         title,
         read_permissions,
-        note_edit_permissions,
+        edit_permissions,
         created_at,
+        order,
         note_folders(
           game_id
         )
         `,
       )
-      .eq("");
-    // Todo - make sure parentFolderGameId is equal to game ID and then go through the same permission checks as in noteFolders
+      .eq("note_folders.game_id", gameId);
 
-    const parentNoteFolderQuery =
-      accessibleParentNoteFolderIds.length > 0
-        ? [
-            and(
-              where("readPermissions", "==", null),
-              where("parentFolderId", "in", accessibleParentNoteFolderIds),
-            ),
-          ]
-        : [];
-
-    let noteQuery: Query<NoteDTO, DocumentData> = query(
-      this.getNoteCollectionRef(gameId),
-      or(
-        where("readPermissions", "==", ReadPermissions.Public),
-        ...parentNoteFolderQuery,
-      ),
-    );
-
-    const basePlayerPermissions = [
-      where("readPermissions", "==", ReadPermissions.Public),
-      where("readPermissions", "==", ReadPermissions.AllPlayers),
-      and(
-        where("readPermissions", "==", ReadPermissions.OnlyAuthor),
-        where("creator", "==", uid),
-      ),
-      and(
-        where("readPermissions", "==", ReadPermissions.GuidesAndAuthor),
-        where("creator", "==", uid),
-      ),
-      ...parentNoteFolderQuery,
-    ];
-    if (permissions === GamePermission.Player) {
-      noteQuery = query(
-        this.getNoteCollectionRef(gameId),
-        or(
-          ...basePlayerPermissions,
-          and(
-            where("readPermissions", "==", ReadPermissions.GuidesAndAuthor),
-            where("readPermissions.players", "array-contains", uid),
-          ),
-        ),
+    if (permissions === GamePermission.Viewer) {
+      query.eq("read_permissions", "public");
+    } else if (permissions === GamePermission.Player) {
+      query.or(
+        `read_permissions.eq."public",read_permissions.eq."all_players",and(read_permissions.eq."only_author",author_id.eq."${uid}"),and(read_permissions.eq."guides_and_author",author_id.eq."${uid}")`,
       );
     } else if (permissions === GamePermission.Guide) {
-      noteQuery = query(
-        this.getNoteCollectionRef(gameId),
-        or(
-          ...basePlayerPermissions,
-          where("readPermissions", "==", ReadPermissions.OnlyGuides),
-          where("readPermissions", "==", ReadPermissions.GuidesAndAuthor),
-        ),
+      query.or(
+        `read_permissions.eq."public",read_permissions.eq."all_players",read_permissions.eq."only_guides",and(read_permissions.eq."only_author",author_id.eq."${uid}"),read_permissions.eq."guides_and_author"`,
       );
     }
 
-    return onSnapshot(
-      noteQuery,
-      (snapshot: QuerySnapshot<NoteDTO>) => {
-        const changedNotes: Record<string, NoteDTO> = {};
-        const deletedNoteIds: string[] = [];
-
-        snapshot.docChanges().forEach((change) => {
-          if (change.type === "added" || change.type === "modified") {
-            changedNotes[change.doc.id] = change.doc.data() as NoteDTO;
-          } else if (change.type === "removed") {
-            deletedNoteIds.push(change.doc.id);
-          }
-        });
-        onNoteChanges(changedNotes, deletedNoteIds);
-      },
-      (error) => {
-        console.debug(error);
+    query.then((response) => {
+      if (response.error) {
+        console.error(response.error);
         onError(
-          convertUnknownErrorToStorageError(error, `Error listening to notes`),
+          convertUnknownErrorToStorageError(
+            response.error,
+            `Failed to listen to notes`,
+          ),
         );
-      },
-    );
+      } else {
+        onNoteChanges(
+          Object.fromEntries(
+            response.data.map((note) => [
+              note.id,
+              note as unknown as NoteDTO,
+            ]) ?? [],
+          ),
+          [],
+        );
+      }
+    });
+
+    const subscription = supabase
+      .channel(`notes:game_id=${gameId}`)
+      .on<NoteDTO>(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "notes",
+          filter: `game_id=eq.${gameId}`,
+        },
+        (payload) => {
+          if (payload.errors) {
+            onError(
+              convertUnknownErrorToStorageError(
+                payload.errors,
+                `Error listening to notes`,
+              ),
+            );
+          } else {
+            if (
+              payload.eventType === "INSERT" ||
+              payload.eventType === "UPDATE"
+            ) {
+              if (
+                permissions === GamePermission.Viewer &&
+                payload.new.read_permissions === "public"
+              ) {
+                onNoteChanges(
+                  {
+                    [payload.new.id]: payload.new,
+                  },
+                  [],
+                );
+              } else if (
+                permissions === GamePermission.Player &&
+                (payload.new.read_permissions === "public" ||
+                  payload.new.read_permissions === "all_players" ||
+                  (payload.new.read_permissions === "only_author" &&
+                    payload.new.author_id === uid) ||
+                  (payload.new.read_permissions === "guides_and_author" &&
+                    payload.new.author_id === uid))
+              ) {
+                onNoteChanges(
+                  {
+                    [payload.new.id]: payload.new,
+                  },
+                  [],
+                );
+              } else if (
+                permissions === GamePermission.Guide &&
+                (payload.new.read_permissions === "public" ||
+                  payload.new.read_permissions === "all_players" ||
+                  payload.new.read_permissions === "only_guides" ||
+                  (payload.new.read_permissions === "only_author" &&
+                    payload.new.author_id === uid) ||
+                  payload.new.read_permissions === "guides_and_author")
+              ) {
+                onNoteChanges({ [payload.new.id]: payload.new }, []);
+              }
+            } else if (payload.eventType === "DELETE" && payload.old.id) {
+              onNoteChanges({}, [payload.old.id]);
+            }
+          }
+        },
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(subscription);
+    };
   }
 
-  public static addNote(
-    uid: string,
-    gameId: string,
-    parentFolderId: string,
-    order: number,
-    title: string,
-  ): Promise<string> {
-    return new Promise((resolve, reject) => {
-      const newNote: NoteDTO = {
-        order,
-        creator: uid,
-        title,
-        parentFolderId: parentFolderId,
-        readPermissions: null,
-        editPermissions: null,
-      };
+  public static listenToNoteContent(
+    noteId: string,
+    onNoteContentChange: (note: NoteDTO) => void,
+    onError: (error: StorageError) => void,
+  ): () => void {
+    this.notes()
+      .select()
+      .eq("id", noteId)
+      .then(({ data, error }) => {
+        if (error) {
+          console.error(error);
+          onError(
+            convertUnknownErrorToStorageError(
+              error,
+              `Failed to listen to note content`,
+            ),
+          );
+        } else {
+          onNoteContentChange(data[0]);
+        }
+      });
 
-      addDoc(this.getNoteCollectionRef(gameId), newNote)
-        .then((doc) => {
-          resolve(doc.id);
-        })
-        .catch((e) => {
-          console.error(e);
-          reject(convertUnknownErrorToStorageError(e, `Failed to add note`));
+    const subscription = supabase
+      .channel(`notes:id=${noteId}`)
+      .on<NoteDTO>(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "notes",
+          filter: `id=eq.${noteId}`,
+        },
+        (payload) => {
+          if (payload.errors) {
+            onError(
+              convertUnknownErrorToStorageError(
+                payload.errors,
+                `Error listening to note content`,
+              ),
+            );
+          } else if (
+            payload.eventType === "INSERT" ||
+            payload.eventType === "UPDATE"
+          ) {
+            onNoteContentChange(payload.new);
+          }
+        },
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(subscription);
+    };
+  }
+
+  public static addNote(note: NoteInsertDTO): Promise<string> {
+    return new Promise((resolve, reject) => {
+      this.notes()
+        .insert(note)
+        .select()
+        .single()
+        .then(({ data, error }) => {
+          if (error) {
+            console.error(error);
+            reject(
+              convertUnknownErrorToStorageError(error, `Failed to add note`),
+            );
+          } else {
+            resolve(data.id);
+          }
         });
     });
   }
 
   public static updateNote(
-    gameId: string,
     noteId: string,
-    updatedNote: PartialNoteDTO,
+    updatedNote: NoteUpdateDTO,
   ): Promise<void> {
     return new Promise((resolve, reject) => {
-      updateDoc(this.getNoteDocumentRef(gameId, noteId), updatedNote)
-        .then(() => {
-          resolve();
-        })
-        .catch((e) => {
-          console.error(e);
-          reject(convertUnknownErrorToStorageError(e, `Failed to update note`));
+      this.notes()
+        .update(updatedNote)
+        .eq("id", noteId)
+        .then(({ error }) => {
+          if (error) {
+            console.error(error);
+            reject(
+              convertUnknownErrorToStorageError(error, `Failed to update note`),
+            );
+          } else {
+            resolve();
+          }
         });
     });
   }
 
-  public static deleteNote(gameId: string, noteId: string): Promise<void> {
+  public static deleteNote(noteId: string): Promise<void> {
     return new Promise((resolve, reject) => {
-      deleteDoc(this.getNoteDocumentRef(gameId, noteId))
-        .then(() => {
-          resolve();
-        })
-        .catch((e) => {
-          console.error(e);
-          reject(convertUnknownErrorToStorageError(e, `Failed to delete note`));
+      this.notes()
+        .delete()
+        .eq("id", noteId)
+        .then(({ error }) => {
+          if (error) {
+            console.error(error);
+            reject(
+              convertUnknownErrorToStorageError(error, `Failed to delete note`),
+            );
+          } else {
+            resolve();
+          }
         });
     });
   }

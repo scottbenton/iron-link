@@ -16,7 +16,7 @@ import { useGamePermissions } from "pages/games/gamePageLayout/hooks/usePermissi
 
 import { useUID } from "stores/auth.store";
 import { GamePermission } from "stores/game.store";
-import { GUIDE_NOTE_FOLDER_NAME, useNotesStore } from "stores/notes.store";
+import { useNotesStore } from "stores/notes.store";
 
 import { EditPermissions } from "repositories/shared.types";
 
@@ -78,49 +78,9 @@ export function MoveDialog(props: MoveDialogProps) {
         return;
       }
       setIsMoveLoading(true);
-      const isCurrentNoteInGuideFolder = isFolderInGuideFolder(
-        parentFolderId,
-        folders,
-      );
-      const isNextFolderInGuideFolder = isFolderInGuideFolder(
-        newParentFolderId,
-        folders,
-      );
 
       const promises: Promise<unknown>[] = [];
 
-      if (isCurrentNoteInGuideFolder !== isNextFolderInGuideFolder) {
-        // We will need to call update permissions as well as moving
-        if (type === "note") {
-          promises
-            .push
-            // updateNotePermissions({
-            //   campaignId,
-            //   noteId: id,
-            //   readPermissions: null,
-            //   editPermissions: null,
-            // }),
-            ();
-        } else {
-          // const folder = folders[id];
-          // promises.push(
-          //   updateNoteFolderPermissions({
-          //     campaignId,
-          //     folderId: id,
-          //     currentPermissions: {
-          //       readPermissions: folder.readPermissions,
-          //       editPermissions: folder.editPermissions,
-          //     },
-          //     nextPermissions: {
-          //       readPermissions: newFolder.readPermissions,
-          //       editPermissions: newFolder.editPermissions,
-          //     },
-          //     descendantFolders: descendants.folders,
-          //     descendantNotes: descendants.notes,
-          //   }),
-          // );
-        }
-      }
       // We can just move the item
       if (type === "note") {
         // Get the order to put the note last in the next list
@@ -275,18 +235,4 @@ function getTreeFromFolders(
     rootNodes,
     tree,
   };
-}
-
-function isFolderInGuideFolder(
-  folderId: string,
-  folders: Record<string, INoteFolder>,
-) {
-  let currentFolder = folders[folderId];
-  while (currentFolder.parentFolderId) {
-    currentFolder = folders[currentFolder.parentFolderId];
-    if (currentFolder.parentFolderId === GUIDE_NOTE_FOLDER_NAME) {
-      return true;
-    }
-  }
-  return false;
 }

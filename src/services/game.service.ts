@@ -1,3 +1,4 @@
+import { StorageError } from "repositories/errors/storageErrors";
 import {
   ExpansionConfig,
   GameDTO,
@@ -103,6 +104,30 @@ export class GameService {
       gameId,
       (gameDTO) => {
         onUpdate(this.convertGameDTOToGame(gameDTO));
+      },
+      onError,
+    );
+  }
+  public static listenToGamePlayers(
+    gameId: string,
+    onGamePlayers: (
+      gamePlayers: Record<string, IGamePlayer>,
+      removed: string[],
+    ) => void,
+    onError: (error: StorageError) => void,
+  ): () => void {
+    return GamePlayersRepository.listenToGamePlayers(
+      gameId,
+      (gamePlayersDTO, removed) => {
+        onGamePlayers(
+          Object.fromEntries(
+            Object.entries(gamePlayersDTO).map(([key, value]) => [
+              key,
+              this.convertGamePlayerDTOToGamePlayer(value),
+            ]),
+          ),
+          removed,
+        );
       },
       onError,
     );
@@ -244,5 +269,17 @@ export class GameService {
       return "guide";
     }
     return "player";
+  }
+  private static convertGamePlayerDTOToGamePlayer(
+    dto: GamePlayerDTO,
+  ): IGamePlayer {
+    const role: GamePlayerRole =
+      dto.role === "guide" ? GamePlayerRole.Guide : GamePlayerRole.Player;
+    return {
+      role,
+      created_at: dto.created_at,
+      game_id: dto.game_id,
+      user_id: dto.user_id,
+    };
   }
 }

@@ -256,11 +256,6 @@ export function useSetGameCharacterPermissions() {
   );
 
   useEffect(() => {
-    console.debug(
-      "Setting character permissions",
-      gamePermission,
-      gameCharacters,
-    );
     const characterPermissions: Record<string, CharacterPermissionType> = {};
 
     gameCharacters.forEach(({ id, characterOwnerId }) => {
