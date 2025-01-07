@@ -12,7 +12,7 @@ interface UserStoreState {
     | {
         loading: boolean;
         user?: {
-          name: string;
+          name: string | null;
         };
       }
     | undefined

@@ -33,11 +33,10 @@ export interface TrackClockProps {
   clockId: string;
   clock: IClock;
   canEdit: boolean;
-  gameId: string;
 }
 
 export function TrackClock(props: TrackClockProps) {
-  const { clockId, clock, canEdit, gameId } = props;
+  const { clockId, clock, canEdit } = props;
   const { t } = useTranslation();
 
   const [editClockDialogOpen, setEditClockDialogOpen] = useState(false);
@@ -46,14 +45,16 @@ export function TrackClock(props: TrackClockProps) {
     (store) => store.updateClockSelectedOracle,
   );
   const handleSelectedOracleChange = (oracleKey: AskTheOracle) => {
-    updateClockOracleKey(gameId, clockId, oracleKey).catch(() => {});
+    updateClockOracleKey(clockId, oracleKey).catch(() => {});
   };
 
   const announce = useSetAnnouncement();
 
   const rollOracle = useRollOracleAndAddToLog();
 
-  const updateClockValue = useTracksStore((store) => store.updateTrackValue);
+  const updateClockValue = useTracksStore(
+    (store) => store.updateClockFilledSegments,
+  );
   const handleProgressionRoll = () => {
     const oracleId =
       askTheOracleEnumMap[clock.oracleKey ?? AskTheOracle.AlmostCertain]._id;
@@ -62,7 +63,7 @@ export function TrackClock(props: TrackClockProps) {
     if (result?.result === "Yes") {
       const add = result.match ? 2 : 1;
 
-      updateClockValue(gameId, clockId, clock.value + add).catch(() => {});
+      updateClockValue(clockId, clock.value + add).catch(() => {});
       announce(
         t(
           "character.character-sidebar.tracks-clock-roll-progress-announcement-yes",
@@ -93,12 +94,12 @@ export function TrackClock(props: TrackClockProps) {
         { clockLabel: clock.label, value: newSegments, total: clock.segments },
       ),
     );
-    updateClockValue(gameId, clockId, newSegments).catch(() => {});
+    updateClockValue(clockId, newSegments).catch(() => {});
   };
 
   const updateTrackStatus = useTracksStore((store) => store.updateTrackStatus);
   const handleStatusChange = (status: TrackStatus) => {
-    updateTrackStatus(gameId, clockId, status).catch(() => {});
+    updateTrackStatus(clockId, status).catch(() => {});
   };
 
   const deleteTrack = useTracksStore((store) => store.deleteTrack);
@@ -112,7 +113,7 @@ export function TrackClock(props: TrackClockProps) {
       confirmationText: t("common.delete", "Delete"),
     })
       .then(() => {
-        deleteTrack(gameId, clockId).catch(() => {});
+        deleteTrack(clockId).catch(() => {});
       })
       .catch(() => {});
   };

@@ -54,7 +54,7 @@ export function useAutoSaveRtcEditor(params: {
         doc: docAndProvider?.doc,
         provider: docAndProvider?.provider,
         userId: uid,
-        userName: displayName,
+        userName: displayName ?? undefined,
       }),
       editable: !readOnly,
       onUpdate: ({ editor }) => {

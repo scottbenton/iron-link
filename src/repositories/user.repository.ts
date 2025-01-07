@@ -1,89 +1,57 @@
-import {
-  DocumentReference,
-  doc,
-  getDoc,
-  onSnapshot,
-  setDoc,
-} from "firebase/firestore";
+import { Tables, TablesUpdate } from "types/supabase-generated.type";
 
-import { firestore } from "config/firebase.config";
+import { supabase } from "lib/supabase.lib";
 
-import {
-  NotFoundError,
-  StorageError,
-  convertUnknownErrorToStorageError,
-} from "./errors/storageErrors";
+import { convertUnknownErrorToStorageError } from "./errors/storageErrors";
 
-export interface UserDTO {
-  displayName: string;
-  photoURL: string | null;
-  hidePhoto: boolean | null;
-  appVersion: string | null;
-}
+export type UserDTO = Tables<"users">;
+type UpdateUserDTO = TablesUpdate<"users">;
 
 export class UserRepository {
-  private static collectionName = "users";
-
-  private static getDocRef(userId: string): DocumentReference<UserDTO> {
-    return doc(
-      firestore,
-      `${this.collectionName}/${userId}`,
-    ) as DocumentReference<UserDTO>;
-  }
+  private static users = () => supabase.from("users");
 
   public static async getUser(userId: string): Promise<UserDTO> {
-    return new Promise<UserDTO>((res, reject) => {
-      getDoc(this.getDocRef(userId))
-        .then((doc) => {
-          if (doc.exists()) {
-            res(doc.data() as UserDTO);
-          } else {
+    return new Promise<UserDTO>((resolve, reject) => {
+      this.users()
+        .select()
+        .eq("id", userId)
+        .single()
+        .then((response) => {
+          if (response.error) {
+            console.error(response.error);
             reject(
-              new NotFoundError(`User with id ${userId} could not be found`),
+              convertUnknownErrorToStorageError(
+                response.error,
+                "Failed to get user",
+              ),
             );
+          } else {
+            resolve(response.data);
           }
-        })
-        .catch((err) => {
-          reject(convertUnknownErrorToStorageError(err, "Failed to get user"));
         });
     });
   }
 
-  public static listenToUser(
-    userId: string,
-    onUser: (user: UserDTO) => void,
-    onError: (error: StorageError) => void,
-  ): () => void {
-    return onSnapshot(
-      this.getDocRef(userId),
-      (doc) => {
-        if (doc.exists()) {
-          onUser(doc.data() as UserDTO);
-        } else {
-          onError(
-            new NotFoundError(`User with id ${userId} could not be found`),
-          );
-        }
-      },
-      (error) => {
-        onError(convertUnknownErrorToStorageError(error, "Failed to get user"));
-      },
-    );
-  }
-
-  public static async setUserDoc(
+  public static async updateUser(
     uid: string,
-    user: Partial<UserDTO>,
+    user: UpdateUserDTO,
   ): Promise<void> {
-    return new Promise<void>((res, reject) => {
-      setDoc(this.getDocRef(uid), user)
-        .then(() => {
-          res();
-        })
-        .catch((err) => {
-          reject(
-            convertUnknownErrorToStorageError(err, "Failed to update user"),
-          );
+    return new Promise<void>((resolve, reject) => {
+      this.users()
+        .update(user)
+        .eq("id", uid)
+        .then((response) => {
+          if (response.error) {
+            console.error(response.error);
+            reject(
+              convertUnknownErrorToStorageError(
+                response.error,
+                "Failed to update user",
+              ),
+            );
+          } else {
+            resolve();
+          }
         });
     });
   }

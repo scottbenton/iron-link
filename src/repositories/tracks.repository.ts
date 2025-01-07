@@ -1,76 +1,23 @@
 import {
-  CollectionReference,
-  DocumentReference,
-  PartialWithFieldValue,
-  Timestamp,
-  addDoc,
-  collection,
-  deleteDoc,
-  doc,
-  onSnapshot,
-  updateDoc,
-} from "firebase/firestore";
+  Tables,
+  TablesInsert,
+  TablesUpdate,
+} from "types/supabase-generated.type";
 
-import { firestore } from "config/firebase.config";
+import { supabase } from "lib/supabase.lib";
 
 import {
   StorageError,
+  UnknownError,
   convertUnknownErrorToStorageError,
 } from "./errors/storageErrors";
-import { GameRepostiory } from "./game.repository";
 
-export interface BaseTrackDTO {
-  label: string;
-  type: TrackSectionTracks;
-  description?: string;
-  value: number;
-  status: TrackStatus;
-  createdTimestamp: Timestamp;
-}
-
-export interface ProgressTrackDTO extends BaseTrackDTO {
-  type: TrackSectionProgressTracks;
-  difficulty: Difficulty;
-}
-
-export interface SceneChallengeDTO extends BaseTrackDTO {
-  type: TrackTypes.SceneChallenge;
-  segmentsFilled: number;
-  difficulty: Difficulty;
-}
-
-export interface ClockDTO extends BaseTrackDTO {
-  type: TrackTypes.Clock;
-  segments: number;
-  oracleKey?: AskTheOracle;
-}
-
-export type TrackDTO = ProgressTrackDTO | ClockDTO | SceneChallengeDTO;
-
-export type PartialTrackDTO = PartialWithFieldValue<TrackDTO>;
+export type TrackDTO = Tables<"game_tracks">;
+type InsertTrackDTO = TablesInsert<"game_tracks">;
+type UpdateTrackDTO = TablesUpdate<"game_tracks">;
 
 export class TracksRepository {
-  private static collectionName = "tracks";
-
-  public static getTrackCollectionName(gameId: string): string {
-    return `${GameRepostiory.collectionName}/${gameId}/${this.collectionName}`;
-  }
-  private static getGameTrackCollectionRef(gameId: string) {
-    return collection(
-      firestore,
-      this.getTrackCollectionName(gameId),
-    ) as CollectionReference<TrackDTO>;
-  }
-
-  private static getDocRef(
-    gameId: string,
-    trackId: string,
-  ): DocumentReference<TrackDTO> {
-    return doc(
-      firestore,
-      `${this.getTrackCollectionName(gameId)}/${trackId}`,
-    ) as DocumentReference<TrackDTO>;
-  }
+  private static tracks = () => supabase.from("game_tracks");
 
   public static listenToGameTracks(
     gameId: string,
@@ -80,98 +27,122 @@ export class TracksRepository {
     ) => void,
     onError: (error: StorageError) => void,
   ): () => void {
-    return onSnapshot(
-      this.getGameTrackCollectionRef(gameId),
-      (snapshot) => {
-        const changedTracks: Record<string, TrackDTO> = {};
-        const deletedTrackIds: string[] = [];
-
-        snapshot.docChanges().forEach((change) => {
-          const track = change.doc.data();
-          switch (change.type) {
-            case "added":
-            case "modified":
-              changedTracks[change.doc.id] = track;
-              break;
-            case "removed":
-              deletedTrackIds.push(change.doc.id);
-              break;
-          }
-        });
-
-        onTrackChanges(changedTracks, deletedTrackIds);
-      },
-      (error) => {
-        onError(
-          convertUnknownErrorToStorageError(
-            error,
-            "Failed to listen to tracks",
-          ),
-        );
-      },
-    );
-  }
-
-  public static async createTrack(
-    gameId: string,
-    track: TrackDTO,
-  ): Promise<string> {
-    return new Promise((resolve, reject) => {
-      addDoc(collection(firestore, this.getTrackCollectionName(gameId)), track)
-        .then((docRef) => {
-          resolve(docRef.id);
-        })
-        .catch((error) => {
-          console.error(error);
-          reject(
+    this.tracks()
+      .select()
+      .eq("game_id", gameId)
+      .then((result) => {
+        if (result.error) {
+          console.error(result.error);
+          onError(
             convertUnknownErrorToStorageError(
-              error,
-              "Track could not be created",
+              result.error,
+              "Failed to get initial tracks",
             ),
           );
+        } else {
+          const tracks: Record<string, TrackDTO> = {};
+          result.data?.forEach((track) => {
+            tracks[track.id] = track;
+          });
+          onTrackChanges(tracks, []);
+        }
+      });
+
+    const subscription = supabase
+      .channel(`game_tracks:game_id=eq.${gameId}`)
+      .on<TrackDTO>(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "game_tracks",
+          filter: `game_id=eq.${gameId}`,
+        },
+        (payload) => {
+          if (payload.errors) {
+            console.error(payload.errors);
+            onError(new UnknownError("Failed to get track changes"));
+          }
+          if (
+            payload.eventType === "INSERT" ||
+            payload.eventType === "UPDATE"
+          ) {
+            onTrackChanges({ [payload.new.id]: payload.new }, []);
+          } else if (payload.eventType === "DELETE" && payload.old.id) {
+            onTrackChanges({}, [payload.old.id]);
+          }
+        },
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(subscription);
+    };
+  }
+
+  public static async createTrack(track: InsertTrackDTO): Promise<string> {
+    return new Promise((resolve, reject) => {
+      this.tracks()
+        .insert(track)
+        .select()
+        .single()
+        .then((result) => {
+          if (result.error) {
+            console.error(result.error);
+            reject(
+              convertUnknownErrorToStorageError(
+                result.error,
+                "Failed to get initial tracks",
+              ),
+            );
+          } else {
+            resolve(result.data.id);
+          }
         });
     });
   }
 
   public static async updateTrack(
-    gameId: string,
     trackId: string,
-    track: PartialTrackDTO,
+    track: UpdateTrackDTO,
   ): Promise<void> {
     return new Promise((resolve, reject) => {
-      updateDoc(this.getDocRef(gameId, trackId), track)
-        .then(() => {
-          resolve();
-        })
-        .catch((error) => {
-          console.error(error);
-          reject(
-            convertUnknownErrorToStorageError(
-              error,
-              "Track could not be updated",
-            ),
-          );
+      this.tracks()
+        .update(track)
+        .eq("id", trackId)
+        .then((result) => {
+          if (result.error) {
+            console.error(result.error);
+            reject(
+              convertUnknownErrorToStorageError(
+                result.error,
+                "Failed to update track",
+              ),
+            );
+          } else {
+            resolve();
+          }
         });
     });
   }
 
-  public static async deleteTrack(
-    gameId: string,
-    trackId: string,
-  ): Promise<void> {
+  public static async deleteTrack(trackId: string): Promise<void> {
     return new Promise((resolve, reject) => {
-      deleteDoc(this.getDocRef(gameId, trackId))
-        .then(() => {
-          resolve();
-        })
-        .catch((error) => {
-          console.error(error);
-          reject(
-            convertUnknownErrorToStorageError(
-              error,
-              "Track could not be deleted",
-            ),
-          );
+      this.tracks()
+        .delete()
+        .eq("id", trackId)
+        .then((result) => {
+          if (result.error) {
+            console.error(result.error);
+            reject(
+              convertUnknownErrorToStorageError(
+                result.error,
+                "Failed to delete track",
+              ),
+            );
+          } else {
+            resolve();
+          }
         });
     });
   }

@@ -286,6 +286,8 @@ export type Database = {
           id: string
           is_completed: boolean
           label: string
+          progress_track_type: Database["public"]["Enums"]["progress_track_type"]
+          total_clock_segments: number
           track_difficulty: Database["public"]["Enums"]["progress_track_difficulty"]
           type: Database["public"]["Enums"]["track_type"]
         }
@@ -299,6 +301,8 @@ export type Database = {
           id?: string
           is_completed?: boolean
           label: string
+          progress_track_type?: Database["public"]["Enums"]["progress_track_type"]
+          total_clock_segments?: number
           track_difficulty: Database["public"]["Enums"]["progress_track_difficulty"]
           type: Database["public"]["Enums"]["track_type"]
         }
@@ -312,6 +316,8 @@ export type Database = {
           id?: string
           is_completed?: boolean
           label?: string
+          progress_track_type?: Database["public"]["Enums"]["progress_track_type"]
+          total_clock_segments?: number
           track_difficulty?: Database["public"]["Enums"]["progress_track_difficulty"]
           type?: Database["public"]["Enums"]["track_type"]
         }
