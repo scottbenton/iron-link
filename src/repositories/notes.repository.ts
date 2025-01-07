@@ -24,22 +24,12 @@ export class NotesRepository {
     uid: string | undefined,
     gameId: string,
     permissions: GamePermission,
-    accessibleParentNoteFolderIds: string[],
     onNoteChanges: (
       changedNotes: Record<string, NoteDTO>,
       removedNoteIds: string[],
     ) => void,
     onError: (error: StorageError) => void,
   ): () => void {
-    // use things up temporarily
-    console.debug(
-      uid,
-      gameId,
-      permissions,
-      accessibleParentNoteFolderIds,
-      onNoteChanges,
-      onError,
-    );
     const query = this.notes()
       .select(
         `

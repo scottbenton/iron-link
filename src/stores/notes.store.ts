@@ -50,7 +50,6 @@ interface NotesStoreActions {
     uid: string | undefined,
     gameId: string,
     gamePermissions: GamePermission,
-    accessibleParentNoteFolderIds: string[],
   ) => () => void;
   listenToActiveNoteContent: (noteId: string) => () => void;
 
@@ -147,17 +146,11 @@ export const useNotesStore = createWithEqualityFn<
         },
       );
     },
-    listenToGameNotes: (
-      uid,
-      gameId,
-      gamePermissions,
-      accessibleParentNoteFolderIds,
-    ) => {
+    listenToGameNotes: (uid, gameId, gamePermissions) => {
       return NotesService.listenToGameNotes(
         uid,
         gameId,
         gamePermissions,
-        accessibleParentNoteFolderIds,
         (chaingedNotes, removedNoteIds) => {
           set((store) => {
             store.noteState.notes = {
@@ -391,10 +384,6 @@ export function useListenToGameNotes(gameId: string | undefined) {
     store.openItem?.type === "note" ? store.openItem.noteId : undefined,
   );
 
-  const noteFolderIds = useNotesStore((store) =>
-    Object.keys(store.folderState.folders),
-  );
-
   useEffect(() => {
     if (gameId && gamePermissions) {
       return listenToNoteFolders(uid, gameId, gamePermissions);
@@ -403,9 +392,9 @@ export function useListenToGameNotes(gameId: string | undefined) {
 
   useEffect(() => {
     if (gameId && gamePermissions) {
-      return listenToNotes(uid, gameId, gamePermissions, noteFolderIds);
+      return listenToNotes(uid, gameId, gamePermissions);
     }
-  }, [gameId, uid, gamePermissions, noteFolderIds, listenToNotes]);
+  }, [gameId, uid, gamePermissions, listenToNotes]);
 
   useEffect(() => {
     if (activeNoteId) {
