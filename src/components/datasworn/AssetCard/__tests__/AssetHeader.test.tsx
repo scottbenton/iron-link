@@ -1,7 +1,7 @@
 import { render } from "@testing-library/react";
 import { Mock, describe, expect, it, vi } from "vitest";
 
-import { getIsLocalEnvironment } from "config/environment.config";
+import { getIsLocalEnvironment } from "lib/environment.lib";
 
 import { AssetHeader, AssetHeaderProps } from "../AssetHeader";
 
