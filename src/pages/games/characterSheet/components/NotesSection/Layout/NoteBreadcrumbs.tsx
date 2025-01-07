@@ -1,17 +1,15 @@
 import { Breadcrumbs, Link, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
-import { useGamePermissions } from "pages/games/gamePageLayout/hooks/usePermissions";
-
 import { useUID } from "stores/auth.store";
-import { GamePermission } from "stores/game.store";
-import { GUIDE_NOTE_FOLDER_NAME, useNotesStore } from "stores/notes.store";
+import { useNotesStore } from "stores/notes.store";
 
 import { getItemName } from "../FolderView/getFolderName";
 import { FAKE_ROOT_NOTE_FOLDER_KEY } from "../FolderView/rootNodeName";
 
 interface BreadcrumbItem {
   type: "folder" | "note";
+  isRootPlayerFolder?: boolean;
   id: string;
   name: string;
 }
@@ -22,25 +20,6 @@ export function NoteBreadcrumbs() {
   const uid = useUID();
 
   const setOpenItem = useNotesStore((store) => store.setOpenItem);
-
-  const { gameType, gamePermission: campaignPermission } = useGamePermissions();
-  const hasCampaignNoteChildren = useNotesStore(
-    (store) =>
-      Object.values(store.noteState.notes).some(
-        (note) => note.parentFolderId === GUIDE_NOTE_FOLDER_NAME,
-      ) ||
-      Object.values(store.folderState.folders).some(
-        (folder) => folder.parentFolderId === GUIDE_NOTE_FOLDER_NAME,
-      ),
-  );
-
-  let hasAccessToMoreThanOneTopLevelFolder = false;
-  if (
-    (campaignPermission === GamePermission.Guide && gameType !== "solo") ||
-    hasCampaignNoteChildren
-  ) {
-    hasAccessToMoreThanOneTopLevelFolder = true;
-  }
 
   const breadcrumbItems: BreadcrumbItem[] = useNotesStore((store) => {
     let item = store.openItem;
@@ -57,7 +36,14 @@ export function NoteBreadcrumbs() {
           id: item.type === "folder" ? item.folderId : item.noteId,
           name:
             item.type === "folder"
-              ? store.folderState.folders[item.folderId]?.name
+              ? getItemName({
+                  name: store.folderState.folders[item.folderId]?.name,
+                  id: item.folderId,
+                  isRootPlayerFolder:
+                    store.folderState.folders[item.folderId]
+                      ?.isRootPlayerFolder ?? false,
+                  t,
+                })
               : store.noteState.notes[item.noteId]?.title,
         });
       }
@@ -79,14 +65,6 @@ export function NoteBreadcrumbs() {
       }
     }
 
-    if (hasAccessToMoreThanOneTopLevelFolder) {
-      breadcrumbs.push({
-        id: FAKE_ROOT_NOTE_FOLDER_KEY,
-        type: "folder",
-        name: FAKE_ROOT_NOTE_FOLDER_KEY,
-      });
-    }
-
     return breadcrumbs.reverse();
   });
 
@@ -96,15 +74,7 @@ export function NoteBreadcrumbs() {
         <Breadcrumbs>
           {breadcrumbItems.map((item, index) =>
             index === breadcrumbItems.length - 1 ? (
-              <Typography key={index}>
-                {getItemName({
-                  name: item.name,
-                  id: item.id,
-                  uid,
-                  t,
-                  gameType: gameType,
-                })}
-              </Typography>
+              <Typography key={index}>{item.name}</Typography>
             ) : (
               <Link
                 key={index}
@@ -117,13 +87,7 @@ export function NoteBreadcrumbs() {
                 sx={{ display: "flex" }}
                 color="textPrimary"
               >
-                {getItemName({
-                  name: item.name,
-                  id: item.id,
-                  uid,
-                  t,
-                  gameType: gameType,
-                })}
+                {item.name}
               </Link>
             ),
           )}

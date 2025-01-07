@@ -19,15 +19,17 @@ import { useTranslation } from "react-i18next";
 
 import { GridLayout } from "components/Layout";
 
-import { useGameId } from "pages/games/gamePageLayout/hooks/useGameId";
-
 import { useNotesStore } from "stores/notes.store";
 
+import { i18n } from "i18n/config";
+
+import { INoteFolder } from "services/noteFolders.service";
 import { INote } from "services/notes.service";
 
 import { FolderItem } from "./FolderItem";
 import { NoteItem } from "./NoteItem";
 import { SortableNoteItem } from "./SortableNoteItem";
+import { getItemName } from "./getFolderName";
 import { FAKE_ROOT_NOTE_FOLDER_KEY } from "./rootNodeName";
 
 export interface FolderViewProps {
@@ -37,7 +39,6 @@ export function FolderView(props: FolderViewProps) {
   const { folderId } = props;
 
   const { t } = useTranslation();
-  const gameId = useGameId();
 
   const subFolders = useNotesStore((state) => {
     if (!folderId) {
@@ -58,11 +59,11 @@ export function FolderView(props: FolderViewProps) {
           ([fid, folder]) =>
             fid !== FAKE_ROOT_NOTE_FOLDER_KEY && !folder.parentFolderId,
         )
-        .sort(([, a], [, b]) => a.name.localeCompare(b.name));
+        .sort(sortFolders);
     }
     return Object.entries(state.folderState.folders)
       .filter(([, folder]) => folder.parentFolderId === folderId)
-      .sort(([, a], [, b]) => a.name.localeCompare(b.name));
+      .sort(sortFolders);
   });
 
   const { sortedNoteIds, noteMap } = useNotesStore((state) => {
@@ -150,10 +151,10 @@ export function FolderView(props: FolderViewProps) {
           return arrayMove(prev, activeIndex, overIndex);
         });
 
-        updateNoteOrder(gameId, activeId, updatedOrder);
+        updateNoteOrder(activeId, updatedOrder);
       }
     },
-    [gameId, noteMap, localSortedNodes, updateNoteOrder],
+    [noteMap, localSortedNodes, updateNoteOrder],
   );
 
   const sensors = useSensors(
@@ -218,4 +219,24 @@ export function FolderView(props: FolderViewProps) {
       )}
     </>
   );
+}
+
+function sortFolders(aArr: [string, INoteFolder], bArr: [string, INoteFolder]) {
+  const a = aArr[1];
+  const b = bArr[1];
+
+  const t = i18n.t;
+  const aName = getItemName({
+    name: a.name,
+    id: a.id,
+    isRootPlayerFolder: a.isRootPlayerFolder,
+    t,
+  });
+  const bName = getItemName({
+    name: b.name,
+    id: b.id,
+    isRootPlayerFolder: b.isRootPlayerFolder,
+    t,
+  });
+  return aName.localeCompare(bName);
 }

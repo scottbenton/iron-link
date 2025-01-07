@@ -1,14 +1,43 @@
+import { Enums, Json } from "types/supabase-generated.type";
+
 import {
   CharacterDTO,
   CharacterRepository,
   InitiativeStatus,
+  StatsMap,
 } from "repositories/character.repository";
 import { StorageError } from "repositories/errors/storageErrors";
-import { ColorScheme } from "repositories/shared.types";
+import { ColorScheme, SpecialTrack } from "repositories/shared.types";
 
-import { AssetService, IAsset } from "./asset.service";
+export type ICharacter = {
+  id: string;
+  uid: string;
+  gameId: string | null;
 
-export type ICharacter = CharacterDTO;
+  name: string;
+  stats: StatsMap;
+  conditionMeters: Record<string, number>; // Health, Sprit, Supply, etc.
+
+  initiativeStatus: InitiativeStatus;
+  momentum: number;
+
+  specialTracks: Record<string, SpecialTrack>; // Bonds, Quests, Discoveries, etc.
+
+  debilities: Record<string, boolean>;
+  adds: number;
+
+  profileImage: {
+    filename: string;
+    position: {
+      x: number;
+      y: number;
+    };
+    scale: number;
+  } | null;
+
+  unspentExperience: number;
+  colorScheme: ColorScheme | null;
+};
 
 export class CharacterService {
   public static async getCharacter(characterId: string): Promise<ICharacter> {
@@ -20,13 +49,70 @@ export class CharacterService {
   private static convertCharacterDTOToCharacter(
     characterDTO: CharacterDTO,
   ): ICharacter {
-    return characterDTO;
+    let initiativeStatus: InitiativeStatus;
+    switch (characterDTO.initiative_status) {
+      case "has_initiative":
+        initiativeStatus = InitiativeStatus.HasInitiative;
+        break;
+      case "no_initiative":
+        initiativeStatus = InitiativeStatus.DoesNotHaveInitiative;
+        break;
+      case "out_of_combat":
+        initiativeStatus = InitiativeStatus.OutOfCombat;
+        break;
+    }
+
+    let colorScheme: ColorScheme | null = null;
+    if (characterDTO.color_scheme) {
+      if (characterDTO.color_scheme in ColorScheme) {
+        colorScheme = characterDTO.color_scheme as ColorScheme;
+      }
+    }
+
+    return {
+      id: characterDTO.id,
+      uid: characterDTO.uid,
+      gameId: characterDTO.game_id,
+      name: characterDTO.name,
+      stats: characterDTO.stat_values as Record<string, number>,
+      conditionMeters: characterDTO.condition_meter_values as Record<
+        string,
+        number
+      >,
+      specialTracks: characterDTO.special_track_values as unknown as Record<
+        string,
+        SpecialTrack
+      >,
+      momentum: characterDTO.momentum,
+      initiativeStatus,
+      debilities: characterDTO.impact_values as Record<string, boolean>,
+      adds: characterDTO.adds,
+      unspentExperience: characterDTO.unspent_experience,
+      colorScheme,
+      profileImage: characterDTO.portrait_filename
+        ? {
+            filename: characterDTO.portrait_filename,
+            position: {
+              x: characterDTO.portrait_position_x ?? 0,
+              y: characterDTO.portrait_position_y ?? 0,
+            },
+            scale: characterDTO.portrait_scale ?? 1,
+          }
+        : null,
+    };
   }
 
   public static async getCharactersInGames(
     gameIds: string[],
   ): Promise<Record<string, ICharacter>> {
-    return await CharacterRepository.getCharactersInGames(gameIds);
+    const characterDTOs =
+      await CharacterRepository.getCharactersInGames(gameIds);
+    return Object.fromEntries(
+      Object.entries(characterDTOs).map(([characterId, characterDTO]) => [
+        characterId,
+        this.convertCharacterDTOToCharacter(characterDTO),
+      ]),
+    );
   }
 
   public static listenToGameCharacters(
@@ -39,15 +125,27 @@ export class CharacterService {
   ): () => void {
     return CharacterRepository.listenToGameCharacters(
       gameId,
-      onCharacterChanges,
+      (changedCharacters, removedCharacterIds) => {
+        onCharacterChanges(
+          Object.fromEntries(
+            Object.entries(changedCharacters).map(
+              ([characterId, characterDTO]) => [
+                characterId,
+                this.convertCharacterDTOToCharacter(characterDTO),
+              ],
+            ),
+          ),
+          removedCharacterIds,
+        );
+      },
       onError,
     );
   }
 
-  public static async getCharacterPortraitURL(
+  public static getCharacterPortraitURL(
     characterId: string,
     filename: string,
-  ): Promise<string> {
+  ): string {
     return CharacterRepository.getCharacterImageLink(characterId, filename);
   }
 
@@ -64,44 +162,20 @@ export class CharacterService {
       };
       scale: number;
     };
-    characterAssets: IAsset[];
-    gameAssets: IAsset[];
   }): Promise<string> {
-    const {
+    const { uid, gameId, name, stats, profileImage } = params;
+
+    const characterId = await CharacterRepository.createCharacter({
       uid,
-      gameId,
+      game_id: gameId,
       name,
-      stats,
-      profileImage,
-      characterAssets,
-      gameAssets,
-    } = params;
+      stat_values: stats,
 
-    const character: CharacterDTO = {
-      uid,
-      name,
-      stats,
-      conditionMeters: {},
-      specialTracks: {},
-      momentum: 0,
-      gameId,
-      profileImage: profileImage.image
-        ? {
-            filename: profileImage.image.name,
-            position: profileImage.position,
-            scale: profileImage.scale,
-          }
-        : null,
-      unspentExperience: 0,
-      colorScheme: null,
-      initiativeStatus: InitiativeStatus.OutOfCombat,
-      debilities: {},
-      adds: 0,
-    };
-
-    const assetPromises: Promise<unknown>[] = [];
-
-    const characterId = await CharacterRepository.createCharacter(character);
+      portrait_filename: profileImage.image ? profileImage.image.name : null,
+      portrait_position_x: profileImage.position.x,
+      portrait_position_y: profileImage.position.y,
+      portrait_scale: profileImage.scale,
+    });
     if (profileImage.image) {
       try {
         CharacterRepository.uploadCharacterImage(
@@ -113,18 +187,6 @@ export class CharacterService {
       }
     }
 
-    characterAssets.forEach((asset) => {
-      assetPromises.push(AssetService.createCharacterAsset(characterId, asset));
-    });
-
-    gameAssets.forEach((asset) => {
-      assetPromises.push(AssetService.createGameAsset(gameId, asset));
-    });
-
-    await Promise.all(assetPromises);
-
-    // Assets
-
     return characterId;
   }
 
@@ -134,7 +196,9 @@ export class CharacterService {
   ): Promise<void> {
     const promises: Promise<unknown>[] = [];
     promises.push(
-      CharacterRepository.updateCharacter(characterId, { profileImage: null }),
+      CharacterRepository.updateCharacter(characterId, {
+        portrait_filename: null,
+      }),
     );
     promises.push(
       CharacterRepository.deleteCharacterPortrait(characterId, filename),
@@ -170,18 +234,15 @@ export class CharacterService {
         characterId,
         newPortrait
           ? {
-              profileImage: {
-                filename: newPortrait.name,
-                scale,
-                position,
-              },
+              portrait_filename: newPortrait.name,
+              portrait_position_x: position.x,
+              portrait_position_y: position.y,
+              portrait_scale: scale,
             }
           : {
-              profileImage: {
-                scale,
-                position,
-                filename: oldFilename,
-              },
+              portrait_position_x: position.x,
+              portrait_position_y: position.y,
+              portrait_scale: scale,
             },
       ),
     );
@@ -192,22 +253,32 @@ export class CharacterService {
     characterId: string,
     stats: Record<string, number>,
   ) {
-    return CharacterRepository.updateCharacter(characterId, { stats });
+    return CharacterRepository.updateCharacter(characterId, {
+      stat_values: stats,
+    });
   }
 
   public static async updateCharacterColorScheme(
     characterId: string,
     colorScheme: ColorScheme | null,
   ) {
-    return CharacterRepository.updateCharacter(characterId, { colorScheme });
+    return CharacterRepository.updateCharacter(characterId, {
+      color_scheme: colorScheme,
+    });
   }
 
   public static async updateCharacterInitiativeStatus(
     characterId: string,
     initiativeStatus: InitiativeStatus,
   ) {
+    let status: Enums<"character_initiative_status"> = "out_of_combat";
+    if (initiativeStatus === InitiativeStatus.HasInitiative) {
+      status = "has_initiative";
+    } else if (initiativeStatus === InitiativeStatus.DoesNotHaveInitiative) {
+      status = "no_initiative";
+    }
     return CharacterRepository.updateCharacter(characterId, {
-      initiativeStatus,
+      initiative_status: status,
     });
   }
 
@@ -218,13 +289,12 @@ export class CharacterService {
     return CharacterRepository.updateCharacter(characterId, { adds });
   }
 
-  public static updateConditionMeter(
+  public static updateConditionMeters(
     characterId: string,
-    conditionMeterKey: string,
-    value: number,
+    conditionMeters: Record<string, number>,
   ): Promise<void> {
     return CharacterRepository.updateCharacter(characterId, {
-      [`conditionMeters.${conditionMeterKey}`]: value,
+      condition_meter_values: conditionMeters,
     });
   }
 
@@ -235,23 +305,21 @@ export class CharacterService {
     return CharacterRepository.updateCharacter(characterId, { momentum });
   }
 
-  public static updateImpact(
+  public static updateImpacts(
     characterId: string,
-    impactKey: string,
-    checked: boolean,
+    impacts: Record<string, boolean>,
   ): Promise<void> {
     return CharacterRepository.updateCharacter(characterId, {
-      [`debilities.${impactKey}`]: checked,
+      impact_values: impacts,
     });
   }
 
-  public static updateSpecialTrackValue(
+  public static updateSpecialTracks(
     characterId: string,
-    trackKey: string,
-    value: number,
+    specialTracks: Record<string, SpecialTrack>,
   ): Promise<void> {
     return CharacterRepository.updateCharacter(characterId, {
-      [`specialTracks.${trackKey}.value`]: value,
+      special_track_values: specialTracks as unknown as Json,
     });
   }
 
@@ -260,7 +328,7 @@ export class CharacterService {
     experience: number,
   ): Promise<void> {
     return CharacterRepository.updateCharacter(characterId, {
-      unspentExperience: experience,
+      unspent_experience: experience,
     });
   }
 

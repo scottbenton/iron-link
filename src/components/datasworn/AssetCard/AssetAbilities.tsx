@@ -20,8 +20,6 @@ export function AssetAbilities(props: AssetAbilitiesProps) {
     hideUnavailableAbilities,
   } = props;
 
-  console.debug(assetDocument?.enabledAbilities);
-
   const abilitiesWithIndex = abilities.map((ability, index) => ({
     ...ability,
     index,

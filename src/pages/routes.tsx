@@ -7,8 +7,7 @@ import {
 
 import { Layout } from "components/Layout";
 
-import { LoginPage } from "./auth/LoginPage";
-import { SignUpPage } from "./auth/SignUpPage";
+import { Auth } from "./auth/Auth";
 import { AddCharacter } from "./games/addCharacter/AddCharacter";
 import { CharacterSheetPage } from "./games/characterSheet/CharacterSheetPage";
 import { CreateGamePage } from "./games/create/CreateGamePage";
@@ -22,8 +21,7 @@ export const router = createBrowserRouter(
     <Route element={<App />}>
       <Route element={<Layout />}>
         <Route path={"/"} element={<div>Home</div>} />
-        <Route path={"/sign-in"} element={<LoginPage />} />
-        <Route path={"/sign-up"} element={<SignUpPage />} />
+        <Route path={"/auth"} element={<Auth />} />
         <Route path={"/games"}>
           <Route index element={<GameSelectPage />} />
           <Route path={"create"} element={<CreateGamePage />} />

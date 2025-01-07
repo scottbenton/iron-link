@@ -1,10 +1,10 @@
-import { CharacterDTO } from "repositories/character.repository";
+import { ICharacter } from "services/character.service";
 
 export interface CharacterRollOptionState {
   name: string;
-  stats: CharacterDTO["stats"];
-  conditionMeters: CharacterDTO["conditionMeters"];
-  adds: CharacterDTO["adds"];
-  momentum: CharacterDTO["momentum"];
-  specialTracks: CharacterDTO["specialTracks"];
+  stats: ICharacter["stats"];
+  conditionMeters: ICharacter["conditionMeters"];
+  adds: ICharacter["adds"];
+  momentum: ICharacter["momentum"];
+  specialTracks: ICharacter["specialTracks"];
 }

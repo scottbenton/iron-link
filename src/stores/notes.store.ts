@@ -7,12 +7,8 @@ import { useGamePermissions } from "pages/games/gamePageLayout/hooks/usePermissi
 
 import { EditPermissions, ReadPermissions } from "repositories/shared.types";
 
-import {
-  INoteContent,
-  NoteContentsService,
-} from "services/noteContents.service";
 import { INoteFolder, NoteFoldersService } from "services/noteFolders.service";
-import { INote, NotesService } from "services/notes.service";
+import { INote, INoteContent, NotesService } from "services/notes.service";
 
 import { useUID } from "./auth.store";
 import { GamePermission } from "./game.store";
@@ -56,7 +52,7 @@ interface NotesStoreActions {
     gamePermissions: GamePermission,
     accessibleParentNoteFolderIds: string[],
   ) => () => void;
-  listenToActiveNoteContent: (gameId: string, noteId: string) => () => void;
+  listenToActiveNoteContent: (noteId: string) => () => void;
 
   setOpenItem: (type: "folder" | "note", id: string) => void;
 
@@ -68,13 +64,9 @@ interface NotesStoreActions {
     order: number,
     readPermissions: ReadPermissions,
     editPermissions: EditPermissions,
-    folderId?: string,
+    isRootPlayerFolder?: boolean,
   ) => Promise<string>;
-  updateFolderName: (
-    gameId: string,
-    folderId: string,
-    name: string,
-  ) => Promise<void>;
+  updateFolderName: (folderId: string, name: string) => Promise<void>;
   // updateFolderPermissions: (
   //   gameId: string,
   //   folderId: string,
@@ -82,31 +74,22 @@ interface NotesStoreActions {
   //   editPermissions: EditPermissions,
   // ) => Promise<void>;
 
-  deleteFolder: (gameId: string, folderId: string) => Promise<void>;
+  deleteFolder: (folderId: string) => Promise<void>;
 
   createNote: (
     uid: string,
-    gameId: string,
     parentFolderId: string,
     title: string,
     order: number,
   ) => Promise<string>;
-  updateNoteName: (
-    gameId: string,
-    noteId: string,
-    title: string,
-  ) => Promise<void>;
-  updateNoteOrder: (
-    gameId: string,
-    noteId: string,
-    order: number,
-  ) => Promise<void>;
-  deleteNote: (gameId: string, noteId: string) => Promise<void>;
+  updateNoteName: (noteId: string, title: string) => Promise<void>;
+  updateNoteOrder: (noteId: string, order: number) => Promise<void>;
+  deleteNote: (noteId: string) => Promise<void>;
 
   updateNoteContent: (
-    gameId: string,
     noteId: string,
     content: Uint8Array,
+    contentString: string,
     isBeaconRequest?: boolean,
   ) => Promise<void>;
 
@@ -196,9 +179,8 @@ export const useNotesStore = createWithEqualityFn<
         },
       );
     },
-    listenToActiveNoteContent: (gameId, noteId) => {
-      return NoteContentsService.listenToNoteContent(
-        gameId,
+    listenToActiveNoteContent: (noteId) => {
+      return NotesService.listenToNoteContent(
         noteId,
         (noteContent) => {
           set((store) => {
@@ -231,11 +213,11 @@ export const useNotesStore = createWithEqualityFn<
       );
     },
 
-    updateNoteContent: (gameId, noteId, content, isBeaconRequest) => {
-      return NoteContentsService.updateNoteContent(
-        gameId,
+    updateNoteContent: (noteId, content, contentString, isBeaconRequest) => {
+      return NotesService.updateNoteContent(
         noteId,
         content,
+        contentString,
         isBeaconRequest,
       );
     },
@@ -279,7 +261,7 @@ export const useNotesStore = createWithEqualityFn<
       order,
       readPermissions,
       editPermissions,
-      folderId,
+      isRootPlayerFolder,
     ) => {
       return NoteFoldersService.addFolder(
         uid,
@@ -289,11 +271,11 @@ export const useNotesStore = createWithEqualityFn<
         name,
         readPermissions,
         editPermissions,
-        folderId,
+        isRootPlayerFolder ?? false,
       );
     },
-    updateFolderName: (gameId, folderId, name) => {
-      return NoteFoldersService.updateFolderName(gameId, folderId, name);
+    updateFolderName: (folderId, name) => {
+      return NoteFoldersService.updateFolderName(folderId, name);
     },
     // updateFolderPermissions: (
     //   gameId,
@@ -303,21 +285,32 @@ export const useNotesStore = createWithEqualityFn<
     // ) => {
     //   return new Promise((resolve, reject) => {});
     // },
-    deleteFolder: (gameId, folderId) => {
-      return NoteFoldersService.deleteFolder(gameId, folderId);
+    deleteFolder: (folderId) => {
+      return NoteFoldersService.deleteFolder(folderId);
     },
 
-    createNote: (uid, gameId, parentFolderId, title, order) => {
-      return NotesService.addNote(uid, gameId, parentFolderId, title, order);
+    createNote: (uid, parentFolderId, title, order) => {
+      const parentFolder = getState().folderState.folders[parentFolderId];
+      if (!parentFolder) {
+        return Promise.reject(new Error("Parent folder not found"));
+      }
+      return NotesService.addNote(
+        uid,
+        parentFolderId,
+        title,
+        order,
+        parentFolder.readPermissions,
+        parentFolder.editPermissions,
+      );
     },
-    updateNoteName: (gameId, noteId, title) => {
-      return NotesService.updateNoteName(gameId, noteId, title);
+    updateNoteName: (noteId, title) => {
+      return NotesService.updateNoteName(noteId, title);
     },
-    updateNoteOrder: (gameId, noteId, order) => {
-      return NotesService.updateNoteOrder(gameId, noteId, order);
+    updateNoteOrder: (noteId, order) => {
+      return NotesService.updateNoteOrder(noteId, order);
     },
-    deleteNote: (gameId, noteId) => {
-      return NotesService.deleteNote(gameId, noteId);
+    deleteNote: (noteId) => {
+      return NotesService.deleteNote(noteId);
     },
 
     getFolderDescendants: (folderId) => {
@@ -403,22 +396,22 @@ export function useListenToGameNotes(gameId: string | undefined) {
   );
 
   useEffect(() => {
-    if (gameId) {
+    if (gameId && gamePermissions) {
       return listenToNoteFolders(uid, gameId, gamePermissions);
     }
   }, [gameId, uid, gamePermissions, listenToNoteFolders]);
 
   useEffect(() => {
-    if (gameId) {
+    if (gameId && gamePermissions) {
       return listenToNotes(uid, gameId, gamePermissions, noteFolderIds);
     }
   }, [gameId, uid, gamePermissions, noteFolderIds, listenToNotes]);
 
   useEffect(() => {
-    if (gameId && activeNoteId) {
-      return listenToNoteContents(gameId, activeNoteId);
+    if (activeNoteId) {
+      return listenToNoteContents(activeNoteId);
     }
-  }, [gameId, activeNoteId, listenToNoteContents]);
+  }, [activeNoteId, listenToNoteContents]);
 
   useEffect(() => {
     return () => {
@@ -430,4 +423,11 @@ export function useListenToGameNotes(gameId: string | undefined) {
 // THEN
 // Query all notes where I have permission OR notes in folders where I have permission
 
-export const GUIDE_NOTE_FOLDER_NAME = "guide-notes";
+export function getPlayerNotesFolder(
+  playerId: string,
+  folders: Record<string, INoteFolder>,
+): INoteFolder | undefined {
+  return Object.values(folders).find((folder) => {
+    return folder.creator === playerId && folder.isRootPlayerFolder;
+  });
+}

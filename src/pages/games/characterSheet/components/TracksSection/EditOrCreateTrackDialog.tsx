@@ -23,7 +23,6 @@ import { useTracksStore } from "stores/tracks.store";
 import {
   Difficulty,
   TrackSectionProgressTracks,
-  TrackStatus,
   TrackTypes,
 } from "repositories/tracks.repository";
 
@@ -61,8 +60,15 @@ export function EditOrCreateTrackDialog(props: EditOrCreateTrackDialogProps) {
     handleClose();
   };
 
-  const addTrack = useTracksStore((store) => store.addTrack);
-  const updateTrack = useTracksStore((store) => store.setTrack);
+  const addProgressTrack = useTracksStore((store) => store.addProgressTrack);
+  const updateProgressTrack = useTracksStore(
+    (store) => store.updateProgressTrack,
+  );
+  const addSceneChallenge = useTracksStore((store) => store.addSceneChallenge);
+  const updateSceneChallenge = useTracksStore(
+    (store) => store.updateSceneChallenge,
+  );
+
   const handleSubmit = () => {
     const potentialError = verifyTrack(track, t);
     if (potentialError) {
@@ -70,40 +76,27 @@ export function EditOrCreateTrackDialog(props: EditOrCreateTrackDialogProps) {
       return;
     }
 
-    let trackDocument: IProgressTrack | ISceneChallenge;
-    if (trackType === TrackTypes.SceneChallenge) {
-      trackDocument = {
-        createdDate: initialTrack?.track.createdDate ?? new Date(),
-        status: TrackStatus.Active,
-        type: TrackTypes.SceneChallenge,
-        label: track.label ?? "",
-        description: track.description ?? "",
-        difficulty: track.difficulty ?? Difficulty.Troublesome,
-        value:
-          initialTrack?.track.value && !resetProgress
-            ? initialTrack.track.value
-            : 0,
-        segmentsFilled:
-          (initialTrack?.track as ISceneChallenge).segmentsFilled ?? 0,
-      };
-    } else {
-      trackDocument = {
-        createdDate: initialTrack?.track.createdDate ?? new Date(),
-        status: TrackStatus.Active,
-        type: trackType || TrackTypes.Vow,
-        label: track.label ?? "",
-        description: track.description ?? "",
-        difficulty:
-          (track as IProgressTrack).difficulty ?? Difficulty.Troublesome,
-        value:
-          initialTrack?.track.value && !resetProgress
-            ? initialTrack.track.value
-            : 0,
-      };
-    }
     setLoading(true);
     if (initialTrack) {
-      updateTrack(gameId, initialTrack.trackId, trackDocument)
+      let updatePromise: Promise<void>;
+      if (trackType === TrackTypes.SceneChallenge) {
+        updatePromise = updateSceneChallenge(
+          initialTrack.trackId,
+          track.label ?? "",
+          track.description,
+          track.difficulty ?? Difficulty.Troublesome,
+          resetProgress,
+        );
+      } else {
+        updatePromise = updateProgressTrack(
+          initialTrack.trackId,
+          track.label ?? "",
+          track.description,
+          track.difficulty ?? Difficulty.Troublesome,
+          resetProgress,
+        );
+      }
+      updatePromise
         .then(() => {
           handleDialogClose();
         })
@@ -117,7 +110,24 @@ export function EditOrCreateTrackDialog(props: EditOrCreateTrackDialogProps) {
           );
         });
     } else {
-      addTrack(gameId, trackDocument)
+      let addPromise: Promise<string>;
+      if (trackType === TrackTypes.SceneChallenge) {
+        addPromise = addSceneChallenge(
+          gameId,
+          track.label ?? "",
+          track.description,
+          track.difficulty ?? Difficulty.Troublesome,
+        );
+      } else {
+        addPromise = addProgressTrack(
+          gameId,
+          trackType,
+          track.label ?? "",
+          track.description,
+          track.difficulty ?? Difficulty.Troublesome,
+        );
+      }
+      addPromise
         .then(() => {
           handleDialogClose();
         })

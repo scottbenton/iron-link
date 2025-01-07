@@ -1,6 +1,5 @@
+import { v4 as uuid } from "uuid";
+
 export function createId() {
-  return (
-    Date.now().toString(36) +
-    Math.random().toString(36).substring(2, 12).padStart(12, "0")
-  );
+  return uuid();
 }

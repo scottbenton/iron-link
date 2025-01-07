@@ -49,20 +49,20 @@ export function useRollStatAndAddToLog() {
 
   const rollStat = useCallback(
     (config: StatRollConfig) => {
-      const rollId = createId();
       const result = getStatRollResult(
         config,
         uid,
+        gameId,
         config.characterId ?? characterId,
       );
 
       if (gameId) {
-        addLog(gameId, rollId, result).catch(() => {});
+        addLog(result.id, result).catch(() => {});
       }
       announceRoll(result, config, dataswornTree, t, announce);
 
       if (!config.hideSnackbar) {
-        addRollSnackbar(rollId, result);
+        addRollSnackbar(result.id, result);
       }
 
       return result;
@@ -89,6 +89,7 @@ export const getRoll = (dieMax: number) => {
 function getStatRollResult(
   config: StatRollConfig,
   uid: string,
+  gameId?: string,
   characterId?: string,
 ): IStatRoll {
   const { momentum, statModifier, adds, statLabel, moveId, statId } = config;
@@ -111,6 +112,8 @@ function getStatRollResult(
   }
 
   const roll: IStatRoll = {
+    id: createId(),
+    gameId: gameId ?? "unknown",
     type: RollType.Stat,
     rollLabel: statLabel,
     timestamp: new Date(),
@@ -118,8 +121,8 @@ function getStatRollResult(
     uid: uid,
     matchedNegativeMomentum,
     guidesOnly: false,
-    moveId: moveId ?? null,
-    rolled: statId,
+    moveId: moveId ?? undefined,
+    statKey: statId,
     action,
     actionTotal,
     challenge1,

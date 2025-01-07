@@ -55,7 +55,7 @@ export function FolderViewToolbar(props: FolderViewToolbarProps) {
     renamingCurrent?: boolean;
   }>({ open: false, type: "folder" });
 
-  const { canEdit, canDelete, isInGuideFolder } = useFolderPermission(folderId);
+  const { canEdit, canDelete } = useFolderPermission(folderId);
 
   const addFolder = useNotesStore((store) => store.createFolder);
   const addNote = useNotesStore((store) => store.createNote);
@@ -80,12 +80,12 @@ export function FolderViewToolbar(props: FolderViewToolbarProps) {
 
   const createNote = (name: string) => {
     if (uid) {
-      addNote(uid, gameId, folderId, name, nextNoteOrder).catch(() => {});
+      addNote(uid, folderId, name, nextNoteOrder).catch(() => {});
     }
   };
 
   const renameCurrentFolder = (name: string) => {
-    updateNoteFolderName(gameId, folderId, name).catch(() => {});
+    updateNoteFolderName(folderId, name).catch(() => {});
   };
 
   return (
@@ -119,15 +119,15 @@ export function FolderViewToolbar(props: FolderViewToolbarProps) {
                 name: parentFolder.name,
                 editPermissions: parentFolder.editPermissions,
                 readPermissions: parentFolder.readPermissions,
+                isRootPlayerFolder: parentFolder.isRootPlayerFolder,
               }}
-              isInGMFolder={isInGuideFolder}
             />
           )}
           {!isImmutableFolder && canDelete && folder.parentFolderId && (
             <FolderDeleteButton
               parentFolderId={folder.parentFolderId}
               folderId={folderId}
-              name={folder.name}
+              name={folder.name ?? ""}
             />
           )}
 
@@ -165,7 +165,9 @@ export function FolderViewToolbar(props: FolderViewToolbarProps) {
                 ? t("notes.folder", "Folder")
                 : t("notes.note", "Note")
             }
-            name={nameItemDialogSettings.renamingCurrent ? folder.name : ""}
+            name={
+              nameItemDialogSettings.renamingCurrent ? (folder.name ?? "") : ""
+            }
             onSave={(name) => {
               if (nameItemDialogSettings.renamingCurrent) {
                 renameCurrentFolder(name);

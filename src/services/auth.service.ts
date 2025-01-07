@@ -1,51 +1,64 @@
-import { onAuthStateChanged } from "firebase/auth";
-
-import { firebaseAuth } from "config/firebase.config";
-
-import { UnauthenticatedError } from "repositories/errors/storageErrors";
-
-export interface AuthenticatedUser {
-  uid: string;
-  displayName: string;
-  photoURL?: string;
-}
+import { supabase } from "lib/supabase.lib";
 
 export class AuthService {
   public static listenToAuthState(
-    onUserFound: (user: AuthenticatedUser) => void,
-    onUserNotFound: () => void,
-    onError: (error: Error) => void,
+    onUserFound: (userId: string) => void,
+    onUserNotFound: () => void
   ): () => void {
-    return onAuthStateChanged(
-      firebaseAuth,
-      (user) => {
-        if (user) {
-          onUserFound({
-            uid: user.uid,
-            displayName: user.displayName ?? "Unknown User",
-            photoURL: user.photoURL ?? undefined,
-          });
-        } else {
-          onUserNotFound();
-        }
-      },
-      (error) => {
-        console.error(error);
-        onError(new Error("Failed to listen to auth state"));
-      },
-    );
+    const result = supabase.auth.onAuthStateChange((_event, session) => { 
+      if (session) {
+        onUserFound(session.user.id);
+      } else {
+        onUserNotFound();
+      }
+    });
+    return () => result.data.subscription.unsubscribe();
   }
-
-  public static getCurrentUserId(): string | null {
-    const user = firebaseAuth.currentUser;
-    return user ? user.uid : null;
-  }
-
-  public static getCurrentUserIdOrThrow(): string {
-    const uid = this.getCurrentUserId();
-    if (!uid) {
-      throw new UnauthenticatedError("User is not authenticated");
+    public static async sendOTPCodeToEmail(email: string): Promise<void> {
+    try {
+      const result = await supabase.auth.signInWithOtp({
+        email,
+      });
+      if (result.error) {
+        throw result.error;
+      }
+    } catch (e) {
+      console.error(e);
+      throw e;
     }
-    return uid;
+    // Send OTP code to email
+  }
+  public static async verifyOTPCode(
+    email: string,
+    otpCode: string,
+  ): Promise<void> {
+    // Verify OTP code
+    try {
+      const result = await supabase.auth.verifyOtp({
+        email,
+        token: otpCode,
+        type: "email",
+      });
+      if (result.error) {
+        throw result.error;
+      }
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
+  }
+
+  public static async logout(): Promise<void> {
+    try {
+      const result = await supabase.auth.signOut();
+      if (result.error) {
+        console.error(result.error);
+        throw result.error;
+      }
+      return;
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
   }
 }

@@ -7,7 +7,20 @@ import {
 } from "repositories/noteFolders.repository";
 import { EditPermissions, ReadPermissions } from "repositories/shared.types";
 
-export type INoteFolder = NoteFolderDTO;
+export type INoteFolder = {
+  id: string;
+  gameId: string;
+  name?: string;
+  order: number;
+  isRootPlayerFolder: boolean;
+  // Null if this is a root folder
+  parentFolderId: string | null;
+  creator: string;
+
+  // Permission sets cannot be null - if we update a parent, we need to manually update children
+  readPermissions: ReadPermissions;
+  editPermissions: EditPermissions;
+};
 
 export class NoteFoldersService {
   public static listenToGameNoteFolders(
@@ -24,7 +37,16 @@ export class NoteFoldersService {
       uid,
       gameId,
       permissions,
-      onNoteFolderChanges,
+      (changedFolders, removedIds) =>
+        onNoteFolderChanges(
+          Object.fromEntries(
+            Object.entries(changedFolders).map(([folderId, folder]) => [
+              folderId,
+              this.convertNoteFolderDTOToNoteFolder(folder),
+            ]),
+          ),
+          removedIds,
+        ),
       onError,
     );
   }
@@ -37,51 +59,99 @@ export class NoteFoldersService {
     name: string,
     readPermissions: ReadPermissions,
     editPermissions: EditPermissions,
-    folderId?: string,
+    isRootPlayerFolder: boolean,
   ): Promise<string> {
-    return NoteFoldersRepository.addNoteFolder(
-      gameId,
-      {
-        name,
-        order,
-        parentFolderId,
-        creator: uid,
-        readPermissions,
-        editPermissions,
-      },
-      folderId,
-    );
+    return NoteFoldersRepository.addNoteFolder({
+      name,
+      game_id: gameId,
+      order,
+      parent_folder_id: parentFolderId,
+      author_id: uid,
+      is_root_player_folder: isRootPlayerFolder,
+      read_permissions: readPermissions,
+      edit_permissions: editPermissions,
+    });
   }
   public static updateFolderName(
-    gameId: string,
     folderId: string,
     name: string,
   ): Promise<void> {
-    return NoteFoldersRepository.updateNoteFolder(gameId, folderId, { name });
+    return NoteFoldersRepository.updateNoteFolder(folderId, { name });
   }
 
   public static updateFolderPermissions(
-    gameId: string,
     folderId: string,
     readPermissions: ReadPermissions,
     editPermissions: EditPermissions,
   ): Promise<void> {
-    return NoteFoldersRepository.updateNoteFolder(gameId, folderId, {
-      readPermissions,
-      editPermissions,
+    return NoteFoldersRepository.updateNoteFolder(folderId, {
+      read_permissions: readPermissions,
+      edit_permissions: editPermissions,
     });
   }
   public static updateParentFolder(
-    gameId: string,
     folderId: string,
     parentFolderId: string,
   ): Promise<void> {
-    return NoteFoldersRepository.updateNoteFolder(gameId, folderId, {
-      parentFolderId,
+    return NoteFoldersRepository.updateNoteFolder(folderId, {
+      parent_folder_id: parentFolderId,
     });
   }
 
-  public static deleteFolder(gameId: string, folderId: string): Promise<void> {
-    return NoteFoldersRepository.deleteNoteFolder(gameId, folderId);
+  public static deleteFolder(folderId: string): Promise<void> {
+    return NoteFoldersRepository.deleteNoteFolder(folderId);
+  }
+
+  private static convertNoteFolderDTOToNoteFolder(
+    noteFolder: NoteFolderDTO,
+  ): INoteFolder {
+    let readPermissions: ReadPermissions;
+    switch (noteFolder.read_permissions) {
+      case "only_author":
+        readPermissions = ReadPermissions.OnlyAuthor;
+        break;
+      case "only_guides":
+        readPermissions = ReadPermissions.OnlyGuides;
+        break;
+      case "all_players":
+        readPermissions = ReadPermissions.AllPlayers;
+        break;
+      case "guides_and_author":
+        readPermissions = ReadPermissions.GuidesAndAuthor;
+        break;
+      case "public":
+        readPermissions = ReadPermissions.Public;
+        break;
+      default:
+        readPermissions = ReadPermissions.OnlyAuthor;
+    }
+    let editPermissions: EditPermissions;
+    switch (noteFolder.edit_permissions) {
+      case "only_author":
+        editPermissions = EditPermissions.OnlyAuthor;
+        break;
+      case "only_guides":
+        editPermissions = EditPermissions.OnlyGuides;
+        break;
+      case "guides_and_author":
+        editPermissions = EditPermissions.GuidesAndAuthor;
+        break;
+      case "all_players":
+        editPermissions = EditPermissions.AllPlayers;
+        break;
+      default:
+        editPermissions = EditPermissions.OnlyAuthor;
+    }
+    return {
+      id: noteFolder.id,
+      gameId: noteFolder.game_id,
+      name: noteFolder.name ?? undefined,
+      order: noteFolder.order,
+      parentFolderId: noteFolder.parent_folder_id,
+      creator: noteFolder.author_id,
+      isRootPlayerFolder: noteFolder.is_root_player_folder,
+      readPermissions,
+      editPermissions,
+    };
   }
 }

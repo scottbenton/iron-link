@@ -1,229 +1,161 @@
+import { RealtimePostgresChangesPayload } from "@supabase/supabase-js";
+
 import {
-  CollectionReference,
-  PartialWithFieldValue,
-  addDoc,
-  collection,
-  deleteDoc,
-  doc,
-  onSnapshot,
-  updateDoc,
-} from "firebase/firestore";
+  Tables,
+  TablesInsert,
+  TablesUpdate,
+} from "types/supabase-generated.type";
 
-import { firestore } from "config/firebase.config";
+import { supabase } from "lib/supabase.lib";
 
-import { CharacterRepository } from "./character.repository";
 import {
   StorageError,
+  UnknownError,
   convertUnknownErrorToStorageError,
 } from "./errors/storageErrors";
-import { GameRepostiory } from "./game.repository";
 
-export interface AssetDTO {
-  id: string;
-  enabledAbilities: Record<number, boolean>;
-  optionValues?: Record<string, string>;
-  controlValues?: Record<string, boolean | string | number>;
-  order: number;
-  shared: boolean;
-}
-
-export type PartialAssetDTO = PartialWithFieldValue<AssetDTO>;
+export type AssetDTO = Tables<"assets">;
+type InsertAssetDTO = TablesInsert<"assets">;
+type UpdateAssetDTO = TablesUpdate<"assets">;
 
 export class AssetRepository {
-  public static collectionName = "assets";
+  public static assets = () => supabase.from("assets");
 
-  public static getCharacterAssetCollectionName(characterId: string): string {
-    return `${CharacterRepository.collectionName}/${characterId}/${this.collectionName}`;
-  }
-  private static getCharacterAssetCollectionRef(characterId: string) {
-    return collection(
-      firestore,
-      this.getCharacterAssetCollectionName(characterId),
-    ) as CollectionReference<AssetDTO>;
-  }
-
-  public static getGameAssetCollectionName(gameId: string): string {
-    return `${GameRepostiory.collectionName}/${gameId}/${this.collectionName}`;
-  }
-  private static getGameAssetCollectionRef(gameId: string) {
-    return collection(
-      firestore,
-      this.getGameAssetCollectionName(gameId),
-    ) as CollectionReference<AssetDTO>;
+  public static async createAsset(assetDTO: InsertAssetDTO): Promise<string> {
+    const { data, error } = await this.assets()
+      .insert(assetDTO)
+      .select()
+      .single();
+    if (error) {
+      console.error(error);
+      throw convertUnknownErrorToStorageError(
+        error,
+        "Asset could not be created",
+      );
+    }
+    return data.id;
   }
 
-  public static async createCharacterAsset(
-    characterId: string,
-    assetDTO: AssetDTO,
-  ): Promise<string> {
-    return new Promise((resolve, reject) => {
-      addDoc(this.getCharacterAssetCollectionRef(characterId), assetDTO)
-        .then((docRef) => {
-          resolve(docRef.id);
-        })
-        .catch((error) => {
-          console.error(error);
-          reject(
-            convertUnknownErrorToStorageError(
-              error,
-              `Character asset could not be created`,
-            ),
-          );
-        });
-    });
-  }
-
-  public static async createGameAsset(
+  public static listenToAssets(
     gameId: string,
-    assetDTO: AssetDTO,
-  ): Promise<string> {
-    return new Promise((resolve, reject) => {
-      addDoc(this.getGameAssetCollectionRef(gameId), assetDTO)
-        .then((docRef) => {
-          resolve(docRef.id);
-        })
-        .catch((error) => {
-          console.error(error);
-          reject(
-            convertUnknownErrorToStorageError(
-              error,
-              `Game asset could not be created`,
-            ),
-          );
-        });
-    });
-  }
-
-  private static listenToAssets(
-    collectionRef: CollectionReference<AssetDTO>,
-    onAssets: (assets: Record<string, AssetDTO>) => void,
+    characterIds: string[],
+    onAssets: (
+      assets: Record<string, AssetDTO>,
+      deletedAssetIds: string[],
+    ) => void,
     onError: (error: StorageError) => void,
   ): () => void {
-    return onSnapshot(
-      collectionRef,
-      (snapshot) => {
-        const assets: Record<string, AssetDTO> = {};
-        snapshot.docs.forEach((doc) => {
-          if (doc.exists()) {
-            assets[doc.id] = doc.data() as AssetDTO;
+    // Fetch the initial state
+    this.assets()
+      .select()
+      .or(
+        `game_id.eq.${gameId}, character_id.in.("${characterIds.join('","')}")`,
+      )
+      .then((result) => {
+        if (result.error) {
+          console.error(result.error);
+          onError(
+            convertUnknownErrorToStorageError(
+              result.error,
+              "Failed to get initial assets",
+            ),
+          );
+        } else {
+          const assets: Record<string, AssetDTO> = {};
+          result.data?.forEach((asset) => {
+            assets[asset.id] = asset;
+          });
+          onAssets(assets, []);
+        }
+      });
+
+    const handlePayload: (
+      payload: RealtimePostgresChangesPayload<AssetDTO>,
+    ) => void = (payload) => {
+      if (payload.errors) {
+        console.error(payload.errors);
+        onError(new UnknownError("Failed to get asset changes"));
+      }
+      if (payload.eventType === "INSERT" || payload.eventType === "UPDATE") {
+        onAssets({ [payload.new.id]: payload.new }, []);
+      } else if (payload.eventType === "DELETE" && payload.old.id) {
+        onAssets({}, [payload.old.id]);
+      } else {
+        onError(new UnknownError("Failed to get asset changes"));
+      }
+    };
+
+    const subscription = supabase
+      .channel(`assets:game_id=${gameId}`)
+      .on<AssetDTO>(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "assets",
+          filter: `game_id=eq.${gameId}`,
+        },
+        handlePayload,
+      )
+      .on<AssetDTO>(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "assets",
+          filter: `character_id=in.(${characterIds.join(",")})`,
+        },
+        handlePayload,
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(subscription);
+    };
+  }
+
+  public static deleteAsset(assetId: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.assets()
+        .delete()
+        .eq("id", assetId)
+        .then(({ error }) => {
+          if (error) {
+            console.error(error);
+            reject(
+              convertUnknownErrorToStorageError(
+                error,
+                "Failed to delete asset",
+              ),
+            );
+          } else {
+            resolve();
           }
         });
-        onAssets(assets);
-      },
-      (error) => {
-        onError(
-          convertUnknownErrorToStorageError(error, `Error listening to assets`),
-        );
-      },
-    );
-  }
-
-  public static listenToCharacterAssets(
-    characterId: string,
-    onAssets: (assets: Record<string, AssetDTO>) => void,
-    onError: (error: StorageError) => void,
-  ): () => void {
-    return this.listenToAssets(
-      this.getCharacterAssetCollectionRef(characterId),
-      onAssets,
-      onError,
-    );
-  }
-
-  public static listenToGameAssets(
-    gameId: string,
-    onAssets: (assets: Record<string, AssetDTO>) => void,
-    onError: (error: StorageError) => void,
-  ): () => void {
-    return this.listenToAssets(
-      this.getGameAssetCollectionRef(gameId),
-      onAssets,
-      onError,
-    );
-  }
-
-  private static removeAsset(
-    collectionRef: CollectionReference<AssetDTO>,
-    assetId: string,
-  ): Promise<void> {
-    return new Promise((resolve, reject) => {
-      deleteDoc(doc(collectionRef, assetId))
-        .then(() => {
-          resolve();
-        })
-        .catch((error) => {
-          console.error(error);
-          reject(
-            convertUnknownErrorToStorageError(
-              error,
-              `Asset could not be removed`,
-            ),
-          );
-        });
     });
   }
 
-  public static removeCharacterAsset(
-    characterId: string,
+  public static updateAsset(
     assetId: string,
-  ): Promise<void> {
-    return this.removeAsset(
-      this.getCharacterAssetCollectionRef(characterId),
-      assetId,
-    );
-  }
-
-  public static removeGameAsset(
-    gameId: string,
-    assetId: string,
-  ): Promise<void> {
-    return this.removeAsset(this.getGameAssetCollectionRef(gameId), assetId);
-  }
-
-  private static updateAsset(
-    collectionRef: CollectionReference<AssetDTO>,
-    assetId: string,
-    assetDTO: PartialAssetDTO,
+    assetDTO: UpdateAssetDTO,
   ): Promise<void> {
     return new Promise((resolve, reject) => {
-      const docRef = doc(collectionRef, assetId);
-      updateDoc(docRef, assetDTO)
-        .then(() => {
-          resolve();
-        })
-        .catch((error) => {
-          console.error(error);
-          reject(
-            convertUnknownErrorToStorageError(
-              error,
-              `Asset could not be updated`,
-            ),
-          );
+      this.assets()
+        .update(assetDTO)
+        .eq("id", assetId)
+        .then(({ error }) => {
+          if (error) {
+            console.error(error);
+            reject(
+              convertUnknownErrorToStorageError(
+                error,
+                "Failed to update asset",
+              ),
+            );
+          } else {
+            resolve();
+          }
         });
     });
-  }
-
-  public static updateCharacterAsset(
-    characterId: string,
-    assetId: string,
-    assetDTO: PartialAssetDTO,
-  ): Promise<void> {
-    return this.updateAsset(
-      this.getCharacterAssetCollectionRef(characterId),
-      assetId,
-      assetDTO,
-    );
-  }
-
-  public static updateGameAsset(
-    gameId: string,
-    assetId: string,
-    assetDTO: PartialAssetDTO,
-  ): Promise<void> {
-    return this.updateAsset(
-      this.getGameAssetCollectionRef(gameId),
-      assetId,
-      assetDTO,
-    );
   }
 }

@@ -3,10 +3,6 @@ import FolderSharedIcon from "@mui/icons-material/FolderShared";
 import { Box, Card, CardActionArea, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
-import { useGamePermissions } from "pages/games/gamePageLayout/hooks/usePermissions";
-
-import { useUID } from "stores/auth.store";
-
 import { ReadPermissions } from "repositories/shared.types";
 
 import { INoteFolder } from "services/noteFolders.service";
@@ -24,9 +20,6 @@ export function FolderItem(props: FolderItemProps) {
   const { folderId, folder, openFolder } = props;
 
   const { t } = useTranslation();
-
-  const uid = useUID();
-  const gameType = useGamePermissions().gameType;
 
   return (
     <Card
@@ -54,9 +47,8 @@ export function FolderItem(props: FolderItemProps) {
           {getItemName({
             name: folder.name,
             id: folderId,
-            uid,
+            isRootPlayerFolder: folder.isRootPlayerFolder,
             t,
-            gameType: gameType,
           })}
         </Typography>
         <Box

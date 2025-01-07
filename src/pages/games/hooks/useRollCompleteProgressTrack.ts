@@ -54,6 +54,8 @@ export function useRollCompleteProgressTrack() {
       }
 
       const trackProgressRoll: ITrackProgressRoll = {
+        id: createId(),
+        gameId: gameId ?? "fake-game",
         type: RollType.TrackProgress,
         rollLabel: trackLabel,
         timestamp: new Date(),
@@ -67,10 +69,9 @@ export function useRollCompleteProgressTrack() {
         guidesOnly: false,
         moveId,
       };
-      const rollId = createId();
 
-      addRollToScreen(rollId, trackProgressRoll);
-      addRoll(gameId, rollId, trackProgressRoll).catch(() => {});
+      addRollToScreen(trackProgressRoll.id, trackProgressRoll);
+      addRoll(trackProgressRoll.id, trackProgressRoll).catch(() => {});
 
       announce(
         t(

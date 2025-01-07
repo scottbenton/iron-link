@@ -21,7 +21,11 @@ describe("AssetAbilities", () => {
       2: false,
     },
     order: 1,
-    shared: false,
+    gameId: null,
+    characterId: null,
+    dataswornAssetId: "1",
+    controlValues: {},
+    optionValues: {},
   };
 
   it("renders correctly with given props", () => {

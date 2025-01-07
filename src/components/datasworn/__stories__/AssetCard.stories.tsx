@@ -21,6 +21,7 @@ export const HawkExample: Story = {
     assetId: "asset:classic/companion/hawk",
     assetDocument: {
       id: "",
+      dataswornAssetId: "asset:classic/companion/hawk",
       enabledAbilities: {
         2: true,
       },
@@ -28,7 +29,9 @@ export const HawkExample: Story = {
       optionValues: {
         name: "Leo",
       },
-      shared: false,
+      controlValues: {},
+      characterId: null,
+      gameId: null,
     },
     onAssetAbilityToggle: () => {},
     onAssetControlChange: () => {},
@@ -41,6 +44,7 @@ export const FlagshipExample: Story = {
     assetId: "asset:sundered_isles/command_vehicle/flagship",
     assetDocument: {
       id: "",
+      dataswornAssetId: "asset:sundered_isles/command_vehicle/flagship",
       enabledAbilities: {
         2: true,
       },
@@ -48,7 +52,9 @@ export const FlagshipExample: Story = {
       optionValues: {
         name: "Leo",
       },
-      shared: false,
+      controlValues: {},
+      characterId: null,
+      gameId: null,
     },
     onAssetAbilityToggle: () => {},
     onAssetControlChange: () => {},
@@ -66,7 +72,10 @@ export const KrakenExample: Story = {
       optionValues: {
         name: "Leo",
       },
-      shared: false,
+      controlValues: {},
+      dataswornAssetId: "asset:sundered_isles/companion/kraken",
+      characterId: null,
+      gameId: null,
     },
     onAssetAbilityToggle: () => {},
     onAssetControlChange: () => {},
@@ -79,6 +88,7 @@ export const SnubFighterExample: Story = {
     assetId: "asset:starforged/support_vehicle/snub_fighter",
     assetDocument: {
       id: "",
+      dataswornAssetId: "asset:starforged/support_vehicle/snub_fighter",
       enabledAbilities: {
         2: true,
       },
@@ -86,7 +96,9 @@ export const SnubFighterExample: Story = {
       optionValues: {
         name: "Leo",
       },
-      shared: false,
+      controlValues: {},
+      gameId: null,
+      characterId: null,
     },
     onAssetAbilityToggle: () => {},
     onAssetControlChange: () => {},
@@ -105,6 +117,9 @@ export const IroncladExample: Story = {
     assetId: "asset:classic/combat_talent/ironclad",
     assetDocument: {
       id: "",
+      gameId: null,
+      characterId: null,
+      dataswornAssetId: "asset:classic/combat_talent/ironclad",
       enabledAbilities: {
         2: true,
       },
@@ -112,7 +127,7 @@ export const IroncladExample: Story = {
       controlValues: {
         equipped: "lightly_armored",
       },
-      shared: false,
+      optionValues: {},
     },
     onAssetAbilityToggle: () => {},
     onAssetControlChange: () => {},
@@ -124,12 +139,16 @@ export const LuckyFigureheadExample: Story = {
   args: {
     assetId: "asset:sundered_isles/module/lucky_figurehead",
     assetDocument: {
-      id: "",
+      id: "12345",
       enabledAbilities: {
         2: true,
       },
+      optionValues: {},
+      controlValues: {},
       order: 1,
-      shared: false,
+      characterId: null,
+      gameId: null,
+      dataswornAssetId: "asset:sundered_isles/module/lucky_figurehead",
     },
     onAssetAbilityToggle: () => {},
     onAssetControlChange: () => {},

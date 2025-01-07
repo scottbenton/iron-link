@@ -6,14 +6,11 @@ import { useTranslation } from "react-i18next";
 
 import { AssetCard } from "components/datasworn/AssetCard";
 
-import { CharacterOrGameId } from "types/CharacterOrGameId.type";
-
 import { useAssetsStore } from "stores/assets.store";
 
 import { IAsset } from "services/asset.service";
 
 export interface AssetsSectionCardProps {
-  id: CharacterOrGameId;
   doesUserOwnCharacter: boolean;
   assetId: string;
   assetDocument: IAsset;
@@ -22,7 +19,6 @@ export interface AssetsSectionCardProps {
 
 function AssetsSectionCardUnMemoized(props: AssetsSectionCardProps) {
   const {
-    id,
     doesUserOwnCharacter,
     assetId,
     assetDocument,
@@ -35,17 +31,17 @@ function AssetsSectionCardUnMemoized(props: AssetsSectionCardProps) {
   );
   const handleAssetAbilityToggle = useCallback(
     (abilityIndex: number, checked: boolean) => {
-      toggleAssetAbility(id, assetId, abilityIndex, checked).catch(() => {});
+      toggleAssetAbility(assetId, abilityIndex, checked).catch(() => {});
     },
-    [id, assetId, toggleAssetAbility],
+    [assetId, toggleAssetAbility],
   );
 
   const updateAssetOption = useAssetsStore((store) => store.updateAssetOption);
   const handleAssetOptionChange = useCallback(
     (assetOptionKey: string, value: string) => {
-      updateAssetOption(id, assetId, assetOptionKey, value).catch(() => {});
+      updateAssetOption(assetId, assetOptionKey, value).catch(() => {});
     },
-    [assetId, id, updateAssetOption],
+    [assetId, updateAssetOption],
   );
 
   const updateAssetControl = useAssetsStore(
@@ -53,9 +49,9 @@ function AssetsSectionCardUnMemoized(props: AssetsSectionCardProps) {
   );
   const handleAssetControlChange = useCallback(
     (controlKey: string, controlValue: boolean | string | number) => {
-      updateAssetControl(id, assetId, controlKey, controlValue).catch(() => {});
+      updateAssetControl(assetId, controlKey, controlValue).catch(() => {});
     },
-    [id, assetId, updateAssetControl],
+    [assetId, updateAssetControl],
   );
 
   const confirm = useConfirm();
@@ -73,10 +69,10 @@ function AssetsSectionCardUnMemoized(props: AssetsSectionCardProps) {
       confirmationText: t("common.delete", "Delete"),
     })
       .then(() => {
-        deleteAsset(id, assetId).catch(() => {});
+        deleteAsset(assetId).catch(() => {});
       })
       .catch(() => {});
-  }, [confirm, t, id, assetId, deleteAsset]);
+  }, [confirm, t, assetId, deleteAsset]);
 
   return (
     <AssetCard
@@ -93,7 +89,7 @@ function AssetsSectionCardUnMemoized(props: AssetsSectionCardProps) {
           </IconButton>
         </Tooltip>
       }
-      assetId={assetDocument.id}
+      assetId={assetDocument.dataswornAssetId}
       assetDocument={assetDocument}
       onAssetAbilityToggle={
         doesUserOwnCharacter ? handleAssetAbilityToggle : undefined

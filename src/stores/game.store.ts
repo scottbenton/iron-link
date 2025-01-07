@@ -12,7 +12,12 @@ import {
 import { GameType } from "repositories/game.repository";
 
 import { IAsset } from "services/asset.service";
-import { GameService, IGame } from "services/game.service";
+import {
+  GamePlayerRole,
+  GameService,
+  IGame,
+  IGamePlayer,
+} from "services/game.service";
 
 import { useUID } from "./auth.store";
 import { useSetDataswornTree } from "./dataswornTree.store";
@@ -26,8 +31,9 @@ export enum GamePermission {
 interface GameStoreState {
   gameId: string;
   game: IGame | null;
+  gamePlayers: Record<string, IGamePlayer> | null;
 
-  gamePermissions: GamePermission;
+  gamePermissions: GamePermission | null;
 
   loading: boolean;
   error?: string;
@@ -52,7 +58,8 @@ interface GameStoreActions {
 const defaultGameStoreState: GameStoreState = {
   gameId: "",
   game: null,
-  gamePermissions: GamePermission.Viewer,
+  gamePlayers: null,
+  gamePermissions: null,
   loading: true,
   sharedAssets: {
     loading: true,
@@ -86,12 +93,34 @@ export const useGameStore = createWithEqualityFn<
           });
         },
       );
+
+      const gamePlayerUnsubscribe = GameService.listenToGamePlayers(
+        gameId,
+        (gamePlayers, removedGamePlayerIds) => {
+          set((state) => {
+            if (!state.gamePlayers) {
+              state.gamePlayers = gamePlayers;
+            } else {
+              state.gamePlayers = {
+                ...state.gamePlayers,
+                ...gamePlayers,
+              };
+              removedGamePlayerIds.forEach((id) => {
+                delete state.gamePlayers?.[id];
+              });
+            }
+          });
+        },
+        () => {},
+      );
+
       return () => {
         set((state) => ({
           ...state,
           ...defaultGameStoreState,
         }));
         gameUnsubscribe();
+        gamePlayerUnsubscribe();
       };
     },
     setPermissions: (permissions) => {
@@ -100,7 +129,19 @@ export const useGameStore = createWithEqualityFn<
       });
     },
     updateConditionMeter: (gameId, conditionMeterKey, value) => {
-      return GameService.updateConditionMeter(gameId, conditionMeterKey, value);
+      return new Promise((resolve, reject) => {
+        set((state) => {
+          if (state.game?.id === gameId) {
+            state.game.conditionMeters[conditionMeterKey] = value;
+            GameService.updateConditionMeters(
+              gameId,
+              state.game.conditionMeters,
+            )
+              .then(resolve)
+              .catch(reject);
+          }
+        });
+      });
     },
     deleteGame: (gameId) => {
       return GameService.deleteGame(gameId);
@@ -112,8 +153,7 @@ export const useGameStore = createWithEqualityFn<
 export function useListenToGame(gameId: string | undefined) {
   const uid = useUID();
 
-  const gamePlayers = useGameStore((state) => state.game?.playerIds ?? []);
-  const gameGuides = useGameStore((state) => state.game?.guideIds ?? []);
+  const gamePlayers = useGameStore((store) => store.gamePlayers);
   const gameType = useGameStore((state) => state.game?.gameType);
 
   const expansionsAndRulesets = useGameStore((store) => ({
@@ -132,23 +172,28 @@ export function useListenToGame(gameId: string | undefined) {
   }, [gameId, listenToGame]);
 
   useEffect(() => {
-    if (gameId) {
+    if (gameId && gamePlayers) {
+      const isGamePlayer = uid ? gamePlayers[uid] !== undefined : false;
+      const isGuide = uid
+        ? gamePlayers[uid]?.role === GamePlayerRole.Guide
+        : false;
+
       if (!uid) {
         setPermissions(GamePermission.Viewer);
       } else if (
         (gameType === GameType.Solo || gameType === GameType.Coop) &&
-        gamePlayers.includes(uid)
+        isGamePlayer
       ) {
         setPermissions(GamePermission.Guide);
-      } else if (gameGuides.includes(uid)) {
+      } else if (isGuide) {
         setPermissions(GamePermission.Guide);
-      } else if (gamePlayers.includes(uid)) {
+      } else if (isGamePlayer) {
         setPermissions(GamePermission.Player);
       } else {
         setPermissions(GamePermission.Viewer);
       }
     }
-  }, [gamePlayers, gameGuides, gameId, gameType, setPermissions, uid]);
+  }, [gamePlayers, gameId, gameType, setPermissions, uid]);
 
   useEffect(() => {
     const dataswornTree: Record<string, Datasworn.RulesPackage> = {};

@@ -1,5 +1,4 @@
-import { arrayRemove, arrayUnion } from "firebase/firestore";
-
+import { StorageError } from "repositories/errors/storageErrors";
 import {
   ExpansionConfig,
   GameDTO,
@@ -7,40 +6,93 @@ import {
   GameType,
   RulesetConfig,
 } from "repositories/game.repository";
-import { ColorScheme } from "repositories/shared.types";
+import {
+  GamePlayerDTO,
+  GamePlayersRepository,
+} from "repositories/gamePlayers.repository";
+import { ColorScheme, SpecialTrack } from "repositories/shared.types";
 
-import { AuthService } from "./auth.service";
+export type IGame = {
+  id: string;
+  name: string;
+  worldId: string | null;
+  conditionMeters: Record<string, number>;
+  specialTracks: Record<string, SpecialTrack>;
+  gameType: GameType;
+  colorScheme: ColorScheme | null;
 
-export type IGame = GameDTO;
+  rulesets: RulesetConfig;
+  expansions: ExpansionConfig;
+};
+
+export enum GamePlayerRole {
+  Player = "player",
+  Guide = "guide",
+}
+
+export interface IGamePlayer extends GamePlayerDTO {
+  role: GamePlayerRole;
+}
 
 export class GameService {
   public static async createGame(
+    uid: string,
     gameName: string,
     gameType: GameType,
     rulesets: Record<string, boolean>,
     expansions: Record<string, Record<string, boolean>>,
   ): Promise<string> {
-    const uid = AuthService.getCurrentUserIdOrThrow();
-
-    const gameDTO: GameDTO = {
-      name: gameName,
-      playerIds: [uid],
-      worldId: null,
-      guideIds: [],
-      conditionMeters: {},
-      specialTracks: {},
-      gameType: gameType,
+    const gameId = await GameRepostiory.createGame(
+      gameName,
+      gameType,
       rulesets,
       expansions,
-      colorScheme: null,
-    };
+    );
 
-    return GameRepostiory.createGame(gameDTO);
+    let role: GamePlayerDTO["role"] = "player";
+
+    if (gameType === GameType.Coop) {
+      role = "guide";
+    } else if (gameType === GameType.Solo) {
+      role = "guide";
+    }
+
+    await GamePlayersRepository.addPlayerToGame(gameId, uid, role);
+
+    return gameId;
   }
 
-  public static async getGame(gameId: string): Promise<IGame> {
-    const gameDTO = await GameRepostiory.getGame(gameId);
-    return this.convertGameDTOToGame(gameDTO);
+  public static async getGameInviteInfo(
+    gameId: string,
+    userId: string,
+  ): Promise<{
+    name: string;
+    gameType: GameType;
+    isPlayer: boolean;
+  }> {
+    const isPlayerInGame =
+      await GamePlayersRepository.getGamePlayerEntryIfExists(gameId, userId);
+    if (isPlayerInGame) {
+      return {
+        name: "",
+        gameType: GameType.Solo,
+        isPlayer: true,
+      };
+    }
+    const result = await GameRepostiory.getGameInviteInfo(gameId);
+
+    let gameType: GameType = GameType.Solo;
+    if (result.game_type === "co-op") {
+      gameType = GameType.Coop;
+    } else if (result.game_type === "guided") {
+      gameType = GameType.Guided;
+    }
+
+    return {
+      name: result.name,
+      gameType,
+      isPlayer: false,
+    };
   }
 
   public static listenToGame(
@@ -56,11 +108,38 @@ export class GameService {
       onError,
     );
   }
+  public static listenToGamePlayers(
+    gameId: string,
+    onGamePlayers: (
+      gamePlayers: Record<string, IGamePlayer>,
+      removed: string[],
+    ) => void,
+    onError: (error: StorageError) => void,
+  ): () => void {
+    return GamePlayersRepository.listenToGamePlayers(
+      gameId,
+      (gamePlayersDTO, removed) => {
+        onGamePlayers(
+          Object.fromEntries(
+            Object.entries(gamePlayersDTO).map(([key, value]) => [
+              key,
+              this.convertGamePlayerDTOToGamePlayer(value),
+            ]),
+          ),
+          removed,
+        );
+      },
+      onError,
+    );
+  }
 
-  public static async getUsersGames(): Promise<Record<string, IGame>> {
-    const uid = AuthService.getCurrentUserIdOrThrow();
-
-    return await GameRepostiory.getUsersGames(uid);
+  public static async getUsersGames(
+    uid: string,
+  ): Promise<Record<string, IGame>> {
+    const games = await GameRepostiory.getUsersGames(uid);
+    return Object.fromEntries(
+      games.map((gameDTO) => [gameDTO.id, this.convertGameDTOToGame(gameDTO)]),
+    );
   }
 
   public static async changeName(
@@ -72,62 +151,54 @@ export class GameService {
 
   public static async addPlayer(
     gameId: string,
+    gameType: GameType,
     playerId: string,
   ): Promise<void> {
-    await GameRepostiory.updateGame(gameId, {
-      playerIds: arrayUnion(playerId),
-    });
+    const role = this.getDefaultPlayerRoleForGameType(gameType);
+    await GamePlayersRepository.addPlayerToGame(gameId, playerId, role);
   }
 
   public static async removePlayer(
     gameId: string,
     playerId: string,
   ): Promise<void> {
-    await GameRepostiory.updateGame(gameId, {
-      playerIds: arrayRemove(playerId),
-    });
+    await GamePlayersRepository.removePlayerFromGame(gameId, playerId);
   }
 
   public static async addGuide(gameId: string, guideId: string): Promise<void> {
-    await GameRepostiory.updateGame(gameId, { guideIds: arrayUnion(guideId) });
+    await GamePlayersRepository.updateGamePlayerRole(gameId, guideId, "guide");
   }
 
   public static async removeGuide(
     gameId: string,
     guideId: string,
   ): Promise<void> {
-    await GameRepostiory.updateGame(gameId, { guideIds: arrayRemove(guideId) });
+    await GamePlayersRepository.updateGamePlayerRole(gameId, guideId, "player");
   }
 
-  public static async setWorldId(
+  public static async updateConditionMeters(
     gameId: string,
-    worldId: string | null,
-  ): Promise<void> {
-    await GameRepostiory.updateGame(gameId, { worldId });
-  }
-
-  public static async updateConditionMeter(
-    gameId: string,
-    conditionMeterKey: string,
-    value: number,
+    updatedConditionMeters: Record<string, number>,
   ): Promise<void> {
     await GameRepostiory.updateGame(gameId, {
-      [`conditionMeters.${conditionMeterKey}`]: value,
+      condition_meter_values: updatedConditionMeters,
     });
   }
 
-  public static async updateSpecialTrackValue(
+  public static async updateSpecialTracks(
     gameId: string,
-    trackKey: string,
-    value: number,
+    specialTracks: Record<string, SpecialTrack>,
   ): Promise<void> {
     await GameRepostiory.updateGame(gameId, {
-      [`specialTracks.${trackKey}.value`]: value,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      special_track_values: specialTracks as unknown as any,
     });
   }
 
   public static async changeGameType(gameId: string, gameType: GameType) {
-    await GameRepostiory.updateGame(gameId, { gameType });
+    const role = this.getDefaultPlayerRoleForGameType(gameType);
+    await GamePlayersRepository.updateAllGamePlayerRoles(gameId, role);
+    await GameRepostiory.updateGame(gameId, { game_type: gameType });
   }
 
   public static async updateRules(
@@ -142,14 +213,73 @@ export class GameService {
     gameId: string,
     colorScheme: ColorScheme,
   ) {
-    await GameRepostiory.updateGame(gameId, { colorScheme });
+    await GameRepostiory.updateGame(gameId, { color_scheme: colorScheme });
   }
 
   private static convertGameDTOToGame(gameDTO: GameDTO): IGame {
-    return gameDTO;
+    let gameType = GameType.Solo;
+    if (gameDTO.game_type === "co-op") {
+      gameType = GameType.Coop;
+    } else if (gameDTO.game_type === "guided") {
+      gameType = GameType.Guided;
+    }
+
+    let colorScheme: ColorScheme | null = null;
+    if (gameDTO.color_scheme === ColorScheme.Cinder) {
+      colorScheme = ColorScheme.Cinder;
+    } else if (gameDTO.color_scheme === ColorScheme.Eidolon) {
+      colorScheme = ColorScheme.Eidolon;
+    } else if (gameDTO.color_scheme === ColorScheme.Hinterlands) {
+      colorScheme = ColorScheme.Hinterlands;
+    } else if (gameDTO.color_scheme === ColorScheme.Myriad) {
+      colorScheme = ColorScheme.Myriad;
+    } else if (gameDTO.color_scheme === ColorScheme.Mystic) {
+      colorScheme = ColorScheme.Mystic;
+    }
+
+    return {
+      id: gameDTO.id,
+      name: gameDTO.name,
+      worldId: null,
+      conditionMeters: (gameDTO.condition_meter_values ?? {}) as Record<
+        string,
+        number
+      >,
+      specialTracks: (gameDTO.special_track_values ?? {}) as unknown as Record<
+        string,
+        SpecialTrack
+      >,
+      gameType,
+      colorScheme,
+      rulesets: gameDTO.rulesets as Record<string, boolean>,
+      expansions: gameDTO.expansions as Record<string, Record<string, boolean>>,
+    };
   }
 
   public static deleteGame(gameId: string): Promise<void> {
     return GameRepostiory.deleteGame(gameId);
+  }
+
+  private static getDefaultPlayerRoleForGameType(
+    gameType: GameType,
+  ): GamePlayerDTO["role"] {
+    if (gameType === GameType.Coop) {
+      return "guide";
+    } else if (gameType === GameType.Solo) {
+      return "guide";
+    }
+    return "player";
+  }
+  private static convertGamePlayerDTOToGamePlayer(
+    dto: GamePlayerDTO,
+  ): IGamePlayer {
+    const role: GamePlayerRole =
+      dto.role === "guide" ? GamePlayerRole.Guide : GamePlayerRole.Player;
+    return {
+      role,
+      created_at: dto.created_at,
+      game_id: dto.game_id,
+      user_id: dto.user_id,
+    };
   }
 }

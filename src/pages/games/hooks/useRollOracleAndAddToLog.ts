@@ -11,8 +11,6 @@ import { useUID } from "stores/auth.store";
 import { useGameCharacter } from "stores/gameCharacters.store";
 import { useGameLogStore } from "stores/gameLog.store";
 
-import { createId } from "lib/id.lib";
-
 import { IOracleTableRoll } from "services/gameLog.service";
 
 export function useRollOracleAndAddToLog() {
@@ -43,17 +41,17 @@ export function useRollOracleAndAddToLog() {
       if (result) {
         const resultWithAdditions = {
           ...result,
+          gameId: gameId ?? "fake-game",
           uid,
           characterId:
             characterId && characterOwner === uid ? characterId : null,
           guidesOnly,
         };
         if (gameId) {
-          const rollId = createId();
-          addRoll(gameId, rollId, resultWithAdditions).catch(() => {});
-          addRollSnackbar(rollId, resultWithAdditions);
+          addRoll(resultWithAdditions.id, resultWithAdditions).catch(() => {});
+          addRollSnackbar(resultWithAdditions.id, resultWithAdditions);
           return {
-            id: rollId,
+            id: resultWithAdditions.id,
             result: resultWithAdditions,
           };
         }

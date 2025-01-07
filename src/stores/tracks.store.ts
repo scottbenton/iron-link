@@ -3,7 +3,12 @@ import { useEffect } from "react";
 import { immer } from "zustand/middleware/immer";
 import { createWithEqualityFn } from "zustand/traditional";
 
-import { AskTheOracle, TrackStatus } from "repositories/tracks.repository";
+import {
+  AskTheOracle,
+  Difficulty,
+  TrackSectionProgressTracks,
+  TrackStatus,
+} from "repositories/tracks.repository";
 
 import { ITrack, TracksService } from "services/tracks.service";
 
@@ -18,30 +23,60 @@ interface TracksStoreActions {
   listenToTracks: (gameId: string) => () => void;
   setShowCompletedTracks: (showCompletedTracks: boolean) => void;
 
-  addTrack: (gameId: string, track: ITrack) => Promise<string>;
-  setTrack: (gameId: string, trackId: string, track: ITrack) => Promise<void>;
-  updateTrackStatus: (
+  addProgressTrack: (
     gameId: string,
+    trackType: TrackSectionProgressTracks,
+    label: string,
+    description: string | undefined,
+    difficulty: Difficulty,
+  ) => Promise<string>;
+  updateProgressTrack: (
     trackId: string,
-    status: TrackStatus,
+    label: string,
+    description: string | undefined,
+    difficulty: Difficulty,
+    resetProgress: boolean,
   ) => Promise<void>;
-  updateTrackValue: (
+
+  addClock: (
     gameId: string,
+    label: string,
+    description: string | undefined,
+    segments: number,
+  ) => Promise<string>;
+  updateClock: (
+    clockId: string,
+    label: string,
+    description: string | undefined,
+    segments: number,
+  ) => Promise<void>;
+
+  addSceneChallenge: (
+    gameId: string,
+    label: string,
+    description: string | undefined,
+    difficulty: Difficulty,
+  ) => Promise<string>;
+  updateSceneChallenge: (
     trackId: string,
-    value: number,
+    label: string,
+    description: string | undefined,
+    difficulty: Difficulty,
+    resetProgress: boolean,
   ) => Promise<void>;
-  updateSceneChallengeClockFilledSegments: (
-    gameId: string,
+
+  updateTrackStatus: (trackId: string, status: TrackStatus) => Promise<void>;
+  updateTrackValue: (trackId: string, value: number) => Promise<void>;
+  updateClockFilledSegments: (
     trackId: string,
     filledSegments: number,
   ) => Promise<void>;
   updateClockSelectedOracle: (
-    gameId: string,
     trackId: string,
     oracleKey: AskTheOracle,
   ) => Promise<void>;
 
-  deleteTrack: (gameId: string, trackId: string) => Promise<void>;
+  deleteTrack: (trackId: string) => Promise<void>;
 
   resetStore: () => void;
 }
@@ -86,39 +121,77 @@ export const useTracksStore = createWithEqualityFn<
       });
     },
 
-    addTrack: (gameId, track) => {
-      return TracksService.createTrack(gameId, track);
-    },
-    setTrack: (gameId, trackId, track) => {
-      return TracksService.setTrack(gameId, trackId, track);
-    },
-    updateTrackStatus: (gameId, trackId, status) => {
-      return TracksService.setTrackStatus(gameId, trackId, status);
-    },
-    updateTrackValue: (gameId, trackId, value) => {
-      return TracksService.updateTrackValue(gameId, trackId, value);
-    },
-    updateSceneChallengeClockFilledSegments: (
-      gameId,
-      trackId,
-      filledSegments,
-    ) => {
-      return TracksService.updateSceneChallengeClockFilledSegments(
+    addProgressTrack: (gameId, trackType, label, description, difficulty) => {
+      return TracksService.createProgressTrack(
         gameId,
-        trackId,
-        filledSegments,
+        trackType,
+        label,
+        description,
+        difficulty,
       );
     },
-    updateClockSelectedOracle: (gameId, trackId, oracleKey) => {
-      return TracksService.updateClockSelectedOracle(
-        gameId,
+    updateProgressTrack: (
+      trackId,
+      label,
+      description,
+      difficulty,
+      resetProgress,
+    ) => {
+      return TracksService.updateProgressTrack(
         trackId,
-        oracleKey,
+        label,
+        description,
+        difficulty,
+        resetProgress,
       );
     },
 
-    deleteTrack: (gameId, trackId) => {
-      return TracksService.deleteTrack(gameId, trackId);
+    addClock: (gameId, label, description, segments) => {
+      return TracksService.createClock(gameId, label, description, segments);
+    },
+    updateClock: (clockId, label, description, segments) => {
+      return TracksService.updateClock(clockId, label, description, segments);
+    },
+
+    addSceneChallenge: (gameId, label, description, difficulty) => {
+      return TracksService.createSceneChallenge(
+        gameId,
+        label,
+        description,
+        difficulty,
+      );
+    },
+    updateSceneChallenge: (
+      trackId,
+      label,
+      description,
+      difficulty,
+      resetProgress,
+    ) => {
+      return TracksService.updateSceneChallenge(
+        trackId,
+        label,
+        description,
+        difficulty,
+        resetProgress,
+      );
+    },
+
+    updateTrackStatus: (trackId, status) => {
+      return TracksService.setTrackStatus(trackId, status);
+    },
+    updateTrackValue: (trackId, value) => {
+      return TracksService.updateTrackValue(trackId, value);
+    },
+    updateClockFilledSegments: (trackId, filledSegments) => {
+      return TracksService.updateClockFilledSegments(trackId, filledSegments);
+    },
+    updateClockSelectedOracle: (trackId, oracleKey) => {
+      return TracksService.updateClockSelectedOracle(trackId, oracleKey);
+    },
+
+    deleteTrack: (trackId) => {
+      return TracksService.deleteTrack(trackId);
     },
 
     resetStore: () => {

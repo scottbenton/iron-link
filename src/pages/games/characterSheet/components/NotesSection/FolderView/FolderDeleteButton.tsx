@@ -3,12 +3,12 @@ import { IconButton, Tooltip } from "@mui/material";
 import { useConfirm } from "material-ui-confirm";
 import { useTranslation } from "react-i18next";
 
-import { useGameId } from "pages/games/gamePageLayout/hooks/useGameId";
-
 import { useNotesStore } from "stores/notes.store";
 
+import { getItemName } from "./getFolderName";
+
 export interface FolderDeleteButtonProps {
-  name: string;
+  name: string | undefined;
   folderId: string;
   parentFolderId: string;
 }
@@ -18,15 +18,18 @@ export function FolderDeleteButton(props: FolderDeleteButtonProps) {
   const { t } = useTranslation();
   const confirm = useConfirm();
 
-  const campaignId = useGameId();
-
   const setOpenFolder = useNotesStore((store) => store.setOpenItem);
   const deleteFolder = useNotesStore((store) => store.deleteFolder);
 
   const deleteCurrentFolder = () => {
     confirm({
       title: t("notes.confirm-folder-delete-title", "Delete {{folderName}}", {
-        folderName: name,
+        folderName: getItemName({
+          name,
+          id: folderId,
+          isRootPlayerFolder: false,
+          t,
+        }),
       }),
       description: t(
         "notes.confirm.folder-delete.description",
@@ -36,7 +39,7 @@ export function FolderDeleteButton(props: FolderDeleteButtonProps) {
     })
       .then(() => {
         setOpenFolder("folder", parentFolderId);
-        deleteFolder(campaignId, folderId).catch(() => {});
+        deleteFolder(folderId).catch(() => {});
       })
       .catch(() => {});
   };

@@ -46,17 +46,17 @@ export interface ShareButtonProps {
     editPermissions: EditPermissions;
     readPermissions: ReadPermissions;
   };
-  isInGMFolder: boolean;
   parentFolder: {
     id: string;
-    name: string;
+    name: string | undefined;
     editPermissions: EditPermissions;
     readPermissions: ReadPermissions;
+    isRootPlayerFolder: boolean;
   };
 }
 
 export function ShareButton(props: ShareButtonProps) {
-  const { item, currentPermissions, isInGMFolder, parentFolder } = props;
+  const { item, currentPermissions, parentFolder } = props;
 
   const { t } = useTranslation();
   const uid = useUID();
@@ -97,13 +97,7 @@ export function ShareButton(props: ShareButtonProps) {
         updatedWritePermissions,
       )
     ) {
-      let newEditPermissions: EditPermissions;
-      if (isInGMFolder) {
-        newEditPermissions = EditPermissions.OnlyGuides;
-      } else {
-        newEditPermissions = EditPermissions.OnlyAuthor;
-      }
-      setUpdatedWritePermissions(newEditPermissions);
+      setUpdatedWritePermissions(EditPermissions.OnlyAuthor);
     }
   };
   const handleSetEditPermissions = (type: EditPermissions) => {
@@ -114,7 +108,7 @@ export function ShareButton(props: ShareButtonProps) {
   const readOptions = useMemo<PermissionOption[]>(() => {
     const options: PermissionOption[] = [];
 
-    if (uid === ownerId && !isInGMFolder) {
+    if (uid === ownerId) {
       options.push({
         label: t("notes.share-permissions.only-you", "Only You"),
         value: ReadPermissions.OnlyAuthor,
@@ -131,20 +125,10 @@ export function ShareButton(props: ShareButtonProps) {
         });
       }
     }
-    if (isInGMFolder && gameType !== GameType.Solo) {
-      options.push({
-        label:
-          gameType === GameType.Coop
-            ? t("notes.share-permissions.only-guides-coop", "All Players")
-            : t("notes.share-permissions.only-guides", "Only Guide(s)"),
-        value: ReadPermissions.OnlyGuides,
-        disabled: false,
-      });
-    }
     if (
-      (uid === ownerId || isInGMFolder) &&
+      uid === ownerId &&
       gameType !== GameType.Solo &&
-      (gameType !== GameType.Coop || !isInGMFolder)
+      gameType !== GameType.Coop
     ) {
       options.push({
         label: t("notes.share-permissions.all-players", "All Players"),
@@ -153,11 +137,11 @@ export function ShareButton(props: ShareButtonProps) {
       });
     }
     return options;
-  }, [isInGMFolder, ownerId, t, uid, gameType]);
+  }, [ownerId, t, uid, gameType]);
   const writeOptions = useMemo<PermissionOption[]>(() => {
     const options: PermissionOption[] = [];
 
-    if (uid === ownerId && !isInGMFolder) {
+    if (uid === ownerId) {
       options.push({
         label: t("notes.share-permissions.only-you", "Only You"),
         value: ReadPermissions.OnlyAuthor,
@@ -174,20 +158,10 @@ export function ShareButton(props: ShareButtonProps) {
         });
       }
     }
-    if (isInGMFolder) {
-      options.push({
-        label:
-          gameType === GameType.Coop
-            ? t("notes.share-permissions.only-guides-coop", "All Players")
-            : t("notes.share-permissions.only-guides", "Only Guide(s)"),
-        value: ReadPermissions.OnlyGuides,
-        disabled: false,
-      });
-    }
     if (
-      (uid === ownerId || isInGMFolder) &&
+      uid === ownerId &&
       gameType !== GameType.Solo &&
-      (gameType !== GameType.Coop || !isInGMFolder)
+      gameType !== GameType.Coop
     ) {
       options.push({
         label: t("notes.share-permissions.all-players", "All Players"),
@@ -199,7 +173,7 @@ export function ShareButton(props: ShareButtonProps) {
       });
     }
     return options;
-  }, [isInGMFolder, ownerId, t, uid, updatedViewPermissions, gameType]);
+  }, [ownerId, t, uid, updatedViewPermissions, gameType]);
 
   const handleShare = () => {
     setOpen(false);
@@ -259,8 +233,7 @@ export function ShareButton(props: ShareButtonProps) {
                         name: parentFolder.name,
                         id: parentFolder.id,
                         t,
-                        uid,
-                        gameType: gameType,
+                        isRootPlayerFolder: parentFolder.isRootPlayerFolder,
                       }),
                     },
                   )}
@@ -300,8 +273,7 @@ export function ShareButton(props: ShareButtonProps) {
                         name: parentFolder.name,
                         id: parentFolder.id,
                         t,
-                        uid,
-                        gameType: gameType,
+                        isRootPlayerFolder: parentFolder.isRootPlayerFolder,
                       }),
                     },
                   )}

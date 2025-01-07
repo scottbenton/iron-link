@@ -28,20 +28,24 @@ interface UsersGamesState {
 }
 
 interface UsersGamesActions {
-  loadUsersGames: () => Promise<void>;
+  loadUsersGames: (uid: string) => Promise<void>;
 }
+
+const defaultValues: UsersGamesState = {
+  games: {},
+  characterDisplayDetails: {},
+  loading: true,
+};
 
 export const useUsersGames = createWithEqualityFn<
   UsersGamesState & UsersGamesActions
 >()(
   immer((set) => ({
-    games: {},
-    characterDisplayDetails: {},
-    loading: true,
+    ...defaultValues,
 
-    loadUsersGames: async () => {
+    loadUsersGames: async (uid) => {
       try {
-        const games = await GameService.getUsersGames();
+        const games = await GameService.getUsersGames(uid);
         set((state) => {
           state.loading = false;
           state.games = games;
@@ -52,39 +56,35 @@ export const useUsersGames = createWithEqualityFn<
           Object.keys(games),
         );
 
-        const portraitPromises: Record<string, Promise<string>> = {};
-        Object.entries(characterMap).forEach(([characterId, character]) => {
+        const portraitURLs = Object.fromEntries(
+        Object.entries(characterMap).map(([characterId, character]) => {
           if (character.profileImage) {
-            portraitPromises[characterId] =
+            const url =
               CharacterService.getCharacterPortraitURL(
                 characterId,
                 character.profileImage.filename,
               );
+            return [characterId, url];
           }
-        });
-
-        const resolvedEntries = await Promise.all(
-          Object.entries(portraitPromises).map(async ([key, promise]) => [
-            key,
-            await promise,
-          ]),
-        );
-        const portraitURLs = Object.fromEntries(resolvedEntries);
+          return [characterId, undefined];
+        }))
 
         set((state) => {
           const characterDisplayDetails: UsersGamesState["characterDisplayDetails"] =
             {};
 
           Object.entries(characterMap).forEach(([characterId, character]) => {
-            if (!characterDisplayDetails[character.gameId]) {
-              characterDisplayDetails[character.gameId] = {};
+            if (character.gameId) {
+              if (!characterDisplayDetails[character.gameId]) {
+                characterDisplayDetails[character.gameId] = {};
+              }
+              characterDisplayDetails[character.gameId][characterId] = {
+                name: character.name,
+                profileImageSettings: character.profileImage,
+                profileImageURL: portraitURLs[characterId] ?? null,
+                uid: character.uid,
+              };
             }
-            characterDisplayDetails[character.gameId][characterId] = {
-              name: character.name,
-              profileImageSettings: character.profileImage,
-              profileImageURL: portraitURLs[characterId] ?? null,
-              uid: character.uid,
-            };
           });
           state.characterDisplayDetails = characterDisplayDetails;
         });
@@ -107,7 +107,7 @@ export function useLoadUsersGames() {
   useEffect(() => {
     if (uid) {
       loadingRef.current = true;
-      loadUsersGames();
+      loadUsersGames(uid);
     }
   }, [uid, loadUsersGames]);
 }

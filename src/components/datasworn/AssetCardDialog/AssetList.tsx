@@ -13,7 +13,10 @@ import { AssetCard } from "../AssetCard/AssetCard";
 
 export interface AssetListProps {
   assetCollection: Datasworn.AssetCollection;
-  selectAsset: (asset: Omit<IAsset, "order">) => void;
+  selectAsset: (
+    asset: Omit<IAsset, "order" | "id" | "characterId" | "gameId">,
+    shared: boolean,
+  ) => void;
   assetMap: AssetMap;
 }
 
@@ -40,11 +43,15 @@ export function AssetList(props: AssetListProps) {
                 color={"inherit"}
                 variant="outlined"
                 onClick={() => {
-                  selectAsset({
-                    id: assetId,
-                    enabledAbilities: {},
-                    shared: assetMap[assetId].shared,
-                  });
+                  selectAsset(
+                    {
+                      dataswornAssetId: assetId,
+                      enabledAbilities: {},
+                      controlValues: {},
+                      optionValues: {},
+                    },
+                    assetMap[assetId].shared,
+                  );
                 }}
               >
                 {t("character.select-asset", "Select Asset")}

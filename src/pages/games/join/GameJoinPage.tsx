@@ -11,7 +11,9 @@ import { pathConfig } from "pages/pathConfig";
 
 import { useUID } from "stores/auth.store";
 
-import { GameService, IGame } from "services/game.service";
+import { GameType } from "repositories/game.repository";
+
+import { GameService } from "services/game.service";
 
 import { useGameId } from "../gamePageLayout/hooks/useGameId";
 
@@ -23,18 +25,20 @@ export function GameJoinPage() {
 
   const navigate = useNavigate();
 
-  const [campaign, setCampaign] = useState<IGame | null>(null);
+  const [gameName, setGameName] = useState<string | null>(null);
+  const [gameType, setGameType] = useState<GameType | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string>();
 
   useEffect(() => {
     if (gameId && uid) {
-      GameService.getGame(gameId)
+      GameService.getGameInviteInfo(gameId, uid)
         .then((game) => {
           setLoading(false);
           setError(undefined);
-          setCampaign(game);
-          if (game.playerIds.includes(uid)) {
+          setGameName(game.name);
+          setGameType(game.gameType);
+          if (game.isPlayer) {
             navigate(pathConfig.game(gameId));
           }
         })
@@ -50,9 +54,9 @@ export function GameJoinPage() {
   }, [gameId, uid, t, navigate]);
 
   const addUser = () => {
-    if (gameId && uid) {
+    if (gameId && uid && gameType) {
       // Add user to campaign
-      GameService.addPlayer(gameId, uid)
+      GameService.addPlayer(gameId, gameType, uid)
         .then(() => {
           navigate(pathConfig.game(gameId));
         })
@@ -69,15 +73,15 @@ export function GameJoinPage() {
       </PageContent>
     );
   }
-  if (loading || !campaign) {
+  if (loading || !gameName) {
     return <LinearProgress />;
   }
 
   return (
     <>
       <PageHeader
-        label={t("game.join-name", "Join {{campaignName}}", {
-          campaignName: campaign.name,
+        label={t("game.join-name", "Join {{gameName}}", {
+          gameName,
         })}
         maxWidth="md"
       />

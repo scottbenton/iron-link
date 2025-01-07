@@ -61,13 +61,14 @@ export function useRollCompleteSpecialTrack() {
         result,
         characterId: isCharacterOwner ? (characterId ?? null) : null,
         uid,
+        id: createId(),
+        gameId,
         guidesOnly: false,
         moveId,
       };
-      const rollId = createId();
 
-      addRollToScreen(rollId, trackProgressRoll);
-      addRoll(gameId, rollId, trackProgressRoll).catch(() => {});
+      addRollToScreen(trackProgressRoll.id, trackProgressRoll);
+      addRoll(trackProgressRoll.id, trackProgressRoll).catch(() => {});
 
       announce(
         t(
@@ -85,16 +86,7 @@ export function useRollCompleteSpecialTrack() {
 
       return result;
     },
-    [
-      announce,
-      addRollToScreen,
-      gameId,
-      characterId,
-      uid,
-      isCharacterOwner,
-      t,
-      addRoll,
-    ],
+    [announce, addRollToScreen, characterId, uid, isCharacterOwner, t, addRoll],
   );
 
   return rollSpecialTrack;

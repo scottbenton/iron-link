@@ -9,9 +9,8 @@ interface CharacterStoreState {
   portraits: Record<
     string,
     {
-      url?: string;
+      url: string;
       filename: string;
-      loading: boolean;
     }
   >;
 }
@@ -32,37 +31,17 @@ export const useCharacterStore = createWithEqualityFn<
     loadCharacterPortrait: (characterId, filename) => {
       const portraits = getState().portraits;
       if (filename) {
-        // If the filename has changed since our last load, or we haven't loaded the portrait yet
-        if (
-          portraits[characterId]?.filename !== filename ||
-          (!portraits[characterId]?.url && !portraits[characterId]?.loading)
-        ) {
+        // If the filename has changed since our last load
+        if (portraits[characterId]?.filename !== filename) {
           set((store) => {
             store.portraits[characterId] = {
-              url: undefined,
+              url: CharacterService.getCharacterPortraitURL(
+                characterId,
+                filename,
+              ),
               filename,
-              loading: true,
             };
           });
-          CharacterService.getCharacterPortraitURL(characterId, filename)
-            .then((url) => {
-              set((store) => {
-                store.portraits[characterId] = {
-                  url,
-                  filename,
-                  loading: false,
-                };
-              });
-            })
-            .catch(() => {
-              set((store) => {
-                store.portraits[characterId] = {
-                  url: undefined,
-                  filename,
-                  loading: false,
-                };
-              });
-            });
         }
       } else if (portraits[characterId]) {
         set((store) => {
@@ -76,7 +55,7 @@ export const useCharacterStore = createWithEqualityFn<
 
 export function useCharacterPortrait(characterId: string) {
   const portrait = useCharacterStore((store) => store.portraits[characterId]);
-  return portrait ?? { url: undefined, filename: "", loading: false };
+  return portrait ?? { url: undefined, filename: "" };
 }
 
 export function useLoadCharacterPortrait(

@@ -12,7 +12,7 @@ export interface TrackItemProps {
 }
 
 export function TrackItem(props: TrackItemProps) {
-  const { gameId, canEdit, trackId } = props;
+  const { canEdit, trackId } = props;
 
   const track = useTracksStore((store) => store.tracks[trackId]);
 
@@ -21,21 +21,9 @@ export function TrackItem(props: TrackItemProps) {
   }
 
   if (track.type === TrackTypes.Clock) {
-    return (
-      <TrackClock
-        gameId={gameId}
-        clockId={trackId}
-        clock={track}
-        canEdit={canEdit}
-      />
-    );
+    return <TrackClock clockId={trackId} clock={track} canEdit={canEdit} />;
   }
   return (
-    <TrackProgressTrack
-      gameId={gameId}
-      trackId={trackId}
-      track={track}
-      canEdit={canEdit}
-    />
+    <TrackProgressTrack trackId={trackId} track={track} canEdit={canEdit} />
   );
 }

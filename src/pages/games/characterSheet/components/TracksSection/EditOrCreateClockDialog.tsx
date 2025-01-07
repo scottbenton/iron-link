@@ -22,8 +22,6 @@ import { useGameId } from "pages/games/gamePageLayout/hooks/useGameId";
 
 import { useTracksStore } from "stores/tracks.store";
 
-import { TrackStatus, TrackTypes } from "repositories/tracks.repository";
-
 import { IClock } from "services/tracks.service";
 
 const segmentOptions = [4, 6, 8, 10];
@@ -66,8 +64,8 @@ export function EditOrCreateClockDialog(props: EditOrCreateClockDialogProps) {
     handleClose();
   };
 
-  const addTrack = useTracksStore((store) => store.addTrack);
-  const updateTrack = useTracksStore((store) => store.setTrack);
+  const addTrack = useTracksStore((store) => store.addClock);
+  const updateTrack = useTracksStore((store) => store.updateClock);
   const handleSubmit = () => {
     if (!title) {
       setError(
@@ -87,21 +85,10 @@ export function EditOrCreateClockDialog(props: EditOrCreateClockDialogProps) {
       return;
     }
 
-    const clock: IClock = {
-      createdDate: new Date(),
-      status: TrackStatus.Active,
-      type: TrackTypes.Clock,
-      ...(initialClock ?? {}),
-      label: title,
-      description,
-      segments,
-      value: initialClock?.clock.value ?? 0,
-    };
-
     setLoading(true);
 
     if (initialClock) {
-      updateTrack(gameId, initialClock.clockId, clock)
+      updateTrack(initialClock.clockId, title, description, segments)
         .then(() => {
           handleDialogClose();
         })
@@ -115,7 +102,7 @@ export function EditOrCreateClockDialog(props: EditOrCreateClockDialogProps) {
           );
         });
     } else {
-      addTrack(gameId, clock)
+      addTrack(gameId, title, description, segments)
         .then(() => {
           handleDialogClose();
         })

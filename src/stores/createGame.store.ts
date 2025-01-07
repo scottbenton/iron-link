@@ -17,7 +17,7 @@ export interface CreateGameState {
   expansions: ExpansionConfig;
 }
 interface CreateGameActions {
-  createGame(name: string): Promise<string>;
+  createGame(uid: string, name: string): Promise<string>;
   setGameName: (name: string) => void;
   setGameType: (gameType: GameType) => void;
   toggleRuleset: (rulesetKey: string, active: boolean) => void;
@@ -42,9 +42,9 @@ export const useCreateGameStore = createWithEqualityFn<
 >()(
   immer((set, getState) => ({
     ...defaultState,
-    createGame: (name: string) => {
+    createGame: (uid, name: string) => {
       const { gameType, rulesets, expansions } = getState();
-      return GameService.createGame(name, gameType, rulesets, expansions);
+      return GameService.createGame(uid, name, gameType, rulesets, expansions);
     },
 
     setGameName: (name) => {

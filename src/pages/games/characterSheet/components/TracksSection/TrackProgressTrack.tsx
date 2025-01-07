@@ -27,7 +27,6 @@ export interface TrackProgressTrackProps {
   trackId: string;
   track: IProgressTrack | ISceneChallenge;
   canEdit: boolean;
-  gameId: string;
 }
 
 const difficultySteps: Record<Difficulty, number> = {
@@ -39,7 +38,7 @@ const difficultySteps: Record<Difficulty, number> = {
 };
 
 export function TrackProgressTrack(props: TrackProgressTrackProps) {
-  const { trackId, track, canEdit, gameId } = props;
+  const { trackId, track, canEdit } = props;
 
   const isCharacterOwner = useIsOwnerOfCharacter();
 
@@ -51,7 +50,7 @@ export function TrackProgressTrack(props: TrackProgressTrackProps) {
 
   const updateTrackStatus = useTracksStore((store) => store.updateTrackStatus);
   const handleStatusChange = (status: TrackStatus) => {
-    updateTrackStatus(gameId, trackId, status)
+    updateTrackStatus(trackId, status)
       .then(() => {
         announce(
           t(
@@ -80,7 +79,7 @@ export function TrackProgressTrack(props: TrackProgressTrackProps) {
       confirmationText: t("common.delete", "Delete"),
     })
       .then(() => {
-        deleteTrack(gameId, trackId)
+        deleteTrack(trackId)
           .then(() => {
             announce(
               t(
@@ -99,15 +98,15 @@ export function TrackProgressTrack(props: TrackProgressTrackProps) {
 
   const updateTrackValue = useTracksStore((store) => store.updateTrackValue);
   const handleUpdateValue = (value: number) => {
-    updateTrackValue(gameId, trackId, value).catch(() => {});
+    updateTrackValue(trackId, value).catch(() => {});
   };
 
-  const updateSceneChallengeClockFilledSegments = useTracksStore(
-    (store) => store.updateSceneChallengeClockFilledSegments,
+  const updateClockFilledSegments = useTracksStore(
+    (store) => store.updateClockFilledSegments,
   );
   const handleSceneChallengeClockChange = (filledSegments: number) => {
     if (track.type === TrackTypes.SceneChallenge) {
-      updateSceneChallengeClockFilledSegments(gameId, trackId, filledSegments)
+      updateClockFilledSegments(trackId, filledSegments)
         .then(() => {
           announce(
             t(
