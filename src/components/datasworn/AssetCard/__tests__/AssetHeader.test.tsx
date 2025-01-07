@@ -5,7 +5,7 @@ import { getIsLocalEnvironment } from "lib/environment.lib";
 
 import { AssetHeader, AssetHeaderProps } from "../AssetHeader";
 
-vi.mock("config/environment.config", () => ({
+vi.mock("lib/environment.lib", () => ({
   getIsLocalEnvironment: vi.fn(),
 }));
 
