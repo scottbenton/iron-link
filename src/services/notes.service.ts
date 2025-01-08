@@ -28,7 +28,6 @@ export class NotesService {
     uid: string | undefined,
     gameId: string,
     gamePermissions: GamePermission,
-    accessibleParentNoteFolderIds: string[],
     onNoteChanges: (
       changedNotes: Record<string, INote>,
       removedNoteIds: string[],
@@ -39,7 +38,6 @@ export class NotesService {
       uid,
       gameId,
       gamePermissions,
-      accessibleParentNoteFolderIds,
       (changedNotes, removedNoteIds) => {
         onNoteChanges(
           Object.fromEntries(
