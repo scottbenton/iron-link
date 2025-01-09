@@ -7,6 +7,7 @@ import NumberedListIcon from "@mui/icons-material/FormatListNumbered";
 import QuoteIcon from "@mui/icons-material/FormatQuote";
 import StrikeThroughIcon from "@mui/icons-material/FormatStrikethrough";
 import HorizontalRuleIcon from "@mui/icons-material/HorizontalRule";
+import ShareIcon from "@mui/icons-material/Share";
 import {
   Box,
   IconButton,
@@ -19,10 +20,14 @@ import { useConfirm } from "material-ui-confirm";
 import { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
 
+import { useGamePermissions } from "pages/games/gamePageLayout/hooks/usePermissions";
+
 import { useNotesStore } from "stores/notes.store";
 
+import { GameType } from "repositories/game.repository";
+
 import { NameItemDialog } from "../FolderView/NameItemDialog";
-import { ShareButton } from "../ShareButton";
+import { ShareDialog } from "../ShareDialog";
 import { TextTypeDropdown } from "./TextTypeDropdown";
 import { NotePermissions } from "./useNotePermission";
 
@@ -36,6 +41,8 @@ export function NoteViewToolbar(props: NoteToolbarContentProps) {
   const { openNoteId, editor, permissions } = props;
 
   const { t } = useTranslation();
+
+  const { gameType } = useGamePermissions();
 
   const setOpenNote = useNotesStore((store) => store.setOpenItem);
   const note = useNotesStore((store) => {
@@ -91,6 +98,8 @@ export function NoteViewToolbar(props: NoteToolbarContentProps) {
     },
     [updateNoteName, openNoteId],
   );
+
+  const [shareDialogOpen, setShareDialogOpen] = useState(false);
 
   return (
     <>
@@ -203,28 +212,24 @@ export function NoteViewToolbar(props: NoteToolbarContentProps) {
           itemLabel="Note"
           name={noteName}
         />
-        {parentFolder && parentFolderId && (
-          <ShareButton
-            item={{
-              type: "note",
-              id: openNoteId,
-              ownerId: note.creator,
-            }}
-            currentPermissions={{
-              editPermissions:
-                note.editPermissions ?? parentFolder.editPermissions,
-              readPermissions:
-                note.readPermissions ?? parentFolder.readPermissions,
-            }}
-            parentFolder={{
-              id: parentFolderId,
-              name: parentFolder.name,
-              editPermissions: parentFolder.editPermissions,
-              readPermissions: parentFolder.readPermissions,
-              isRootPlayerFolder: parentFolder.isRootPlayerFolder,
-            }}
-          />
+        {parentFolder && parentFolderId && gameType !== GameType.Solo && (
+          <Tooltip
+            title={t("note.editor-toolbar.share-note", "Share Note")}
+            enterDelay={300}
+          >
+            <IconButton onClick={() => setShareDialogOpen(true)}>
+              <ShareIcon />
+            </IconButton>
+          </Tooltip>
         )}
+        <ShareDialog
+          item={{
+            type: "note",
+            id: openNoteId,
+          }}
+          open={shareDialogOpen}
+          onClose={() => setShareDialogOpen(false)}
+        />
         {permissions.canDelete && (
           <Tooltip
             title={t("note.editor-toolbar.delete-note", "Delete Note")}

@@ -54,6 +54,7 @@ export class NotesService {
   }
 
   public static addNote(
+    gameId: string,
     uid: string,
     parentFolderId: string,
     title: string,
@@ -62,6 +63,7 @@ export class NotesService {
     editPermissions: EditPermissions,
   ): Promise<string> {
     return NotesRepository.addNote({
+      game_id: gameId,
       author_id: uid,
       parent_folder_id: parentFolderId,
       title,

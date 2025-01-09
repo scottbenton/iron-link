@@ -1,12 +1,14 @@
 import {
   Button,
+  Checkbox,
   Dialog,
   DialogActions,
   DialogContent,
+  FormControlLabel,
   Typography,
 } from "@mui/material";
 import { SimpleTreeView, TreeItem } from "@mui/x-tree-view";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { DialogTitleWithCloseButton } from "components/DialogTitleWithCloseButton";
@@ -46,6 +48,48 @@ export function MoveDialog(props: MoveDialogProps) {
   const [selectedParentFolder, setSelectedParentFolder] = useState<
     string | null
   >(parentFolderId);
+
+  const selectedFolderPermissions = useNotesStore((store) => {
+    if (!selectedParentFolder) return null;
+    return {
+      readPermissions:
+        store.folderState.folders[selectedParentFolder]?.readPermissions,
+      editPermissions:
+        store.folderState.folders[selectedParentFolder]?.editPermissions,
+    };
+  });
+  const currentItemPermissions = useNotesStore((store) => {
+    if (type === "folder") {
+      return {
+        readPermissions: store.folderState.folders[id]?.readPermissions,
+        editPermissions: store.folderState.folders[id]?.editPermissions,
+      };
+    } else {
+      return {
+        readPermissions: store.noteState.notes[id]?.readPermissions,
+        editPermissions: store.noteState.notes[id]?.editPermissions,
+      };
+    }
+  });
+
+  const doPermissionsMatch = useMemo(() => {
+    if (!selectedFolderPermissions) return true;
+
+    if (
+      selectedFolderPermissions.readPermissions !==
+      currentItemPermissions.readPermissions
+    ) {
+      return false;
+    }
+    if (
+      selectedFolderPermissions.editPermissions !==
+      currentItemPermissions.editPermissions
+    ) {
+      return false;
+    }
+    return true;
+  }, [selectedFolderPermissions, currentItemPermissions]);
+
   const selectedParentFolderOrder = useNotesStore((store) => {
     let nextOrder = 0;
     Object.values(store.noteState.notes).forEach((note) => {
@@ -62,6 +106,7 @@ export function MoveDialog(props: MoveDialogProps) {
 
   const descendants = useFolderDescendants(type === "folder" ? id : undefined);
   const [isMoveLoading, setIsMoveLoading] = useState(false);
+  const [shouldUpdatePermissions, setShouldUpdatePermissions] = useState(false);
 
   const isGuide = campaignPermission === GamePermission.Guide;
 
@@ -69,44 +114,31 @@ export function MoveDialog(props: MoveDialogProps) {
 
   const { rootNodes, tree } = getTreeFromFolders(folders, uid, isGuide);
 
+  const moveNote = useNotesStore((store) => store.moveNote);
+  const moveFolder = useNotesStore((store) => store.moveFolder);
+
   const handleMove = useCallback(
     (newParentFolderId: string) => {
-      const newFolder = folders[newParentFolderId];
-      if (!newFolder || newParentFolderId === parentFolderId) {
-        // We aren't moving the item, we're done!
-        onClose();
-        return;
-      }
       setIsMoveLoading(true);
 
-      const promises: Promise<unknown>[] = [];
+      let promise: Promise<void>;
 
       // We can just move the item
       if (type === "note") {
-        // Get the order to put the note last in the next list
-        // promises.push(
-        //   updateNote({
-        //     campaignId,
-        //     noteId: id,
-        //     note: {
-        //       parentFolderId: newParentFolderId,
-        //       order: selectedParentFolderOrder + 1,
-        //     },
-        //   }),
-        // );
+        promise = moveNote(
+          id,
+          newParentFolderId,
+          !doPermissionsMatch && shouldUpdatePermissions,
+        );
       } else {
-        // promises.push(
-        //   updateNoteFolder({
-        //     campaignId,
-        //     folderId: id,
-        //     noteFolder: {
-        //       parentFolderId: newParentFolderId,
-        //     },
-        //   }),
-        // );
+        promise = moveFolder(
+          id,
+          newParentFolderId,
+          !doPermissionsMatch && shouldUpdatePermissions,
+        );
       }
 
-      Promise.all(promises)
+      promise
         .catch(() => {})
         .finally(() => {
           setIsMoveLoading(false);
@@ -122,6 +154,8 @@ export function MoveDialog(props: MoveDialogProps) {
       descendants,
       campaignId,
       selectedParentFolderOrder,
+      shouldUpdatePermissions,
+      doPermissionsMatch,
     ],
   );
 
@@ -137,11 +171,11 @@ export function MoveDialog(props: MoveDialogProps) {
           {type === "note"
             ? t(
                 "notes.moveNoteDescription",
-                "Select the folder you want to move this note to. Note that this may update the permissions of the note to match the new folder.",
+                "Select the folder you want to move this note to. If the permissions of the note do not match the permissions of the folder, you can choose to update the permissions of the note to match the new folder.",
               )
             : t(
                 "notes.moveFolderDescription",
-                "Select the folder you want to move this folder to. Note that this may update the permissions of the folder (and its contents) to match the new folder.",
+                "Select the folder you want to move this folder to. If the permissions in the new parent folder are different, you can choose to update the permissions of the folder to match the new folder.",
               )}
         </Typography>
         <SimpleTreeView
@@ -172,6 +206,18 @@ export function MoveDialog(props: MoveDialogProps) {
               ))}
             </TreeItem>
           ))}
+          {!doPermissionsMatch && (
+            <FormControlLabel
+              label={t(
+                "notes.updatePermissions",
+                "Update permissions to match the new folder",
+              )}
+              checked={shouldUpdatePermissions}
+              onChange={(_, checked) => setShouldUpdatePermissions(checked)}
+              control={<Checkbox />}
+              sx={{ mt: 2 }}
+            />
+          )}
         </SimpleTreeView>
       </DialogContent>
       <DialogActions>

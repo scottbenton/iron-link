@@ -433,6 +433,7 @@ export type Database = {
           author_id: string
           created_at: string
           edit_permissions: Database["public"]["Enums"]["note_edit_permissions"]
+          game_id: string
           id: string
           note_content_bytes: string | null
           note_content_text: string | null
@@ -445,6 +446,7 @@ export type Database = {
           author_id: string
           created_at?: string
           edit_permissions: Database["public"]["Enums"]["note_edit_permissions"]
+          game_id: string
           id?: string
           note_content_bytes?: string | null
           note_content_text?: string | null
@@ -457,6 +459,7 @@ export type Database = {
           author_id?: string
           created_at?: string
           edit_permissions?: Database["public"]["Enums"]["note_edit_permissions"]
+          game_id?: string
           id?: string
           note_content_bytes?: string | null
           note_content_text?: string | null
@@ -471,6 +474,13 @@ export type Database = {
             columns: ["author_id"]
             isOneToOne: false
             referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "notes_game_id_fkey"
+            columns: ["game_id"]
+            isOneToOne: false
+            referencedRelation: "games"
             referencedColumns: ["id"]
           },
           {

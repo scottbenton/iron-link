@@ -13,14 +13,22 @@ import { INote, INoteContent, NotesService } from "services/notes.service";
 import { useUID } from "./auth.store";
 import { GamePermission } from "./game.store";
 
+interface Permissions {
+  canEdit: boolean;
+  canDelete: boolean;
+  canChangePermissions: boolean;
+}
+
 interface NotesStoreState {
   noteState: {
     notes: Record<string, INote>;
+    permissions: Record<string, Permissions>;
     loading: boolean;
     error?: string;
   };
   folderState: {
     folders: Record<string, INoteFolder>;
+    permissions: Record<string, Permissions>;
     loading: boolean;
     error?: string;
   };
@@ -66,16 +74,21 @@ interface NotesStoreActions {
     isRootPlayerFolder?: boolean,
   ) => Promise<string>;
   updateFolderName: (folderId: string, name: string) => Promise<void>;
-  // updateFolderPermissions: (
-  //   gameId: string,
-  //   folderId: string,
-  //   readPermissions: ReadPermissions,
-  //   editPermissions: EditPermissions,
-  // ) => Promise<void>;
+  moveFolder: (
+    folderId: string,
+    newParentFolderId: string,
+    updatePermissions: boolean,
+  ) => Promise<void>;
+  updateFolderPermissions: (
+    folderId: string,
+    readPermissions: ReadPermissions,
+    editPermissions: EditPermissions,
+  ) => Promise<void>;
 
   deleteFolder: (folderId: string) => Promise<void>;
 
   createNote: (
+    gameId: string,
     uid: string,
     parentFolderId: string,
     title: string,
@@ -83,6 +96,16 @@ interface NotesStoreActions {
   ) => Promise<string>;
   updateNoteName: (noteId: string, title: string) => Promise<void>;
   updateNoteOrder: (noteId: string, order: number) => Promise<void>;
+  moveNote: (
+    noteId: string,
+    newParentFolderId: string,
+    updatePermissions: boolean,
+  ) => Promise<void>;
+  updateNotePermissions: (
+    noteId: string,
+    readPermissions: ReadPermissions,
+    editPermissions: EditPermissions,
+  ) => Promise<void>;
   deleteNote: (noteId: string) => Promise<void>;
 
   updateNoteContent: (
@@ -104,10 +127,12 @@ const defaultNotesState: NotesStoreState = {
   noteState: {
     loading: true,
     notes: {},
+    permissions: {},
     error: undefined,
   },
   folderState: {
     loading: true,
+    permissions: {},
     folders: {},
     error: undefined,
   },
@@ -131,8 +156,18 @@ export const useNotesStore = createWithEqualityFn<
               ...store.folderState.folders,
               ...changedNoteFolders,
             };
+            Object.entries(changedNoteFolders).forEach(([folderId, folder]) => {
+              const permissions = getPermissions(
+                folder.editPermissions,
+                folder.creator,
+                uid,
+                gamePermissions,
+              );
+              store.folderState.permissions[folderId] = permissions;
+            });
             deletedNoteFolderIds.forEach((folderId) => {
               delete store.folderState.folders[folderId];
+              delete store.folderState.permissions[folderId];
             });
             store.folderState.loading = false;
             store.folderState.error = undefined;
@@ -151,14 +186,26 @@ export const useNotesStore = createWithEqualityFn<
         uid,
         gameId,
         gamePermissions,
-        (chaingedNotes, removedNoteIds) => {
+        (changedNotes, removedNoteIds) => {
           set((store) => {
             store.noteState.notes = {
               ...store.noteState.notes,
-              ...chaingedNotes,
+              ...changedNotes,
             };
+
+            Object.entries(changedNotes).forEach(([noteId, note]) => {
+              const permissions = getPermissions(
+                note.editPermissions,
+                note.creator,
+                uid,
+                gamePermissions,
+              );
+              store.noteState.permissions[noteId] = permissions;
+            });
+
             removedNoteIds.forEach((noteId) => {
               delete store.noteState.notes[noteId];
+              delete store.noteState.permissions[noteId];
             });
             store.noteState.loading = false;
             store.noteState.error = undefined;
@@ -270,24 +317,98 @@ export const useNotesStore = createWithEqualityFn<
     updateFolderName: (folderId, name) => {
       return NoteFoldersService.updateFolderName(folderId, name);
     },
-    // updateFolderPermissions: (
-    //   gameId,
-    //   folderId,
-    //   readPermissions,
-    //   editPermissions,
-    // ) => {
-    //   return new Promise((resolve, reject) => {});
-    // },
+    moveFolder: (folderId, newParentFolderId, updatePermissions) => {
+      return new Promise((resolve, reject) => {
+        const state = getState();
+
+        const parentFolder = state.folderState.folders[newParentFolderId];
+        if (!parentFolder) {
+          reject(new Error("Parent folder not found"));
+          return;
+        }
+
+        const promises: Promise<void>[] = [];
+
+        promises.push(
+          NoteFoldersService.updateParentFolder(folderId, newParentFolderId),
+        );
+        if (updatePermissions) {
+          promises.push(
+            state.updateFolderPermissions(
+              folderId,
+              parentFolder.readPermissions,
+              parentFolder.editPermissions,
+            ),
+          );
+        }
+
+        Promise.all(promises)
+          .then(() => {
+            resolve();
+          })
+          .catch(reject);
+      });
+    },
+    updateFolderPermissions: (folderId, readPermissions, editPermissions) => {
+      return new Promise((resolve, reject) => {
+        const state = getState();
+        const folder = state.folderState.folders[folderId];
+        if (!folder) {
+          reject(new Error("Folder not found"));
+          return;
+        }
+        const descendants = getState().getFolderDescendants(folderId);
+        const foldersToUpdate = Object.keys(descendants.folders).filter(
+          (folderId) => {
+            const subFolder = descendants.folders[folderId];
+            if (
+              subFolder.readPermissions === folder.readPermissions &&
+              subFolder.editPermissions === folder.editPermissions
+            ) {
+              return true;
+            }
+            return false;
+          },
+        );
+
+        foldersToUpdate.push(folderId);
+
+        const notesToUpdate = Object.keys(descendants.notes).filter(
+          (noteId) => {
+            const note = descendants.notes[noteId];
+            if (
+              note.readPermissions === folder.readPermissions &&
+              note.editPermissions === folder.editPermissions
+            ) {
+              return true;
+            }
+            return false;
+          },
+        );
+
+        NoteFoldersService.updateFolderPermissions(
+          foldersToUpdate,
+          notesToUpdate,
+          readPermissions,
+          editPermissions,
+        )
+          .then(() => {
+            resolve();
+          })
+          .catch(reject);
+      });
+    },
     deleteFolder: (folderId) => {
       return NoteFoldersService.deleteFolder(folderId);
     },
 
-    createNote: (uid, parentFolderId, title, order) => {
+    createNote: (gameId, uid, parentFolderId, title, order) => {
       const parentFolder = getState().folderState.folders[parentFolderId];
       if (!parentFolder) {
         return Promise.reject(new Error("Parent folder not found"));
       }
       return NotesService.addNote(
+        gameId,
         uid,
         parentFolderId,
         title,
@@ -301,6 +422,51 @@ export const useNotesStore = createWithEqualityFn<
     },
     updateNoteOrder: (noteId, order) => {
       return NotesService.updateNoteOrder(noteId, order);
+    },
+    moveNote: (noteId, newParentFolderId, updatePermissions) => {
+      const state = getState();
+      const note = state.noteState.notes[noteId];
+      const parentFolder = state.folderState.folders[newParentFolderId];
+
+      const notesInParentFolder = Object.values(state.noteState.notes).filter(
+        (note) => note.parentFolderId === newParentFolderId,
+      );
+      const order =
+        notesInParentFolder.length > 0
+          ? Math.max(
+              ...Object.values(state.noteState.notes)
+                .filter((note) => note.parentFolderId === newParentFolderId)
+                .map((note) => note.order),
+            ) + 1
+          : 1;
+
+      if (!note || !parentFolder) {
+        return Promise.reject(new Error("Note or folder not found"));
+      }
+
+      const readPermissions = updatePermissions
+        ? parentFolder.readPermissions
+        : note.readPermissions;
+      const editPermissions = updatePermissions
+        ? parentFolder.editPermissions
+        : note.editPermissions;
+
+      console.debug(order);
+
+      return NotesService.updateNoteParentFolder(
+        noteId,
+        newParentFolderId,
+        order,
+        readPermissions,
+        editPermissions,
+      );
+    },
+    updateNotePermissions: (noteId, readPermissions, editPermissions) => {
+      return NotesService.updateNotePermissions(
+        noteId,
+        readPermissions,
+        editPermissions,
+      );
     },
     deleteNote: (noteId) => {
       return NotesService.deleteNote(noteId);
@@ -369,7 +535,7 @@ export const useNotesStore = createWithEqualityFn<
 
 export function useListenToGameNotes(gameId: string | undefined) {
   const uid = useUID();
-  const gamePermissions = useGamePermissions().gamePermission;
+  const { gamePermission, gameType } = useGamePermissions();
 
   const resetStore = useNotesStore((store) => store.reset);
   const listenToNoteFolders = useNotesStore(
@@ -385,16 +551,16 @@ export function useListenToGameNotes(gameId: string | undefined) {
   );
 
   useEffect(() => {
-    if (gameId && gamePermissions) {
-      return listenToNoteFolders(uid, gameId, gamePermissions);
+    if (gameId && gamePermission) {
+      return listenToNoteFolders(uid, gameId, gamePermission);
     }
-  }, [gameId, uid, gamePermissions, listenToNoteFolders]);
+  }, [gameId, uid, gamePermission, listenToNoteFolders, gameType]);
 
   useEffect(() => {
-    if (gameId && gamePermissions) {
-      return listenToNotes(uid, gameId, gamePermissions);
+    if (gameId && gamePermission) {
+      return listenToNotes(uid, gameId, gamePermission);
     }
-  }, [gameId, uid, gamePermissions, listenToNotes]);
+  }, [gameId, uid, gamePermission, listenToNotes, gameType]);
 
   useEffect(() => {
     if (activeNoteId) {
@@ -407,10 +573,7 @@ export function useListenToGameNotes(gameId: string | undefined) {
       resetStore();
     };
   }, [gameId, uid, resetStore]);
-} // So what does it look like to fetch all this information?
-// Query all folders where I have permission
-// THEN
-// Query all notes where I have permission OR notes in folders where I have permission
+}
 
 export function getPlayerNotesFolder(
   playerId: string,
@@ -419,4 +582,60 @@ export function getPlayerNotesFolder(
   return Object.values(folders).find((folder) => {
     return folder.creator === playerId && folder.isRootPlayerFolder;
   });
+}
+
+function getPermissions(
+  writePermissions: EditPermissions,
+  authorId: string,
+  uid: string | undefined,
+  gamePermission: GamePermission,
+): Permissions {
+  if (!uid || gamePermission === GamePermission.Viewer) {
+    return {
+      canEdit: false,
+      canDelete: false,
+      canChangePermissions: false,
+    };
+  }
+
+  const isUserGuide = gamePermission === GamePermission.Guide;
+  const isUserAuthor = authorId === uid;
+
+  if (writePermissions === EditPermissions.AllPlayers) {
+    return {
+      canEdit: true,
+      canDelete: isUserAuthor,
+      canChangePermissions: isUserAuthor,
+    };
+  }
+
+  if (writePermissions === EditPermissions.OnlyAuthor) {
+    return {
+      canEdit: isUserAuthor,
+      canDelete: isUserAuthor,
+      canChangePermissions: isUserAuthor,
+    };
+  }
+
+  if (writePermissions === EditPermissions.GuidesAndAuthor) {
+    return {
+      canEdit: isUserAuthor || isUserGuide,
+      canDelete: isUserAuthor,
+      canChangePermissions: isUserAuthor,
+    };
+  }
+
+  if (writePermissions === EditPermissions.OnlyGuides) {
+    return {
+      canEdit: isUserGuide,
+      canDelete: isUserGuide,
+      canChangePermissions: isUserGuide,
+    };
+  }
+
+  return {
+    canEdit: false,
+    canDelete: false,
+    canChangePermissions: false,
+  };
 }

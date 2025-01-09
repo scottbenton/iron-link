@@ -180,6 +180,31 @@ export class NoteFoldersRepository {
     });
   }
 
+  public static massUpdateNoteFolders(
+    folderIds: string[],
+    updatedNoteFolder: NoteFolderUpdateDTO,
+  ): Promise<void> {
+    return new Promise((resolve, reject) => {
+      console.debug(`Updating ${folderIds} folders to ${updatedNoteFolder}`);
+      this.noteFolders()
+        .update(updatedNoteFolder)
+        .in("id", folderIds)
+        .then(({ error }) => {
+          if (error) {
+            console.error(error);
+            reject(
+              convertUnknownErrorToStorageError(
+                error,
+                `Note folders could not be updated`,
+              ),
+            );
+          } else {
+            resolve();
+          }
+        });
+    });
+  }
+
   public static deleteNoteFolder(folderId: string): Promise<void> {
     return new Promise((resolve, reject) => {
       this.noteFolders()
