@@ -74,10 +74,8 @@ export function useAutoSaveRtcEditor(params: {
       textContent: string,
       isBeaconRequest?: boolean,
     ) => {
-      console.debug("CALLING ON SAVE WITH CONTENT", textContent);
       if (onSave) {
         const notes = Y.encodeStateAsUpdate(doc);
-        console.debug("NOTES SEQUENCE", notes);
 
         setHasUnsavedChanges(false);
         hasUnsavedChangesRef.current = false;
@@ -122,10 +120,7 @@ export function useAutoSaveRtcEditor(params: {
     setDocAndProvider({ doc: newDoc, provider: newProvider });
 
     return () => {
-      console.debug("TEXT VALUE REF:", textValueRef.current);
-      console.debug("HAS UNSAVED CHANGES REF:", hasUnsavedChangesRef.current);
       if (hasUnsavedChangesRef.current && textValueRef.current) {
-        console.debug("SAVING DUE TO UNMOUNT OR yDoc CHANGE");
         handleSave(documentId, newDoc, textValueRef.current);
       }
 
@@ -143,14 +138,15 @@ export function useAutoSaveRtcEditor(params: {
         hasUnsavedChangesRef.current &&
         textValueRef.current
       ) {
-        console.debug("SAVING DUE TO TAB CLOSE");
         handleSave(documentId, docAndProvider.doc, textValueRef.current, true);
       }
     };
 
     document.addEventListener("visibilitychange", onUnload);
+    window.addEventListener("beforeunload", onUnload);
     return () => {
       document.removeEventListener("visibilitychange", onUnload);
+      window.removeEventListener("beforeunload", onUnload);
     };
   }, [docAndProvider, documentId, handleSave]);
 
@@ -164,7 +160,6 @@ export function useAutoSaveRtcEditor(params: {
         if (!textValueRef.current) {
           console.error("Text value is empty, cannot save");
         } else {
-          console.debug("SAVING DUE TO AUTO SAVE");
           handleSave(documentId, doc, textValueRef.current);
         }
       }, AUTOSAVE_INTERVAL_SECONDS * 1000);

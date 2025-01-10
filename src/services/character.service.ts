@@ -64,7 +64,11 @@ export class CharacterService {
 
     let colorScheme: ColorScheme | null = null;
     if (characterDTO.color_scheme) {
-      if (characterDTO.color_scheme in ColorScheme) {
+      if (
+        Object.values(ColorScheme).includes(
+          characterDTO.color_scheme as ColorScheme,
+        )
+      ) {
         colorScheme = characterDTO.color_scheme as ColorScheme;
       }
     }

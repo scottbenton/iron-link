@@ -1,0 +1,9 @@
+alter table assets replica identity full;
+alter table characters replica identity full;
+alter table game_logs replica identity full;
+alter table game_players replica identity full;
+alter table game_tracks replica identity full;
+alter table games replica identity full;
+alter table note_folders replica identity full;
+alter table notes replica identity full;
+alter table users replica identity full;

@@ -1,21 +1,27 @@
 import FolderIcon from "@mui/icons-material/CreateNewFolder";
+import MoveIcon from "@mui/icons-material/DriveFileMove";
 import RenameIcon from "@mui/icons-material/DriveFileRenameOutline";
 import DocumentIcon from "@mui/icons-material/NoteAdd";
+import ShareIcon from "@mui/icons-material/Share";
 import { Box, Button, IconButton, Tooltip } from "@mui/material";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { useGameId } from "pages/games/gamePageLayout/hooks/useGameId";
+import { useGamePermissions } from "pages/games/gamePageLayout/hooks/usePermissions";
 
 import { useUID } from "stores/auth.store";
 import { useNotesStore } from "stores/notes.store";
 
+import { GameType } from "repositories/game.repository";
+
 import { NoteToolbar } from "../Layout";
-import { useFolderPermission } from "../NoteView/useFolderPermissions";
-import { ShareButton } from "../ShareButton";
+import { MoveDialog } from "../MoveDialog";
+import { ShareDialog } from "../ShareDialog";
 import { FolderDeleteButton } from "./FolderDeleteButton";
 import { NameItemDialog } from "./NameItemDialog";
 import { FAKE_ROOT_NOTE_FOLDER_KEY } from "./rootNodeName";
+import { useFolderPermission } from "./useFolderPermissions";
 
 export interface FolderViewToolbarProps {
   folderId: string;
@@ -25,6 +31,7 @@ export function FolderViewToolbar(props: FolderViewToolbarProps) {
   const { folderId } = props;
   const { t } = useTranslation();
 
+  const { gameType } = useGamePermissions();
   const uid = useUID();
   const gameId = useGameId();
 
@@ -61,6 +68,9 @@ export function FolderViewToolbar(props: FolderViewToolbarProps) {
   const addNote = useNotesStore((store) => store.createNote);
   const updateNoteFolderName = useNotesStore((store) => store.updateFolderName);
 
+  const [shareDialogOpen, setShareDialogOpen] = useState(false);
+  const [moveDialogOpen, setMoveDialogOpen] = useState(false);
+
   // Something's gone wrong, lets stop before we break things
   if (!folder || folderId === FAKE_ROOT_NOTE_FOLDER_KEY) return null;
 
@@ -80,7 +90,7 @@ export function FolderViewToolbar(props: FolderViewToolbarProps) {
 
   const createNote = (name: string) => {
     if (uid) {
-      addNote(uid, folderId, name, nextNoteOrder).catch(() => {});
+      addNote(gameId, uid, folderId, name, nextNoteOrder).catch(() => {});
     }
   };
 
@@ -108,27 +118,36 @@ export function FolderViewToolbar(props: FolderViewToolbarProps) {
             </Tooltip>
           )}
           {!isImmutableFolder && parentFolder && parentFolderId && (
-            <ShareButton
-              item={{ type: "folder", id: folderId, ownerId: folder.creator }}
-              currentPermissions={{
-                editPermissions: folder.editPermissions,
-                readPermissions: folder.readPermissions,
-              }}
-              parentFolder={{
-                id: parentFolderId,
-                name: parentFolder.name,
-                editPermissions: parentFolder.editPermissions,
-                readPermissions: parentFolder.readPermissions,
-                isRootPlayerFolder: parentFolder.isRootPlayerFolder,
-              }}
+            <Tooltip title={t("notes.toolbar.move-folder", "Move Folder")}>
+              <IconButton onClick={() => setMoveDialogOpen(true)}>
+                <MoveIcon />
+              </IconButton>
+            </Tooltip>
+          )}
+          {parentFolderId && (
+            <MoveDialog
+              open={moveDialogOpen}
+              onClose={() => setMoveDialogOpen(false)}
+              item={{ type: "folder", id: folderId, parentFolderId }}
             />
           )}
+          {!isImmutableFolder &&
+            parentFolder &&
+            parentFolderId &&
+            gameType !== GameType.Solo && (
+              <Tooltip title={t("notes.toolbar.share-folder", "Share Folder")}>
+                <IconButton onClick={() => setShareDialogOpen(true)}>
+                  <ShareIcon />
+                </IconButton>
+              </Tooltip>
+            )}
+          <ShareDialog
+            open={shareDialogOpen}
+            onClose={() => setShareDialogOpen(false)}
+            item={{ type: "folder", id: folderId }}
+          />
           {!isImmutableFolder && canDelete && folder.parentFolderId && (
-            <FolderDeleteButton
-              parentFolderId={folder.parentFolderId}
-              folderId={folderId}
-              name={folder.name ?? ""}
-            />
+            <FolderDeleteButton folderId={folderId} />
           )}
 
           <Box flexGrow={1} display="flex" justifyContent="flex-end" gap={1}>

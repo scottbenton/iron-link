@@ -1,4 +1,5 @@
 import DeleteIcon from "@mui/icons-material/Delete";
+import MoveIcon from "@mui/icons-material/DriveFileMove";
 import RenameIcon from "@mui/icons-material/DriveFileRenameOutline";
 import BoldIcon from "@mui/icons-material/FormatBold";
 import ItalicIcon from "@mui/icons-material/FormatItalic";
@@ -7,6 +8,7 @@ import NumberedListIcon from "@mui/icons-material/FormatListNumbered";
 import QuoteIcon from "@mui/icons-material/FormatQuote";
 import StrikeThroughIcon from "@mui/icons-material/FormatStrikethrough";
 import HorizontalRuleIcon from "@mui/icons-material/HorizontalRule";
+import ShareIcon from "@mui/icons-material/Share";
 import {
   Box,
   IconButton,
@@ -19,10 +21,15 @@ import { useConfirm } from "material-ui-confirm";
 import { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
 
+import { useGamePermissions } from "pages/games/gamePageLayout/hooks/usePermissions";
+
 import { useNotesStore } from "stores/notes.store";
 
+import { GameType } from "repositories/game.repository";
+
 import { NameItemDialog } from "../FolderView/NameItemDialog";
-import { ShareButton } from "../ShareButton";
+import { MoveDialog } from "../MoveDialog";
+import { ShareDialog } from "../ShareDialog";
 import { TextTypeDropdown } from "./TextTypeDropdown";
 import { NotePermissions } from "./useNotePermission";
 
@@ -36,6 +43,8 @@ export function NoteViewToolbar(props: NoteToolbarContentProps) {
   const { openNoteId, editor, permissions } = props;
 
   const { t } = useTranslation();
+
+  const { gameType } = useGamePermissions();
 
   const setOpenNote = useNotesStore((store) => store.setOpenItem);
   const note = useNotesStore((store) => {
@@ -91,6 +100,9 @@ export function NoteViewToolbar(props: NoteToolbarContentProps) {
     },
     [updateNoteName, openNoteId],
   );
+
+  const [shareDialogOpen, setShareDialogOpen] = useState(false);
+  const [moveDialogOpen, setMoveDialogOpen] = useState(false);
 
   return (
     <>
@@ -204,27 +216,37 @@ export function NoteViewToolbar(props: NoteToolbarContentProps) {
           name={noteName}
         />
         {parentFolder && parentFolderId && (
-          <ShareButton
-            item={{
-              type: "note",
-              id: openNoteId,
-              ownerId: note.creator,
-            }}
-            currentPermissions={{
-              editPermissions:
-                note.editPermissions ?? parentFolder.editPermissions,
-              readPermissions:
-                note.readPermissions ?? parentFolder.readPermissions,
-            }}
-            parentFolder={{
-              id: parentFolderId,
-              name: parentFolder.name,
-              editPermissions: parentFolder.editPermissions,
-              readPermissions: parentFolder.readPermissions,
-              isRootPlayerFolder: parentFolder.isRootPlayerFolder,
-            }}
+          <Tooltip title={t("notes.toolbar.move-folder", "Move Folder")}>
+            <IconButton onClick={() => setMoveDialogOpen(true)}>
+              <MoveIcon />
+            </IconButton>
+          </Tooltip>
+        )}
+        {parentFolderId && (
+          <MoveDialog
+            open={moveDialogOpen}
+            onClose={() => setMoveDialogOpen(false)}
+            item={{ type: "note", id: openNoteId, parentFolderId }}
           />
         )}
+        {parentFolder && parentFolderId && gameType !== GameType.Solo && (
+          <Tooltip
+            title={t("note.editor-toolbar.share-note", "Share Note")}
+            enterDelay={300}
+          >
+            <IconButton onClick={() => setShareDialogOpen(true)}>
+              <ShareIcon />
+            </IconButton>
+          </Tooltip>
+        )}
+        <ShareDialog
+          item={{
+            type: "note",
+            id: openNoteId,
+          }}
+          open={shareDialogOpen}
+          onClose={() => setShareDialogOpen(false)}
+        />
         {permissions.canDelete && (
           <Tooltip
             title={t("note.editor-toolbar.delete-note", "Delete Note")}

@@ -6,10 +6,11 @@ import {
 
 import { GamePermission } from "stores/game.store";
 
-import { supabase } from "lib/supabase.lib";
+import { SUPABASE_URL, supabase } from "lib/supabase.lib";
 
 import {
   StorageError,
+  UnknownError,
   convertUnknownErrorToStorageError,
 } from "./errors/storageErrors";
 
@@ -41,12 +42,10 @@ export class NotesRepository {
         edit_permissions,
         created_at,
         order,
-        note_folders(
-          game_id
-        )
+        game_id
         `,
       )
-      .eq("note_folders.game_id", gameId);
+      .eq("game_id", gameId);
 
     if (permissions === GamePermission.Viewer) {
       query.eq("read_permissions", "public");
@@ -249,12 +248,63 @@ export class NotesRepository {
     });
   }
 
+  public static updateNoteBeaconRequest(
+    token: string,
+    noteId: string,
+    updatedNote: NoteUpdateDTO,
+  ): Promise<void> {
+    return new Promise((resolve, reject) => {
+      const endpoint = `${SUPABASE_URL}/rest/v1/notes?id=eq.${noteId}`;
+      fetch(endpoint, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+          Prefer: "return=minimal",
+        },
+        body: JSON.stringify(updatedNote),
+        keepalive: true,
+      }).then((res) => {
+        if (!res.ok) {
+          console.error(res);
+          reject(new UnknownError("Failed to save note beacon request"));
+        }
+        resolve();
+      });
+    });
+  }
+
+  public static massUpdateNotes(
+    noteIds: string[],
+    updatedNote: NoteUpdateDTO,
+  ): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.notes()
+        .update(updatedNote)
+        .in("id", noteIds)
+        .then(({ error }) => {
+          if (error) {
+            console.error(error);
+            reject(
+              convertUnknownErrorToStorageError(
+                error,
+                `Notes could not be updated`,
+              ),
+            );
+          } else {
+            resolve();
+          }
+        });
+    });
+  }
+
   public static deleteNote(noteId: string): Promise<void> {
     return new Promise((resolve, reject) => {
       this.notes()
         .delete()
         .eq("id", noteId)
-        .then(({ error }) => {
+        .then((result) => {
+          const error = result.error;
           if (error) {
             console.error(error);
             reject(
