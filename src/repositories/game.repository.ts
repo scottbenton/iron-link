@@ -126,9 +126,10 @@ export class GameRepostiory {
   public static async getUsersGames(userId: string): Promise<GameDTO[]> {
     return new Promise((resolve, reject) => {
       this.games()
-        .select("*, game_players(*)")
+        .select("*, game_players!inner(*)")
         .eq("game_players.user_id", userId)
         .then(({ data, error }) => {
+          console.debug(data);
           if (error) {
             console.error(error);
             reject(
