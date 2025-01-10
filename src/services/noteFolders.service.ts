@@ -5,6 +5,7 @@ import {
   NoteFolderDTO,
   NoteFoldersRepository,
 } from "repositories/noteFolders.repository";
+import { NotesRepository } from "repositories/notes.repository";
 import { EditPermissions, ReadPermissions } from "repositories/shared.types";
 
 export type INoteFolder = {
@@ -80,13 +81,29 @@ export class NoteFoldersService {
   }
 
   public static updateFolderPermissions(
-    folderId: string,
+    folderIds: string[],
+    noteIds: string[],
     readPermissions: ReadPermissions,
     editPermissions: EditPermissions,
   ): Promise<void> {
-    return NoteFoldersRepository.updateNoteFolder(folderId, {
-      read_permissions: readPermissions,
-      edit_permissions: editPermissions,
+    return new Promise((resolve, reject) => {
+      const promises: Promise<void>[] = [];
+      promises.push(
+        NoteFoldersRepository.massUpdateNoteFolders(folderIds, {
+          read_permissions: readPermissions,
+          edit_permissions: editPermissions,
+        }),
+      );
+      promises.push(
+        NotesRepository.massUpdateNotes(noteIds, {
+          read_permissions: readPermissions,
+          edit_permissions: editPermissions,
+        }),
+      );
+
+      Promise.all(promises)
+        .then(() => resolve())
+        .catch(reject);
     });
   }
   public static updateParentFolder(

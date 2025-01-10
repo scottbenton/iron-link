@@ -2,19 +2,19 @@ import { supabase } from "lib/supabase.lib";
 
 export class AuthService {
   public static listenToAuthState(
-    onUserFound: (userId: string) => void,
-    onUserNotFound: () => void
+    onUserFound: (userId: string, accessToken: string) => void,
+    onUserNotFound: () => void,
   ): () => void {
-    const result = supabase.auth.onAuthStateChange((_event, session) => { 
+    const result = supabase.auth.onAuthStateChange((_event, session) => {
       if (session) {
-        onUserFound(session.user.id);
+        onUserFound(session.user.id, session.access_token);
       } else {
         onUserNotFound();
       }
     });
     return () => result.data.subscription.unsubscribe();
   }
-    public static async sendOTPCodeToEmail(email: string): Promise<void> {
+  public static async sendOTPCodeToEmail(email: string): Promise<void> {
     try {
       const result = await supabase.auth.signInWithOtp({
         email,

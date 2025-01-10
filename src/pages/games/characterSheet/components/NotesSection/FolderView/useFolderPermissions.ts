@@ -1,15 +1,15 @@
 import { useNotesStore } from "stores/notes.store";
 
-export interface NotePermissions {
+export interface FolderPermissions {
   canChangePermissions: boolean;
   canEdit: boolean;
   canDelete: boolean;
 }
 
-export function useNotePermission(noteId: string): NotePermissions {
+export function useFolderPermission(folderId: string): FolderPermissions {
   return useNotesStore((store) => {
     return (
-      store.noteState.permissions[noteId] ?? {
+      store.folderState.permissions[folderId] ?? {
         canChangePermissions: false,
         canEdit: false,
         canDelete: false,
