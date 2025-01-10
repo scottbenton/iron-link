@@ -133,10 +133,19 @@ export class NotesService {
     noteId: string,
     noteContent: Uint8Array,
     noteContentText: string,
-    isBeaconRequest?: boolean,
   ): Promise<void> {
-    console.debug("WAS BEACON REQUEST", isBeaconRequest);
     return NotesRepository.updateNote(noteId, {
+      note_content_bytes: this.uint8ArrayToDatabase(noteContent),
+      note_content_text: noteContentText,
+    });
+  }
+  public static async updateNoteContentBeacon(
+    noteId: string,
+    noteContent: Uint8Array,
+    noteContentText: string,
+    token: string,
+  ): Promise<void> {
+    return NotesRepository.updateNoteBeaconRequest(token, noteId, {
       note_content_bytes: this.uint8ArrayToDatabase(noteContent),
       note_content_text: noteContentText,
     });

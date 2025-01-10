@@ -143,8 +143,10 @@ export function useAutoSaveRtcEditor(params: {
     };
 
     document.addEventListener("visibilitychange", onUnload);
+    window.addEventListener("beforeunload", onUnload);
     return () => {
       document.removeEventListener("visibilitychange", onUnload);
+      window.removeEventListener("beforeunload", onUnload);
     };
   }, [docAndProvider, documentId, handleSave]);
 

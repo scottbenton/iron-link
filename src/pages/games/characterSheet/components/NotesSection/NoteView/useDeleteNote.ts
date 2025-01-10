@@ -34,7 +34,6 @@ export function useDeleteNote() {
             if (currentItem?.type === "note" && currentItem.noteId === noteId) {
               setOpenItem("folder", parentFolderId);
             }
-            console.debug("DELETING NOTE");
             deleteNote(noteId).catch(() => {});
           })
           .catch(() => {});

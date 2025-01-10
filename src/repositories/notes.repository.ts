@@ -6,10 +6,11 @@ import {
 
 import { GamePermission } from "stores/game.store";
 
-import { supabase } from "lib/supabase.lib";
+import { SUPABASE_URL, supabase } from "lib/supabase.lib";
 
 import {
   StorageError,
+  UnknownError,
   convertUnknownErrorToStorageError,
 } from "./errors/storageErrors";
 
@@ -244,6 +245,32 @@ export class NotesRepository {
             resolve();
           }
         });
+    });
+  }
+
+  public static updateNoteBeaconRequest(
+    token: string,
+    noteId: string,
+    updatedNote: NoteUpdateDTO,
+  ): Promise<void> {
+    return new Promise((resolve, reject) => {
+      const endpoint = `${SUPABASE_URL}/rest/v1/notes?id=eq.${noteId}`;
+      fetch(endpoint, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+          Prefer: "return=minimal",
+        },
+        body: JSON.stringify(updatedNote),
+        keepalive: true,
+      }).then((res) => {
+        if (!res.ok) {
+          console.error(res);
+          reject(new UnknownError("Failed to save note beacon request"));
+        }
+        resolve();
+      });
     });
   }
 

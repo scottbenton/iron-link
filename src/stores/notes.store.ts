@@ -10,7 +10,7 @@ import { EditPermissions, ReadPermissions } from "repositories/shared.types";
 import { INoteFolder, NoteFoldersService } from "services/noteFolders.service";
 import { INote, INoteContent, NotesService } from "services/notes.service";
 
-import { useUID } from "./auth.store";
+import { useAuthStore, useUID } from "./auth.store";
 import { GamePermission } from "./game.store";
 
 interface Permissions {
@@ -254,12 +254,16 @@ export const useNotesStore = createWithEqualityFn<
     },
 
     updateNoteContent: (noteId, content, contentString, isBeaconRequest) => {
-      return NotesService.updateNoteContent(
-        noteId,
-        content,
-        contentString,
-        isBeaconRequest,
-      );
+      const token = useAuthStore.getState().token;
+      if (isBeaconRequest && token) {
+        return NotesService.updateNoteContentBeacon(
+          noteId,
+          content,
+          contentString,
+          token,
+        );
+      }
+      return NotesService.updateNoteContent(noteId, content, contentString);
     },
 
     setOpenItem: (type, id) => {
@@ -450,8 +454,6 @@ export const useNotesStore = createWithEqualityFn<
       const editPermissions = updatePermissions
         ? parentFolder.editPermissions
         : note.editPermissions;
-
-      console.debug(order);
 
       return NotesService.updateNoteParentFolder(
         noteId,

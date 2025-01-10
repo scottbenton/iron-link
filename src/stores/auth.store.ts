@@ -14,6 +14,7 @@ export enum AuthStatus {
 interface AuthState {
   status: AuthStatus;
   uid: string | undefined;
+  token: string | undefined;
 }
 interface AuthActions {
   subscribeToAuthStatus: () => () => void;
@@ -26,19 +27,22 @@ export const useAuthStore = createWithEqualityFn<AuthState & AuthActions>()(
   immer((set) => ({
     status: AuthStatus.Loading,
     uid: undefined,
+    token: undefined,
 
     subscribeToAuthStatus: () => {
       return AuthService.listenToAuthState(
-        (uid) => {
+        (uid, accessToken) => {
           set((state) => {
             state.status = AuthStatus.Authenticated;
             state.uid = uid;
+            state.token = accessToken;
           });
         },
         () => {
           set((state) => {
             state.status = AuthStatus.Unauthenticated;
             state.uid = undefined;
+            state.token = undefined;
           });
         },
       );

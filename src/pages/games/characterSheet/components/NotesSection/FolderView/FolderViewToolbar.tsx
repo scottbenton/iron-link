@@ -1,4 +1,5 @@
 import FolderIcon from "@mui/icons-material/CreateNewFolder";
+import MoveIcon from "@mui/icons-material/DriveFileMove";
 import RenameIcon from "@mui/icons-material/DriveFileRenameOutline";
 import DocumentIcon from "@mui/icons-material/NoteAdd";
 import ShareIcon from "@mui/icons-material/Share";
@@ -15,6 +16,7 @@ import { useNotesStore } from "stores/notes.store";
 import { GameType } from "repositories/game.repository";
 
 import { NoteToolbar } from "../Layout";
+import { MoveDialog } from "../MoveDialog";
 import { ShareDialog } from "../ShareDialog";
 import { FolderDeleteButton } from "./FolderDeleteButton";
 import { NameItemDialog } from "./NameItemDialog";
@@ -67,6 +69,7 @@ export function FolderViewToolbar(props: FolderViewToolbarProps) {
   const updateNoteFolderName = useNotesStore((store) => store.updateFolderName);
 
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
+  const [moveDialogOpen, setMoveDialogOpen] = useState(false);
 
   // Something's gone wrong, lets stop before we break things
   if (!folder || folderId === FAKE_ROOT_NOTE_FOLDER_KEY) return null;
@@ -113,6 +116,20 @@ export function FolderViewToolbar(props: FolderViewToolbarProps) {
                 <RenameIcon />
               </IconButton>
             </Tooltip>
+          )}
+          {!isImmutableFolder && parentFolder && parentFolderId && (
+            <Tooltip title={t("notes.toolbar.move-folder", "Move Folder")}>
+              <IconButton onClick={() => setMoveDialogOpen(true)}>
+                <MoveIcon />
+              </IconButton>
+            </Tooltip>
+          )}
+          {parentFolderId && (
+            <MoveDialog
+              open={moveDialogOpen}
+              onClose={() => setMoveDialogOpen(false)}
+              item={{ type: "folder", id: folderId, parentFolderId }}
+            />
           )}
           {!isImmutableFolder &&
             parentFolder &&

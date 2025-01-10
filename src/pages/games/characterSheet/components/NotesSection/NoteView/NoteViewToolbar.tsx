@@ -1,4 +1,5 @@
 import DeleteIcon from "@mui/icons-material/Delete";
+import MoveIcon from "@mui/icons-material/DriveFileMove";
 import RenameIcon from "@mui/icons-material/DriveFileRenameOutline";
 import BoldIcon from "@mui/icons-material/FormatBold";
 import ItalicIcon from "@mui/icons-material/FormatItalic";
@@ -27,6 +28,7 @@ import { useNotesStore } from "stores/notes.store";
 import { GameType } from "repositories/game.repository";
 
 import { NameItemDialog } from "../FolderView/NameItemDialog";
+import { MoveDialog } from "../MoveDialog";
 import { ShareDialog } from "../ShareDialog";
 import { TextTypeDropdown } from "./TextTypeDropdown";
 import { NotePermissions } from "./useNotePermission";
@@ -100,6 +102,7 @@ export function NoteViewToolbar(props: NoteToolbarContentProps) {
   );
 
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
+  const [moveDialogOpen, setMoveDialogOpen] = useState(false);
 
   return (
     <>
@@ -212,6 +215,20 @@ export function NoteViewToolbar(props: NoteToolbarContentProps) {
           itemLabel="Note"
           name={noteName}
         />
+        {parentFolder && parentFolderId && (
+          <Tooltip title={t("notes.toolbar.move-folder", "Move Folder")}>
+            <IconButton onClick={() => setMoveDialogOpen(true)}>
+              <MoveIcon />
+            </IconButton>
+          </Tooltip>
+        )}
+        {parentFolderId && (
+          <MoveDialog
+            open={moveDialogOpen}
+            onClose={() => setMoveDialogOpen(false)}
+            item={{ type: "note", id: openNoteId, parentFolderId }}
+          />
+        )}
         {parentFolder && parentFolderId && gameType !== GameType.Solo && (
           <Tooltip
             title={t("note.editor-toolbar.share-note", "Share Note")}

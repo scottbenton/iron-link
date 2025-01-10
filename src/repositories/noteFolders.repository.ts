@@ -185,7 +185,6 @@ export class NoteFoldersRepository {
     updatedNoteFolder: NoteFolderUpdateDTO,
   ): Promise<void> {
     return new Promise((resolve, reject) => {
-      console.debug(`Updating ${folderIds} folders to ${updatedNoteFolder}`);
       this.noteFolders()
         .update(updatedNoteFolder)
         .in("id", folderIds)
