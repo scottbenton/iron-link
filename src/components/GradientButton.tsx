@@ -1,7 +1,8 @@
 import { Box, ButtonBase, SxProps, Theme, Typography } from "@mui/material";
+import { useMemo } from "react";
 
 import { GradientBox } from "./GradientBox";
-import { LinkComponent } from "./LinkComponent";
+import { ButtonBaseLink } from "./LinkComponent";
 
 export interface GradientButtonProps {
   href?: string;
@@ -14,15 +15,37 @@ export interface GradientButtonProps {
 
 export function GradientButton(props: GradientButtonProps) {
   const { sx, children, href, onClick, type = "button", disabled } = props;
-  return (
-    <ButtonBase
-      LinkComponent={href ? LinkComponent : undefined}
-      href={href ?? ""}
-      focusRipple
-      disabled={disabled}
-      type={type}
-      sx={[
-        (theme) => ({
+
+  const contents = useMemo(() => {
+    return (
+      <GradientBox className="gradient-box">
+        <Box
+          className="inner-box"
+          px={1.75}
+          py={0.75}
+          borderRadius={0.75}
+          bgcolor="grey.900"
+          sx={(theme) => ({
+            transition: theme.transitions.create(["padding", "border-radius"], {
+              duration: 150,
+              easing: theme.transitions.easing.easeInOut,
+            }),
+          })}
+        >
+          <Typography variant="button" color="inherit">
+            {children}
+          </Typography>
+        </Box>
+      </GradientBox>
+    );
+  }, [children]);
+
+  const buttonProps = useMemo(
+    () => ({
+      focusRipple: true,
+      disabled,
+      sx: [
+        (theme: Theme) => ({
           color: "common.white",
           borderRadius: 1,
           overflow: "hidden",
@@ -49,28 +72,22 @@ export function GradientButton(props: GradientButtonProps) {
           },
         }),
         ...(Array.isArray(sx) ? sx : [sx]),
-      ]}
-      onClick={onClick}
-    >
-      <GradientBox className="gradient-box">
-        <Box
-          className="inner-box"
-          px={1.75}
-          py={0.75}
-          borderRadius={0.75}
-          bgcolor="grey.900"
-          sx={(theme) => ({
-            transition: theme.transitions.create(["padding", "border-radius"], {
-              duration: 150,
-              easing: theme.transitions.easing.easeInOut,
-            }),
-          })}
-        >
-          <Typography variant="button" color="inherit">
-            {children}
-          </Typography>
-        </Box>
-      </GradientBox>
+      ],
+    }),
+    [disabled, sx],
+  );
+
+  if (href) {
+    return (
+      <ButtonBaseLink to={href} {...buttonProps}>
+        {contents}
+      </ButtonBaseLink>
+    );
+  }
+
+  return (
+    <ButtonBase {...buttonProps} onClick={onClick} type={type}>
+      {contents}
     </ButtonBase>
   );
 }

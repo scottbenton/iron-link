@@ -2,7 +2,7 @@ import { Typography } from "@mui/material";
 import { Box, Button } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
-import { useRollOracleAndAddToLog } from "pages/games/hooks/useRollOracleAndAddToLog";
+import { useRollOracleAndAddToLog } from "components/pages/games/hooks/useRollOracleAndAddToLog";
 
 import { askTheOracleIds, askTheOracleLabels } from "data/askTheOracle";
 

@@ -1,12 +1,19 @@
+import { RouterProvider, createRouter } from "@tanstack/react-router";
 import { ConfirmProvider } from "material-ui-confirm";
 import { useTranslation } from "react-i18next";
-import { RouterProvider } from "react-router-dom";
-
-import { router } from "pages/routes";
+import { routeTree } from "routeTree.gen";
 
 import { HeadProvider } from "./HeadProvider";
 import { SnackbarProvider } from "./SnackbarProvider";
 import { ThemeProvider } from "./ThemeProvider";
+
+const router = createRouter({ routeTree, defaultViewTransition: true });
+// Register the router instance for type safety
+declare module "@tanstack/react-router" {
+  interface Register {
+    router: typeof router;
+  }
+}
 
 export function Providers() {
   const { t } = useTranslation();

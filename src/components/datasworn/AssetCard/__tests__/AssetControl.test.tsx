@@ -2,7 +2,7 @@ import { Datasworn } from "@datasworn/core";
 import { fireEvent, render, screen, within } from "@testing-library/react";
 import { MockedFunction, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { useRollStatAndAddToLog } from "pages/games/hooks/useRollStatAndAddToLog";
+import { useRollStatAndAddToLog } from "components/pages/games/hooks/useRollStatAndAddToLog";
 
 import { TestWrapper } from "tests/TestWrapper";
 
