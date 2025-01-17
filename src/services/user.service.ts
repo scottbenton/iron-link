@@ -11,11 +11,11 @@ export class UserService {
     return this.convertUserDTOToUser(userDTO);
   }
 
-  public static async setUserName(
+  public static setUserName(
     userId: string,
     displayName: string,
-  ): Promise<void> {
-    await UserRepository.updateUser(userId, { display_name: displayName });
+  ): Promise<string | null> {
+    return UserRepository.updateUser(userId, { display_name: displayName });
   }
 
   private static convertUserDTOToUser(userDTO: UserDTO): IUser {

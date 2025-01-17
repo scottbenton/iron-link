@@ -21,6 +21,7 @@ interface UserStoreState {
 
 interface UserStoreActions {
   loadUserDetails: (uid: string) => void;
+  setUserName: (uid: string, name: string) => Promise<void>;
 }
 
 export const useUsersStore = createWithEqualityFn<
@@ -49,6 +50,21 @@ export const useUsersStore = createWithEqualityFn<
             });
           });
       }
+    },
+    setUserName: (uid, name) => {
+      return new Promise((resolve, reject) => {
+        UserService.setUserName(uid, name)
+          .then((newName) => {
+            set((state) => {
+              state.users[uid] = {
+                loading: false,
+                user: { name: newName },
+              };
+            });
+            resolve();
+          })
+          .catch(reject);
+      });
     },
   })),
   deepEqual,
@@ -81,6 +97,40 @@ export function useUserName(uid: string | null) {
       return t("common.unknown", "Unknown");
     } else {
       return user.user.name;
+    }
+  });
+}
+
+export function useUserNameWithStatus(uid: string | null): {
+  loading: boolean;
+  name: string | null;
+} {
+  useLoadUserDetails(uid);
+
+  return useUsersStore((store) => {
+    if (!uid) {
+      return {
+        name: null,
+        loading: false,
+      };
+    }
+    const user = store.users[uid];
+
+    if (!user || user.loading) {
+      return {
+        name: null,
+        loading: true,
+      };
+    } else if (!user.user?.name) {
+      return {
+        name: null,
+        loading: false,
+      };
+    } else {
+      return {
+        name: user.user.name,
+        loading: false,
+      };
     }
   });
 }

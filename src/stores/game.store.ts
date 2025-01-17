@@ -12,6 +12,7 @@ import {
 import { GameType } from "repositories/game.repository";
 
 import { IAsset } from "services/asset.service";
+import { CharacterService } from "services/character.service";
 import {
   GamePlayerRole,
   GameService,
@@ -53,6 +54,18 @@ interface GameStoreActions {
     value: number,
   ) => Promise<void>;
   deleteGame: (gameId: string) => Promise<void>;
+
+  updateGamePlayerRole: (
+    gameId: string,
+    gamePlayerId: string,
+    role: GamePlayerRole,
+  ) => Promise<void>;
+
+  removePlayerFromGame: (
+    gameId: string,
+    gamePlayerId: string,
+    characterIds: string[],
+  ) => Promise<void>;
 }
 
 const defaultGameStoreState: GameStoreState = {
@@ -145,6 +158,25 @@ export const useGameStore = createWithEqualityFn<
     },
     deleteGame: (gameId) => {
       return GameService.deleteGame(gameId);
+    },
+    updateGamePlayerRole: (gameId, gamePlayerId, role) => {
+      if (role === GamePlayerRole.Guide) {
+        return GameService.addGuide(gameId, gamePlayerId);
+      }
+      return GameService.removeGuide(gameId, gamePlayerId);
+    },
+    removePlayerFromGame: (gameId, gamePlayerId, characterIds) => {
+      const promises: Promise<void>[] = [];
+      characterIds.forEach((characterId) => {
+        promises.push(CharacterService.removeCharacterFromGame(characterId));
+      });
+      promises.push(GameService.removePlayer(gameId, gamePlayerId));
+
+      return new Promise((resolve, reject) => {
+        Promise.all(promises)
+          .then(() => resolve())
+          .catch(reject);
+      });
     },
   })),
   deepEqual,

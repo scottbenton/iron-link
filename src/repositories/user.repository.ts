@@ -35,11 +35,13 @@ export class UserRepository {
   public static async updateUser(
     uid: string,
     user: UpdateUserDTO,
-  ): Promise<void> {
-    return new Promise<void>((resolve, reject) => {
+  ): Promise<string | null> {
+    return new Promise((resolve, reject) => {
       this.users()
         .update(user)
         .eq("id", uid)
+        .select()
+        .single()
         .then((response) => {
           if (response.error) {
             console.error(response.error);
@@ -50,7 +52,7 @@ export class UserRepository {
               ),
             );
           } else {
-            resolve();
+            resolve(response.data.display_name);
           }
         });
     });

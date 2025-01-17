@@ -1,3 +1,4 @@
+import { Button, ButtonProps } from "@mui/material";
 import {
   Box,
   BoxProps,
@@ -94,4 +95,18 @@ const MuiIconLinkComponent = forwardRef<HTMLAnchorElement, MuiIconLinkProps>(
 const CreatedIconLink = createLink(MuiIconLinkComponent);
 export const IconLink: LinkComponent<typeof MuiIconLinkComponent> = (props) => {
   return <CreatedIconLink preload={"intent"} {...props} />;
+};
+
+export type MuiButtonLinkProps = Omit<ButtonProps<"a">, "href" | "component">;
+const MuiButtonLinkComponent = forwardRef<
+  HTMLAnchorElement,
+  MuiButtonLinkProps
+>((props, ref) => {
+  return <Button component={"a"} ref={ref} {...props} />;
+});
+const CreatedButtonLink = createLink(MuiButtonLinkComponent);
+export const ButtonLink: LinkComponent<typeof MuiButtonLinkComponent> = (
+  props,
+) => {
+  return <CreatedButtonLink preload={"intent"} {...props} />;
 };
