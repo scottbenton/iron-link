@@ -14,7 +14,7 @@ export type ThemeConfig = Record<
 
 const BORDER_RADIUS = 8;
 
-export const config: ThemeConfig = {
+export const themeConfig: ThemeConfig = {
   [ColorScheme.Default]: {
     primary: {
       light: "#eab308",
@@ -141,7 +141,7 @@ export function getTheme(colorScheme: ColorScheme): Theme {
         disabledBackground: grey[950] + "1f",
         focus: grey[950] + "1f",
       },
-      ...config[colorScheme],
+      ...themeConfig[colorScheme],
       ...sharedStatusColors,
     },
     transitions: {
@@ -176,7 +176,7 @@ export function getTheme(colorScheme: ColorScheme): Theme {
             disabledBackground: grey[100] + "1f",
             focus: grey[100] + "1f",
           },
-          ...config[colorScheme],
+          ...themeConfig[colorScheme],
           ...sharedStatusColors,
         },
       },

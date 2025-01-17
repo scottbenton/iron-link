@@ -9,9 +9,15 @@ import {
   defaultExpansions,
 } from "data/datasworn.packages";
 
-import { GameType } from "repositories/game.repository";
+import {
+  ExpansionConfig,
+  GameType,
+  RulesetConfig,
+} from "repositories/game.repository";
+import { ColorScheme } from "repositories/shared.types";
 
 import { IAsset } from "services/asset.service";
+import { CharacterService } from "services/character.service";
 import {
   GamePlayerRole,
   GameService,
@@ -47,12 +53,34 @@ interface GameStoreState {
 interface GameStoreActions {
   listenToGame: (gameId: string) => () => void;
   setPermissions: (permissions: GamePermission) => void;
+  updateGameName: (gameId: string, newName: string) => Promise<void>;
   updateConditionMeter: (
     gameId: string,
     conditionMeterKey: string,
     value: number,
   ) => Promise<void>;
+  updateGameColorScheme: (
+    gameId: string,
+    colorScheme: ColorScheme | null,
+  ) => Promise<void>;
   deleteGame: (gameId: string) => Promise<void>;
+  updateGameRulesPackages: (
+    gameId: string,
+    rulesets: RulesetConfig,
+    expansions: ExpansionConfig,
+  ) => Promise<void>;
+
+  updateGamePlayerRole: (
+    gameId: string,
+    gamePlayerId: string,
+    role: GamePlayerRole,
+  ) => Promise<void>;
+
+  removePlayerFromGame: (
+    gameId: string,
+    gamePlayerId: string,
+    characterIds: string[],
+  ) => Promise<void>;
 }
 
 const defaultGameStoreState: GameStoreState = {
@@ -143,8 +171,39 @@ export const useGameStore = createWithEqualityFn<
         });
       });
     },
+    updateGameName: (gameId, newName) => {
+      return GameService.changeName(gameId, newName);
+    },
+    updateGameColorScheme: (gameId, colorScheme) => {
+      return GameService.updateColorScheme(
+        gameId,
+        colorScheme ?? ColorScheme.Default,
+      );
+    },
+    updateGameRulesPackages: (gameId, rulesets, expansions) => {
+      return GameService.updateRules(gameId, rulesets, expansions);
+    },
     deleteGame: (gameId) => {
       return GameService.deleteGame(gameId);
+    },
+    updateGamePlayerRole: (gameId, gamePlayerId, role) => {
+      if (role === GamePlayerRole.Guide) {
+        return GameService.addGuide(gameId, gamePlayerId);
+      }
+      return GameService.removeGuide(gameId, gamePlayerId);
+    },
+    removePlayerFromGame: (gameId, gamePlayerId, characterIds) => {
+      const promises: Promise<void>[] = [];
+      characterIds.forEach((characterId) => {
+        promises.push(CharacterService.removeCharacterFromGame(characterId));
+      });
+      promises.push(GameService.removePlayer(gameId, gamePlayerId));
+
+      return new Promise((resolve, reject) => {
+        Promise.all(promises)
+          .then(() => resolve())
+          .catch(reject);
+      });
     },
   })),
   deepEqual,

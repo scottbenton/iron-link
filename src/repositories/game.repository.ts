@@ -37,7 +37,7 @@ export interface LegacyGameDTO {
 export type GameDTO = Tables<"games">;
 export type GameDTOUpdate = Partial<Omit<GameDTO, "id" | "created_at">>;
 
-export class GameRepostiory {
+export class GameRepository {
   public static games = () => supabase.from("games");
 
   public static collectionName = "games";

@@ -11,11 +11,11 @@ import { useTranslation } from "react-i18next";
 
 import { useGamePermissions } from "components/pages/games/gamePageLayout/hooks/usePermissions";
 
-import { useCharacterMenuState } from "stores/characterMenuState.store";
 import {
   CharacterPermissionType,
   useGameCharacter,
 } from "stores/gameCharacters.store";
+import { useMenuState } from "stores/menuState";
 
 import { useCharacterIdOptional } from "../../hooks/useCharacterId";
 import { DeleteCharacterButton } from "./DeleteCharacterButton";
@@ -38,13 +38,13 @@ export function CharacterMenuItems(props: CharacterMenuItemsProps) {
     useGameCharacter((character) => character?.name) ??
     t("common.loading", "Loading");
 
-  const setIsCharacterDetailsDialogOpen = useCharacterMenuState(
+  const setIsCharacterDetailsDialogOpen = useMenuState(
     (store) => store.setIsCharacterDetailsDialogOpen,
   );
-  const setIsCharacterStatsDialogOpen = useCharacterMenuState(
+  const setIsCharacterStatsDialogOpen = useMenuState(
     (store) => store.setIsCharacterStatsDialogOpen,
   );
-  const setIsColorSchemeDialogOpen = useCharacterMenuState(
+  const setIsColorSchemeDialogOpen = useMenuState(
     (store) => store.setIsColorSchemeDialogOpen,
   );
 

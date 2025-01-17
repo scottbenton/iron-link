@@ -1,11 +1,11 @@
-import { useCharacterMenuState } from "stores/characterMenuState.store";
+import { useMenuState } from "stores/menuState";
 
 import { CharacterDetailsDialog } from "./CharacterDetailsDialog";
 import { CharacterStatsDialog } from "./CharacterStatsDialog";
 import { ColorSchemeDialog } from "./ColorSchemeDialog";
 
 export function CharacterMenuDialogs() {
-  const state = useCharacterMenuState();
+  const state = useMenuState();
 
   return (
     <>
