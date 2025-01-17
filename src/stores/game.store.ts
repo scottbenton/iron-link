@@ -9,7 +9,12 @@ import {
   defaultExpansions,
 } from "data/datasworn.packages";
 
-import { GameType } from "repositories/game.repository";
+import {
+  ExpansionConfig,
+  GameType,
+  RulesetConfig,
+} from "repositories/game.repository";
+import { ColorScheme } from "repositories/shared.types";
 
 import { IAsset } from "services/asset.service";
 import { CharacterService } from "services/character.service";
@@ -48,12 +53,22 @@ interface GameStoreState {
 interface GameStoreActions {
   listenToGame: (gameId: string) => () => void;
   setPermissions: (permissions: GamePermission) => void;
+  updateGameName: (gameId: string, newName: string) => Promise<void>;
   updateConditionMeter: (
     gameId: string,
     conditionMeterKey: string,
     value: number,
   ) => Promise<void>;
+  updateGameColorScheme: (
+    gameId: string,
+    colorScheme: ColorScheme | null,
+  ) => Promise<void>;
   deleteGame: (gameId: string) => Promise<void>;
+  updateGameRulesPackages: (
+    gameId: string,
+    rulesets: RulesetConfig,
+    expansions: ExpansionConfig,
+  ) => Promise<void>;
 
   updateGamePlayerRole: (
     gameId: string,
@@ -155,6 +170,18 @@ export const useGameStore = createWithEqualityFn<
           }
         });
       });
+    },
+    updateGameName: (gameId, newName) => {
+      return GameService.changeName(gameId, newName);
+    },
+    updateGameColorScheme: (gameId, colorScheme) => {
+      return GameService.updateColorScheme(
+        gameId,
+        colorScheme ?? ColorScheme.Default,
+      );
+    },
+    updateGameRulesPackages: (gameId, rulesets, expansions) => {
+      return GameService.updateRules(gameId, rulesets, expansions);
     },
     deleteGame: (gameId) => {
       return GameService.deleteGame(gameId);

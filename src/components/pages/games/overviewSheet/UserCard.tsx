@@ -1,4 +1,5 @@
 import { Box, Button, Card, Typography } from "@mui/material";
+import { useConfirm } from "material-ui-confirm";
 import { useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -67,6 +68,7 @@ export function UserCard(props: UserCardProps) {
   );
 
   const { error } = useSnackbar();
+  const confirm = useConfirm();
 
   const handleMakeGuide = useCallback(() => {
     updateGamePlayerRole(gameId, uid, GamePlayerRole.Guide).catch(() => {
@@ -76,13 +78,30 @@ export function UserCard(props: UserCardProps) {
 
   const handleKick = useCallback(() => {
     if (charactersByUser) {
-      removePlayerFromGame(gameId, uid, charactersByUser[uid] ?? []).catch(
-        () => {
-          error(t("game.overview.error", "Failed to kick user"));
-        },
-      );
+      confirm({
+        title: t(
+          "game.game-overview.remove-user-confirmation-title",
+          "Remove User",
+        ),
+        description: t(
+          "game.game-overview.remove-user-confirmation-text",
+          "Are you sure you want to remove this user?",
+        ),
+        confirmationText: t(
+          "game.game-overview.remove-user-confirmation-button",
+          "Remove User",
+        ),
+      })
+        .then(() => {
+          removePlayerFromGame(gameId, uid, charactersByUser[uid] ?? []).catch(
+            () => {
+              error(t("game.overview.error", "Failed to kick user"));
+            },
+          );
+        })
+        .catch(() => {});
     }
-  }, [removePlayerFromGame, gameId, uid, charactersByUser, error, t]);
+  }, [removePlayerFromGame, gameId, uid, charactersByUser, error, t, confirm]);
 
   return (
     <Card sx={{ mt: 1 }} variant="outlined">

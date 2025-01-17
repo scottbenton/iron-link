@@ -8,6 +8,8 @@ import {
   useLoadCharacterPortrait,
 } from "stores/character.store";
 
+import { ColorScheme } from "repositories/shared.types";
+
 export interface PortraitAvatarProps {
   characterId: string;
   name?: string;
@@ -23,6 +25,7 @@ export interface PortraitAvatarProps {
   colorful?: boolean;
   rounded?: boolean;
   darkBorder?: boolean;
+  colorSchemeBorder?: ColorScheme;
 }
 
 export function PortraitAvatar(props: PortraitAvatarProps) {
@@ -34,6 +37,7 @@ export function PortraitAvatar(props: PortraitAvatarProps) {
     size,
     darkBorder,
     rounded,
+    colorSchemeBorder,
   } = props;
 
   const filename = portraitSettings?.filename;
@@ -51,6 +55,7 @@ export function PortraitAvatar(props: PortraitAvatarProps) {
       portraitUrl={portraitUrl}
       name={name}
       loading={!name}
+      colorSchemeBorder={colorSchemeBorder}
     />
   );
 }

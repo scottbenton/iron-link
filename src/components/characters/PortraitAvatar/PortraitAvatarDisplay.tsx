@@ -2,7 +2,11 @@ import BackgroundIcon from "@mui/icons-material/Face";
 import { Box, Skeleton, Typography, TypographyVariant } from "@mui/material";
 import { useState } from "react";
 
+import { themeConfig } from "providers/ThemeProvider/themes/themeConfig";
+
 import { getHueFromString } from "lib/getHueFromString";
+
+import { ColorScheme } from "repositories/shared.types";
 
 export type AvatarSizes = "small" | "medium" | "large" | "huge";
 
@@ -37,6 +41,7 @@ export interface PortraitAvatarDisplayProps {
   portraitUrl?: string;
   name?: string;
   loading?: boolean;
+  colorSchemeBorder?: ColorScheme;
 }
 
 export function PortraitAvatarDisplay(props: PortraitAvatarDisplayProps) {
@@ -50,6 +55,7 @@ export function PortraitAvatarDisplay(props: PortraitAvatarDisplayProps) {
     portraitUrl,
     name,
     loading,
+    colorSchemeBorder,
   } = props;
 
   const [isTaller, setIsTaller] = useState<boolean>(true);
@@ -68,6 +74,10 @@ export function PortraitAvatarDisplay(props: PortraitAvatarDisplayProps) {
 
   const borderWidth = size === "huge" && darkBorder ? 12 : 2;
 
+  const colorSchemeBorderColor = colorSchemeBorder
+    ? themeConfig[colorSchemeBorder].primary.main
+    : undefined;
+
   return (
     <Box
       width={sizes[size]}
@@ -85,11 +95,13 @@ export function PortraitAvatarDisplay(props: PortraitAvatarDisplayProps) {
         justifyContent: "center",
         borderWidth,
         borderStyle: "solid",
-        borderColor: shouldShowColor
-          ? `hsl(${hue}, 60%, 40%)`
-          : darkBorder
-            ? theme.palette.grey[700]
-            : theme.palette.divider,
+        borderColor:
+          colorSchemeBorderColor ??
+          (shouldShowColor
+            ? `hsl(${hue}, 60%, 40%)`
+            : darkBorder
+              ? theme.palette.grey[700]
+              : theme.palette.divider),
         borderRadius: rounded ? "100%" : `${theme.shape.borderRadius}px`,
         "&>img": {
           width: isTaller ? `${100 * scale}%` : "auto",

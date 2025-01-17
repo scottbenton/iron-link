@@ -14,6 +14,7 @@ import { useGameCharactersStore } from "stores/gameCharacters.store";
 import { usePathConfig } from "lib/paths.lib";
 
 import { GameType } from "repositories/game.repository";
+import { ColorScheme } from "repositories/shared.types";
 
 import { GamePlayerRole } from "services/game.service";
 
@@ -30,6 +31,7 @@ export function CharactersAndUsersTab() {
       name: character.name,
       userId: character.uid,
       portraitSettings: character.profileImage,
+      colorScheme: character.colorScheme,
     })),
   );
 
@@ -60,7 +62,7 @@ export function CharactersAndUsersTab() {
         {t("game.overview.characters", "Characters")}
       </Typography>
       {characters.map((character) => (
-        <Card key={character.id}>
+        <Card key={character.id} sx={{ mt: 1 }} variant="outlined">
           <CardActionAreaLink
             to={pathConfig.gameCharacter}
             params={{ gameId, characterId: character.id }}
@@ -77,6 +79,7 @@ export function CharactersAndUsersTab() {
                 characterId={character.id}
                 name={character.name}
                 portraitSettings={character.portraitSettings ?? undefined}
+                colorSchemeBorder={character.colorScheme ?? ColorScheme.Default}
               />
               <Typography variant="h5" fontFamily="fontFamilyTitle" ml={2}>
                 {character.name}

@@ -9,6 +9,7 @@ import { useIsMobile } from "hooks/useIsMobile";
 import { AssetsSection } from "../characterSheet/components/AssetsSection";
 import { TracksSection } from "../characterSheet/components/TracksSection";
 import { CharactersAndUsersTab } from "./CharactersAndUsersTab";
+import { GameSettingsMenu } from "./gameSettings/GameSettingsMenu";
 
 enum Tabs {
   Characters = "characters",
@@ -50,6 +51,7 @@ export function GameOverviewSheet() {
           >
             {t("game.overview-sidebar.header", "Game Overview")}
           </Typography>
+          <GameSettingsMenu />
         </Box>
       )}
       <StyledTabs

@@ -2,7 +2,7 @@ import { StorageError } from "repositories/errors/storageErrors";
 import {
   ExpansionConfig,
   GameDTO,
-  GameRepostiory,
+  GameRepository,
   GameType,
   RulesetConfig,
 } from "repositories/game.repository";
@@ -42,7 +42,7 @@ export class GameService {
     rulesets: Record<string, boolean>,
     expansions: Record<string, Record<string, boolean>>,
   ): Promise<string> {
-    const gameId = await GameRepostiory.createGame(
+    const gameId = await GameRepository.createGame(
       gameName,
       gameType,
       rulesets,
@@ -79,7 +79,7 @@ export class GameService {
         isPlayer: true,
       };
     }
-    const result = await GameRepostiory.getGameInviteInfo(gameId);
+    const result = await GameRepository.getGameInviteInfo(gameId);
 
     let gameType: GameType = GameType.Solo;
     if (result.game_type === "co-op") {
@@ -100,7 +100,7 @@ export class GameService {
     onUpdate: (game: IGame) => void,
     onError: (error: Error) => void,
   ): () => void {
-    return GameRepostiory.listenToGame(
+    return GameRepository.listenToGame(
       gameId,
       (gameDTO) => {
         onUpdate(this.convertGameDTOToGame(gameDTO));
@@ -136,7 +136,7 @@ export class GameService {
   public static async getUsersGames(
     uid: string,
   ): Promise<Record<string, IGame>> {
-    const games = await GameRepostiory.getUsersGames(uid);
+    const games = await GameRepository.getUsersGames(uid);
     return Object.fromEntries(
       games.map((gameDTO) => [gameDTO.id, this.convertGameDTOToGame(gameDTO)]),
     );
@@ -146,7 +146,7 @@ export class GameService {
     gameId: string,
     newName: string,
   ): Promise<void> {
-    await GameRepostiory.updateGame(gameId, { name: newName });
+    await GameRepository.updateGame(gameId, { name: newName });
   }
 
   public static async addPlayer(
@@ -180,7 +180,7 @@ export class GameService {
     gameId: string,
     updatedConditionMeters: Record<string, number>,
   ): Promise<void> {
-    await GameRepostiory.updateGame(gameId, {
+    await GameRepository.updateGame(gameId, {
       condition_meter_values: updatedConditionMeters,
     });
   }
@@ -189,7 +189,7 @@ export class GameService {
     gameId: string,
     specialTracks: Record<string, SpecialTrack>,
   ): Promise<void> {
-    await GameRepostiory.updateGame(gameId, {
+    await GameRepository.updateGame(gameId, {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       special_track_values: specialTracks as unknown as any,
     });
@@ -198,7 +198,7 @@ export class GameService {
   public static async changeGameType(gameId: string, gameType: GameType) {
     const role = this.getDefaultPlayerRoleForGameType(gameType);
     await GamePlayersRepository.updateAllGamePlayerRoles(gameId, role);
-    await GameRepostiory.updateGame(gameId, { game_type: gameType });
+    await GameRepository.updateGame(gameId, { game_type: gameType });
   }
 
   public static async updateRules(
@@ -206,14 +206,14 @@ export class GameService {
     rulesets: RulesetConfig,
     expansions: ExpansionConfig,
   ): Promise<void> {
-    await GameRepostiory.updateGame(gameId, { rulesets, expansions });
+    await GameRepository.updateGame(gameId, { rulesets, expansions });
   }
 
   public static async updateColorScheme(
     gameId: string,
     colorScheme: ColorScheme,
   ) {
-    await GameRepostiory.updateGame(gameId, { color_scheme: colorScheme });
+    await GameRepository.updateGame(gameId, { color_scheme: colorScheme });
   }
 
   private static convertGameDTOToGame(gameDTO: GameDTO): IGame {
@@ -257,7 +257,7 @@ export class GameService {
   }
 
   public static deleteGame(gameId: string): Promise<void> {
-    return GameRepostiory.deleteGame(gameId);
+    return GameRepository.deleteGame(gameId);
   }
 
   private static getDefaultPlayerRoleForGameType(

@@ -13,6 +13,8 @@ import { usePathConfig } from "lib/paths.lib";
 import { CharacterMenuDialogs } from "../characterSheet/components/CharacterSettingsMenu/CharacterMenuDialogs";
 import { CharacterMenuItems } from "../characterSheet/components/CharacterSettingsMenu/CharacterMenuItems";
 import { useCharacterIdOptional } from "../characterSheet/hooks/useCharacterId";
+import { GameSettingsMenuDialogs } from "../overviewSheet/gameSettings/GameSettingsMenuDialogs";
+import { GameSettingsMenuItems } from "../overviewSheet/gameSettings/GameSettingsMenuItems";
 import { MobileTabs } from "./MobileTabs";
 import { useGameId } from "./hooks/useGameId";
 
@@ -23,8 +25,14 @@ export interface GameNavBarProps {
   isOnCreatePage: boolean;
 }
 
-const menuItems: MenuAdditionComponent[] = [CharacterMenuItems];
-const menuDialogs: MenuAdditionComponent[] = [CharacterMenuDialogs];
+const menuItems: MenuAdditionComponent[] = [
+  GameSettingsMenuItems,
+  CharacterMenuItems,
+];
+const menuDialogs: MenuAdditionComponent[] = [
+  GameSettingsMenuDialogs,
+  CharacterMenuDialogs,
+];
 
 export function GameNavBar(props: GameNavBarProps) {
   const { tab, setTab, isOnOverviewPage, isOnCreatePage } = props;

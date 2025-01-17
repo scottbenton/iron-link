@@ -1,5 +1,11 @@
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import { Box, ButtonBase, ThemeProvider, Typography } from "@mui/material";
+import {
+  Box,
+  ButtonBase,
+  Grid2,
+  ThemeProvider,
+  Typography,
+} from "@mui/material";
 import { useTranslation } from "react-i18next";
 
 import { getTheme } from "providers/ThemeProvider/themes/themeConfig";
@@ -17,7 +23,7 @@ export function ColorSchemeSelector(props: ColorSchemeSelectorProps) {
   const { selectedColorScheme, onChange } = props;
 
   return (
-    <Box display="flex" flexWrap="wrap" gap={1}>
+    <Grid2 container spacing={1}>
       {Object.values(ColorScheme).map((scheme) => (
         <ThemedBox
           key={scheme}
@@ -26,7 +32,7 @@ export function ColorSchemeSelector(props: ColorSchemeSelectorProps) {
           onClick={() => onChange(scheme)}
         />
       ))}
-    </Box>
+    </Grid2>
   );
 }
 
@@ -41,41 +47,44 @@ export function ThemedBox(props: {
   const theme = getTheme(colorScheme);
 
   return (
-    <ThemeProvider theme={theme}>
-      <ButtonBase
-        focusRipple
-        onClick={onClick}
-        sx={(theme) => ({
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          minWidth: 200,
-          border: `1px solid ${theme.palette.divider}`,
-          borderRadius: 1,
-          p: 2,
-          position: "relative",
-        })}
-      >
-        {selected && (
-          <Box
-            sx={{
-              position: "absolute",
-              top: 8,
-              right: 8,
-            }}
-          >
-            <CheckCircleIcon aria-label={t("common.selected", "Selected")} />
-          </Box>
-        )}
-        <IronLinkLogo sx={{ width: 64, height: 64 }} />
-        <Typography
-          variant="h6"
-          fontFamily="fontFamilyTitle"
-          textTransform={"capitalize"}
+    <Grid2 size={{ xs: 12, sm: 6 }}>
+      <ThemeProvider theme={theme}>
+        <ButtonBase
+          focusRipple
+          onClick={onClick}
+          sx={(theme) => ({
+            flexGrow: 1,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            width: "100%",
+            border: `1px solid ${theme.palette.divider}`,
+            borderRadius: 1,
+            p: 2,
+            position: "relative",
+          })}
         >
-          {colorScheme}
-        </Typography>
-      </ButtonBase>
-    </ThemeProvider>
+          {selected && (
+            <Box
+              sx={{
+                position: "absolute",
+                top: 8,
+                right: 8,
+              }}
+            >
+              <CheckCircleIcon aria-label={t("common.selected", "Selected")} />
+            </Box>
+          )}
+          <IronLinkLogo sx={{ width: 64, height: 64 }} />
+          <Typography
+            variant="h6"
+            fontFamily="fontFamilyTitle"
+            textTransform={"capitalize"}
+          >
+            {colorScheme}
+          </Typography>
+        </ButtonBase>
+      </ThemeProvider>
+    </Grid2>
   );
 }

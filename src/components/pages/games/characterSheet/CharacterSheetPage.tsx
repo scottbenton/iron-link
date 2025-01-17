@@ -9,14 +9,12 @@ import {
 } from "stores/gameCharacters.store";
 
 import { CharacterSidebarContents } from "./components/CharacterSidebarContents";
-import { useSyncCharacterColorScheme } from "./hooks/useSyncCharacterColorScheme";
 
 export function CharacterSheetPage() {
   const hasCharacter = useGameCharacter((character) => !!character);
   const error = useGameCharactersStore((state) => state.error);
 
   const { t } = useTranslation();
-  useSyncCharacterColorScheme();
 
   if (!hasCharacter && !error) {
     return <LinearProgress />;

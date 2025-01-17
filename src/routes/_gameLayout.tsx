@@ -13,6 +13,7 @@ import { MobileTabs } from "components/pages/games/gamePageLayout/MobileTabs";
 import { SidebarLayout } from "components/pages/games/gamePageLayout/SidebarLayout";
 import { GameTabs } from "components/pages/games/gamePageLayout/components/GameTabs";
 import { useSyncGame } from "components/pages/games/gamePageLayout/hooks/useSyncGame";
+import { useSyncColorScheme } from "components/pages/games/hooks/useSyncColorScheme";
 
 import { useGameStore } from "stores/game.store";
 
@@ -46,6 +47,7 @@ function RouteComponent() {
   const { t } = useTranslation();
 
   useSyncGame();
+  useSyncColorScheme();
   const characterId = useCharacterIdOptional();
 
   const hasGame = useGameStore((state) => !!state.game);
