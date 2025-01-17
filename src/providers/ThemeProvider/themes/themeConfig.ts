@@ -12,7 +12,9 @@ export type ThemeConfig = Record<
   }
 >;
 
-export const config: ThemeConfig = {
+const BORDER_RADIUS = 8;
+
+export const themeConfig: ThemeConfig = {
   [ColorScheme.Default]: {
     primary: {
       light: "#eab308",
@@ -90,7 +92,7 @@ export const config: ThemeConfig = {
 export function getTheme(colorScheme: ColorScheme): Theme {
   return createTheme({
     shape: {
-      borderRadius: 8,
+      borderRadius: BORDER_RADIUS,
     },
     typography: {
       fontFamily: [
@@ -139,8 +141,18 @@ export function getTheme(colorScheme: ColorScheme): Theme {
         disabledBackground: grey[950] + "1f",
         focus: grey[950] + "1f",
       },
-      ...config[colorScheme],
+      ...themeConfig[colorScheme],
       ...sharedStatusColors,
+    },
+    transitions: {
+      duration: {
+        enteringScreen: 400,
+        leavingScreen: 200,
+      },
+      easing: {
+        easeIn: "cubic-bezier(0.3, 0.0, 0.8, 0.15)",
+        easeOut: "cubic-bezier(0.05, 0.7, 0.1, 1.0)",
+      },
     },
     colorSchemes: {
       dark: {
@@ -164,7 +176,7 @@ export function getTheme(colorScheme: ColorScheme): Theme {
             disabledBackground: grey[100] + "1f",
             focus: grey[100] + "1f",
           },
-          ...config[colorScheme],
+          ...themeConfig[colorScheme],
           ...sharedStatusColors,
         },
       },
@@ -177,6 +189,16 @@ export function getTheme(colorScheme: ColorScheme): Theme {
             //   config.palette.grey[type === ThemeType.Light ? 300 : 700]
             // }`,
             backgroundImage: "unset!important", // Remove the annoying elevation background filter
+          },
+        },
+      },
+      MuiIconButton: {
+        styleOverrides: {
+          root: {
+            borderRadius: BORDER_RADIUS,
+            "& .MuiTouchRipple-root .MuiTouchRipple-child": {
+              borderRadius: BORDER_RADIUS,
+            },
           },
         },
       },

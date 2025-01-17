@@ -1,34 +1,36 @@
-import { useEffect } from "react";
-import { matchPath, useLocation } from "react-router-dom";
+import { Navigate, useLocation } from "@tanstack/react-router";
 
-import {
-  onlyUnauthenticatedPaths,
-  openPaths,
-  pathConfig,
-} from "pages/pathConfig";
+import { AuthStatus, useAuthStatus, useUID } from "stores/auth.store";
+import { useUserNameWithStatus } from "stores/users.store";
 
-import { useContinueUrl } from "hooks/useContinueUrl";
+import { UserNameDialog } from "./UserNameDialog";
 
-import { AuthStatus, useAuthStatus } from "stores/auth.store";
+const openPaths = ["/", "/auth"];
+const onlyUnauthenticatedPaths = ["/auth"];
 
 export function LayoutPathListener() {
   const { pathname } = useLocation();
   const authStatus = useAuthStatus();
-  const { redirectWithContinueUrl, navigateToContinueURL } = useContinueUrl();
 
-  useEffect(() => {
-    const doesOpenPathMatch = openPaths.some((path) => {
-      return !!matchPath(path, pathname);
-    });
-    if (!doesOpenPathMatch && authStatus === AuthStatus.Unauthenticated) {
-      redirectWithContinueUrl(pathConfig.auth, pathname);
-    } else if (
-      onlyUnauthenticatedPaths.includes(pathname) &&
-      authStatus === AuthStatus.Authenticated
-    ) {
-      navigateToContinueURL(pathConfig.gameSelect);
-    }
-  }, [pathname, navigateToContinueURL, redirectWithContinueUrl, authStatus]);
+  const uid = useUID();
+  const { name, loading } = useUserNameWithStatus(uid ?? null);
 
-  return null;
+  if (
+    authStatus === AuthStatus.Unauthenticated &&
+    !openPaths.includes(pathname)
+  ) {
+    return <Navigate to={"/auth"} />;
+  }
+  if (
+    authStatus === AuthStatus.Authenticated &&
+    onlyUnauthenticatedPaths.includes(pathname)
+  ) {
+    return <Navigate to={"/games"} />;
+  }
+
+  return (
+    <>
+      <UserNameDialog open={!loading && name === null} />
+    </>
+  );
 }

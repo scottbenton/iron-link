@@ -1,7 +1,8 @@
 import { Box, Typography } from "@mui/material";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "@tanstack/react-router";
 
 import { GradientBox } from "components/GradientBox";
+import { BoxLink } from "components/LinkComponent";
 
 import { NavRouteConfig } from "./navRoutes";
 
@@ -13,8 +14,7 @@ export function NavRailItem(props: NavRouteConfig) {
   const isSelected = checkIsSelected(pathname);
 
   return (
-    <Box
-      component={Link}
+    <BoxLink
       to={href}
       display={"flex"}
       flexDirection={"column"}
@@ -62,6 +62,6 @@ export function NavRailItem(props: NavRouteConfig) {
       >
         {title}
       </Typography>
-    </Box>
+    </BoxLink>
   );
 }

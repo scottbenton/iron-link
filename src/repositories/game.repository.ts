@@ -37,7 +37,7 @@ export interface LegacyGameDTO {
 export type GameDTO = Tables<"games">;
 export type GameDTOUpdate = Partial<Omit<GameDTO, "id" | "created_at">>;
 
-export class GameRepostiory {
+export class GameRepository {
   public static games = () => supabase.from("games");
 
   public static collectionName = "games";
@@ -129,7 +129,6 @@ export class GameRepostiory {
         .select("*, game_players!inner(*)")
         .eq("game_players.user_id", userId)
         .then(({ data, error }) => {
-          console.debug(data);
           if (error) {
             console.error(error);
             reject(

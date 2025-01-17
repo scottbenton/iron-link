@@ -11,7 +11,7 @@ import {
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { useRollOracleAndAddToLog } from "pages/games/hooks/useRollOracleAndAddToLog";
+import { useRollOracleAndAddToLog } from "components/pages/games/hooks/useRollOracleAndAddToLog";
 
 import { useOpenDataswornDialog } from "stores/appState.store";
 

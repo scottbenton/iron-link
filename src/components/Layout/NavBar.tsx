@@ -1,61 +1,129 @@
+import BackIcon from "@mui/icons-material/ChevronLeft";
 import HamburgerMenuIcon from "@mui/icons-material/Menu";
-import { AppBar, Box, Drawer, IconButton, List, Toolbar } from "@mui/material";
-import { useState } from "react";
+import {
+  AppBar,
+  Box,
+  Drawer,
+  IconButton,
+  List,
+  Toolbar,
+  Tooltip,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
+import { ReactNode, useState } from "react";
+import { useTranslation } from "react-i18next";
 
-import { AppSettingsMenu } from "./AppSettingsMenu";
+import { HideOnScroll } from "components/HideOnScroll";
+import { IconLink } from "components/LinkComponent";
+
+import { AppSettingsMenu, MenuAdditionComponent } from "./AppSettingsMenu";
 import { IronLinkLogo } from "./IronLinkLogo";
 import { NavBarListItem } from "./NavBarListItem";
 import { NavRouteConfig } from "./navRoutes";
 
 export interface NavBarProps {
-  routes: NavRouteConfig[];
+  topLevelRoutes?: NavRouteConfig[] | undefined;
+  goBackTo?: { href: string; params?: Record<string, string> };
+  pageTitle?: string;
+  secondLevel?: ReactNode;
+  menuAdditions?: {
+    menuItems?: MenuAdditionComponent[];
+    menuDialogs?: MenuAdditionComponent[];
+  };
 }
-export function NavBar(props: NavBarProps) {
-  const { routes } = props;
 
+export function NavBar(props: NavBarProps) {
+  const { topLevelRoutes, goBackTo, pageTitle, secondLevel, menuAdditions } =
+    props;
+
+  const { t } = useTranslation();
   const [isNavMenuOpen, setIsNavMenuOpen] = useState(false);
+
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+
+  if (!isMobile) {
+    return null;
+  }
 
   return (
     <>
-      <AppBar
-        elevation={0}
-        position={"static"}
-        color={"default"}
-        sx={(theme) => ({
-          bgcolor: "grey.800",
-          color: "common.white",
-          display: "block",
-          [theme.breakpoints.up("sm")]: {
-            display: "none",
-          },
-        })}
-      >
-        <Toolbar
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
+      <HideOnScroll>
+        <AppBar
+          elevation={0}
+          color={"default"}
+          sx={(theme) => ({
+            bgcolor: theme.palette.mode === "light" ? "grey.200" : "grey.950",
+            // bgcolor: "grey.950",
+            // color: "common.white",
+            display: "block",
+          })}
         >
-          <Box display={"flex"} alignItems={"center"}>
-            <IconButton
-              color={"inherit"}
-              onClick={() => setIsNavMenuOpen(true)}
-            >
-              <HamburgerMenuIcon />
-            </IconButton>
-            <IronLinkLogo sx={{ width: 40, height: 40, ml: 2 }} />
-          </Box>
-          <AppSettingsMenu />
-        </Toolbar>
-      </AppBar>
-      <Drawer open={isNavMenuOpen} onClose={() => setIsNavMenuOpen(false)}>
+          <Toolbar
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <Box display={"flex"} alignItems={"center"}>
+              {topLevelRoutes && (
+                <Tooltip
+                  title={t("nav.open-menu-mobile", "Open Navigation Menu")}
+                >
+                  <IconButton
+                    color={"inherit"}
+                    onClick={() => setIsNavMenuOpen(true)}
+                  >
+                    <HamburgerMenuIcon />
+                  </IconButton>
+                </Tooltip>
+              )}
+              {goBackTo && (
+                <Tooltip title={t("nav.go-back-mobile", "Go Back")}>
+                  <div>
+                    <IconLink
+                      color={"inherit"}
+                      to={goBackTo.href}
+                      params={goBackTo.params}
+                    >
+                      <BackIcon />
+                    </IconLink>
+                  </div>
+                </Tooltip>
+              )}
+              {pageTitle ? (
+                <Typography variant={"h6"} ml={2}>
+                  {pageTitle}
+                </Typography>
+              ) : (
+                <IronLinkLogo sx={{ width: 40, height: 40, ml: 2 }} />
+              )}
+            </Box>
+            <AppSettingsMenu
+              menuItems={menuAdditions?.menuItems}
+              menuDialogs={menuAdditions?.menuDialogs}
+            />
+          </Toolbar>
+          {secondLevel && <Toolbar>{secondLevel}</Toolbar>}
+        </AppBar>
+      </HideOnScroll>
+      <Drawer
+        open={topLevelRoutes && isNavMenuOpen}
+        onClose={() => setIsNavMenuOpen(false)}
+      >
         <List>
-          {routes.map((route, index) => (
+          {topLevelRoutes?.map((route, index) => (
             <NavBarListItem key={index} {...route} />
           ))}
         </List>
       </Drawer>
+
+      {/* These are here for spacing purposes */}
+      <Toolbar />
+      {secondLevel && <Toolbar />}
     </>
   );
 }
