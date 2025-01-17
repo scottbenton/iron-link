@@ -1,34 +1,26 @@
-import { useEffect } from "react";
-import { matchPath, useLocation } from "react-router-dom";
-
-import {
-  onlyUnauthenticatedPaths,
-  openPaths,
-  pathConfig,
-} from "pages/pathConfig";
-
-import { useContinueUrl } from "hooks/useContinueUrl";
+import { Navigate, useLocation } from "@tanstack/react-router";
 
 import { AuthStatus, useAuthStatus } from "stores/auth.store";
+
+const openPaths = ["/", "/auth"];
+const onlyUnauthenticatedPaths = ["/auth"];
 
 export function LayoutPathListener() {
   const { pathname } = useLocation();
   const authStatus = useAuthStatus();
-  const { redirectWithContinueUrl, navigateToContinueURL } = useContinueUrl();
 
-  useEffect(() => {
-    const doesOpenPathMatch = openPaths.some((path) => {
-      return !!matchPath(path, pathname);
-    });
-    if (!doesOpenPathMatch && authStatus === AuthStatus.Unauthenticated) {
-      redirectWithContinueUrl(pathConfig.auth, pathname);
-    } else if (
-      onlyUnauthenticatedPaths.includes(pathname) &&
-      authStatus === AuthStatus.Authenticated
-    ) {
-      navigateToContinueURL(pathConfig.gameSelect);
-    }
-  }, [pathname, navigateToContinueURL, redirectWithContinueUrl, authStatus]);
+  if (
+    authStatus === AuthStatus.Unauthenticated &&
+    !openPaths.includes(pathname)
+  ) {
+    return <Navigate to={"/auth"} />;
+  }
+  if (
+    authStatus === AuthStatus.Authenticated &&
+    onlyUnauthenticatedPaths.includes(pathname)
+  ) {
+    return <Navigate to={"/games"} />;
+  }
 
-  return null;
+  return <></>;
 }

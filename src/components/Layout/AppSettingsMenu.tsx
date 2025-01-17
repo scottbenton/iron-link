@@ -8,20 +8,30 @@ import {
   ListSubheader,
   Menu,
   MenuItem,
+  Tooltip,
   useColorScheme,
 } from "@mui/material";
-import { useRef, useState } from "react";
+import { ComponentType, useCallback, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { useSnackbar } from "providers/SnackbarProvider";
 
 import { AuthStatus, useAuthStatus, useAuthStore } from "stores/auth.store";
 
-export function AppSettingsMenu() {
+export type MenuAdditionComponent = ComponentType<{ closeMenu: () => void }>;
+
+export interface AppSettingsMenuProps {
+  menuItems?: MenuAdditionComponent[];
+  menuDialogs?: MenuAdditionComponent[];
+}
+
+export function AppSettingsMenu(props: AppSettingsMenuProps) {
+  const { menuItems, menuDialogs } = props;
   const { t } = useTranslation();
   const status = useAuthStatus();
 
   const [open, setOpen] = useState(false);
+  const closeMenu = useCallback(() => setOpen(false), []);
   const buttonRef = useRef<HTMLButtonElement>(null);
 
   const { colorScheme, setColorScheme } = useColorScheme();
@@ -31,19 +41,20 @@ export function AppSettingsMenu() {
 
   return (
     <>
-      <IconButton
-        ref={buttonRef}
-        color="inherit"
-        aria-label={t("iron-link.app-settings", "App Settings")}
-        onClick={() => setOpen(true)}
-      >
-        <SettingsIcon />
-      </IconButton>
-      <Menu
-        open={open}
-        onClose={() => setOpen(false)}
-        anchorEl={buttonRef.current}
-      >
+      <Tooltip title={t("iron-link.app-settings", "App Settings")}>
+        <IconButton
+          ref={buttonRef}
+          color="inherit"
+          aria-label={t("iron-link.app-settings", "App Settings")}
+          onClick={() => setOpen(true)}
+        >
+          <SettingsIcon />
+        </IconButton>
+      </Tooltip>
+      <Menu open={open} onClose={closeMenu} anchorEl={buttonRef.current}>
+        {menuItems?.map((Item, index) => (
+          <Item closeMenu={closeMenu} key={index} />
+        ))}
         <ListSubheader>
           {t("iron-link.app-settings", "App Settings")}
         </ListSubheader>
@@ -88,6 +99,9 @@ export function AppSettingsMenu() {
           </MenuItem>
         )}
       </Menu>
+      {menuDialogs?.map((Dialog, index) => (
+        <Dialog closeMenu={closeMenu} key={index} />
+      ))}
     </>
   );
 }

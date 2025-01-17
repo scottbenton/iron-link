@@ -2,8 +2,7 @@ import { Box, Button, Stack } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
 import { ProgressTrack } from "components/datasworn/ProgressTrack";
-
-import { useRollCompleteSpecialTrack } from "pages/games/hooks/useRollCompleteSpecialTrack";
+import { useRollCompleteSpecialTrack } from "components/pages/games/hooks/useRollCompleteSpecialTrack";
 
 import { useSpecialTrackRules } from "stores/dataswornTree.store";
 

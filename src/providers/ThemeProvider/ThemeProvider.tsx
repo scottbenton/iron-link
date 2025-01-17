@@ -13,7 +13,7 @@ export function ThemeProvider(props: PropsWithChildren) {
 
   return (
     <MuiThemeProvider theme={theme}>
-      <CssBaseline />
+      <CssBaseline enableColorScheme />
       {children}
     </MuiThemeProvider>
   );

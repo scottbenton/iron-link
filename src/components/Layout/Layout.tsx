@@ -1,5 +1,5 @@
 import { Box, LinearProgress } from "@mui/material";
-import { Outlet } from "react-router-dom";
+import { Outlet } from "@tanstack/react-router";
 
 import { RollSnackbarSection } from "components/characters/rolls/RollSnackbarSection";
 import { DataswornDialog } from "components/datasworn/DataswornDialog";
@@ -11,19 +11,15 @@ import { LiveRegion } from "./LiveRegion";
 import { NavBar } from "./NavBar";
 import { NavRail } from "./NavRail";
 import { SkipToContentButton } from "./SkipToContentButton";
-import { authenticatedNavRoutes, unauthenticatedNavRoutes } from "./navRoutes";
+import { useNavRoutes } from "./navRoutes";
 
 export function Layout() {
   const authStatus = useAuthStatus();
+  const routes = useNavRoutes();
 
   if (authStatus === AuthStatus.Loading) {
     return <LinearProgress />;
   }
-
-  const routes =
-    authStatus === AuthStatus.Authenticated
-      ? authenticatedNavRoutes
-      : unauthenticatedNavRoutes;
 
   return (
     <Box
@@ -41,13 +37,14 @@ export function Layout() {
         <LiveRegion />
         <SkipToContentButton />
         <LayoutPathListener />
-        <NavBar routes={routes} />
+        <NavBar topLevelRoutes={routes} />
         <NavRail routes={routes} />
         <Box
           sx={{
             display: "flex",
             flexDirection: "column",
             flexGrow: 1,
+            minWidth: 0,
           }}
           component={"main"}
           id={"main-content"}

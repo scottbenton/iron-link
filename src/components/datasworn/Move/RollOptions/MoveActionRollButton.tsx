@@ -3,8 +3,7 @@ import RollIcon from "@mui/icons-material/Casino";
 import { useTranslation } from "react-i18next";
 
 import { Stat } from "components/datasworn/Stat";
-
-import { useRollStatAndAddToLog } from "pages/games/hooks/useRollStatAndAddToLog";
+import { useRollStatAndAddToLog } from "components/pages/games/hooks/useRollStatAndAddToLog";
 
 import {
   useConditionMeterRules,

@@ -129,7 +129,6 @@ export class GameRepostiory {
         .select("*, game_players!inner(*)")
         .eq("game_players.user_id", userId)
         .then(({ data, error }) => {
-          console.debug(data);
           if (error) {
             console.error(error);
             reject(

@@ -15,10 +15,14 @@ export function NavRail(props: NavRailProps) {
   return (
     <>
       <Box
-        sx={{
+        sx={(theme) => ({
           width: 80,
           flexShrink: 0,
-        }}
+          display: "none",
+          [theme.breakpoints.up("md")]: {
+            display: "block",
+          },
+        })}
       />
       <Box
         sx={(theme) => ({
@@ -37,7 +41,7 @@ export function NavRail(props: NavRailProps) {
           flexDirection: "column",
           alignItems: "center",
           flexShrink: 0,
-          [theme.breakpoints.up("sm")]: {
+          [theme.breakpoints.up("md")]: {
             display: "inline-flex",
           },
         })}

@@ -10,8 +10,6 @@
     "lint": "eslint .",
     "format": "eslint . --fix && prettier . --write",
     "preview": "vite preview",
-    "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build",
     "test": "vitest",
     "test:watch": "vitest --watch",
     "extract:i18n": "i18next 'src/**/*.{ts,tsx}' [-oc]",
@@ -34,6 +32,7 @@
     "@mui/material-pigment-css": "^6.1.0",
     "@mui/x-tree-view": "^7.22.1",
     "@supabase/supabase-js": "^2.47.7",
+    "@tanstack/react-router": "^1.95.5",
     "@tiptap/extension-collaboration": "^2.9.1",
     "@tiptap/extension-collaboration-cursor": "^2.9.1",
     "@tiptap/extension-link": "^2.9.1",
@@ -46,6 +45,7 @@
     "i18next": "^23.15.1",
     "immer": "^10.1.1",
     "material-ui-confirm": "^3.0.16",
+    "motion": "^11.17.0",
     "notistack": "^3.0.1",
     "react": "^18.3.1",
     "react-avatar-editor": "^13.0.2",
@@ -54,7 +54,7 @@
     "react-hook-form": "^7.53.0",
     "react-i18next": "^15.0.1",
     "react-markdown": "^9.0.1",
-    "react-router-dom": "^6.26.2",
+    "react-resizable-panels": "^2.1.7",
     "remark-gfm": "^4.0.0",
     "scheduler": "^0.23.2",
     "use-context-selector": "^2.0.0",
@@ -65,18 +65,10 @@
     "zustand": "^5.0.1"
   },
   "devDependencies": {
-    "@chromatic-com/storybook": "^1.9.0",
     "@eslint/js": "^9.9.0",
-    "@storybook/addon-essentials": "^8.3.0",
-    "@storybook/addon-interactions": "^8.3.0",
-    "@storybook/addon-links": "^8.3.0",
-    "@storybook/addon-onboarding": "^8.3.0",
-    "@storybook/addon-themes": "^8.3.0",
-    "@storybook/blocks": "^8.3.0",
-    "@storybook/react": "^8.3.0",
-    "@storybook/react-vite": "^8.3.0",
-    "@storybook/test": "^8.3.0",
-    "@testing-library/dom": "^10.4.0",
+    "@tanstack/router-devtools": "^1.95.5",
+    "@tanstack/router-plugin": "^1.95.5",
+    "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.0.1",
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
     "@types/react": "^18.3.5",
@@ -87,14 +79,11 @@
     "eslint": "^9.9.0",
     "eslint-plugin-react-hooks": "^5.1.0-rc.0",
     "eslint-plugin-react-refresh": "^0.4.9",
-    "eslint-plugin-storybook": "^0.10.1",
     "globals": "^15.9.0",
     "i18next-parser": "^9.0.2",
     "jsdom": "^25.0.0",
     "playwright": "^1.47.1",
     "prettier": "^3.3.3",
-    "storybook": "^8.3.0",
-    "storybook-addon-remix-react-router": "^3.0.0",
     "supabase": "^2.2.1",
     "typescript": "^5.5.3",
     "typescript-eslint": "^8.0.1",
@@ -102,10 +91,5 @@
     "vite-plugin-svgr": "^4.2.0",
     "vite-tsconfig-paths": "^5.0.1",
     "vitest": "^2.1.1"
-  },
-  "eslintConfig": {
-    "extends": [
-      "plugin:storybook/recommended"
-    ]
   }
 }

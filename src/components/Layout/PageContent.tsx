@@ -7,10 +7,19 @@ export interface PageContentProps extends PropsWithChildren {
   hiddenHeader?: boolean;
   maxWidth?: false | Breakpoint;
   sx?: SxProps<Theme>;
+  disablePadding?: boolean;
 }
 
 export function PageContent(props: PageContentProps) {
-  const { children, isPaper, viewHeight, hiddenHeader, maxWidth, sx } = props;
+  const {
+    children,
+    isPaper,
+    viewHeight,
+    hiddenHeader,
+    maxWidth,
+    sx,
+    disablePadding,
+  } = props;
 
   return (
     <Container
@@ -25,7 +34,7 @@ export function PageContent(props: PageContentProps) {
           borderBottomRightRadius: 0,
           flexGrow: 1,
 
-          pb: 2,
+          pb: disablePadding ? 0 : 2,
           display: "flex",
           flexDirection: "column",
         }),
@@ -43,6 +52,7 @@ export function PageContent(props: PageContentProps) {
           : {},
         ...(Array.isArray(sx) ? sx : [sx]),
       ]}
+      disableGutters={disablePadding}
     >
       {children}
     </Container>
