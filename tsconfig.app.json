@@ -19,9 +19,9 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-
+    
     /** Base Path */
     "baseUrl": "src"
   },
-  "include": ["src"]
+  "include": ["src", "./src/tests/setup.ts"]
 }

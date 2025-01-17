@@ -37,7 +37,7 @@ export function Layout() {
         <LiveRegion />
         <SkipToContentButton />
         <LayoutPathListener />
-        <NavBar routes={routes} />
+        <NavBar topLevelRoutes={routes} />
         <NavRail routes={routes} />
         <Box
           sx={{

@@ -14,7 +14,7 @@ const mockUseRollStat = useRollStatAndAddToLog as MockedFunction<
 >;
 mockUseRollStat.mockImplementation(() => mockRollStat);
 
-vi.mock("pages/games/hooks/useRollStatAndAddToLog", () => ({
+vi.mock("components/pages/games/hooks/useRollStatAndAddToLog", () => ({
   useRollStatAndAddToLog: vi.fn(),
 }));
 describe("AssetControl", () => {
