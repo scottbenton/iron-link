@@ -342,6 +342,7 @@ export type Database = {
           name: string
           rulesets: Json
           special_track_values: Json
+          world_id: string | null
         }
         Insert: {
           color_scheme?: string | null
@@ -353,6 +354,7 @@ export type Database = {
           name: string
           rulesets?: Json
           special_track_values?: Json
+          world_id?: string | null
         }
         Update: {
           color_scheme?: string | null
@@ -364,8 +366,17 @@ export type Database = {
           name?: string
           rulesets?: Json
           special_track_values?: Json
+          world_id?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "games_world_id_fkey"
+            columns: ["world_id"]
+            isOneToOne: false
+            referencedRelation: "worlds"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       note_folders: {
         Row: {
@@ -509,6 +520,50 @@ export type Database = {
           id?: string
         }
         Relationships: []
+      }
+      worlds: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          description: string | null
+          description_text: string | null
+          expansions: Json
+          id: string
+          name: string
+          rulesets: Json
+          setting_key: string | null
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          description_text?: string | null
+          expansions?: Json
+          id?: string
+          name: string
+          rulesets?: Json
+          setting_key?: string | null
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          description_text?: string | null
+          expansions?: Json
+          id?: string
+          name?: string
+          rulesets?: Json
+          setting_key?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "worlds_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {

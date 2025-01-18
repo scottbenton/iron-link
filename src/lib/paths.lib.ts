@@ -6,6 +6,7 @@ import { Route as gameSelect } from "routes/_defaultNavLayout/games/index";
 import { Route as homebrewSelect } from "routes/_defaultNavLayout/homebrew";
 import { Route as homeRoute } from "routes/_defaultNavLayout/index";
 import { Route as worldSelect } from "routes/_defaultNavLayout/worlds";
+import { Route as world } from "routes/_defaultNavLayout/worlds/$worldId/index";
 import { Route as gameCharacter } from "routes/_gameLayout/games/$gameId/c/$characterId";
 import { Route as gameCharacterCreate } from "routes/_gameLayout/games/$gameId/create";
 import { Route as game } from "routes/_gameLayout/games/$gameId/index";
@@ -23,6 +24,7 @@ export function usePathConfig() {
       worldSelect: worldSelect.to,
       homebrewSelect: homebrewSelect.to,
       auth: auth.to,
+      world: world.to,
     }),
     [],
   );

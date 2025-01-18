@@ -20,6 +20,7 @@ import { Route as DefaultNavLayoutHomebrewIndexImport } from './routes/_defaultN
 import { Route as DefaultNavLayoutGamesIndexImport } from './routes/_defaultNavLayout/games/index'
 import { Route as DefaultNavLayoutGamesCreateImport } from './routes/_defaultNavLayout/games/create'
 import { Route as GameLayoutGamesGameIdIndexImport } from './routes/_gameLayout/games/$gameId/index'
+import { Route as DefaultNavLayoutWorldsWorldIdIndexImport } from './routes/_defaultNavLayout/worlds/$worldId/index'
 import { Route as GameLayoutGamesGameIdCreateImport } from './routes/_gameLayout/games/$gameId/create'
 import { Route as DefaultNavLayoutGamesGameIdJoinImport } from './routes/_defaultNavLayout/games/$gameId/join'
 import { Route as GameLayoutGamesGameIdCCharacterIdImport } from './routes/_gameLayout/games/$gameId/c/$characterId'
@@ -100,6 +101,17 @@ const GameLayoutGamesGameIdIndexRoute = GameLayoutGamesGameIdIndexImport.update(
 ).lazy(() =>
   import('./routes/_gameLayout/games/$gameId/index.lazy').then((d) => d.Route),
 )
+
+const DefaultNavLayoutWorldsWorldIdIndexRoute =
+  DefaultNavLayoutWorldsWorldIdIndexImport.update({
+    id: '/worlds/$worldId/',
+    path: '/worlds/$worldId/',
+    getParentRoute: () => DefaultNavLayoutRoute,
+  } as any).lazy(() =>
+    import('./routes/_defaultNavLayout/worlds/$worldId/index.lazy').then(
+      (d) => d.Route,
+    ),
+  )
 
 const GameLayoutGamesGameIdCreateRoute =
   GameLayoutGamesGameIdCreateImport.update({
@@ -208,6 +220,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GameLayoutGamesGameIdCreateImport
       parentRoute: typeof GameLayoutImport
     }
+    '/_defaultNavLayout/worlds/$worldId/': {
+      id: '/_defaultNavLayout/worlds/$worldId/'
+      path: '/worlds/$worldId'
+      fullPath: '/worlds/$worldId'
+      preLoaderRoute: typeof DefaultNavLayoutWorldsWorldIdIndexImport
+      parentRoute: typeof DefaultNavLayoutImport
+    }
     '/_gameLayout/games/$gameId/': {
       id: '/_gameLayout/games/$gameId/'
       path: '/games/$gameId'
@@ -235,6 +254,7 @@ interface DefaultNavLayoutRouteChildren {
   DefaultNavLayoutHomebrewIndexRoute: typeof DefaultNavLayoutHomebrewIndexRoute
   DefaultNavLayoutWorldsIndexRoute: typeof DefaultNavLayoutWorldsIndexRoute
   DefaultNavLayoutGamesGameIdJoinRoute: typeof DefaultNavLayoutGamesGameIdJoinRoute
+  DefaultNavLayoutWorldsWorldIdIndexRoute: typeof DefaultNavLayoutWorldsWorldIdIndexRoute
 }
 
 const DefaultNavLayoutRouteChildren: DefaultNavLayoutRouteChildren = {
@@ -245,6 +265,8 @@ const DefaultNavLayoutRouteChildren: DefaultNavLayoutRouteChildren = {
   DefaultNavLayoutHomebrewIndexRoute: DefaultNavLayoutHomebrewIndexRoute,
   DefaultNavLayoutWorldsIndexRoute: DefaultNavLayoutWorldsIndexRoute,
   DefaultNavLayoutGamesGameIdJoinRoute: DefaultNavLayoutGamesGameIdJoinRoute,
+  DefaultNavLayoutWorldsWorldIdIndexRoute:
+    DefaultNavLayoutWorldsWorldIdIndexRoute,
 }
 
 const DefaultNavLayoutRouteWithChildren =
@@ -277,6 +299,7 @@ export interface FileRoutesByFullPath {
   '/worlds': typeof DefaultNavLayoutWorldsIndexRoute
   '/games/$gameId/join': typeof DefaultNavLayoutGamesGameIdJoinRoute
   '/games/$gameId/create': typeof GameLayoutGamesGameIdCreateRoute
+  '/worlds/$worldId': typeof DefaultNavLayoutWorldsWorldIdIndexRoute
   '/games/$gameId': typeof GameLayoutGamesGameIdIndexRoute
   '/games/$gameId/c/$characterId': typeof GameLayoutGamesGameIdCCharacterIdRoute
 }
@@ -291,6 +314,7 @@ export interface FileRoutesByTo {
   '/worlds': typeof DefaultNavLayoutWorldsIndexRoute
   '/games/$gameId/join': typeof DefaultNavLayoutGamesGameIdJoinRoute
   '/games/$gameId/create': typeof GameLayoutGamesGameIdCreateRoute
+  '/worlds/$worldId': typeof DefaultNavLayoutWorldsWorldIdIndexRoute
   '/games/$gameId': typeof GameLayoutGamesGameIdIndexRoute
   '/games/$gameId/c/$characterId': typeof GameLayoutGamesGameIdCCharacterIdRoute
 }
@@ -307,6 +331,7 @@ export interface FileRoutesById {
   '/_defaultNavLayout/worlds/': typeof DefaultNavLayoutWorldsIndexRoute
   '/_defaultNavLayout/games/$gameId/join': typeof DefaultNavLayoutGamesGameIdJoinRoute
   '/_gameLayout/games/$gameId/create': typeof GameLayoutGamesGameIdCreateRoute
+  '/_defaultNavLayout/worlds/$worldId/': typeof DefaultNavLayoutWorldsWorldIdIndexRoute
   '/_gameLayout/games/$gameId/': typeof GameLayoutGamesGameIdIndexRoute
   '/_gameLayout/games/$gameId/c/$characterId': typeof GameLayoutGamesGameIdCCharacterIdRoute
 }
@@ -323,6 +348,7 @@ export interface FileRouteTypes {
     | '/worlds'
     | '/games/$gameId/join'
     | '/games/$gameId/create'
+    | '/worlds/$worldId'
     | '/games/$gameId'
     | '/games/$gameId/c/$characterId'
   fileRoutesByTo: FileRoutesByTo
@@ -336,6 +362,7 @@ export interface FileRouteTypes {
     | '/worlds'
     | '/games/$gameId/join'
     | '/games/$gameId/create'
+    | '/worlds/$worldId'
     | '/games/$gameId'
     | '/games/$gameId/c/$characterId'
   id:
@@ -350,6 +377,7 @@ export interface FileRouteTypes {
     | '/_defaultNavLayout/worlds/'
     | '/_defaultNavLayout/games/$gameId/join'
     | '/_gameLayout/games/$gameId/create'
+    | '/_defaultNavLayout/worlds/$worldId/'
     | '/_gameLayout/games/$gameId/'
     | '/_gameLayout/games/$gameId/c/$characterId'
   fileRoutesById: FileRoutesById
@@ -388,7 +416,8 @@ export const routeTree = rootRoute
         "/_defaultNavLayout/games/",
         "/_defaultNavLayout/homebrew/",
         "/_defaultNavLayout/worlds/",
-        "/_defaultNavLayout/games/$gameId/join"
+        "/_defaultNavLayout/games/$gameId/join",
+        "/_defaultNavLayout/worlds/$worldId/"
       ]
     },
     "/_gameLayout": {
@@ -430,6 +459,10 @@ export const routeTree = rootRoute
     "/_gameLayout/games/$gameId/create": {
       "filePath": "_gameLayout/games/$gameId/create.ts",
       "parent": "/_gameLayout"
+    },
+    "/_defaultNavLayout/worlds/$worldId/": {
+      "filePath": "_defaultNavLayout/worlds/$worldId/index.ts",
+      "parent": "/_defaultNavLayout"
     },
     "/_gameLayout/games/$gameId/": {
       "filePath": "_gameLayout/games/$gameId/index.ts",

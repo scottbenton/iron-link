@@ -2,6 +2,8 @@ import { Tables } from "types/supabase-generated.type";
 
 import { supabase } from "lib/supabase.lib";
 
+import { GamePlayerRole } from "services/game.service";
+
 import {
   NotFoundError,
   StorageError,
@@ -123,24 +125,32 @@ export class GameRepository {
     };
   }
 
-  public static async getUsersGames(userId: string): Promise<GameDTO[]> {
+  public static async getUsersGames(
+    userId: string,
+    role?: GamePlayerRole,
+  ): Promise<GameDTO[]> {
     return new Promise((resolve, reject) => {
-      this.games()
+      const query = this.games()
         .select("*, game_players!inner(*)")
-        .eq("game_players.user_id", userId)
-        .then(({ data, error }) => {
-          if (error) {
-            console.error(error);
-            reject(
-              convertUnknownErrorToStorageError(
-                error,
-                `Failed to get games for user with id ${userId}`,
-              ),
-            );
-          } else {
-            resolve(data);
-          }
-        });
+        .eq("game_players.user_id", userId);
+
+      if (role) {
+        query.eq("game_players.role", role);
+      }
+
+      query.then(({ data, error }) => {
+        if (error) {
+          console.error(error);
+          reject(
+            convertUnknownErrorToStorageError(
+              error,
+              `Failed to get games for user with id ${userId}`,
+            ),
+          );
+        } else {
+          resolve(data);
+        }
+      });
     });
   }
 
