@@ -1,4 +1,4 @@
-import { Navigate, useLocation } from "@tanstack/react-router";
+import { Navigate, useLocation, useSearch } from "@tanstack/react-router";
 
 import { AuthStatus, useAuthStatus, useUID } from "stores/auth.store";
 import { useUserNameWithStatus } from "stores/users.store";
@@ -15,17 +15,19 @@ export function LayoutPathListener() {
   const uid = useUID();
   const { name, loading } = useUserNameWithStatus(uid ?? null);
 
+  const { continuePath } = useSearch({ strict: false });
+
   if (
     authStatus === AuthStatus.Unauthenticated &&
     !openPaths.includes(pathname)
   ) {
-    return <Navigate to={"/auth"} />;
+    return <Navigate to={"/auth"} search={{ continuePath: pathname }} />;
   }
   if (
     authStatus === AuthStatus.Authenticated &&
     onlyUnauthenticatedPaths.includes(pathname)
   ) {
-    return <Navigate to={"/games"} />;
+    return <Navigate to={continuePath || "/games"} />;
   }
 
   return (
