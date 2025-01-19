@@ -3,7 +3,7 @@ import {
   GameRepository,
   RulesetConfig,
 } from "repositories/game.repository";
-import { WorldRepository } from "repositories/worlds.repository";
+import { WorldDTO, WorldRepository } from "repositories/worlds.repository";
 
 import { GamePlayerRole } from "./game.service";
 
@@ -15,7 +15,7 @@ export interface IWorld {
   id: string;
   name: string;
 
-  settingKey: string;
+  settingKey: string | null;
   rulesets: RulesetConfig;
   expansions: ExpansionConfig;
   createdBy: string | null;
@@ -45,6 +45,21 @@ export class WorldsService {
       id: world.id,
       name: world.name,
     }));
+  }
+
+  public static listenToWorld(
+    uid: string,
+    worldId: string,
+    onUpdate: (world: IWorld) => void,
+    onError: (error: Error) => void,
+  ): () => void {
+    return WorldRepository.listenToWorld(
+      worldId,
+      (world) => {
+        onUpdate(this.convertWorldDTOToWorld(world));
+      },
+      onError,
+    );
   }
 
   public static async createWorld(
@@ -95,5 +110,20 @@ export class WorldsService {
   }
   private static databaseToUint8Array(str: string): Uint8Array {
     return Buffer.from(str.slice(2), "hex");
+  }
+
+  private static convertWorldDTOToWorld(world: WorldDTO): IWorld {
+    return {
+      id: world.id,
+      name: world.name,
+      settingKey: world.setting_key,
+      rulesets: world.rulesets as RulesetConfig,
+      expansions: world.expansions as ExpansionConfig,
+      createdBy: world.created_by,
+      createdAt: new Date(world.created_at),
+      description: world.description
+        ? this.databaseToUint8Array(world.description)
+        : new Uint8Array(),
+    };
   }
 }

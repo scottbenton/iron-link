@@ -20,8 +20,8 @@ export function SidebarLayout() {
           display: "flex",
           flexDirection: "column",
           gap: 0.5,
+          flexShrink: 0,
           maxWidth: 350,
-          width: "100%",
         }}
       >
         <Card
@@ -99,8 +99,9 @@ export function SidebarLayout() {
               lg: "flex",
             },
             bgcolor: "background.default",
-            maxWidth: 350,
-            width: "100%",
+
+            width: 350,
+            flexShrink: 0,
             overflow: "hidden",
             flexDirection: "column",
             borderRadius: 0,

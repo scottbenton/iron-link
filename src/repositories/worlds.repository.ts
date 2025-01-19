@@ -6,7 +6,10 @@ import {
 
 import { supabase } from "lib/supabase.lib";
 
-import { convertUnknownErrorToStorageError } from "./errors/storageErrors";
+import {
+  StorageError,
+  convertUnknownErrorToStorageError,
+} from "./errors/storageErrors";
 
 export type MinimalWorldDTO = Pick<WorldDTO, "id" | "name">;
 export type WorldDTO = Tables<"worlds">;
@@ -38,6 +41,63 @@ export class WorldRepository {
           }
         });
     });
+  }
+
+  public static listenToWorld(
+    worldId: string,
+    onWorld: (world: WorldDTO) => void,
+    onError: (error: StorageError) => void,
+  ): () => void {
+    this.worlds()
+      .select()
+      .eq("id", worldId)
+      .single()
+      .then((result) => {
+        if (result.error) {
+          console.error(result.error);
+          onError(
+            convertUnknownErrorToStorageError(
+              result.error,
+              "Failed to listen to world",
+            ),
+          );
+        } else {
+          onWorld(result.data);
+        }
+      });
+
+    const subscription = supabase
+      .channel(`worlds:id=eq.${worldId}`)
+      .on<WorldDTO>(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "worlds",
+          filter: `id=eq.${worldId}`,
+        },
+        (payload) => {
+          if (payload.errors) {
+            console.error(payload.errors);
+            onError(
+              convertUnknownErrorToStorageError(
+                payload.errors,
+                "Failed to listen to world",
+              ),
+            );
+          } else if (
+            payload.eventType === "INSERT" ||
+            payload.eventType === "UPDATE"
+          ) {
+            onWorld(payload.new);
+          }
+        },
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(subscription);
+    };
   }
 
   public static createWorld(world: InsertWorldDTO): Promise<string> {
