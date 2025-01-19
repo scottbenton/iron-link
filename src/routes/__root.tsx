@@ -1,6 +1,5 @@
 import { Box, LinearProgress } from "@mui/material";
 import { Outlet, createRootRoute } from "@tanstack/react-router";
-import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 
 import { LayoutPathListener } from "components/Layout/LayoutPathListener";
 import { LiveRegion } from "components/Layout/LiveRegion";
@@ -57,7 +56,6 @@ function RootComponent() {
       </Box>
       <RollSnackbarSection />
       <DataswornDialog />
-      <TanStackRouterDevtools />
       {/* <UserNameDialog
           open={userNameDialogOpen}
           handleClose={closeUserNameDialog}
