@@ -1,6 +1,5 @@
 export enum MobileTabs {
-  Overview = "Overview",
-  Character = "Character",
+  Outlet = "Outlet",
   Reference = "Reference",
   Notes = "Notes",
 }

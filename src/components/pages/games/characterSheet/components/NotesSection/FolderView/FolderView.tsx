@@ -18,6 +18,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { GridLayout } from "components/Layout";
+import { EmptyState } from "components/Layout/EmptyState";
 
 import { useNotesStore } from "stores/notes.store";
 
@@ -30,7 +31,7 @@ import { FolderItem } from "./FolderItem";
 import { NoteItem } from "./NoteItem";
 import { SortableNoteItem } from "./SortableNoteItem";
 import { getItemName } from "./getFolderName";
-import { FAKE_ROOT_NOTE_FOLDER_KEY } from "./rootNodeName";
+import { useFolderPermission } from "./useFolderPermissions";
 
 export interface FolderViewProps {
   folderId: string | undefined;
@@ -39,6 +40,8 @@ export function FolderView(props: FolderViewProps) {
   const { folderId } = props;
 
   const { t } = useTranslation();
+
+  const { canEdit } = useFolderPermission(folderId);
 
   const subFolders = useNotesStore((state) => {
     if (!folderId) {
@@ -52,14 +55,6 @@ export function FolderView(props: FolderViewProps) {
         }
         return false;
       });
-    }
-    if (folderId === FAKE_ROOT_NOTE_FOLDER_KEY) {
-      return Object.entries(state.folderState.folders)
-        .filter(
-          ([fid, folder]) =>
-            fid !== FAKE_ROOT_NOTE_FOLDER_KEY && !folder.parentFolderId,
-        )
-        .sort(sortFolders);
     }
     return Object.entries(state.folderState.folders)
       .filter(([, folder]) => folder.parentFolderId === folderId)
@@ -169,7 +164,7 @@ export function FolderView(props: FolderViewProps) {
       {folderId === undefined &&
         (subFolders.length > 0 || sortedNoteIds.length > 0) && (
           <>
-            <Divider sx={{ my: 1 }} />
+            <Divider sx={{ mt: 4, mb: 1 }} />
             <Typography variant="overline" px={1}>
               {t("notes.shared-with-me", "Shared with you")}
             </Typography>
@@ -191,7 +186,17 @@ export function FolderView(props: FolderViewProps) {
           )}
         />
       )}
-      {folderId ? (
+      {subFolders.length === 0 && sortedNoteIds.length === 0 && folderId && (
+        <EmptyState
+          title={t("notes.empty-folder", "Empty Folder")}
+          message={t(
+            "notes.empty-folder-description",
+            "This folder has no contents yet.",
+          )}
+          sx={{ py: 2 }}
+        />
+      )}
+      {folderId && canEdit ? (
         <DndContext
           collisionDetection={closestCenter}
           sensors={sensors}
@@ -228,13 +233,11 @@ function sortFolders(aArr: [string, INoteFolder], bArr: [string, INoteFolder]) {
   const t = i18n.t;
   const aName = getItemName({
     name: a.name,
-    id: a.id,
     isRootPlayerFolder: a.isRootPlayerFolder,
     t,
   });
   const bName = getItemName({
     name: b.name,
-    id: b.id,
     isRootPlayerFolder: b.isRootPlayerFolder,
     t,
   });

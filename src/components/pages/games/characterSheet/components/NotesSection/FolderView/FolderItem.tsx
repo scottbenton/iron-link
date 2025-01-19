@@ -46,7 +46,6 @@ export function FolderItem(props: FolderItemProps) {
         <Typography sx={{ flexGrow: 1 }}>
           {getItemName({
             name: folder.name,
-            id: folderId,
             isRootPlayerFolder: folder.isRootPlayerFolder,
             t,
           })}

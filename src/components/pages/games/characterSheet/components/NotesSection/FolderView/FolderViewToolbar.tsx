@@ -20,7 +20,6 @@ import { MoveDialog } from "../MoveDialog";
 import { ShareDialog } from "../ShareDialog";
 import { FolderDeleteButton } from "./FolderDeleteButton";
 import { NameItemDialog } from "./NameItemDialog";
-import { FAKE_ROOT_NOTE_FOLDER_KEY } from "./rootNodeName";
 import { useFolderPermission } from "./useFolderPermissions";
 
 export interface FolderViewToolbarProps {
@@ -72,7 +71,7 @@ export function FolderViewToolbar(props: FolderViewToolbarProps) {
   const [moveDialogOpen, setMoveDialogOpen] = useState(false);
 
   // Something's gone wrong, lets stop before we break things
-  if (!folder || folderId === FAKE_ROOT_NOTE_FOLDER_KEY) return null;
+  if (!folder) return null;
 
   const createFolder = (name: string) => {
     if (uid) {

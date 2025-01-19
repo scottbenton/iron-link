@@ -70,20 +70,22 @@ export function GameNavBar(props: GameNavBarProps) {
             variant="fullWidth"
             sx={{ flexGrow: 1, alignSelf: "flex-end" }}
           >
-            {isOnOverviewPage && (
-              <Tab
-                label={t("game.overview", "Overview")}
-                value={MobileTabs.Overview}
-              />
-            )}
-            {!isOnOverviewPage && (
-              <Tab
-                label={t("game.character", "Character")}
-                value={MobileTabs.Character}
-              />
-            )}
-            <Tab label={t("game.notes", "Notes")} value={MobileTabs.Notes} />
             <Tab
+              id={`tab-${MobileTabs.Outlet}`}
+              label={
+                isOnOverviewPage
+                  ? t("game.overview", "Overview")
+                  : t("game.character", "Character")
+              }
+              value={MobileTabs.Outlet}
+            />
+            <Tab
+              id={`tab-${MobileTabs.Notes}`}
+              label={t("game.notes", "Notes")}
+              value={MobileTabs.Notes}
+            />
+            <Tab
+              id={`tab-${MobileTabs.Reference}`}
               label={t("game.reference", "Reference")}
               value={MobileTabs.Reference}
             />

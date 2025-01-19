@@ -17,7 +17,6 @@ export function OpenItemWrapper(
           flexDirection: "column",
           // flexGrow: 1,
           overflow: "auto",
-          px: 0.5,
         },
         ...(Array.isArray(sx) ? sx : [sx]),
       ]}

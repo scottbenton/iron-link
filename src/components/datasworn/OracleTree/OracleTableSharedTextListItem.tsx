@@ -11,9 +11,11 @@ import {
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
+import { useGamePermissions } from "components/pages/games/gamePageLayout/hooks/usePermissions";
 import { useRollOracleAndAddToLog } from "components/pages/games/hooks/useRollOracleAndAddToLog";
 
 import { useOpenDataswornDialog } from "stores/appState.store";
+import { GamePermission } from "stores/game.store";
 
 import { ListItemButtonWithSecondaryAction } from "./ListItemButtonWithSecondaryAction";
 
@@ -32,6 +34,7 @@ export function OracleTableSharedTextListItem(
   const rollOracleTable = useRollOracleAndAddToLog();
   const { t } = useTranslation();
   const openDialog = useOpenDataswornDialog();
+  const isGuide = useGamePermissions().gamePermission === GamePermission.Guide;
 
   const options = collection.contents ?? {};
   const keys = Object.keys(options);
@@ -44,7 +47,7 @@ export function OracleTableSharedTextListItem(
       disabled={disabled || !selectedOptionId}
       onClick={
         selectedOptionId
-          ? () => rollOracleTable(selectedOptionId, true)
+          ? () => rollOracleTable(selectedOptionId, isGuide)
           : undefined
       }
       secondaryAction={

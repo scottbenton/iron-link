@@ -29,7 +29,6 @@ export function useDeleteFolder() {
             {
               folderName: getItemName({
                 name: folder.name,
-                id: folder.id,
                 isRootPlayerFolder: false,
                 t,
               }),

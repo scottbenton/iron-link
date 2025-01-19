@@ -235,7 +235,6 @@ export function ShareDialog(props: ShareDialogProps) {
                   {
                     parentFolderName: getItemName({
                       name: parentFolder.name,
-                      id: parentFolder.id,
                       t,
                       isRootPlayerFolder: parentFolder.isRootPlayerFolder,
                     }),
@@ -275,7 +274,6 @@ export function ShareDialog(props: ShareDialogProps) {
                   {
                     parentFolderName: getItemName({
                       name: parentFolder.name,
-                      id: parentFolder.id,
                       t,
                       isRootPlayerFolder: parentFolder.isRootPlayerFolder,
                     }),
