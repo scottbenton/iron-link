@@ -1,6 +1,5 @@
 import { LinearProgress } from "@mui/material";
 
-import { useUID } from "stores/auth.store";
 import { useNotesStore } from "stores/notes.store";
 
 import { DefaultNoteChooser } from "./DefaultNoteChooser";
@@ -13,9 +12,13 @@ export function NotesSection() {
     (store) => store.folderState.loading || store.noteState.loading,
   );
 
-  const uid = useUID();
-
   const openItem = useNotesStore((store) => store.openItem);
+  const isRootPlayerFolder = useNotesStore((store) =>
+    store.openItem?.type === "folder"
+      ? (store.folderState.folders[store.openItem.folderId]
+          ?.isRootPlayerFolder ?? false)
+      : false,
+  );
 
   if (areBasicNotesLoading) {
     return <LinearProgress />;
@@ -29,7 +32,7 @@ export function NotesSection() {
           <FolderViewToolbar folderId={openItem.folderId} />
           <OpenItemWrapper sx={{ mx: -1, flexGrow: 1 }}>
             <FolderView folderId={openItem.folderId} />
-            {openItem.folderId === uid && <FolderView folderId={undefined} />}
+            {isRootPlayerFolder && <FolderView folderId={undefined} />}
           </OpenItemWrapper>
         </>
       )}

@@ -1,11 +1,9 @@
 import { Breadcrumbs, Link, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
-import { useUID } from "stores/auth.store";
 import { useNotesStore } from "stores/notes.store";
 
 import { getItemName } from "../FolderView/getFolderName";
-import { FAKE_ROOT_NOTE_FOLDER_KEY } from "../FolderView/rootNodeName";
 
 interface BreadcrumbItem {
   type: "folder" | "note";
@@ -17,9 +15,14 @@ interface BreadcrumbItem {
 export function NoteBreadcrumbs() {
   const { t } = useTranslation();
 
-  const uid = useUID();
-
   const setOpenItem = useNotesStore((store) => store.setOpenItem);
+
+  const rootPlayerFolderId = useNotesStore(
+    (store) =>
+      Object.values(store.folderState.folders).find(
+        (folder) => folder.isRootPlayerFolder,
+      )?.id,
+  );
 
   const breadcrumbItems: BreadcrumbItem[] = useNotesStore((store) => {
     let item = store.openItem;
@@ -27,26 +30,20 @@ export function NoteBreadcrumbs() {
     const breadcrumbs: BreadcrumbItem[] = [];
 
     while (item) {
-      if (
-        item.type !== "folder" ||
-        item.folderId !== FAKE_ROOT_NOTE_FOLDER_KEY
-      ) {
-        breadcrumbs.push({
-          type: item.type,
-          id: item.type === "folder" ? item.folderId : item.noteId,
-          name:
-            item.type === "folder"
-              ? getItemName({
-                  name: store.folderState.folders[item.folderId]?.name,
-                  id: item.folderId,
-                  isRootPlayerFolder:
-                    store.folderState.folders[item.folderId]
-                      ?.isRootPlayerFolder ?? false,
-                  t,
-                })
-              : store.noteState.notes[item.noteId]?.title,
-        });
-      }
+      breadcrumbs.push({
+        type: item.type,
+        id: item.type === "folder" ? item.folderId : item.noteId,
+        name:
+          item.type === "folder"
+            ? getItemName({
+                name: store.folderState.folders[item.folderId]?.name,
+                isRootPlayerFolder:
+                  store.folderState.folders[item.folderId]
+                    ?.isRootPlayerFolder ?? false,
+                t,
+              })
+            : store.noteState.notes[item.noteId]?.title,
+      });
 
       const parentFolderId =
         item.type === "folder"
@@ -56,8 +53,8 @@ export function NoteBreadcrumbs() {
         ? store.folderState.folders[parentFolderId]
         : undefined;
 
-      if (parentFolderId && !parentFolder && uid) {
-        item = { type: "folder", folderId: uid };
+      if (parentFolderId && !parentFolder && rootPlayerFolderId) {
+        item = { type: "folder", folderId: rootPlayerFolderId };
       } else if (parentFolderId && parentFolder) {
         item = { type: "folder", folderId: parentFolderId };
       } else {
@@ -67,6 +64,8 @@ export function NoteBreadcrumbs() {
 
     return breadcrumbs.reverse();
   });
+
+  console.debug(breadcrumbItems);
 
   if (breadcrumbItems.length > 0) {
     return (

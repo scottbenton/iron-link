@@ -2,12 +2,17 @@ import { Typography } from "@mui/material";
 import { Box, Button } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
+import { useGamePermissions } from "components/pages/games/gamePageLayout/hooks/usePermissions";
 import { useRollOracleAndAddToLog } from "components/pages/games/hooks/useRollOracleAndAddToLog";
+
+import { GamePermission } from "stores/game.store";
 
 import { askTheOracleIds, askTheOracleLabels } from "data/askTheOracle";
 
 export function AskTheOracleButtons() {
   const rollOracleTable = useRollOracleAndAddToLog();
+  const isGuide = useGamePermissions().gamePermission === GamePermission.Guide;
+
   const { t } = useTranslation();
 
   return (
@@ -41,7 +46,7 @@ export function AskTheOracleButtons() {
               minWidth: 0,
               px: 1,
             })}
-            onClick={() => rollOracleTable(oracleKey, true)}
+            onClick={() => rollOracleTable(oracleKey, isGuide)}
           >
             {askTheOracleLabels[oracleKey]}
           </Button>

@@ -1,114 +1,99 @@
-import { Box, Card, useMediaQuery, useTheme } from "@mui/material";
+import { Box } from "@mui/material";
 import { Outlet } from "@tanstack/react-router";
-import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
+
+import { useIsBreakpoint } from "hooks/useIsBreakpoint";
 
 import { NotesSection } from "../characterSheet/components/NotesSection";
 import { ReferenceSidebarContents } from "../characterSheet/components/ReferenceSidebarContents";
+import { MobileTabs } from "./MobileTabs";
+import { SidebarTabPanel } from "./SidebarTabPanel";
 
-export function SidebarLayout() {
-  const theme = useTheme();
-  const hasThreeColumns = useMediaQuery(theme.breakpoints.up("lg"));
-  const hasAtLeastTwoColumns = useMediaQuery(theme.breakpoints.up("md"));
+export interface SidebarLayoutProps {
+  currentOpenTab: MobileTabs;
+}
+
+export function SidebarLayout(props: SidebarLayoutProps) {
+  const { currentOpenTab } = props;
+
+  const isLargeScreen = useIsBreakpoint("greater-than", "lg");
+  const isMediumScreen = useIsBreakpoint("equal-to", "md");
+  const isSmallScreen = useIsBreakpoint("smaller-than", "md");
 
   return (
-    <Box display="flex" alignItems="stretch" height="100%">
+    <Box display="flex" alignItems="stretch" height="100%" flexGrow={1}>
       <Box
-        component={PanelGroup}
-        autoSaveId={"left-sidebar"}
-        direction="vertical"
         sx={{
-          display: "flex",
-          flexDirection: "column",
-          gap: 0.5,
-          maxWidth: 350,
-          width: "100%",
+          flexGrow: 1,
+          display: "grid",
+          gridTemplateColumns: isLargeScreen
+            ? "350px 1fr 350px"
+            : isMediumScreen
+              ? "350px 1fr"
+              : "1fr",
+          gridTemplateRows: isMediumScreen ? "auto auto" : "1fr",
+          rowGap: 1,
         }}
       >
-        <Card
-          component={Panel}
-          id="character-panel"
-          defaultSize={50}
-          minSize={10}
-          order={0}
-          variant="outlined"
-          sx={{
-            borderRadius: 0,
-            bgcolor: "background.default",
-          }}
+        <SidebarTabPanel
+          tab={MobileTabs.Outlet}
+          currentOpenTab={currentOpenTab}
+          isInTabView={isSmallScreen}
+          sx={(theme) => ({
+            bgcolor: isSmallScreen ? undefined : "background.default",
+            gridRow: "1",
+            gridColumn: "1",
+            resize: isMediumScreen ? "vertical" : undefined,
+            height: isMediumScreen ? "100%" : undefined,
+            border: isSmallScreen
+              ? undefined
+              : `1px solid ${theme.palette.divider}`,
+          })}
         >
-          <Box overflow="auto" p={2} height="100%">
+          <Box
+            overflow="auto"
+            px={2}
+            pb={2}
+            pt={isSmallScreen ? 0 : 2}
+            height="100%"
+          >
             <Outlet />
           </Box>
-        </Card>
-        {hasAtLeastTwoColumns && !hasThreeColumns && (
-          <>
-            <Box
-              component={PanelResizeHandle}
-              sx={{
-                position: "relative",
-                zIndex: 1,
-                bgcolor: "grey.400",
-                alignSelf: "center",
-                py: 0.25,
-                px: 3,
-                // my: -0.5,
-                cursor: "ew-resize",
-                borderRadius: 999,
-              }}
-            />
-            <Card
-              component={Panel}
-              id="left-reference-panel"
-              order={1}
-              defaultSize={50}
-              minSize={10}
-              variant="outlined"
-              sx={{
-                borderRadius: 0,
-                bgcolor: "background.default",
-              }}
-            >
-              <Box overflow="auto" height={"100%"}>
-                <ReferenceSidebarContents />
-              </Box>
-            </Card>
-          </>
-        )}
-      </Box>
-      {hasAtLeastTwoColumns && (
-        <Box
+        </SidebarTabPanel>
+        <SidebarTabPanel
+          tab={MobileTabs.Reference}
+          currentOpenTab={currentOpenTab}
+          isInTabView={isSmallScreen}
+          sx={(theme) => ({
+            bgcolor: isSmallScreen ? undefined : "background.default",
+            gridRow: isMediumScreen ? "2" : "1",
+            gridColumn: isLargeScreen ? "3" : "1",
+            border: isSmallScreen
+              ? undefined
+              : `1px solid ${theme.palette.divider}`,
+          })}
+        >
+          <Box overflow="auto" height={"100%"}>
+            <ReferenceSidebarContents />
+          </Box>
+        </SidebarTabPanel>
+
+        <SidebarTabPanel
+          tab={MobileTabs.Notes}
+          currentOpenTab={currentOpenTab}
+          isInTabView={isSmallScreen}
           sx={{
-            overflow: "hidden",
-            display: "flex",
-            flexDirection: "column",
+            overflow: !isSmallScreen ? "hidden" : "initial",
             flexGrow: 1,
-            px: 1,
             mt: 1,
+            gridRow: isMediumScreen ? "1 / span 2" : "1",
+            gridColumn: isSmallScreen ? "1" : "2",
+            px: 2,
+            maxWidth: "100vw",
           }}
         >
           <NotesSection />
-        </Box>
-      )}
-
-      {hasThreeColumns && (
-        <Card
-          variant="outlined"
-          sx={{
-            display: {
-              xs: "none",
-              lg: "flex",
-            },
-            bgcolor: "background.default",
-            maxWidth: 350,
-            width: "100%",
-            overflow: "hidden",
-            flexDirection: "column",
-            borderRadius: 0,
-          }}
-        >
-          <ReferenceSidebarContents />
-        </Card>
-      )}
+        </SidebarTabPanel>
+      </Box>
     </Box>
   );
 }

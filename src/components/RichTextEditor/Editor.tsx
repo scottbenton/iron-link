@@ -1,6 +1,8 @@
 import { Box, Fade } from "@mui/material";
 import { EditorContent, Editor as TTEditor } from "@tiptap/react";
 
+import { useIsMobile } from "hooks/useIsMobile";
+
 export interface EditorProps {
   outlined?: boolean;
   editable?: boolean;
@@ -19,6 +21,8 @@ export function Editor(props: EditorProps) {
     saving,
     minHeight = 300,
   } = props;
+
+  const isMobile = useIsMobile();
 
   return (
     <>
@@ -84,7 +88,8 @@ export function Editor(props: EditorProps) {
               maxWidth: "100%",
               flexGrow: 1,
 
-              p: editable || !outlined ? 2 : 0,
+              py: editable || !outlined ? 2 : 0,
+              pr: isMobile ? 0 : 2,
 
               mx: !outlined ? "auto" : undefined,
 
@@ -100,6 +105,9 @@ export function Editor(props: EditorProps) {
               },
               "&.ProseMirror>:first-of-type": {
                 marginTop: 0,
+              },
+              "& > *": {
+                maxWidth: "65ch",
               },
             },
             blockquote: {

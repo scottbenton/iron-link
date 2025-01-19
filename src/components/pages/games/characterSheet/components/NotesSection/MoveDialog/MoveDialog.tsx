@@ -24,7 +24,6 @@ import { EditPermissions } from "repositories/shared.types";
 import { INoteFolder } from "services/noteFolders.service";
 
 import { getItemName } from "../FolderView/getFolderName";
-import { FAKE_ROOT_NOTE_FOLDER_KEY } from "../FolderView/rootNodeName";
 import { useFolderDescendants } from "../FolderView/useFolderDescendants";
 import { MoveTreeItem } from "./MoveTreeItem";
 
@@ -189,7 +188,6 @@ export function MoveDialog(props: MoveDialogProps) {
               key={folderId}
               label={getItemName({
                 name: folders[folderId].name,
-                id: folderId,
                 isRootPlayerFolder: folders[folderId].isRootPlayerFolder,
                 t,
               })}
@@ -246,9 +244,6 @@ function getTreeFromFolders(
   const tree: Record<string, string[]> = {};
   // Check each folder for permissions
   Object.entries(folders).forEach(([folderId, folder]) => {
-    if (folderId === FAKE_ROOT_NOTE_FOLDER_KEY) {
-      return;
-    }
     if (
       folder.editPermissions === EditPermissions.GuidesAndAuthor &&
       (!isGuide || folder.creator !== uid)
