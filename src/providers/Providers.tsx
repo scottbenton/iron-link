@@ -19,8 +19,8 @@ export function Providers() {
   const { t } = useTranslation();
 
   return (
-    <HeadProvider>
-      <ThemeProvider>
+    <ThemeProvider>
+      <HeadProvider>
         <ConfirmProvider
           defaultOptions={{
             cancellationText: t("common.cancel", "Cancel"),
@@ -35,7 +35,7 @@ export function Providers() {
             <RouterProvider router={router} />
           </SnackbarProvider>
         </ConfirmProvider>
-      </ThemeProvider>
-    </HeadProvider>
+      </HeadProvider>
+    </ThemeProvider>
   );
 }

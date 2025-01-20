@@ -40,9 +40,9 @@ export function ConditionMeters() {
     (store) => store.updateCharacterConditionMeterValue,
   );
 
-  const momentum = useGameCharacter(
-    (character) => character?.momentum ?? DEFAULT_MOMENTUM,
-  );
+  const momentum = useGameCharacter((character) => {
+    return character?.momentum ?? DEFAULT_MOMENTUM;
+  });
   const updateCharacterMomentum = useGameCharactersStore(
     (store) => store.updateCharacterMomentum,
   );
