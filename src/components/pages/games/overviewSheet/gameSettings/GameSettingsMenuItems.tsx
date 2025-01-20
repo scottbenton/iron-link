@@ -11,12 +11,13 @@ import { useTranslation } from "react-i18next";
 
 import { useSnackbar } from "providers/SnackbarProvider";
 
-import { useGameStore } from "stores/game.store";
+import { GamePermission, useGameStore } from "stores/game.store";
 import { useMenuState } from "stores/menuState";
 
 import { usePathConfig } from "lib/paths.lib";
 
 import { useGameIdOptional } from "../../gamePageLayout/hooks/useGameId";
+import { useGamePermissions } from "../../gamePageLayout/hooks/usePermissions";
 
 export interface GameSettingsMenuItemsProps {
   closeMenu: () => void;
@@ -35,6 +36,8 @@ export function GameSettingsMenuItems(props: GameSettingsMenuItemsProps) {
   const setIsGameThemeDialogOpen = useMenuState(
     (state) => state.setIsGameThemeDialogOpen,
   );
+
+  const { gamePermission } = useGamePermissions();
 
   const deleteGame = useGameStore((store) => store.deleteGame);
   const gameId = useGameIdOptional();
@@ -78,7 +81,7 @@ export function GameSettingsMenuItems(props: GameSettingsMenuItemsProps) {
     }
   }, [confirm, gameId, deleteGame, t, error, closeMenu, navigate, pathConfig]);
 
-  if (!gameId) {
+  if (!gameId || gamePermission !== GamePermission.Guide) {
     return null;
   }
 

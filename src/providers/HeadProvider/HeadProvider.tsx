@@ -2,6 +2,8 @@ import { PropsWithChildren } from "react";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import { useTranslation } from "react-i18next";
 
+import { useSyncFavIconWithColorScheme } from "./useSyncFavIconWithColorScheme";
+
 export function HeadProvider(props: PropsWithChildren) {
   const { children } = props;
 
@@ -10,6 +12,8 @@ export function HeadProvider(props: PropsWithChildren) {
 
   const { t } = useTranslation();
   const appName = t("iron-link.title", "Iron Link");
+
+  useSyncFavIconWithColorScheme();
 
   return (
     <HelmetProvider>
