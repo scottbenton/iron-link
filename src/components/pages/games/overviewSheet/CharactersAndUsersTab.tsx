@@ -79,7 +79,7 @@ export function CharactersAndUsersTab() {
                 characterId={character.id}
                 name={character.name}
                 portraitSettings={character.portraitSettings ?? undefined}
-                colorSchemeBorder={character.colorScheme ?? ColorScheme.Default}
+                borderColor={character.colorScheme ?? ColorScheme.Default}
               />
               <Typography variant="h5" fontFamily="fontFamilyTitle" ml={2}>
                 {character.name}

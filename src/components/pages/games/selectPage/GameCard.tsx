@@ -57,11 +57,11 @@ export function GameCard(props: GameCardProps) {
     <Card variant={"outlined"} sx={{ height: "100%", overflow: "visible" }}>
       <CardActionAreaLink
         sx={{
-          p: 2,
+          p: Object.keys(gameCharacters).length > 0 ? 1 : 2,
           display: "flex",
           flexDirection: "column",
           alignItems: "flex-start",
-          justifyContent: "flex-start",
+          justifyContent: "center",
           height: "100%",
           overflow: "visible",
         }}
@@ -69,13 +69,9 @@ export function GameCard(props: GameCardProps) {
         to={pathConfig.game}
         params={{ gameId }}
       >
-        <Box
-          display="flex"
-          alignItems="center"
-          gap={Object.keys(gameCharacters).length > 0 ? 2 : 0}
-        >
+        <Box display="flex" alignItems="center">
           <GameCharacterPortraits gameCharacterDetails={gameCharacters} />
-          <div>
+          <Box ml={2}>
             <Typography
               variant={"h5"}
               fontFamily={(theme) => theme.typography.fontFamilyTitle}
@@ -90,7 +86,7 @@ export function GameCard(props: GameCardProps) {
             >
               {rulesPackageString}
             </Typography>
-          </div>
+          </Box>
         </Box>
       </CardActionAreaLink>
     </Card>
