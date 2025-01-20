@@ -48,7 +48,6 @@ export function ImageInput(props: ImageInputProps) {
         onClick={() => setDialogOpen(true)}
       >
         <PortraitAvatarDisplay
-          colorful
           size={"large"}
           name={characterName}
           portraitUrl={imageUrl}
