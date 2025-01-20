@@ -8,7 +8,6 @@ export function useSyncFavIconWithColorScheme() {
   const color2 = theme.palette.secondary.main;
 
   useEffect(() => {
-    console.debug("UPDATING SVG", color1, color2);
     const svg = `
       <svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
         <g clip-path="url(#clip0)">
